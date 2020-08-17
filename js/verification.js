@@ -13,7 +13,7 @@ function loadVerificationHolder(type) {
     })
     .catch(function (error) {
       $("#verificationHolder").html(`
-        <div class="alert alert-dismissible alert-danger">Error.</div>
+        <div class="alert alert-dismissible alert-danger">Unauthorized. Put the correct key in.</div>
         `);
     });
 }
@@ -26,16 +26,25 @@ function getVerificationCards(data) {
   data.forEach((user) => {
     html += `
     <div class='col-sm-4'> 
-        <div class="card">
-          <img class="card-img-top img-fluid" src="${user.ProfilePictureURL}" alt="Card image cap">
-          <div class="card-block">
+        <div class="card" style="padding: 3px; margin: 10px;">
+        ${imageRender(user.ProfilePictureURL, true, user.UserID)}
+          <div class="card-block" style="padding: 3px;">
             <h4 class="card-title">${user.FullName}</h4>
-            <p class="card-text">${user.Type}</p>
+            <p class="card-text">Login type: ${user.Type}</p>
           </div>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Vestibulum at eros</li>
+            <li class="list-group-item">Phone number: ${user.Phone}</li>
+            <li class="list-group-item">EmiratesID: ${user.EmiratesID}</li>
+            <li class="list-group-item">EmiratesID Front Image: ${imageRender(
+              user.EmiratesIDFrontImageURL,
+              true,
+              user.UserID
+            )} </li>
+            <li class="list-group-item">EmiratesID Back Image: ${imageRender(
+              user.EmiratesIDBackImageURL,
+              true,
+              user.UserID
+            )}</li>
           </ul>
           <div class="card-block">
             <a href="#" class="card-link">Card link</a>
@@ -46,4 +55,10 @@ function getVerificationCards(data) {
   });
   html += "</div></div>";
   return html;
+}
+
+function imageRender(url, isGallery, galName = "gallery") {
+  let galAttribute = "data-fancybox='" + galName + "'";
+  let gallery = isGallery ? galAttribute : "data-fancybox";
+  return `<a ${gallery} href="${url}"><img style="padding: 3px;" class="card-img-top img-fluid" src="${url}" alt="Card image cap"></a>`;
 }
