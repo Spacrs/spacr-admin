@@ -85,6 +85,9 @@ function getVerificationCards(data) {
 }
 
 function pend(userID, same) {
+  if (same) {
+    return;
+  }
   $("#action-button-" + userID).hide();
   $("#loader-" + userID).show();
   updateVerificationStatus(userID, "pending", (response) => {
@@ -98,6 +101,9 @@ function pend(userID, same) {
 }
 
 function reject(userID, same) {
+  if (same) {
+    return;
+  }
   $("#action-button-" + userID).hide();
   $("#loader-" + userID).show();
   updateVerificationStatus(userID, "rejected", (response) => {
@@ -110,6 +116,9 @@ function reject(userID, same) {
 }
 
 function verify(userID, same) {
+  if (same) {
+    return;
+  }
   $("#action-button-" + userID).hide();
   $("#loader-" + userID).show();
   updateVerificationStatus(userID, "verified", (response) => {
