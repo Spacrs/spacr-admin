@@ -43,12 +43,16 @@ function getVerificationCards(data) {
             <li class="list-group-item"><b>Phone number:</b> ${paramR(
               user.Phone
             )}</li>
+            <li class="list-group-item"><b>Location</b><br /> Longitude: ${paramR(
+              user.AddressLongitude
+            )} Latitude: ${paramR(user.AddressLatitude)}</li>
             <li class="list-group-item"><b>Birthday</b> ${paramR(
               user.Birthday
             )}</li>
             <li class="list-group-item"><b>EmiratesID</b> ${paramR(
               user.EmiratesID
             )}</li>
+            
             <li class="list-group-item"><b>EmiratesID Front Image</b> ${imageRender(
               user.EmiratesIDFrontImageURL,
               true,
@@ -59,6 +63,15 @@ function getVerificationCards(data) {
               true,
               user.UserID
             )}</li>
+            <li class="list-group-item"><b>Passport Number</b> ${paramR(
+              user.PassportNumber
+            )}</li>
+            <li class="list-group-item"><b>Passport Image</b> ${imageRender(
+              user.PassportImageURL,
+              true,
+              user.UserID
+            )}</li>
+            
           </ul>
           <div class="card-block text-center" >
           <img id="loader-${
