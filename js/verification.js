@@ -8,7 +8,9 @@ function loadVerificationHolder(type) {
       verified: type,
     })
     .then(function (response) {
-      let html = getVerificationCards(response.data);
+      let html = `
+      <h1 class="display-4 text-center" style="padding:10px;">${type.toUpperCase()} USERS</h1>`;
+      html += getVerificationCards(response.data);
       $("#verificationHolder").html(html);
     })
     .catch(function (error) {

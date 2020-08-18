@@ -12,6 +12,7 @@ function login() {
   $("#secretInput").hide();
   $("#loginButton").hide();
   $("#logoutButton").show();
+  loadVerificationHolder("pending");
   // alert(LOGIN_SECRET);
 }
 
@@ -21,11 +22,9 @@ function logout() {
   $("#secretInput").show();
   $("#loginButton").show();
   $("#logoutButton").hide();
+  loadVerificationHolder("pending");
 }
 
 $(document).ready(function () {
-  $("img").on("error", function () {
-    alert("err");
-    $(this).replaceWith(`<b style="color:red;">EMPTY</b>`);
-  });
+  loadVerificationHolder("pending");
 });
