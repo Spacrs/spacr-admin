@@ -22,3 +22,10 @@ function logout() {
   $("#loginButton").show();
   $("#logoutButton").hide();
 }
+
+$(document).ready(function () {
+  $("img").on("error", function () {
+    alert("err");
+    $(this).replaceWith(`<b style="color:red;">EMPTY</b>`);
+  });
+});
