@@ -1,3 +1,19 @@
+//https://sweetalert2.github.io/#show-close-button
+let optionsForRejection = [
+  {
+    label: "Face doesn't match",
+    text: "Faces don't match between documents / images.",
+  },
+  {
+    label: "Identification numbers are not visible.",
+    text: "Identification numbers are not visible in document(s).",
+  },
+  {
+    label: "Phone number not available.",
+    text: "No valid phone number.",
+  },
+];
+
 function loadVerificationHolder(type) {
   $("#verificationHolder").html(`
     <center><img style="margin-top:100px;" src="assets/loader.gif" /></center>
@@ -9,7 +25,9 @@ function loadVerificationHolder(type) {
     })
     .then(function (response) {
       let html = `
-      <h1 class="display-4 text-center" style="padding:10px;">${type.toUpperCase()} USERS</h1>`;
+      <h1 class="display-4 text-center" style="padding:10px;">${type.toUpperCase()} USERS (${
+        response.data.length
+      })</h1>`;
       html += getVerificationCards(response.data);
       $("#verificationHolder").html(html);
     })
@@ -21,11 +39,19 @@ function loadVerificationHolder(type) {
 }
 
 function getVerificationCards(data) {
+  console.log(JSON.stringify(data));
   if (data.length === 0) {
     return `<div class="alert alert-warning">Empty response</div>`;
   }
-  let html = "<div class='container'><div class='row'>";
+  let modalHTML = "";
+  let html =
+    "<div class='container' style='background:#F0F8FF;'><div class='row'>";
+
   data.forEach((user) => {
+    let verificationInfoCode = "";
+    if (user.VerificationInfo != null && user.Verified != "verified") {
+      verificationInfoCode = `<li class='list-group-item'><b>Verification info:</b> ${user.VerificationInfo}</li>`;
+    }
     html += `
     <div class='col-sm-4' id="card-${user.UserID}"> 
         <div class="card" style="padding: 7px; margin: 10px; border-radius: 10px;">
@@ -38,6 +64,7 @@ function getVerificationCards(data) {
             
           </div>
           <ul class="list-group list-group-flush">
+          ${verificationInfoCode}
           <li class="list-group-item"><b>Login type:</b> ${user.Type}</li>
           <li class="list-group-item"><b>Email:</b> ${user.Email}</li>
             <li class="list-group-item"><b>Phone number:</b> ${paramR(
@@ -83,9 +110,9 @@ function getVerificationCards(data) {
           <button type="button" onclick="pend('${user.UserID}',${
       user.Verified == "pending" ? "true" : "false"
     })" class="btn btn-warning">Pending</button>
-          <button type="button" onclick="reject('${user.UserID}',${
-      user.Verified == "rejected" ? "true" : "false"
-    })" class="btn btn-danger">Rejected</button>
+    <a href="#modal-${
+      user.UserID
+    }" rel="modal:open"><button type="button" class="btn btn-danger">Rejected</button></a>
           <button type="button" onclick="verify('${user.UserID}',${
       user.Verified == "verified" ? "true" : "false"
     })" class="btn btn-success">Verified</button>
@@ -94,9 +121,96 @@ function getVerificationCards(data) {
         </div>
     </div>
 `;
+    //reject('${user.UserID}',${user.Verified == "rejected" ? "true" : "false"})
+    modalHTML += modalCode(user);
   });
   html += "</div></div>";
+  html += modalHTML;
+
   return html;
+}
+
+function modalCode(user) {
+  let userID = user.UserID;
+  var date = new Date();
+  var timestamp = date.getTime();
+  let randomString = makeid(20) + "" + timestamp;
+  let optionCode = "";
+  let options = optionsForRejection;
+  for (let optionIndex in options) {
+    optionCode += `<div class="custom-control custom-checkbox">
+    <input type="checkbox" class="custom-control-input" id="customCheck${optionIndex}${randomString}" onclick="checkBox${randomString}(${optionIndex})">
+    <label class="custom-control-label" for="customCheck${optionIndex}${randomString}">${options[optionIndex].label}</label>
+  </div>`;
+  }
+
+  return `
+  <script>
+  
+let selectedVals${randomString} = []
+function checkBox${randomString}(type) {
+  
+  if(!selectedVals${randomString}.includes(type)) {
+    selectedVals${randomString}.push(type)
+  } else {
+    var index = selectedVals${randomString}.indexOf(type);
+    selectedVals${randomString}.splice(index, 1);
+  }
+
+  let text = ""
+  for(let x of selectedVals${randomString}) {
+    text += optionsForRejection[x].text + " ";
+  }
+  $("#textArea${randomString}").val(text)
+}
+
+function rejectButtonClick${randomString}() {
+  $("#loader-modal-${randomString}").show()
+  reject('${user.UserID}',${
+    user.Verified == "rejected" ? "true" : "false"
+  }, $("#textArea${randomString}").val(), () => {
+    $("#loader-modal-${randomString}").hide()
+  });
+}
+</script>
+  <div id="modal-${userID}" class="modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Rejection Info</h5><a href="#" rel="modal:close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button></a>
+      </div>
+      <div class="modal-body">
+        <p>Reasons:</p>
+        <div class="form-group">${optionCode}</div>
+  <div class="form-group">
+      <label for="exampleTextarea">Rejection message user will see (editable):</label>
+      <textarea class="form-control" id="textArea${randomString}" rows="3" style="margin-top: 0px; margin-bottom: 0px; height: 93px;"></textarea>
+    </div>
+      </div>
+      <div class="modal-footer">
+      <img id="loader-modal-${randomString}" src="assets/loader.gif" style="width:50px;display:none;" />
+        <button type="button" onclick="rejectButtonClick${randomString}()" class="btn btn-danger">Reject user</button>
+        <a href="#" rel="modal:close"><button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+`;
+
+  function makeid(length) {
+    var result = "";
+    var characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }
 }
 
 function pend(userID, same) {
@@ -115,19 +229,26 @@ function pend(userID, same) {
   });
 }
 
-function reject(userID, same) {
+function reject(userID, same, rejectionText, cb) {
   if (same) {
     return;
   }
   $("#action-button-" + userID).hide();
   $("#loader-" + userID).show();
-  updateVerificationStatus(userID, "rejected", (response) => {
-    if (!same) {
-      removeCardWithUserID(userID);
+  updateVerificationStatusWithRejectionText(
+    userID,
+    "rejected",
+    rejectionText,
+    (response) => {
+      if (!same) {
+        removeCardWithUserID(userID);
+      }
+      $("#action-button-" + userID).show();
+      $("#loader-" + userID).hide();
+      $.modal.close();
+      cb();
     }
-    $("#action-button-" + userID).show();
-    $("#loader-" + userID).hide();
-  });
+  );
 }
 
 function verify(userID, same) {
@@ -155,6 +276,22 @@ function updateVerificationStatus(userID, type, cb) {
       secret: LOGIN_SECRET,
       verify: type,
       userID: userID,
+    })
+    .then(function (response) {
+      cb(response);
+    })
+    .catch(function (error) {
+      $("#verificationHolder").html(error);
+    });
+}
+
+function updateVerificationStatusWithRejectionText(userID, type, text, cb) {
+  axios
+    .post("https://www.spacr.ml/admin/verify", {
+      secret: LOGIN_SECRET,
+      verify: type,
+      userID: userID,
+      verificationInfo: text,
     })
     .then(function (response) {
       cb(response);

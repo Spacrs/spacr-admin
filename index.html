@@ -11,6 +11,7 @@
       src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"
     ></script>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/modal.css" />
     <!-- ADDITIONAL STYLESHEET HERE -->
     <title>Spacr</title>
   </head>
@@ -46,6 +47,8 @@
                 Verification
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#" onclick="loadVerificationHolder('all')">All users</a>
+                <a class="dropdown-item" href="#" onclick="loadVerificationHolder('none')">None</a>
                 <a class="dropdown-item" href="#" onclick="loadVerificationHolder('pending')">Pending</a>
                 <a class="dropdown-item" href="#" onclick="loadVerificationHolder('rejected')">Rejected</a>
                 <a class="dropdown-item" href="#" onclick="loadVerificationHolder('verified')">Verified</a>
@@ -90,12 +93,13 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
     <script
-      src="js/main.js"
+      src="js/main.js?2"
       type= "text/javascript"
     ></script>
     <script
-      src="js/verification.js"
+      src="js/verification.js?2"
       type= "text/javascript"
     ></script>
     <!-- ADDITIONAL JS HERE -->
