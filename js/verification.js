@@ -70,9 +70,12 @@ function getVerificationCards(data) {
             <li class="list-group-item"><b>Phone number:</b> ${paramR(
               user.Phone
             )}</li>
-            <li class="list-group-item"><b>Location</b><br /> Longitude: ${paramR(
-              user.AddressLongitude
-            )} Latitude: ${paramR(user.AddressLatitude)}</li>
+            <li class="list-group-item"><b>Location</b>
+            <ul style="list-style: none;padding: 5px;"><li>Address: ${paramR(
+              user.Address
+            )} </li><li> Longitude: ${paramR(
+      user.AddressLongitude
+    )} </li><li>Latitude: ${paramR(user.AddressLatitude)}</li></ul></li>
             <li class="list-group-item"><b>Birthday</b> ${paramR(
               user.Birthday
             )}</li>
