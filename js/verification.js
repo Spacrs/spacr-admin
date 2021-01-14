@@ -298,7 +298,7 @@ function sendPingToUser(userID, idVal) {
       buttonUnclickable(idVal)
     })
     .catch(function (error) {
-      alert(error);
+      alert("An error occured and notification wasn't sent for some reason.");
     });
 }
 
