@@ -59,7 +59,7 @@ function getVerificationCards(data) {
           user.UserID
         }</span></center>
         ${imageRender(user.ProfilePictureURL, true, user.UserID)}
-          <div class="card-block" style="padding: 3px;">
+          <div class="card-block" style="padding: 3px; display: inline-block;">
             <h4 class="card-title">${paramR(user.FullName)}</h4> 
             <button type="button" onclick="sendPingToUser('${user.UserID}','ping-button-${user.UserID}')" class="btn btn-primary btn-sm" id="ping-button-${user.UserID}">Ping</button>
           </div>
@@ -289,6 +289,7 @@ function updateVerificationStatus(userID, type, cb) {
 }
 
 function sendPingToUser(userID, idVal) {
+  
   axios
     .post("https://www.spacr.ml/admin/pingUser", {
       secret: LOGIN_SECRET,
