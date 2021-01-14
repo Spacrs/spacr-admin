@@ -298,7 +298,7 @@ function sendPingToUser(userID, idVal) {
       buttonUnclickable(idVal)
     })
     .catch(function (error) {
-      $("#verificationHolder").html(error);
+      alert(error);
     });
 }
 
