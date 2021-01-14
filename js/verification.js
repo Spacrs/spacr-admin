@@ -59,7 +59,7 @@ function getVerificationCards(data) {
           user.UserID
         }</span></center>
         ${imageRender(user.ProfilePictureURL, true, user.UserID)}
-          <div class="card-block" style="padding: 3px;">
+          <div class="card-block text-center" style="padding: 3px;">
             <div style="display: inline;">
               <h4 class="card-title">${paramR(user.FullName)}</h4> 
               <button type="button" onclick="sendPingToUser('${user.UserID}','ping-button-${user.UserID}')" class="btn btn-primary btn-sm" id="ping-button-${user.UserID}">Ping</button>
