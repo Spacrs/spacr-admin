@@ -288,6 +288,20 @@ function updateVerificationStatus(userID, type, cb) {
     });
 }
 
+function sendPingToUser(userID, cb) {
+  axios
+    .post("https://www.spacr.ml/admin/pingUser", {
+      secret: LOGIN_SECRET,
+      userID: userID,
+    })
+    .then(function (response) {
+      cb(response);
+    })
+    .catch(function (error) {
+      $("#verificationHolder").html(error);
+    });
+}
+
 function updateVerificationStatusWithRejectionText(userID, type, text, cb) {
   axios
     .post("https://www.spacr.ml/admin/verify", {
