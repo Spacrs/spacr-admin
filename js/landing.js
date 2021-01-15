@@ -42,7 +42,7 @@ function createTableHTML(data) {
     let date = new Date(e.TimeRecorded * 1000);
     let dateText = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
     var timeText = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-    var dateTimeText = `${date.toDateString()} ${date.toTimeString()}`
+    var dateTimeText = `${date.toDateString()} ${timeText}` //${date.toTimeString()}
 html+= `
 <tr>
 <th scope="row">${e.id}</th>
