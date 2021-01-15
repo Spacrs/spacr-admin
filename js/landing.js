@@ -3,7 +3,7 @@ function loadLandingPageEntries() {
     <center><img style="margin-top:100px;" src="assets/loader.gif" /></center>
     `);
   axios
-    .post("https://spacr.ml/landingEndpoint/", {
+    .post("https://www.spacr.ml/landingEndpoint/", {
       secret: LOGIN_SECRET
     })
     .then(function (response) {
