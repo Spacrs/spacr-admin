@@ -9,7 +9,7 @@ function loadLandingPageEntries() {
     })
     .then(function (response) {
       let html = `
-      <h1 class="display-4 text-center" style="padding:10px;">All ${
+      <h1 class="display-4 text-center" style="padding:10px;">${
         response.data.length
       } landing page entries</h1>`;
       html += createTableHTML(response.data);
