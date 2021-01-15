@@ -17,5 +17,6 @@ function loadLandingPageEntries() {
       $("#verificationHolder").html(`
         <div class="alert alert-dismissible alert-danger">Unauthorized. Put the correct key in.</div>
         `);
+        //d
     });
 }
