@@ -9,9 +9,9 @@ function loadLandingPageEntries() {
     })
     .then(function (response) {
       let html = `
-      <h1 class="display-4 text-center" style="padding:10px;">] All landing page records (${
+      <h1 class="display-4 text-center" style="padding:10px;">All ${
         response.data.length
-      })</h1>`;
+      } landing page entries</h1>`;
       html += createTableHTML(response.data);
       $("#verificationHolder").html(html);
     })
@@ -39,10 +39,14 @@ function createTableHTML(data) {
 
    `;
    data.forEach((e) => {
+    let date = new Date(e.TimeRecorded * 1000);
+    let dateText = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+    var timeText = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+    var dateTimeText = dateText+' '+timeText;
 html+= `
 <tr>
 <th scope="row">${e.id}</th>
-<td>${e.TimeRecorded}</td>
+<td>${dateTimeText}</td>
 <td>${e.Name}</td>
 <td>${e.Destination}</td>
 <td>${e.Email}</td>
