@@ -9,7 +9,7 @@ function loadLandingPageEntries() {
     })
     .then(function (response) {
       let html = `
-      <h1 class="display-4 text-center" style="padding:10px;">${type.toUpperCase()} USERS (${
+      <h1 class="display-4 text-center" style="padding:10px;">] USERS (${
         response.data.length
       })</h1>`;
       html += JSON.stringify(response.data);
