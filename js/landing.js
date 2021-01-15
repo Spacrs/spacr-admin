@@ -9,10 +9,10 @@ function loadLandingPageEntries() {
     })
     .then(function (response) {
       let html = `
-      <h1 class="display-4 text-center" style="padding:10px;">] USERS (${
+      <h1 class="display-4 text-center" style="padding:10px;">] All landing page records (${
         response.data.length
       })</h1>`;
-      html += JSON.stringify(response.data);
+      html += createTableHTML(response.data);
       $("#verificationHolder").html(html);
     })
     .catch(function (error) {
@@ -21,4 +21,37 @@ function loadLandingPageEntries() {
         <div class="alert alert-dismissible alert-danger">Unauthorized. Put the correct key in.</div>
         `);
     });
+}
+
+function createTableHTML(data) {
+    let html = `
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Date</th>
+      <th scope="col">Name</th>
+      <th scope="col">Destination</th>
+      <th scope="col">Email</th>
+    </tr>
+  </thead>
+  <tbody>
+
+   `;
+   data.forEach((e) => {
+html+= `
+<tr>
+<th scope="row">${e.id}</th>
+<td>${e.TimeRecorded}</td>
+<td>${e.Name}</td>
+<td>${e.Destination}</td>
+<td>${e.Email}</td>
+</tr>
+`
+   })
+html +=`
+  </tbody>
+</table>`
+
+return html
 }
