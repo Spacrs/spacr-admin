@@ -19,7 +19,7 @@ function loadVerificationHolder(type) {
     <center><img style="margin-top:100px;" src="assets/loader.gif" /></center>
     `);
   axios
-    .post("https://www.spacr.ml/user/getAllByVerificationStatus", {
+    .post("https://www.spacr.tk/user/getAllByVerificationStatus", {
       secret: LOGIN_SECRET,
       verified: type,
     })
@@ -277,7 +277,7 @@ function removeCardWithUserID(id) {
 
 function updateVerificationStatus(userID, type, cb) {
   axios
-    .post("https://www.spacr.ml/admin/verify", {
+    .post("https://www.spacr.tk/admin/verify", {
       secret: LOGIN_SECRET,
       verify: type,
       userID: userID,
@@ -293,7 +293,7 @@ function updateVerificationStatus(userID, type, cb) {
 function sendPingToUser(userID, idVal) {
   
   axios
-    .post("https://www.spacr.ml/admin/pingUser", {
+    .post("https://www.spacr.tk/admin/pingUser", {
       secret: LOGIN_SECRET,
       userID: userID,
     })
@@ -307,7 +307,7 @@ function sendPingToUser(userID, idVal) {
 
 function updateVerificationStatusWithRejectionText(userID, type, text, cb) {
   axios
-    .post("https://www.spacr.ml/admin/verify", {
+    .post("https://www.spacr.tk/admin/verify", {
       secret: LOGIN_SECRET,
       verify: type,
       userID: userID,

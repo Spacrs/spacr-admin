@@ -2,7 +2,7 @@ function loadLandingPageEntries() {
     $("#verificationHolder").html(`
     <center><img style="margin-top:100px;" src="assets/loader.gif" /></center>
     `);
-    let url = `https://www.spacr.ml/landingEndpoint/getAll`
+    let url = `https://www.spacr.tk/landingEndpoint/getAll`
   axios
     .post(url, {
       secret: LOGIN_SECRET
