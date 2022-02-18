@@ -277,7 +277,7 @@ function removeCardWithUserID(id) {
 
 function updateVerificationStatus(userID, type, cb) {
   axios
-    .post("https://www.spacr.tk/admin/verify", {
+    .post("https://spacr-dev.herokuapp.com/verify", {
       secret: LOGIN_SECRET,
       verify: type,
       userID: userID,
@@ -293,7 +293,7 @@ function updateVerificationStatus(userID, type, cb) {
 function sendPingToUser(userID, idVal) {
   
   axios
-    .post("https://www.spacr.tk/admin/pingUser", {
+    .post("https://spacr-dev.herokuapp.com/admin/pingUser", {
       secret: LOGIN_SECRET,
       userID: userID,
     })
@@ -307,7 +307,7 @@ function sendPingToUser(userID, idVal) {
 
 function updateVerificationStatusWithRejectionText(userID, type, text, cb) {
   axios
-    .post("https://www.spacr.tk/admin/verify", {
+    .post("https://spacr-dev.herokuapp.com/admin/verify", {
       secret: LOGIN_SECRET,
       verify: type,
       userID: userID,
