@@ -19,7 +19,7 @@ function loadVerificationHolder(type) {
     <center><img style="margin-top:100px;" src="assets/loader.gif" /></center>
     `);
   axios
-    .post("https://www.spacr.tk/user/getAllByVerificationStatus", {
+    .post("https://spacr-dev.herokuapp.com/user/getAllByVerificationStatus", {
       secret: LOGIN_SECRET,
       verified: type,
     })
