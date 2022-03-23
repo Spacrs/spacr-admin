@@ -277,7 +277,7 @@ function removeCardWithUserID(id) {
 
 function updateVerificationStatus(userID, type, cb) {
   axios
-    .post("https://spacr-dev.herokuapp.com/verify", {
+    .post("https://spacr-dev.herokuapp.com/admin/verify", {
       secret: LOGIN_SECRET,
       verify: type,
       userID: userID,
