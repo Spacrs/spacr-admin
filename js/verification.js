@@ -68,6 +68,7 @@ function getVerificationCards(data) {
           <ul class="list-group list-group-flush">
           ${verificationInfoCode}
           <li class="list-group-item"><b>Login type:</b> ${user.Type}</li>
+          <li class="list-group-item"><b>Date of creation:</b> ${user.Type}</li>
           <li class="list-group-item"><b>Email:</b> ${user.Email}</li>
             <li class="list-group-item"><b>Phone number:</b> ${paramR(
               user.Phone
