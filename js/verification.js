@@ -19,7 +19,7 @@ function loadVerificationHolder(type) {
     <center><img style="margin-top:100px;" src="assets/loader.gif" /></center>
     `);
   axios
-    .post("https://spacr-dev.herokuapp.com/user/getAllByVerificationStatus", {
+    .post("https://spacr.samaritantechnologies.co/user/getAllByVerificationStatus", {
       secret: LOGIN_SECRET,
       verified: type,
     })
@@ -68,7 +68,7 @@ function getVerificationCards(data) {
           <ul class="list-group list-group-flush">
           ${verificationInfoCode}
           <li class="list-group-item"><b>Login type:</b> ${user.Type}</li>
-          <li class="list-group-item"><b>Date of creation:</b> ${user.TimeStamp}</li>
+          <li class="list-group-item"><b>Date of creation:</b> ${(user.TimeStamp)?new Date(user.TimeStamp).toLocaleString('en-US'):""}</li>
           <li class="list-group-item"><b>Email:</b> ${user.Email}</li>
             <li class="list-group-item"><b>Phone number:</b> ${paramR(
               user.Phone
@@ -278,7 +278,7 @@ function removeCardWithUserID(id) {
 
 function updateVerificationStatus(userID, type, cb) {
   axios
-    .post("https://spacr-dev.herokuapp.com/admin/verify", {
+    .post("https://spacr.samaritantechnologies.co/admin/verify", {
       secret: LOGIN_SECRET,
       verify: type,
       userID: userID,
@@ -294,7 +294,7 @@ function updateVerificationStatus(userID, type, cb) {
 function sendPingToUser(userID, idVal) {
   
   axios
-    .post("https://spacr-dev.herokuapp.com/admin/pingUser", {
+    .post("https://spacr.samaritantechnologies.co/admin/pingUser", {
       secret: LOGIN_SECRET,
       userID: userID,
     })
@@ -308,7 +308,7 @@ function sendPingToUser(userID, idVal) {
 
 function updateVerificationStatusWithRejectionText(userID, type, text, cb) {
   axios
-    .post("https://spacr-dev.herokuapp.com/admin/verify", {
+    .post("https://spacr.samaritantechnologies.co/admin/verify", {
       secret: LOGIN_SECRET,
       verify: type,
       userID: userID,
