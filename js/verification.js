@@ -19,7 +19,7 @@ function loadVerificationHolder(type) {
     <center><img style="margin-top:100px;" src="assets/loader.gif" /></center>
     `);
   axios
-    .post("https://spacr.samaritantechnologies.co/user/getAllByVerificationStatus", {
+    .post("https://api.spa-cr.com//user/getAllByVerificationStatus", {
       secret: LOGIN_SECRET,
       verified: type,
     })
@@ -278,7 +278,7 @@ function removeCardWithUserID(id) {
 
 function updateVerificationStatus(userID, type, cb) {
   axios
-    .post("https://spacr.samaritantechnologies.co/admin/verify", {
+    .post("https://api.spa-cr.com//admin/verify", {
       secret: LOGIN_SECRET,
       verify: type,
       userID: userID,
@@ -294,7 +294,7 @@ function updateVerificationStatus(userID, type, cb) {
 function sendPingToUser(userID, idVal) {
   
   axios
-    .post("https://spacr.samaritantechnologies.co/admin/pingUser", {
+    .post("https://api.spa-cr.com//admin/pingUser", {
       secret: LOGIN_SECRET,
       userID: userID,
     })
@@ -308,7 +308,7 @@ function sendPingToUser(userID, idVal) {
 
 function updateVerificationStatusWithRejectionText(userID, type, text, cb) {
   axios
-    .post("https://spacr.samaritantechnologies.co/admin/verify", {
+    .post("https://api.spa-cr.com//admin/verify", {
       secret: LOGIN_SECRET,
       verify: type,
       userID: userID,
