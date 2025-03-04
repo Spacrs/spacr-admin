@@ -9,6 +9,8 @@ const {
   IoIosLogOut,
   GrTemplate,
   MdOutlineCategory,
+  BsCreditCard2Front,
+  TbTruckDelivery 
 } = icons;
 import { logout } from "../../store/slices/userSlice/userSlice";
 import { useAppDispatch } from "../../store/hooks";
@@ -25,7 +27,7 @@ function Sidebar() {
     >
       <div className="flex flex-col justify-between flex-grow p-4">
         <nav className="flex flex-col space-y-2">
-          <Link
+          {/* <Link
             to="/admin/dashboard"
             className={`flex items-center p-2 ${
               isActive("/admin/dashboard")
@@ -35,7 +37,7 @@ function Sidebar() {
           >
             <RxDashboard style={{ fontSize: "20px", margin: "0 10px" }} />
             Dashboard
-          </Link>
+          </Link> */}
           <Link
             to="/admin/users"
             className={`flex items-center p-2 ${
@@ -48,41 +50,29 @@ function Sidebar() {
             Users
           </Link>
           <Link
-            to="/admin/template-category"
+            to="/admin/payment-config"
             className={`flex items-center p-2 ${
-              isActive("/admin/template-category")
+              isActive("/admin/payment-config")
                 ? "bg-dark text-white"
                 : "text-gray-600 hover:bg-dark hover:text-white"
             } font-medium rounded-md`}
           >
-            <MdOutlineCategory style={{ fontSize: "20px", margin: "0 10px" }} />
-            Template Category
+            <BsCreditCard2Front style={{ fontSize: "20px", margin: "0 10px" }} />
+            Payment Config
           </Link>
           <Link
-            to="/admin/templates"
+            to="/admin/order-list"
             className={`flex items-center p-2 ${
-              isActive("/admin/templates")
+              isActive("/admin/oder-list")
                 ? "bg-primary text-white"
                 : "text-gray-600 hover:bg-dark hover:text-white"
             } font-medium rounded-md`}
           >
-            <GrTemplate style={{ fontSize: "20px", margin: "0 10px" }} />
-            Templates
+            <TbTruckDelivery style={{ fontSize: "20px", margin: "0 10px" }} />
+            
+            Order List
           </Link>
-          <Link
-            to="/admin/reports"
-            className={`flex items-center p-2 ${
-              isActive("/admin/reports")
-                ? "bg-primary text-white"
-                : "text-gray-600 hover:bg-dark hover:text-white"
-            } font-medium rounded-md`}
-          >
-            <HiOutlineDocumentReport
-              style={{ fontSize: "20px", margin: "0 10px" }}
-            />
-            Reports
-          </Link>
-          <Link
+          {/* <Link
             to="/admin/settings"
             className={`flex items-center p-2 ${
               isActive("/admin/settings")
@@ -92,7 +82,7 @@ function Sidebar() {
           >
             <CiSettings style={{ fontSize: "20px", margin: "0 10px" }} />
             Settings
-          </Link>
+          </Link> */}
         </nav>
         <div className="mt-6">
           <button

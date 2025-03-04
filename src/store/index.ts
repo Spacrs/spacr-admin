@@ -9,9 +9,11 @@ import {skillApi} from "./slices/skilSlice/apiSlice";
 import skillSlice from "./slices/skilSlice/skillSlice";
 import adminLayoutSlice from "./slices/adminLayoutSlice/adminLayoutSlice";
 import resumeDetailSlice from "./slices/resumeTemplateSlice/resumeDetailSlice";
-import { aiApi } from "./slices/ai/aiApi";
+import paymentConfigSlice from "./slices/paymentConfigSlice/paymentConfigSlice";
+import { paymentConfigApi } from "./slices/paymentConfigSlice/apiSlice";
 
-
+import orderSlice from "./slices/orderSlice/orderSlice";
+import { ordersApi } from "./slices/orderSlice/apiSlice";
 
 
 export const store: Store = configureStore({
@@ -20,13 +22,16 @@ export const store: Store = configureStore({
     [categoryApi.reducerPath]: categoryApi.reducer,
     [userResumeApi.reducerPath]: userResumeApi.reducer,
     [skillApi.reducerPath]: skillApi.reducer,
-    [aiApi.reducerPath]:aiApi.reducer,
+    [paymentConfigApi.reducerPath]:paymentConfigApi.reducer,
+    [ordersApi.reducerPath]:ordersApi.reducer,
     userSlice,
+    paymentConfigSlice,
     categorySlice,
     resumeDetailsSlice,
     skillSlice,
     adminLayoutSlice,
-    resumeDetailSlice
+    resumeDetailSlice,
+    orderSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -34,7 +39,8 @@ export const store: Store = configureStore({
       .concat(categoryApi.middleware)
       .concat(userResumeApi.middleware)
       .concat(skillApi.middleware)
-      .concat(aiApi.middleware)
+      .concat(paymentConfigApi.middleware)
+      .concat(ordersApi.middleware)
 });
 
 export type RootState = ReturnType<typeof store.getState>;

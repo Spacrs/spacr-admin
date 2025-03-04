@@ -1,12 +1,15 @@
 import Dashboard from "../pages/DashboardManagement/Dashboard";
 import Authenticate from "../pages/AuthManagement/Authenticate";
 import Report from "../pages/Report";
+import PaymentConfig from "../pages/PaymentConfigManagement/PaymentConfig";
+
 import Setting from "../pages/SettingManagemnt/Setting";
 import Users from "../pages/UserManagemnt/Users";
 import UserDetails from "../pages/UserManagemnt/UserDetails";
 
 import Categories from "../pages/CategoryManagement/Categories";
 import AdminLayout from "../pages/AdminManagement/AdminLayout";
+import Orders from "../pages/OrderManagement/Orders";
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -45,9 +48,15 @@ export const adminRoutes = [
     showBreadcrumb: true,
   },
   {
-    path: "reports",
-    component: Report,
+    path: "payment-config",
+    component: PaymentConfig,
     breadcrumb: ["admin", "reports"],
+    showBreadcrumb: true,
+  },
+  {
+    path: "order-list",
+    component: Orders,
+    breadcrumb: ["admin", "orders"],
     showBreadcrumb: true,
   },
   {

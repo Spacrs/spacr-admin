@@ -84,17 +84,26 @@ export const adminAuthApi: any = createApi({
     }),
     updateUserInfo: builder.mutation<any, UserInfoRequest>({
       query: (credentials) => ({
-        url: `/users/info/${credentials.userId}`,
-        method: "PUT",
+        url: `/admin/update-user-details/${credentials.userId}`,
+        method: "PATCH",
         body: credentials,
         headers: {
           authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       }),
     }),
-    getUsers: builder.query<any, void>({
-      query: () => ({
-        url: `/admin/get-all-users`,
+    // getUsers: builder.query<any, void>({
+    //   query: () => ({
+    //     url: `/admin/get-all-users`,
+    //     method: "GET",
+    //     headers: {
+    //       authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    //     },
+    //   }),
+    // }),
+    getUsers: builder.query<any, { page: number; verified?: string }>({
+      query: ({ page, verified }) => ({
+        url: `/admin/get-all-users?page=${page}${verified ? `&verified=${verified}` : ""}`,
         method: "GET",
         headers: {
           authorization: `Bearer ${localStorage.getItem("access_token")}`,

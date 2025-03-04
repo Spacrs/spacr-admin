@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import Table from "../../components/Common/Table";
-import { useGetUsersQuery } from "../../store/slices/userSlice/apiSlice";
+import {
+  useGetUsersQuery,
+  useUpdateUserInfoMutation,
+} from "../../store/slices/userSlice/apiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { getUsers } from "../../store/slices/userSlice/userSlice";
 import { useNavigate } from "react-router-dom";
@@ -18,12 +21,11 @@ const columns = [
     Header: "Action",
     colName: "KebabMenu",
     options: [
-      { label: "Activate", value: "active" ,type:"toggle" },
-      { label: "Deactivate", value: "inactive",type:"toggle" },
-      { label: "View Profile" , value :"",type:"button" }
+      { label: "Activate", value: "active", type: "toggle" },
+      { label: "Deactivate", value: "inactive", type: "toggle" },
+      { label: "View Profile", value: "", type: "button" },
     ],
   },
-  // { name: "action", Header: "Actions", colName: "Actions" }
 ];
 
 function Users() {
@@ -31,7 +33,15 @@ function Users() {
   const navigate = useNavigate();
   const { users } = useAppSelector((state) => state.userSlice);
   const [currentPage, setCurrentPage] = useState(1);
-  const { data, isLoading, isError } = useGetUsersQuery(currentPage);
+  const [filter, setFilter] = useState("");
+
+  // Fetch users based on currentPage and filter
+  const { data, isLoading, isError, refetch } = useGetUsersQuery({
+    page: currentPage,
+    verified: filter !== "" ? filter : undefined, // Send filter if not 'all'
+  });
+
+  const [updateUserStatus] = useUpdateUserInfoMutation();
 
   useEffect(() => {
     if (data?.data) {
@@ -47,17 +57,45 @@ function Users() {
     );
   }
 
-  const handleToggleStatus = (val:any)=>{
-    console.log(val)
-  }
+  const handleToggleStatus = async (val: any) => {
+    const newStatus = val.Status === "active" ? "inactive" : "active";
 
-  const handleView = (val:any)=>{
-    navigate(`/admin/users-details/${val.UserID}`)
-    console.log(val)
-  }
+    try {
+      await updateUserStatus({
+        userId: val.UserID,
+        status: newStatus,
+      }).unwrap();
+      refetch(); // Refetch users after updating status
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
+  };
+
+  const handleView = (val: any) => {
+    navigate(`/admin/users-details/${val.UserID}`);
+  };
 
   return (
     <div className="p-4">
+      {/* Filter and Title Section */}
+      {/* <div className="flex justify-end items-center mb-4">
+        <select
+          value={filter}
+          onChange={(e) => {
+            setFilter(e.target.value);
+            setCurrentPage(1); // Reset to first page when filtering
+          }}
+          className="p-2 border rounded-md bg-white shadow"
+        >
+          <option value="all">All</option>
+          <option value="pending">Pending</option>
+          <option value="none">None</option>
+          <option value="verified">Accepted</option>
+          <option value="rejected">Rejected</option>
+        </select>
+      </div> */}
+
+      {/* Table Section */}
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md">
         <Table
           data={users}

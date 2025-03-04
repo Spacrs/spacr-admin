@@ -57,6 +57,8 @@ import { CiBoxList } from "react-icons/ci";
 import { MdOutlineArrowRightAlt,MdOutlineArrowDownward} from "react-icons/md";
 import { IoReturnDownBack } from "react-icons/io5";
 import { CiMenuKebab } from "react-icons/ci";
+import { BsCreditCard2Front } from "react-icons/bs";
+import { TbTruckDelivery } from "react-icons/tb";
 
 export const icons = {
   CiHome: CiHome,
@@ -124,6 +126,8 @@ export const icons = {
   MdOutlineArrowRightAlt,
   MdOutlineArrowDownward,
   IoReturnDownBack,
-  CiMenuKebab
+  CiMenuKebab,
+  BsCreditCard2Front,
+  TbTruckDelivery 
 };
 

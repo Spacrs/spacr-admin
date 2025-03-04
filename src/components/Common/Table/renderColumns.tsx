@@ -7,9 +7,9 @@ const {
   MdOutlineEdit,
   AiOutlineDelete,
   BsCopy,
-  MdOutlineMarkEmailRead,
-  MdOutlineMarkEmailUnread,
-  CiMenuKebab
+
+  CiMenuKebab,
+  BsEye
 } = icons;
 
 export const renderColumns = (
@@ -20,8 +20,15 @@ export const renderColumns = (
   switch (column.colName) {
     case "Default":
       return (
-        <p className="font-medium">{column.name ? row[column.name] : ""}</p>
+        <p className="font-medium">
+          {typeof row[column.name] === "boolean"
+            ? row[column.name]
+              ? "Yes"
+              : "No"
+            : row[column.name] || ""}
+        </p>
       );
+
     case "Default":
       return (
         <p className="font-medium">{column.name ? row[column.name] : ""}</p>
@@ -29,33 +36,46 @@ export const renderColumns = (
     case "Actions":
       return (
         <div className="flex space-x-2 items-center">
-          <MdOutlineEdit
-            onClick={() => actions.handleUpdate?.(row)}
-            className="text-lg font-bold text-gray-500 hover:text-[#3f9997]"
-          />
-          <AiOutlineDelete
-            onClick={() => actions.handleDelete?.(row)}
-            className="text-lg font-bold text-gray-500 hover:text-red-400"
-          />
-          <BsCopy
-            onClick={() => actions.handleClone?.(row)}
-            className="text-lg font-bold text-gray-500 hover:text-blue-400"
-          />
+          {actions.handleUpdate && (
+            <MdOutlineEdit
+              onClick={() => actions.handleUpdate?.(row)}
+              className="text-lg font-bold text-gray-500 hover:text-[#3f9997]"
+            />
+          )}
+          {actions.handleView && (
+            <BsEye
+              onClick={() => actions.handleView?.(row)}
+              className="text-lg font-bold text-gray-500 hover:text-[#3f9997]"
+            />
+          )}
+          {actions.handleDelete && (
+            <AiOutlineDelete
+              onClick={() => actions.handleDelete?.(row)}
+              className="text-lg font-bold text-gray-500 hover:text-red-400"
+            />
+          )}
+          {actions.handleClone && (
+            <BsCopy
+              onClick={() => actions.handleClone?.(row)}
+              className="text-lg font-bold text-gray-500 hover:text-blue-400"
+            />
+          )}
         </div>
       );
     case "Status":
       return (
         <div className="relative flex items-center">
           {column.name && ["active", "verified"].includes(row[column.name]) && (
-            <div className=" bg-[#3f9997] text-white text-xs font-medium rounded-full p-2">
+            <div className=" bg-green-500 text-white text-xs font-medium rounded-full p-2">
               {row[column.name]}
             </div>
           )}
-          {column.name && ["inactive"].includes(row[column.name]) && (
-            <div className=" bg-orange-400 text-white text-xs font-medium rounded-full p-2">
-              {row[column.name]}
-            </div>
-          )}
+          {column.name &&
+            ["inactive", "Pending","pending"].includes(row[column.name]) && (
+              <div className=" bg-orange-400 text-white text-xs font-medium rounded-full p-2">
+                {row[column.name]}
+              </div>
+            )}
           {column.name && ["none"].includes(row[column.name]) && (
             <div className=" bg-orange-400 text-white text-xs font-medium rounded-full p-2">
               {row[column.name]}
@@ -78,14 +98,16 @@ export const renderColumns = (
           })
         : "N/A";
 
-      return <div className="text-gray-700 text-sm font-medium">{formattedDate}</div>;
+      return (
+        <div className="text-gray-700 text-sm font-medium">{formattedDate}</div>
+      );
     }
     case "KebabMenu": {
       const [isOpen, setIsOpen] = useState(false);
       const menuRef = useRef(null);
-    
+
       const toggleMenu = () => setIsOpen(!isOpen);
-    
+
       // Close menu when clicking outside
       useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -93,16 +115,18 @@ export const renderColumns = (
             setIsOpen(false);
           }
         };
-    
+
         document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
+        return () =>
+          document.removeEventListener("mousedown", handleClickOutside);
       }, []);
-    
+
       // Determine the correct toggle option based on user status
-      const statusOption = row.Status === "active"
-        ? { label: "Deactivate", value: "inactive", type: "toggle" }
-        : { label: "Activate", value: "active", type: "toggle" };
-    
+      const statusOption =
+        row.Status === "active"
+          ? { label: "Deactivate", value: "inactive", type: "toggle" }
+          : { label: "Activate", value: "active", type: "toggle" };
+
       return (
         <div className="relative flex items-center" ref={menuRef}>
           <CiMenuKebab
@@ -138,6 +162,21 @@ export const renderColumns = (
         </div>
       );
     }
+    case "Boolean":
+      return (
+        <div className="relative flex items-center">
+          {column.name && row[column.name] === true && (
+            <div className="bg-green-500 text-white text-xs font-medium rounded-full px-3 py-1">
+              Yes
+            </div>
+          )}
+          {column.name && row[column.name] === false && (
+            <div className="bg-red-500 text-white text-xs font-medium rounded-full px-3 py-1">
+              No
+            </div>
+          )}
+        </div>
+      );
 
     default:
       return <></>;
