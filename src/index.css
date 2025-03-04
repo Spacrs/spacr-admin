@@ -1,0 +1,264 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f0f0; 
+  border-radius: 10px; 
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #55bab9, #5597ba); 
+  border-radius: 10px; 
+  transition:  0.3s ease; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #5597ba, #55bab9); 
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(45deg, #5597ba, #55ba98);
+}
+
+::-webkit-scrollbar-corner {
+  background: #f0f0f0;
+}
+
+
+.circle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #66bfbf;
+  border-radius: 50%;
+  opacity: 0.8;
+  box-shadow: 0 0 15px rgba(102, 191, 191, 0.7),
+    0 0 30px rgba(102, 191, 191, 0.5);
+  transform: scale(1);
+  transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+  /* cubic-bezier(0.23, 1, 0.320, 1) */
+  pointer-events: none;
+  z-index: 100000;
+}
+
+#borderBottomEffect {
+  border-bottom: 5px solid rgba(102, 191, 191, 0.7);
+  border-radius: 50%;
+  transform: scale(1);
+}
+
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(85, 186, 185, 0.5);
+  transform: scale(0);
+  animation: ripple-animation 0.6s linear;
+  pointer-events: none;
+}
+
+@keyframes ripple-animation {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* resize */
+.resizeable-element {
+  transition: transform 0.2s ease-in-out, width 0.2s ease, height 0.2s ease;
+}
+
+.resizeable-element.selected .react-resizable-handle {
+  display: block;
+  border: 2px solid #3498db;
+  background-color: #3498db;
+  border-radius: 20px;
+  position: absolute;
+  z-index: 10;
+}
+
+.react-resizable-handle-border {
+  display: block;
+  border: 2px solid #3498db;
+  position: absolute;
+  z-index: 9;
+  width: 100%;
+  height: 100%;
+}
+
+.react-resizable-handle-sw {
+  bottom: -6px;
+  left: -6px;
+  cursor: sw-resize;
+  width: 20px;
+  height: 10px;
+}
+
+.react-resizable-handle-se {
+  bottom: -6px;
+  right: -6px;
+  cursor: se-resize;
+  width: 20px;
+  height: 10px;
+}
+
+.react-resizable-handle-nw {
+  top: -6px;
+  left: -6px;
+  cursor: nw-resize;
+  width: 20px;
+  height: 10px;
+}
+
+.react-resizable-handle-ne {
+  top: -6px;
+  right: -6px;
+  cursor: ne-resize;
+  width: 20px;
+  height: 10px;
+}
+
+.react-resizable-handle-w,
+.react-resizable-handle-e,
+.react-resizable-handle-n,
+.react-resizable-handle-s {
+  background-color: white;
+  border-radius: 4px;
+  border: 2px solid #3498db;
+}
+
+.react-resizable-handle-w {
+  left: -6px;
+  top: calc(50% - 12px);
+  cursor: w-resize;
+  width: 10px;
+  height: 20px;
+}
+
+.react-resizable-handle-e {
+  right: -6px;
+  top: calc(50% - 12px);
+  cursor: e-resize;
+  width: 10px;
+  height: 20px;
+}
+
+.react-resizable-handle-n {
+  top: -6px;
+  left: calc(50% - 12px);
+  cursor: n-resize;
+  width: 20px;
+  height: 10px;
+}
+
+.react-resizable-handle-s {
+  bottom: -6px;
+  left: calc(50% - 12px);
+  cursor: s-resize;
+  width: 20px;
+  height: 10px;
+}
+
+/* icon resize */
+
+.icon-resizable-handle {
+  display: block;
+  border:5px solid #3498db;
+  position: absolute;
+  z-index: 9;
+  border-radius: 50%;
+}
+.icon-resizable-handle-sw {
+  bottom: -6px;
+  left: -6px;
+  cursor: sw-resize;
+}
+
+.icon-resizable-handle-se {
+  bottom: -6px;
+  right: -6px;
+  cursor: se-resize;
+}
+
+.icon-resizable-handle-nw {
+  top: -6px;
+  left: -6px;
+  cursor: nw-resize;
+}
+
+.icon-resizable-handle-ne {
+  top: -6px;
+  right: -6px;
+  cursor: ne-resize;
+}
+
+/* .react-draggable {
+  transform: none !important;
+} */
+
+
+
+@keyframes rotateBorder {
+	100% {
+		transform: rotate(1turn);
+	}
+}
+
+.rainbow {
+	position: relative;
+	z-index: 0;
+	border-radius: 10px;
+	overflow: hidden;
+	font-family: sans-serif;
+	font-weight: bold;
+	&::before {
+		content: '';
+		position: absolute;
+		z-index: -2;
+		left: -50%;
+		top: -50%;
+		width: 200%;
+		height: 200%;
+		background-color: #55bab9;
+		background-repeat: no-repeat;
+		background-size: 50% 50%, 50% 50%;
+		background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+		background-image: linear-gradient(#399953, #399953), linear-gradient(#fbb300, #fbb300), linear-gradient(#d53e33, #d53e33), linear-gradient(#377af5, #377af5);
+		animation: rotateBorder 4s linear infinite;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2); /* Shadow around the border */
+	}
+	
+	&::after {
+		content: '';
+		position: absolute;
+		z-index: -1;
+		left: 6px;
+		top: 6px;
+		width: calc(100% - 12px);
+		height: calc(100% - 12px);
+		background: #55bab9;
+		border-radius: 5px;
+	}
+}
