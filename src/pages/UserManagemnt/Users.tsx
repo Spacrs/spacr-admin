@@ -38,6 +38,7 @@ function Users() {
   // Fetch users based on currentPage and filter
   const { data, isLoading, isError, refetch } = useGetUsersQuery({
     page: currentPage,
+    limit:5,
     verified: filter !== "" ? filter : undefined, // Send filter if not 'all'
   });
 
@@ -76,25 +77,8 @@ function Users() {
   };
 
   return (
-    <div className="p-4">
+    <div className="">
       {/* Filter and Title Section */}
-      {/* <div className="flex justify-end items-center mb-4">
-        <select
-          value={filter}
-          onChange={(e) => {
-            setFilter(e.target.value);
-            setCurrentPage(1); // Reset to first page when filtering
-          }}
-          className="p-2 border rounded-md bg-white shadow"
-        >
-          <option value="all">All</option>
-          <option value="pending">Pending</option>
-          <option value="none">None</option>
-          <option value="verified">Accepted</option>
-          <option value="rejected">Rejected</option>
-        </select>
-      </div> */}
-
       {/* Table Section */}
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md">
         <Table

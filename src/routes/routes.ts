@@ -65,24 +65,6 @@ export const adminRoutes = [
     breadcrumb: ["admin", "settings"],
     showBreadcrumb: true,
   },
-  // {
-  //   path: "templates",
-  //   component: Template,
-  //   breadcrumb: ["admin", "templates"],
-  //   showBreadcrumb: true,
-  // },
-  // {
-  //   path: "/create/template/:categoryId",
-  //   component: ConfigureTemplate,
-  //   breadcrumb: ["admin", "Create Templates"],
-  //   showBreadcrumb: false,
-  // },
-  // {
-  //   path: "/edit/template/:categoryId/:templateId",
-  //   component: ConfigureTemplate,
-  //   breadcrumb: ["admin", "Create Templates"],
-  //   showBreadcrumb: false,
-  // },
   {
     path: "/template-category",
     component: Categories,

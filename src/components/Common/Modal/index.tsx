@@ -29,7 +29,7 @@ const Modal: React.FC<IModalProps> = ({
         }`}
       >
         <div className="relative h-full flex flex-col">
-          <div className="w-full flex justify-between items-center px-6 py-4 bg-[#3f9997] border-b">
+          <div className="w-full flex justify-between items-center px-6 py-4 bg-primary border-b">
             <h2 className="text-lg font-semibold text-white">{title}</h2>
             <button
               onClick={onClose}
@@ -43,7 +43,7 @@ const Modal: React.FC<IModalProps> = ({
             <button
               type="submit"
               onClick={handlSave}
-              className="bg-[#3f9997] text-white py-2 px-4 rounded-md hover:bg-[#36908c] focus:outline-none focus:bg-[#36908c]"
+              className="bg-primary text-white py-2 px-4 rounded-md hover:bg-[#6bb1e0] focus:outline-none focus:bg-primary"
             >
               Save Changes
             </button>

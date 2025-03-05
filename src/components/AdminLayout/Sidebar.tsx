@@ -42,8 +42,8 @@ function Sidebar() {
             to="/admin/users"
             className={`flex items-center p-2 ${
               isActive("/admin/users")
-                ? "bg-dark text-white"
-                : "text-gray-600 hover:bg-dark hover:text-white"
+                ? "bg-primary text-white"
+                : "text-gray-600 hover:bg-primary hover:text-white"
             } font-medium rounded-md`}
           >
             <HiOutlineUsers style={{ fontSize: "20px", margin: "0 10px" }} />
@@ -53,8 +53,8 @@ function Sidebar() {
             to="/admin/payment-config"
             className={`flex items-center p-2 ${
               isActive("/admin/payment-config")
-                ? "bg-dark text-white"
-                : "text-gray-600 hover:bg-dark hover:text-white"
+                ? "bg-primary text-white"
+                : "text-gray-600 hover:bg-primary hover:text-white"
             } font-medium rounded-md`}
           >
             <BsCreditCard2Front style={{ fontSize: "20px", margin: "0 10px" }} />
@@ -63,9 +63,9 @@ function Sidebar() {
           <Link
             to="/admin/order-list"
             className={`flex items-center p-2 ${
-              isActive("/admin/oder-list")
+              isActive("/admin/order-list")
                 ? "bg-primary text-white"
-                : "text-gray-600 hover:bg-dark hover:text-white"
+                : "text-gray-600 hover:bg-primary hover:text-white"
             } font-medium rounded-md`}
           >
             <TbTruckDelivery style={{ fontSize: "20px", margin: "0 10px" }} />

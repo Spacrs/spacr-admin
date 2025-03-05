@@ -15,7 +15,7 @@ const UserDetails = () => {
   const IdentificationDocuments = user?.IdentificationDocuments || [];
 
   return (
-    <div className="p-4">
+    <div className="">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Left Side - Enhanced User Card */}
         <div className="col-span-1 bg-white text-gray-700 shadow-lg rounded-lg p-6">

@@ -1,16 +1,9 @@
 import React from "react";
-import { useState, useRef, useEffect } from "react";
 import { IColumns, IAction } from "./index";
 import { icons } from "../../../Icons/constant";
+import KebabMenu from "./KebabMenu";
 
-const {
-  MdOutlineEdit,
-  AiOutlineDelete,
-  BsCopy,
-
-  CiMenuKebab,
-  BsEye
-} = icons;
+const { MdOutlineEdit, AiOutlineDelete, BsCopy, BsEye } = icons;
 
 export const renderColumns = (
   column: IColumns,
@@ -60,7 +53,7 @@ export const renderColumns = (
             </div>
           )}
           {column.name &&
-            ["inactive", "Pending","pending"].includes(row[column.name]) && (
+            ["inactive", "Pending", "pending"].includes(row[column.name]) && (
               <div className=" bg-orange-400 text-white text-xs font-medium rounded-full p-2">
                 {row[column.name]}
               </div>
@@ -91,66 +84,10 @@ export const renderColumns = (
         <div className="text-gray-700 text-sm font-medium">{formattedDate}</div>
       );
     }
-    case "KebabMenu": {
-      const [isOpen, setIsOpen] = useState(false);
-      const menuRef = useRef(null);
 
-      const toggleMenu = () => setIsOpen(!isOpen);
+    case "KebabMenu":
+      return <KebabMenu row={row} actions={actions} />;
 
-      // Close menu when clicking outside
-      useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-          if (menuRef.current && !menuRef.current.contains(event.target)) {
-            setIsOpen(false);
-          }
-        };
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () =>
-          document.removeEventListener("mousedown", handleClickOutside);
-      }, []);
-
-      // Determine the correct toggle option based on user status
-      const statusOption =
-        row.Status === "active"
-          ? { label: "Deactivate", value: "inactive", type: "toggle" }
-          : { label: "Activate", value: "active", type: "toggle" };
-
-      return (
-        <div className="relative flex items-center" ref={menuRef}>
-          <CiMenuKebab
-            onClick={toggleMenu}
-            className="text-lg font-bold text-gray-500 hover:text-[#3f9997] cursor-pointer"
-          />
-          {isOpen && (
-            <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-md z-50">
-              <ul className="py-2 text-sm text-gray-700">
-                {/* Activate / Deactivate */}
-                <li
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => {
-                    actions.handleToggleStatus?.(row, statusOption.value);
-                    setIsOpen(false);
-                  }}
-                >
-                  {statusOption.label}
-                </li>
-                {/* View Profile */}
-                <li
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => {
-                    actions.handleView?.(row);
-                    setIsOpen(false);
-                  }}
-                >
-                  View Profile
-                </li>
-              </ul>
-            </div>
-          )}
-        </div>
-      );
-    }
     case "Boolean":
       return (
         <div className="relative flex items-center">

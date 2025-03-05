@@ -23,12 +23,16 @@ function MainContent({
   return showBreadcrumb ? (
     <div
       style={{ width: sideBar ? "calc(100% - 300px)" : "100%" }}
-      className="h-full flex-col overflow-y-scroll"
+      className="h-full flex-col bg-white"
     >
-      {breadcrumb && <Breadcrumb title={path} breadcrumb={breadcrumb} />}
-      {children}
+      <div className="h-full w-full flex-col overflow-y-scroll rounded-md bg-gray-200 p-2">
+        {breadcrumb && <Breadcrumb title={path} breadcrumb={breadcrumb} />}
+        {children}
+      </div>
     </div>
-  ) : children;
+  ) : (
+    children
+  );
 }
 
 export default MainContent;

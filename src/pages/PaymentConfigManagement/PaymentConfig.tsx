@@ -81,7 +81,7 @@ function PaymentConfig() {
   };
 
   return (
-    <div className="p-4">
+    <div className="">
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md">
         <Table
           data={paymentConfigs}

@@ -44,7 +44,7 @@ interface RegisterRequest {
   email: string;
   password: string;
   name: string;
-  role: string; 
+  role: string;
 }
 export const adminAuthApi: any = createApi({
   reducerPath: "adminAuthApi",
@@ -53,13 +53,6 @@ export const adminAuthApi: any = createApi({
     login: builder.mutation<any, LoginRequest>({
       query: (credentials) => ({
         url: "/admin/authentication",
-        method: "POST",
-        body: credentials,
-      }),
-    }),
-    register: builder.mutation<any, RegisterRequest>({
-      query: (credentials) => ({
-        url: "/auth/register",
         method: "POST",
         body: credentials,
       }),
@@ -92,18 +85,14 @@ export const adminAuthApi: any = createApi({
         },
       }),
     }),
-    // getUsers: builder.query<any, void>({
-    //   query: () => ({
-    //     url: `/admin/get-all-users`,
-    //     method: "GET",
-    //     headers: {
-    //       authorization: `Bearer ${localStorage.getItem("access_token")}`,
-    //     },
-    //   }),
-    // }),
-    getUsers: builder.query<any, { page: number; verified?: string }>({
-      query: ({ page, verified }) => ({
-        url: `/admin/get-all-users?page=${page}${verified ? `&verified=${verified}` : ""}`,
+    getUsers: builder.query<
+      any,
+      { page: number; limit: number; verified?: string }
+    >({
+      query: ({ page, limit, verified }) => ({
+        url: `/admin/get-all-users?page=${page}&limit=${limit}${
+          verified ? `&verified=${verified}` : ""
+        }`,
         method: "GET",
         headers: {
           authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -162,7 +151,6 @@ export const adminAuthApi: any = createApi({
 
 export const {
   useLoginMutation,
-  useRegisterMutation,
   useGetUserQuery,
   useGetUsersQuery,
   useGetTemplatesQuery,
