@@ -20,17 +20,6 @@ export const renderColumns = (
   switch (column.colName) {
     case "Default":
       return (
-        <p className="font-medium">
-          {typeof row[column.name] === "boolean"
-            ? row[column.name]
-              ? "Yes"
-              : "No"
-            : row[column.name] || ""}
-        </p>
-      );
-
-    case "Default":
-      return (
         <p className="font-medium">{column.name ? row[column.name] : ""}</p>
       );
     case "Actions":
