@@ -10,6 +10,7 @@ import UserDetails from "../pages/UserManagemnt/UserDetails";
 import Categories from "../pages/CategoryManagement/Categories";
 import AdminLayout from "../pages/AdminManagement/AdminLayout";
 import Orders from "../pages/OrderManagement/Orders";
+import OrderDetails from '../pages/OrderManagement/OrderDetails';
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -63,6 +64,12 @@ export const adminRoutes = [
     path: "settings",
     component: Setting,
     breadcrumb: ["admin", "settings"],
+    showBreadcrumb: true,
+  },
+  {
+    path: "order-details/:order-id",
+    component: OrderDetails,
+    breadcrumb: ["admin", "Order-Details"],
     showBreadcrumb: true,
   },
   {

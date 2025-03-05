@@ -44,7 +44,7 @@ interface RegisterRequest {
   email: string;
   password: string;
   name: string;
-  role: string;
+  role: string; 
 }
 export const adminAuthApi: any = createApi({
   reducerPath: "adminAuthApi",
@@ -57,6 +57,7 @@ export const adminAuthApi: any = createApi({
         body: credentials,
       }),
     }),
+
     getUser: builder.query<any, void>({
       query: (userId) => ({
         url: `/admin/users/${userId}`,
@@ -85,14 +86,40 @@ export const adminAuthApi: any = createApi({
         },
       }),
     }),
-    getUsers: builder.query<
-      any,
-      { page: number; limit: number; verified?: string }
-    >({
-      query: ({ page, limit, verified }) => ({
-        url: `/admin/get-all-users?page=${page}&limit=${limit}${
-          verified ? `&verified=${verified}` : ""
-        }`,
+
+    updateUserVerification: builder.mutation<any, UserInfoRequest>({
+      query: (credentials) => ({
+        url: `/admin/update-verification/${credentials.userId}`,
+        method: "PATCH",
+        body: credentials,
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      }),
+    }),
+
+    
+    // getUsers: builder.query<any, void>({
+    //   query: () => ({
+    //     url: `/admin/get-all-users`,
+    //     method: "GET",
+    //     headers: {
+    //       authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    //     },
+    //   }),
+    // }),
+    // getUsers: builder.query<any, { page: number; verified?: string, search?: string }>({
+    //   query: ({ page, verified, search }) => ({
+    //     url: `/admin/get-all-users?page=${page}${verified ? `&verified=${verified}` : ""}`,
+    //     method: "GET",
+    //     headers: {
+    //       authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    //     },
+    //   }),
+    // }),
+    getUsers: builder.query<any, { page: number; verified?: string; search?: string }>({
+      query: ({ page, verified, search }) => ({
+        url: `/admin/get-all-users?page=${page}${verified ? `&verified=${verified}` : ""}${search ? `&search=${search}` : ""}`,
         method: "GET",
         headers: {
           authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -160,4 +187,5 @@ export const {
   useGetTemplateQuery,
   useUpdateTemplateMutation,
   useDeleteTemplateMutation,
+  useUpdateUserVerificationMutation
 } = adminAuthApi;
