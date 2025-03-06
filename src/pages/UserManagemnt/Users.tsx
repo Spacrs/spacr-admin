@@ -5,7 +5,7 @@ import {
   useUpdateUserInfoMutation,
 } from "../../store/slices/userSlice/apiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { getUsers, resetUsers } from "../../store/slices/userSlice/userSlice";
+import { setUsers, resetUsers } from "../../store/slices/userSlice/userSlice";
 import { useNavigate } from "react-router-dom";
 import ConfirmationModal from "../../components/Common/Modal/ConfirmationModal"; // Import the modal component
 
@@ -32,7 +32,7 @@ const columns = [
 function Users() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { users } = useAppSelector((state) => state.userSlice);
+  const { users,isloading } = useAppSelector((state) => state.userSlice);
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState(""); // Search term
   const [verificationStatus, setVerificationStatus] = useState(""); // Verification filter
@@ -48,25 +48,19 @@ function Users() {
 
   const [updateUserStatus] = useUpdateUserInfoMutation();
 
-  // useEffect(() => {
-  //   console.log("kuch bhi")
-  //   if (data?.data) {
-
-  //     dispatch(getUsers(data.data)); // Update users in the store
-  //   }
-  //   ()=> dispatch(resetUsers({users:[]}))
-  // }, [data, dispatch]);
-  
 
   useEffect(() => {
     if (data?.data) {
-      dispatch(getUsers(data.data)); // Update users in the store
+      dispatch(setUsers(data.data)); 
     }
-  
     return () => {
-       dispatch(resetUsers({ users: [] })); // Ensure this doesn't return anything
+       dispatch(resetUsers({ users: [] }));
     };
   }, [data, dispatch]);
+
+  useEffect(() => {
+    refetch()
+  }, [isloading,refetch])
 
   if (isError) {
     return (
@@ -101,8 +95,6 @@ function Users() {
   const handleView = (val: any) => {
     navigate(`/admin/users-details/${val.UserID}`);
   };
-
-  console.log(users,isLoading,"hhhhhh")
 
   return (
     <div className="flex flex-col">

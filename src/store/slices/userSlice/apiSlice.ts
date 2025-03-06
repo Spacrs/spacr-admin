@@ -97,26 +97,6 @@ export const adminAuthApi: any = createApi({
         },
       }),
     }),
-
-    
-    // getUsers: builder.query<any, void>({
-    //   query: () => ({
-    //     url: `/admin/get-all-users`,
-    //     method: "GET",
-    //     headers: {
-    //       authorization: `Bearer ${localStorage.getItem("access_token")}`,
-    //     },
-    //   }),
-    // }),
-    // getUsers: builder.query<any, { page: number; verified?: string, search?: string }>({
-    //   query: ({ page, verified, search }) => ({
-    //     url: `/admin/get-all-users?page=${page}${verified ? `&verified=${verified}` : ""}`,
-    //     method: "GET",
-    //     headers: {
-    //       authorization: `Bearer ${localStorage.getItem("access_token")}`,
-    //     },
-    //   }),
-    // }),
     getUsers: builder.query<any, { page: number; verified?: string; search?: string }>({
       query: ({ page, verified, search }) => ({
         url: `/admin/get-all-users?page=${page}${verified ? `&verified=${verified}` : ""}${search ? `&search=${search}` : ""}`,
