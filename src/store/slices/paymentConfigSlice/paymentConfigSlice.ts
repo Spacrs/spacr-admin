@@ -21,7 +21,7 @@ export const paymentConfigSlice = createSlice({
     },
     updatePaymentConfigInList: (state: IState, action: PayloadAction<any>) => {
       state.paymentConfigs = state.paymentConfigs.map((config) =>
-        config.id === action.payload.id ? action.payload : config
+        config.Id === action.payload.Id ? action.payload : config
       );
     },
   },

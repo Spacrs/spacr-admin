@@ -1,13 +1,11 @@
 import Dashboard from "../pages/DashboardManagement/Dashboard";
 import Authenticate from "../pages/AuthManagement/Authenticate";
-import Report from "../pages/Report";
 import PaymentConfig from "../pages/PaymentConfigManagement/PaymentConfig";
 
 import Setting from "../pages/SettingManagemnt/Setting";
 import Users from "../pages/UserManagemnt/Users";
 import UserDetails from "../pages/UserManagemnt/UserDetails";
 
-import Categories from "../pages/CategoryManagement/Categories";
 import AdminLayout from "../pages/AdminManagement/AdminLayout";
 import Orders from "../pages/OrderManagement/Orders";
 import OrderDetails from '../pages/OrderManagement/OrderDetails';
@@ -85,11 +83,5 @@ export const adminRoutes = [
     component: OrderDetails,
     breadcrumb: ["admin", "Order-Details"],
     showBreadcrumb: true,
-  },
-  {
-    path: "/template-category",
-    component: Categories,
-    breadcrumb: ["admin", "Template Categories"],
-    showBreadcrumb: true,
-  },
+  }
 ];
