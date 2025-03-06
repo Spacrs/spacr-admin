@@ -4,7 +4,7 @@ const PublicRoutes = ({ children }: { children: React.ReactElement }) => {
   const auth_token = localStorage.getItem("access_token");
   const roleName = localStorage.getItem("role");
   const navigateRoute =
-    roleName === "admin" ? `/${roleName}/dashboard` : `/build-resume/contact`;
+    roleName === "admin" ? `/${roleName}/dashboard` : `/`;
   return !auth_token ? children : <Navigate to={navigateRoute} />;
 };
 

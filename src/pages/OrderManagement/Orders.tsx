@@ -3,14 +3,14 @@ import Table from "../../components/Common/Table";
 import { useGetOrdersQuery, useUpdateOrderTrendMutation } from "../../store/slices/orderSlice/apiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { setOrders, updateOrderList } from "../../store/slices/orderSlice/orderSlice";
-
+import { useNavigate } from "react-router-dom";
 const columns = [
   { name: "ProductName", Header: "Product Name", colName: "Default" },
 //   { name: "Descriptions", Header: "Descriptions", colName: "Default" },
 { name: "Price", Header: "Price", colName: "Default" },
 { name: "DeliveryReward", Header: "Delivery Reward", colName: "Default" },
 { name: "Quantity", Header: "Quantity", colName: "Default" },
-{ name: "IsWithBox", Header: "Is With Box", colName: "Default" },
+{ name: "IsWithBox", Header: "Is With Box", colName: "Boolean" },
 
   { name: "Status", Header: "Status", colName: "Status" },
   { name: "IsTrending", Header: "Is Trending", colName: "Boolean" }, // New Column
@@ -32,6 +32,8 @@ function Orders() {
   const [isOpen, setIsOpen] = useState(false);
 
   const [updateOrderTrend] = useUpdateOrderTrendMutation();
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (data?.data) {
@@ -73,7 +75,18 @@ function Orders() {
     }
   };
 
-  const handleView = () => {
+  const handleView = (data:any) => {
+    console.log("data", data)
+    if (data) {
+      try {
+        console.log(data.OrderId, "orderId selectedorder");
+        navigate(`/admin/order-details/${data.OrderID}`)
+      } catch (error) {
+        console.log(error, "error in handleView");
+      }
+    } else {
+      console.log("No selected order to view.");
+    }  
     
   }
 
@@ -142,7 +155,7 @@ function Orders() {
               <button className="px-4 py-2 bg-gray-300 rounded-md" onClick={closeModal}>
                 Cancel
               </button>
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-md" onClick={handleUpdateOrder}>
+              <button className="px-4 py-2 bg-primary text-white rounded-md" onClick={handleUpdateOrder}>
                 Update
               </button>
             </div>

@@ -1,18 +1,45 @@
 import { useEffect, useState } from "react";
-import { useGetUserInfoQuery } from "../../store/slices/userSlice/apiSlice";
+import { useGetUserInfoQuery, useUpdateUserVerificationMutation } from "../../store/slices/userSlice/apiSlice";
 import { useParams } from "react-router-dom";
-
+import {updateUserInUserList} from '../../store/slices/userSlice/userSlice'
+import { useDispatch } from "react-redux";
 const UserDetails = () => {
   const params = useParams();
   const { data, isLoading, isError } = useGetUserInfoQuery(params.id);
 
-  if (isLoading)
-    return <div className="text-center text-gray-500">Loading...</div>;
-  if (isError)
-    return <div className="text-red-500 text-center mt-4">Error loading user data</div>;
+  const [status, setStatus] = useState<string>("pending");
+  const [updateUserVerification] = useUpdateUserVerificationMutation(); // Mutation hook to update status
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if (data?.data) {
+      setStatus(data?.data.Verified); // Initialize the dropdown with the current status of the user
+    }
+  }, [data]);
+
+  // If loading or error states
+  if (isLoading) return <div className="text-center text-gray-500">Loading...</div>;
+  if (isError) return <div className="text-red-500 text-center mt-4">Error loading user data</div>;
 
   const user = data?.data;
   const IdentificationDocuments = user?.IdentificationDocuments || [];
+
+  // Handle status change
+  const handleOnChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const verificationStatus = event.target.value;
+    setStatus(verificationStatus); // Update the local state
+
+    // Trigger the API call to update user status
+    try {
+      const data = await updateUserVerification({
+        userId: user.UserID,
+        verified: verificationStatus,
+      }).unwrap();
+      dispatch(updateUserInUserList({ ...data.data,  Verified: verificationStatus}));
+      // dispatch(updateUserInUserList(data.data))
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
+  };
 
   return (
     <div className="">
@@ -41,6 +68,22 @@ const UserDetails = () => {
                 {user?.Status}
               </span>
             </p>
+
+            <div className="mt-4">
+              <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+              <strong>Change Verification Status</strong>
+              </label>
+              <select
+                id="status"
+                value={status} 
+                onChange={handleOnChange} // Trigger on change to update status
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              >
+                <option value="pending">Pending</option>
+                <option value="verified">Verified</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -57,7 +100,7 @@ const UserDetails = () => {
                 </tr>
               </thead>
               <tbody>
-                {user.devices.map((device, index) => (
+                {user.devices.map((device: any, index: any) => (
                   <tr key={index} className="border hover:bg-gray-100 transition">
                     <td className="border p-2">{device.name}</td>
                     <td className="border p-2">{device.status}</td>

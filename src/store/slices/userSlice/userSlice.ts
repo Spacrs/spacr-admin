@@ -48,6 +48,22 @@ export const createUserSlice = createSlice({
       localStorage.removeItem("user");
       window.location.href = "/";
     },
+    updateUserInUserList: (state: IState, action: PayloadAction<any>) => {
+      const user = action.payload;
+      console.log(user, "dataaaa");
+    
+      // Make sure to return a new state object
+      const newUser = state.users.map((u: any) =>
+        u.UserID === user.UserID ? { ...u, ...user } : u
+      );
+    
+      state.users = newUser;
+    }
+    ,
+    resetUsers:(state: IState, action: PayloadAction<any>) => {
+      return (state = {...state,...action.payload});
+    },
+    
     updateUser: (state: IState, action: PayloadAction<any>) => {
       return (state.user = action.payload);
     },
@@ -56,8 +72,10 @@ export const createUserSlice = createSlice({
 
 export const {
   getUsers,
+  resetUsers,
   logout,
-  updateUser
+  updateUser,
+  updateUserInUserList
 } = createUserSlice.actions;
 
 export const selectUser = (state: RootState) => state.userSlice.users;
