@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useGetUserInfoQuery, useUpdateUserVerificationMutation } from "../../store/slices/userSlice/apiSlice";
 import { useParams } from "react-router-dom";
-import {updateUserInUserList} from '../../store/slices/userSlice/userSlice'
+import {updateIsLoading, updateUserInUserList} from '../../store/slices/userSlice/userSlice'
 import { useDispatch } from "react-redux";
+import Loading from "../../components/Common/Loader";
+
 const UserDetails = () => {
   const params = useParams();
   const { data, isLoading, isError } = useGetUserInfoQuery(params.id);
@@ -17,7 +19,7 @@ const UserDetails = () => {
   }, [data]);
 
   // If loading or error states
-  if (isLoading) return <div className="text-center text-gray-500">Loading...</div>;
+  if (isLoading) return <div className="text-center text-gray-500"><Loading/></div>;
   if (isError) return <div className="text-red-500 text-center mt-4">Error loading user data</div>;
 
   const user = data?.data;
@@ -30,12 +32,13 @@ const UserDetails = () => {
 
     // Trigger the API call to update user status
     try {
+      dispatch(updateIsLoading(true));
       const data = await updateUserVerification({
         userId: user.UserID,
         verified: verificationStatus,
       }).unwrap();
       dispatch(updateUserInUserList({ ...data.data,  Verified: verificationStatus}));
-      // dispatch(updateUserInUserList(data.data))
+      dispatch(updateIsLoading(false));
     } catch (error) {
       console.error("Error updating status:", error);
     }

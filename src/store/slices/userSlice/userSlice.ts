@@ -7,6 +7,7 @@ interface IState {
   template: {};
   templates: { document: string; _id: string; userId: string }[];
   accessToken: null | string;
+  isloading: boolean;
   userInfo?: {
     address: string;
     phone: string;
@@ -23,6 +24,7 @@ const initialState: IState = {
   template: {},
   templates: [],
   accessToken: null,
+  isloading: false,
   userInfo: {
     address: "",
     phone: "",
@@ -37,7 +39,7 @@ export const createUserSlice = createSlice({
   name: "USER_ACTIONS",
   initialState,
   reducers: {
-    getUsers: (state: IState, action: PayloadAction<any>) => {
+    setUsers: (state: IState, action: PayloadAction<any>) => {
       state.users = action.payload;
       return state;
     },
@@ -48,17 +50,21 @@ export const createUserSlice = createSlice({
       localStorage.removeItem("user");
       window.location.href = "/";
     },
+    updateIsLoading: (state: IState, action: PayloadAction<any>) => {
+      state.isloading = action.payload;
+      return state;
+    },
     updateUserInUserList: (state: IState, action: PayloadAction<any>) => {
       const user = action.payload;
-      console.log(user, "dataaaa");
     
-      // Make sure to return a new state object
-      const newUser = state.users.map((u: any) =>
+      // Ensure we return a new updated users array
+      const newUsers = state.users.map((u: any) =>
         u.UserID === user.UserID ? { ...u, ...user } : u
       );
     
-      state.users = newUser;
-    }
+      state.users = newUsers; 
+      return state
+    }    
     ,
     resetUsers:(state: IState, action: PayloadAction<any>) => {
       return (state = {...state,...action.payload});
@@ -71,11 +77,12 @@ export const createUserSlice = createSlice({
 });
 
 export const {
-  getUsers,
+  setUsers,
   resetUsers,
   logout,
   updateUser,
-  updateUserInUserList
+  updateUserInUserList,
+  updateIsLoading
 } = createUserSlice.actions;
 
 export const selectUser = (state: RootState) => state.userSlice.users;

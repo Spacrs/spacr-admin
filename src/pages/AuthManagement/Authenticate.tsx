@@ -31,7 +31,7 @@ const Authenticate: React.FC = (): React.ReactElement => {
       console.log(response)
       if (response.success) {
         localStorage.setItem("access_token", user.secret);
-        navigate(`/admin/dashboard`);
+        navigate(`/admin/users`);
         toastHandler(response.message);
       }
     } catch (error: any) {
