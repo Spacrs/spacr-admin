@@ -26,13 +26,13 @@ export const renderColumns = (
           {actions.handleUpdate && (
             <MdOutlineEdit
               onClick={() => actions.handleUpdate?.(row)}
-              className="cursor-pointer text-lg font-bold text-gray-500 hover:text-[#3f9997]"
+              className="cursor-pointer text-lg font-bold text-gray-500 hover:text-primary"
             />
           )}
           {actions.handleView && (
             <BsEye
               onClick={() => actions.handleView?.(row)}
-              className="cursor-pointer text-lg font-bold text-gray-500 hover:text-[#3f9997]"
+              className="cursor-pointer text-lg font-bold text-gray-500 hover:text-primary"
             />
           )}
           {actions.handleDelete && (
