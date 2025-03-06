@@ -6,7 +6,7 @@ import {
 } from "../../store/slices/paymentConfigSlice/apiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { setPaymentConfigs, updatePaymentConfigInList } from "../../store/slices/paymentConfigSlice/paymentConfigSlice";
-
+import Button from '../../components/Common/Button';
 const columns = [
   { name: "sortName", Header: "Name", colName: "Default" },
   { name: "providers", Header: "Providers", colName: "Default" },
@@ -139,18 +139,19 @@ function PaymentConfig() {
 
             {/* Centered Buttons */}
             <div className="flex justify-center gap-4 mt-5">
-              <button
-                className="px-4 py-2 bg-gray-300 rounded-md"
-                onClick={closeModal}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-2 bg-blue-600 text-white rounded-md"
-                onClick={() => handleUpdateConfig(selectedConfig)}
-              >
-                Update
-              </button>
+              
+              <Button
+                 className="px-4 py-2 bg-gray-300 rounded-md"
+                 onClick={closeModal}
+                 text="Cancel"
+              />
+              
+              <Button
+                 className="px-4 py-2 bg-primary text-white rounded-md"
+                 onClick={() => handleUpdateConfig(selectedConfig)}
+                 text="Update"
+              />
+              
             </div>
           </div>
         </div>

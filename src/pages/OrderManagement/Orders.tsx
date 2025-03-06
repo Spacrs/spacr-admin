@@ -4,6 +4,8 @@ import { useGetOrdersQuery, useUpdateOrderTrendMutation } from "../../store/slic
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { setOrders, updateOrderList } from "../../store/slices/orderSlice/orderSlice";
 import { useNavigate } from "react-router-dom";
+import Button from '../../components/Common/Button';
+
 const columns = [
   { name: "ProductName", Header: "Product Name", colName: "Default" },
 //   { name: "Descriptions", Header: "Descriptions", colName: "Default" },
@@ -152,12 +154,19 @@ function Orders() {
             </div>
 
             <div className="flex justify-center gap-4 mt-5">
-              <button className="px-4 py-2 bg-gray-300 rounded-md" onClick={closeModal}>
-                Cancel
-              </button>
-              <button className="px-4 py-2 bg-primary text-white rounded-md" onClick={handleUpdateOrder}>
-                Update
-              </button>
+              
+              <Button
+                className="px-4 py-2 bg-gray-300 rounded-md" 
+                onClick={closeModal}
+                text="Cancel"
+              />
+              
+              <Button
+                className="px-4 py-2 bg-primary text-white rounded-md" 
+                onClick={handleUpdateOrder}
+                text="Update"
+              />
+              
             </div>
           </div>
         </div>

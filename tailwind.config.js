@@ -21,7 +21,8 @@ export default {
         slideUp: 'slideUp 0.3s ease-out',
       },
       colors: {
-        primary: '#36468E', // Custom blue
+        // primary: '#36468E',
+        primary: '#131f5c',
         lightBlue:'#ECF0FF',
         secondary: '#2ecc71', // Green
         danger: '#e74c3c', // Red
