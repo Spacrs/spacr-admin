@@ -5,9 +5,9 @@ export const paymentConfigApi: any = createApi({
   reducerPath: "paymentConfigApi",
   baseQuery: baseQueryWithInterceptor,
   endpoints: (builder) => ({
-    getPaymentConfigs: builder.query<any, void>({
-      query: () => ({
-        url: `/payment-config/`,
+    getPaymentConfigs: builder.query<any, { page?: number; limit?: string }>({
+      query: ({ page, limit }) => ({
+        url: `/payment-config/?page=${page}${limit ? `&limit=${limit}` : ""}`,
         method: "GET",
         headers: {
           authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -21,14 +21,15 @@ export const paymentConfigApi: any = createApi({
           COD: credentials.COD,
           stripe: credentials.stripe,
         };
-        return ({
-        url: `/payment-config/update/${credentials.Id}`,
-        method: "PATCH",
-        body: val,
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      })},
+        return {
+          url: `/payment-config/update/${credentials.Id}`,
+          method: "PATCH",
+          body: val,
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        };
+      },
     }),
   }),
 });

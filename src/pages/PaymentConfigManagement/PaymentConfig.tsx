@@ -5,14 +5,17 @@ import {
   useUpdatePaymentConfigMutation,
 } from "../../store/slices/paymentConfigSlice/apiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { setPaymentConfigs, updatePaymentConfigInList } from "../../store/slices/paymentConfigSlice/paymentConfigSlice";
-import Button from '../../components/Common/Button';
+import {
+  setPaymentConfigs,
+  updatePaymentConfigInList,
+} from "../../store/slices/paymentConfigSlice/paymentConfigSlice";
+import Button from "../../components/Common/Button";
 const columns = [
-  { name: "sortName", Header: "Name", colName: "Default" },
+  { name: "shortName", Header: "Name", colName: "Default" },
   { name: "providers", Header: "Providers", colName: "Default" },
-  { name: "wallet", Header: "Wallet", colName: "Default" },
-  { name: "COD", Header: "COD", colName: "Default" },
-  { name: "stripe", Header: "Stripe", colName: "Default" },
+  { name: "wallet", Header: "Wallet", colName: "Boolean" },
+  { name: "COD", Header: "COD", colName: "Boolean" },
+  { name: "stripe", Header: "Stripe", colName: "Boolean" },
   { name: "createdAt", Header: "Created At", colName: "Date" },
   {
     name: "action",
@@ -28,7 +31,10 @@ function PaymentConfig() {
     (state) => state.paymentConfigSlice
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const { data, isLoading, isError } = useGetPaymentConfigsQuery();
+  const { data, isLoading, isError,refetch } = useGetPaymentConfigsQuery({
+    page: currentPage,
+    limit:5
+  });
 
   const [selectedConfig, setSelectedConfig] = useState<any>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -65,14 +71,13 @@ function PaymentConfig() {
 
   const handleUpdateConfig = async () => {
     try {
-      const updatedConfig = await updatePaymentConfig(selectedConfig).unwrap(); 
+      const updatedConfig = await updatePaymentConfig(selectedConfig).unwrap();
       dispatch(updatePaymentConfigInList(updatedConfig.data)); // ✅ Update Redux store
       setIsOpen(false);
     } catch (error) {
       console.error("Error updating payment config:", error);
     }
   };
-  
 
   // Close modal
   const closeModal = () => {
@@ -139,19 +144,12 @@ function PaymentConfig() {
 
             {/* Centered Buttons */}
             <div className="flex justify-center gap-4 mt-5">
-              
+              <Button onClick={closeModal} text="Cancel" type="lightBlue" />
               <Button
-                 className="px-4 py-2 bg-gray-300 rounded-md"
-                 onClick={closeModal}
-                 text="Cancel"
+                onClick={() => handleUpdateConfig(selectedConfig)}
+                text="Update"
+                type="primary"
               />
-              
-              <Button
-                 className="px-4 py-2 bg-primary text-white rounded-md"
-                 onClick={() => handleUpdateConfig(selectedConfig)}
-                 text="Update"
-              />
-              
             </div>
           </div>
         </div>
