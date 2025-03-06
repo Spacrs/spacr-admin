@@ -21,7 +21,7 @@ const KebabMenu = ({ row, actions }: { row: any; actions: any }) => {
     <div className="relative flex items-center" ref={menuRef}>
       <CiMenuKebab
         onClick={toggleMenu}
-        className="text-lg font-bold text-gray-500 hover:text-[#3f9997] cursor-pointer"
+        className="text-lg font-bold text-gray-500 hover:text-primary cursor-pointer"
       />
       {isOpen && (
         <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-md z-50">

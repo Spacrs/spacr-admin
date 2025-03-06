@@ -43,7 +43,7 @@ function Sidebar() {
             className={`flex items-center p-2 ${
               isActive("/admin/users")
                 ? "bg-primary text-white"
-                : "text-gray-600 hover:bg-primary hover:text-white"
+                : "text-gray-600 hover:bg-lightBlue hover:text-primary"
             } font-medium rounded-md`}
           >
             <HiOutlineUsers style={{ fontSize: "20px", margin: "0 10px" }} />
@@ -54,7 +54,7 @@ function Sidebar() {
             className={`flex items-center p-2 ${
               isActive("/admin/payment-config")
                 ? "bg-primary text-white"
-                : "text-gray-600 hover:bg-primary hover:text-white"
+                : "text-gray-600 hover:bg-lightBlue hover:text-primary"
             } font-medium rounded-md`}
           >
             <BsCreditCard2Front style={{ fontSize: "20px", margin: "0 10px" }} />
@@ -65,7 +65,7 @@ function Sidebar() {
             className={`flex items-center p-2 ${
               isActive("/admin/order-list")
                 ? "bg-primary text-white"
-                : "text-gray-600 hover:bg-primary hover:text-white"
+                : "text-gray-600 hover:bg-lightBlue hover:text-primary"
             } font-medium rounded-md`}
           >
             <TbTruckDelivery style={{ fontSize: "20px", margin: "0 10px" }} />

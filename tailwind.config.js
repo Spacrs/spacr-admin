@@ -22,6 +22,7 @@ export default {
       },
       colors: {
         primary: '#36468E', // Custom blue
+        lightBlue:'#ECF0FF',
         secondary: '#2ecc71', // Green
         danger: '#e74c3c', // Red
         warning: '#f1c40f', // Yellow

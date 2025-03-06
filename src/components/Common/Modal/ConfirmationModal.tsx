@@ -23,7 +23,7 @@ const ConfirmationModal: React.FC<ModalProps> = ({
           <h3 className="text-lg font-semibold">{message}</h3>
           <div className="mt-6 flex justify-center gap-4">
             <button
-              className="px-4 py-2 bg-gray-500 text-white rounded-md"
+              className="px-4 py-2 bg-lightBlue text-primary rounded-md"
               onClick={onClose}
             >
               Cancel
