@@ -10,7 +10,9 @@ const {
   GrTemplate,
   MdOutlineCategory,
   BsCreditCard2Front,
-  TbTruckDelivery 
+  TbTruckDelivery,
+  GrSend,
+  MdOutlineScheduleSend
 } = icons;
 import { logout } from "../../store/slices/userSlice/userSlice";
 import { useAppDispatch } from "../../store/hooks";
@@ -71,6 +73,30 @@ function Sidebar() {
             <TbTruckDelivery style={{ fontSize: "20px", margin: "0 10px" }} />
             
             Order List
+          </Link>
+          <Link
+            to="/admin/send-notification"
+            className={`flex items-center p-2 ${
+              isActive("/admin/send-notification")
+                ? "bg-primary text-white"
+                : "text-gray-600 hover:bg-primary hover:text-white"
+            } font-medium rounded-md`}
+          >
+            <GrSend style={{ fontSize: "20px", margin: "0 10px" }} />
+            
+            Send Notification
+          </Link>
+          <Link
+            to="/admin/schedule-notification"
+            className={`flex items-center p-2 ${
+              isActive("/admin/schedule-notification")
+                ? "bg-primary text-white"
+                : "text-gray-600 hover:bg-primary hover:text-white"
+            } font-medium rounded-md`}
+          >
+            <MdOutlineScheduleSend style={{ fontSize: "20px", margin: "0 10px" }} />
+            
+            Schedule Notification
           </Link>
           {/* <Link
             to="/admin/settings"

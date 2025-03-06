@@ -7,6 +7,8 @@ import {
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import hippoLogoWhite from "../../assets/images/hippoLogoWhite.png";
 
+import logo from '../../assets/images/logo.png'
+
 interface IUserInfo {
   address: string;
   phone: string;
@@ -58,17 +60,17 @@ function Header() {
   };
 
   return (
-    <header className="bg-white border border-b h-[70px] text-black">
+    <header className="border border-b h-[70px] text-black" style={{ backgroundColor: "#131f5c" }}>
       <div className="w-full mx-auto sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <div className="flex w-full justify-between items-center">
-              Spacr
+              <img src={logo} className="h-10" alt="Logo" />
             </div>
           </div>
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
-              <button className="bg-gray-800 p-1 rounded-full text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#3f9997] focus:ring-white">
+              <button className="bg-black p-1 rounded-full text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#3f9997] focus:ring-white">
                 <span className="sr-only">View notifications</span>
                 <svg
                   className="h-6 w-6"

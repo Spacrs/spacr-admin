@@ -1,5 +1,6 @@
 // components/Common/ConfirmationModal.tsx
 import React from "react";
+import Button from '../Button';
 
 interface ModalProps {
   isOpen: boolean;
@@ -22,18 +23,19 @@ const ConfirmationModal: React.FC<ModalProps> = ({
         <div className="text-center">
           <h3 className="text-lg font-semibold">{message}</h3>
           <div className="mt-6 flex justify-center gap-4">
-            <button
-              className="px-4 py-2 bg-gray-500 text-white rounded-md"
-              onClick={onClose}
-            >
-              Cancel
-            </button>
-            <button
-              className="px-4 py-2 bg-primary text-white rounded-md"
-              onClick={onConfirm}
-            >
-              Confirm
-            </button>
+            
+            <Button 
+                className='px-4 py-2 bg-gray-500 text-white rounded-md'
+                text="Cancel"
+                onClick={onClose}
+            />
+            
+            <Button 
+                className='px-4 py-2 bg-primary text-white rounded-md'
+                text="Confirm"
+                onClick={onConfirm}
+            />
+            
           </div>
         </div>
       </div>

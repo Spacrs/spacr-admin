@@ -59,6 +59,8 @@ import { IoReturnDownBack } from "react-icons/io5";
 import { CiMenuKebab } from "react-icons/ci";
 import { BsCreditCard2Front } from "react-icons/bs";
 import { TbTruckDelivery } from "react-icons/tb";
+import { GrSend } from "react-icons/gr";
+import { MdOutlineScheduleSend } from "react-icons/md";
 
 export const icons = {
   CiHome: CiHome,
@@ -128,6 +130,8 @@ export const icons = {
   IoReturnDownBack,
   CiMenuKebab,
   BsCreditCard2Front,
-  TbTruckDelivery 
+  TbTruckDelivery,
+  GrSend,
+  MdOutlineScheduleSend
 };
 

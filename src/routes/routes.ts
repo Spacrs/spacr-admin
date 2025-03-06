@@ -11,6 +11,8 @@ import Categories from "../pages/CategoryManagement/Categories";
 import AdminLayout from "../pages/AdminManagement/AdminLayout";
 import Orders from "../pages/OrderManagement/Orders";
 import OrderDetails from '../pages/OrderManagement/OrderDetails';
+import DirectNotification from "../pages/NotificationManagement/DirectNotification";
+import ScheduleNotification from "../pages/NotificationManagement/ScheduleNotification";
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -51,13 +53,25 @@ export const adminRoutes = [
   {
     path: "payment-config",
     component: PaymentConfig,
-    breadcrumb: ["admin", "reports"],
+    breadcrumb: ["admin", "Payment Config"],
     showBreadcrumb: true,
   },
   {
     path: "order-list",
     component: Orders,
     breadcrumb: ["admin", "orders"],
+    showBreadcrumb: true,
+  },
+  {
+    path: "send-notification",
+    component: DirectNotification,
+    breadcrumb: ["admin", "Send Notification"],
+    showBreadcrumb: true,
+  },
+  {
+    path: "schedule-notification",
+    component: ScheduleNotification,
+    breadcrumb: ["admin", "Schedule Notification"],
     showBreadcrumb: true,
   },
   {
