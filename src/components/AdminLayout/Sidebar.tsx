@@ -1,119 +1,129 @@
 import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
 import { icons } from "../../Icons/constant";
-const {
-  HiOutlineDocumentReport,
-  HiOutlineUsers,
-  CiHome,
-  CiSettings,
-  RxDashboard,
-  IoIosLogOut,
-  GrTemplate,
-  MdOutlineCategory,
-  BsCreditCard2Front,
-  TbTruckDelivery,
-  GrSend,
-  MdOutlineScheduleSend
-} = icons;
 import { logout } from "../../store/slices/userSlice/userSlice";
 import { useAppDispatch } from "../../store/hooks";
 
+const {
+  HiOutlineUsers,
+  IoIosLogOut,
+  BsCreditCard2Front,
+  TbTruckDelivery,
+  GrSend,
+  MdOutlineScheduleSend,
+  IoIosArrowDown,
+  IoIosArrowUp,
+} = icons;
+
 function Sidebar() {
-  const location = useLocation(); // Hook to get current location
+  const location = useLocation();
   const dispatch = useAppDispatch();
+  const [activeMenu, setActiveMenu] = useState<string | null>(null); // Track active menu
+
   const isActive = (path: string) => location.pathname === path;
 
+  const handleMenuClick = (menu: string) => {
+    // If clicking the same menu, toggle; otherwise, set a new active menu
+    setActiveMenu(activeMenu === menu ? null : menu);
+  };
+
+  const menuItems = [
+    {
+      label: "Users",
+      path: "/admin/users",
+      icon: <HiOutlineUsers style={{ fontSize: "20px", margin: "0 10px" }} />,
+    },
+    {
+      label: "Payment Config",
+      path: "/admin/payment-config",
+      icon: <BsCreditCard2Front style={{ fontSize: "20px", margin: "0 10px" }} />,
+    },
+    {
+      label: "Order List",
+      path: "/admin/order-list",
+      icon: <TbTruckDelivery style={{ fontSize: "20px", margin: "0 10px" }} />,
+    },
+    {
+      label: "Notifications",
+      isSubmenu: true,
+      icon: <GrSend style={{ fontSize: "20px", margin: "0 10px" }} />,
+      subItems: [
+        {
+          label: "Send Notification",
+          path: "/admin/send-notification",
+          icon: <GrSend style={{ fontSize: "18px", margin: "0 10px" }} />,
+        },
+        {
+          label: "Schedule Notification",
+          path: "/admin/schedule-notification",
+          icon: <MdOutlineScheduleSend style={{ fontSize: "18px", margin: "0 10px" }} />,
+        },
+      ],
+    },
+  ];
+
   return (
-    <div
-      style={{ width: "300px" }}
-      className="h-full flex-col  bg-white text-white hidden md:flex"
-    >
+    <div style={{ width: "300px" }} className="h-full flex-col bg-white text-white hidden md:flex">
       <div className="flex flex-col justify-between flex-grow p-4">
         <nav className="flex flex-col space-y-2">
-          {/* <Link
-            to="/admin/dashboard"
-            className={`flex items-center p-2 ${
-              isActive("/admin/dashboard")
-                ? "bg-dark text-white"
-                : "text-gray-600 hover:bg-dark hover:text-white"
-            } font-medium rounded-md`}
-          >
-            <RxDashboard style={{ fontSize: "20px", margin: "0 10px" }} />
-            Dashboard
-          </Link> */}
-          <Link
-            to="/admin/users"
-            className={`flex items-center p-2 ${
-              isActive("/admin/users")
-                ? "bg-primary text-white"
-                : "text-gray-600 hover:bg-lightBlue hover:text-primary"
-            } font-medium rounded-md`}
-          >
-            <HiOutlineUsers style={{ fontSize: "20px", margin: "0 10px" }} />
-            Users
-          </Link>
-          <Link
-            to="/admin/payment-config"
-            className={`flex items-center p-2 ${
-              isActive("/admin/payment-config")
-                ? "bg-primary text-white"
-                : "text-gray-600 hover:bg-lightBlue hover:text-primary"
-            } font-medium rounded-md`}
-          >
-            <BsCreditCard2Front style={{ fontSize: "20px", margin: "0 10px" }} />
-            Payment Config
-          </Link>
-          <Link
-            to="/admin/order-list"
-            className={`flex items-center p-2 ${
-              isActive("/admin/order-list")
-                ? "bg-primary text-white"
-                : "text-gray-600 hover:bg-lightBlue hover:text-primary"
-            } font-medium rounded-md`}
-          >
-            <TbTruckDelivery style={{ fontSize: "20px", margin: "0 10px" }} />
-            
-            Order List
-          </Link>
-          <Link
-            to="/admin/send-notification"
-            className={`flex items-center p-2 ${
-              isActive("/admin/send-notification")
-                ? "bg-primary text-white"
-                : "text-gray-600 hover:bg-primary hover:text-white"
-            } font-medium rounded-md`}
-          >
-            <GrSend style={{ fontSize: "20px", margin: "0 10px" }} />
-            
-            Send Notification
-          </Link>
-          <Link
-            to="/admin/schedule-notification"
-            className={`flex items-center p-2 ${
-              isActive("/admin/schedule-notification")
-                ? "bg-primary text-white"
-                : "text-gray-600 hover:bg-primary hover:text-white"
-            } font-medium rounded-md`}
-          >
-            <MdOutlineScheduleSend style={{ fontSize: "20px", margin: "0 10px" }} />
-            
-            Schedule Notification
-          </Link>
-          {/* <Link
-            to="/admin/settings"
-            className={`flex items-center p-2 ${
-              isActive("/admin/settings")
-                ? "bg-primary text-white"
-                : "text-gray-600 hover:bg-dark hover:text-white"
-            } font-medium rounded-md`}
-          >
-            <CiSettings style={{ fontSize: "20px", margin: "0 10px" }} />
-            Settings
-          </Link> */}
+          {menuItems.map((item, index) =>
+            item.isSubmenu ? (
+              <div key={index} className="flex flex-col">
+                <button
+                  onClick={() => handleMenuClick(item.label)}
+                  className={`flex items-center p-2 w-full font-medium rounded-md transition-all duration-300 ${
+                    activeMenu === item.label ? "bg-primary text-white" : "text-gray-600 hover:bg-lightBlue hover:text-primary"
+                  }`}
+                >
+                  {item.icon}
+                  {item.label}
+                  <span className="ml-auto">
+                    {activeMenu === item.label ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                  </span>
+                </button>
+                <div
+                  className={`ml-5 flex flex-col  transition-all duration-300 overflow-hidden ${
+                    activeMenu === item.label ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+                  }`}
+                >
+                  {item.subItems?.map((subItem, subIndex) => (
+                    <Link
+                      key={subIndex}
+                      to={subItem.path}
+                      className={`flex items-center p-2 mt-2 font-medium rounded-md transition-all duration-300 ${
+                        isActive(subItem.path)
+                          ? "bg-primary text-white"
+                          : "text-gray-600 hover:bg-lightBlue hover:text-primary"
+                      }`}
+                    >
+                      {subItem.icon}
+                      {subItem.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <Link
+                key={index}
+                to={item.path}
+                onClick={() => setActiveMenu(null)} // Close submenu when clicking another menu item
+                className={`flex items-center p-2 font-medium rounded-md transition-all duration-300 ${
+                  isActive(item.path)
+                    ? "bg-primary text-white"
+                    : "text-gray-600 hover:bg-lightBlue hover:text-primary"
+                }`}
+              >
+                {item.icon}
+                {item.label}
+              </Link>
+            )
+          )}
         </nav>
+
         <div className="mt-6">
           <button
             onClick={() => dispatch(logout())}
-            className={`flex items-center p-2 w-full text-primary hover:bg-primary hover:text-white font-medium rounded-md`}
+            className="flex items-center p-2 w-full text-primary hover:bg-primary hover:text-white font-medium rounded-md transition-all duration-300"
           >
             <IoIosLogOut style={{ fontSize: "20px", margin: "0 10px" }} />
             Logout

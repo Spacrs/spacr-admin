@@ -3,7 +3,7 @@ import { RxDashboard } from "react-icons/rx";
 import { HiOutlineUsers } from "react-icons/hi";
 import { HiOutlineDocumentReport } from "react-icons/hi";
 import { CiSettings } from "react-icons/ci";
-import { IoIosLogOut } from "react-icons/io";
+import { IoIosArrowDown,IoIosArrowUp, IoIosLogOut } from "react-icons/io";
 import { GrTemplate } from "react-icons/gr";
 import { CgFormatText } from "react-icons/cg";
 import { GrGallery } from "react-icons/gr";
@@ -132,6 +132,8 @@ export const icons = {
   BsCreditCard2Front,
   TbTruckDelivery,
   GrSend,
-  MdOutlineScheduleSend
+  MdOutlineScheduleSend,
+  IoIosArrowDown,
+  IoIosArrowUp
 };
 
