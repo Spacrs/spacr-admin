@@ -85,8 +85,20 @@ function PaymentConfig() {
     setSelectedConfig(null);
   };
 
+  const addPaymentConfig = () => {
+
+  }
+  const addCity = () => {
+
+  }
+
   return (
     <div className="">
+      {/* <div className="flex justify-end p-4 bg-gray-100 rounded-lg shadow-md mb-5 space-x-2">
+          <Button type="secondary" text="Add Payment Config" onClick={addPaymentConfig}/>
+        
+          <Button type="secondary" text="Add City" onClick={addCity}/>
+      </div> */}
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md">
         <Table
           data={paymentConfigs}

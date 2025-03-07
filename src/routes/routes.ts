@@ -11,6 +11,7 @@ import Orders from "../pages/OrderManagement/Orders";
 import OrderDetails from '../pages/OrderManagement/OrderDetails';
 import DirectNotification from "../pages/NotificationManagement/DirectNotification";
 import ScheduleNotification from "../pages/NotificationManagement/ScheduleNotification";
+import ContactSupportList from "../pages/ContactSupportManagement/ContactSupportList"
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -70,6 +71,12 @@ export const adminRoutes = [
     path: "schedule-notification",
     component: ScheduleNotification,
     breadcrumb: ["admin", "Schedule Notification"],
+    showBreadcrumb: true,
+  },
+  {
+    path: "contact-support-list",
+    component: ContactSupportList,
+    breadcrumb: ["admin", "Contact Support"],
     showBreadcrumb: true,
   },
   {

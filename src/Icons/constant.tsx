@@ -61,6 +61,7 @@ import { BsCreditCard2Front } from "react-icons/bs";
 import { TbTruckDelivery } from "react-icons/tb";
 import { GrSend } from "react-icons/gr";
 import { MdOutlineScheduleSend } from "react-icons/md";
+import { MdContactSupport } from "react-icons/md";
 
 export const icons = {
   CiHome: CiHome,
@@ -134,6 +135,7 @@ export const icons = {
   GrSend,
   MdOutlineScheduleSend,
   IoIosArrowDown,
-  IoIosArrowUp
+  IoIosArrowUp,
+  MdContactSupport
 };
 
