@@ -8,10 +8,7 @@ export const paymentConfigApi: any = createApi({
     getPaymentConfigs: builder.query<any, { page?: number; limit?: string }>({
       query: ({ page, limit }) => ({
         url: `/payment-config/?page=${page}${limit ? `&limit=${limit}` : ""}`,
-        method: "GET",
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
+        method: "GET"
       }),
     }),
     updatePaymentConfig: builder.mutation<any, Partial<any>>({
@@ -24,10 +21,7 @@ export const paymentConfigApi: any = createApi({
         return {
           url: `/payment-config/update/${credentials.Id}`,
           method: "PATCH",
-          body: val,
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
+          body: val
         };
       },
     }),

@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLoginMutation } from "../../store/slices/userSlice/apiSlice";
+import {
+  LoginRequest,
+  useLoginMutation,
+} from "../../store/slices/userSlice/apiSlice";
 import { Toaster } from "react-hot-toast";
 import errorHandler from "../../_helpers/errorHandler";
 import toastHandler from "../../_helpers/toastHandler";
-import logo from '../../assets/images/logo.png'
-interface LoginRequest {
-  secret: string;
-}
+import logo from "../../assets/images/logo.png";
 
 const Authenticate: React.FC = (): React.ReactElement => {
   const [user, setUser] = useState<LoginRequest>({
@@ -28,7 +28,7 @@ const Authenticate: React.FC = (): React.ReactElement => {
       const userCredentials: LoginRequest = user;
       const response = await login(userCredentials).unwrap();
 
-      console.log(response)
+      console.log(response);
       if (response.success) {
         localStorage.setItem("access_token", user.secret);
         navigate(`/admin/users`);
@@ -41,10 +41,13 @@ const Authenticate: React.FC = (): React.ReactElement => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-6 dark:bg-[#fbf8f1]" style={{backgroundColor: '#131f5c'}}>
+    <div
+      className="flex min-h-screen flex-col items-center justify-center p-6 dark:bg-[#fbf8f1]"
+      style={{ backgroundColor: "#131f5c" }}
+    >
       <Toaster />
       <div className="mb-6">
-        <img src={logo} alt="login_logo" className="h-24"/>
+        <img src={logo} alt="login_logo" className="h-24" />
       </div>
       <div className="flex w-full max-w-4xl overflow-hidden rounded-lg bg-[#fbf8f1] shadow-lg dark:bg-white">
         <div className="w-full p-8 sm:p-12 lg:w-full">
@@ -71,7 +74,6 @@ const Authenticate: React.FC = (): React.ReactElement => {
       </div>
     </div>
   );
-  
 };
 
 export default Authenticate;

@@ -8,10 +8,7 @@ export const ordersApi: any = createApi({
     getOrders: builder.query<any, void>({
       query: () => ({
         url: `/admin/all-orders`, // ✅ Corrected endpoint
-        method: "GET",
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
+        method: "GET"
       }),
     }),
     updateOrderTrend: builder.mutation<any, Partial<any>>({
@@ -20,10 +17,7 @@ export const ordersApi: any = createApi({
         method: "PATCH",
         body: {
           IsTrending: order.IsTrending,
-        },
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
+        }
       }),
     }),
   }),
