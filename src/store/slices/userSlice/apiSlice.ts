@@ -1,51 +1,13 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithInterceptor } from "../../baseQuery";
 
-interface LoginRequest {
-  email: string;
-  password: string;
+export interface LoginRequest {
+  secret: string;
 }
-
-enum Orientation {
-  portrait = "portrait",
-  landscape = "landscape",
-}
-enum Size {
-  A4 = "A4",
-  Letter = "Letter",
-  Legal = "Legal",
-  Tabloid = "Tabloid",
-  A3 = "A3",
-  A5 = "A5",
-  Custom = "Custom",
-}
-interface Element {
-  id: number;
-  x: number;
-  y: number;
-  width: number | string;
-  height: number | string;
-  content: string;
-  color: string;
-  fontSize: number;
-  fontWeight: string;
-  padding: number;
-}
-interface TemplateRequest {
-  document: string;
-  orientation: Orientation;
-  size: Size;
-  layer: Element[];
-}
-interface UserInfoRequest {
+export interface UserInfoRequest {
   userId: string;
 }
-interface RegisterRequest {
-  email: string;
-  password: string;
-  name: string;
-  role: string; 
-}
+
 export const adminAuthApi: any = createApi({
   reducerPath: "adminAuthApi",
   baseQuery: baseQueryWithInterceptor,
@@ -57,7 +19,6 @@ export const adminAuthApi: any = createApi({
         body: credentials,
       }),
     }),
-
     getUser: builder.query<any, void>({
       query: (userId) => ({
         url: `/admin/users/${userId}`,
@@ -86,7 +47,6 @@ export const adminAuthApi: any = createApi({
         },
       }),
     }),
-
     updateUserVerification: builder.mutation<any, UserInfoRequest>({
       query: (credentials) => ({
         url: `/admin/update-verification/${credentials.userId}`,
@@ -105,67 +65,15 @@ export const adminAuthApi: any = createApi({
           authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       }),
-    }),
-    createTemplates: builder.mutation<any, TemplateRequest>({
-      query: (credentials) => ({
-        url: `/resume/create/template`,
-        method: "POST",
-        body: credentials,
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      }),
-    }),
-    getTemplates: builder.query<any, void>({
-      query: () => ({
-        url: `/resume/get/templates`,
-        method: "GET",
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      }),
-    }),
-    getTemplate: builder.query<any, void>({
-      query: (templateId) => ({
-        url: `/resume/get/template/${templateId}`,
-        method: "GET",
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      }),
-    }),
-    updateTemplate: builder.mutation<any, Partial<any>>({
-      query: (credentials) => ({
-        url: `/resume/update/template/${credentials.templateId}`,
-        method: "PUT",
-        body: credentials,
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      }),
-    }),
-    deleteTemplate: builder.mutation<any, void>({
-      query: (templateId) => ({
-        url: `/resume/delete/template/${templateId}`,
-        method: "DELETE",
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      }),
-    }),
+    })
   }),
 });
 
 export const {
   useLoginMutation,
   useGetUserQuery,
-  useGetUsersQuery,
-  useGetTemplatesQuery,
-  useCreateTemplatesMutation,
   useGetUserInfoQuery,
   useUpdateUserInfoMutation,
-  useGetTemplateQuery,
-  useUpdateTemplateMutation,
-  useDeleteTemplateMutation,
-  useUpdateUserVerificationMutation
+  useUpdateUserVerificationMutation,
+  useGetUsersQuery
 } = adminAuthApi;

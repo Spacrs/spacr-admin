@@ -3,6 +3,7 @@ import { useState } from "react";
 import { icons } from "../../Icons/constant";
 import { logout } from "../../store/slices/userSlice/userSlice";
 import { useAppDispatch } from "../../store/hooks";
+import { MenuItem } from "../../types/sidebar.types";
 
 const {
   HiOutlineUsers,
@@ -27,7 +28,7 @@ function Sidebar() {
     setActiveMenu(activeMenu === menu ? null : menu);
   };
 
-  const menuItems = [
+  const menuItems: MenuItem[] = [
     {
       label: "Users",
       path: "/admin/users",
@@ -36,7 +37,9 @@ function Sidebar() {
     {
       label: "Payment Config",
       path: "/admin/payment-config",
-      icon: <BsCreditCard2Front style={{ fontSize: "20px", margin: "0 10px" }} />,
+      icon: (
+        <BsCreditCard2Front style={{ fontSize: "20px", margin: "0 10px" }} />
+      ),
     },
     {
       label: "Order List",
@@ -56,14 +59,21 @@ function Sidebar() {
         {
           label: "Schedule Notification",
           path: "/admin/schedule-notification",
-          icon: <MdOutlineScheduleSend style={{ fontSize: "18px", margin: "0 10px" }} />,
+          icon: (
+            <MdOutlineScheduleSend
+              style={{ fontSize: "18px", margin: "0 10px" }}
+            />
+          ),
         },
       ],
     },
   ];
 
   return (
-    <div style={{ width: "300px" }} className="h-full flex-col bg-white text-white hidden md:flex">
+    <div
+      style={{ width: "300px" }}
+      className="h-full flex-col bg-white text-white hidden md:flex"
+    >
       <div className="flex flex-col justify-between flex-grow p-4">
         <nav className="flex flex-col space-y-2">
           {menuItems.map((item, index) =>
@@ -72,18 +82,26 @@ function Sidebar() {
                 <button
                   onClick={() => handleMenuClick(item.label)}
                   className={`flex items-center p-2 w-full font-medium rounded-md transition-all duration-300 ${
-                    activeMenu === item.label ? "bg-primary text-white" : "text-gray-600 hover:bg-lightBlue hover:text-primary"
+                    activeMenu === item.label
+                      ? "bg-primary text-white"
+                      : "text-gray-600 hover:bg-lightBlue hover:text-primary"
                   }`}
                 >
                   {item.icon}
                   {item.label}
                   <span className="ml-auto">
-                    {activeMenu === item.label ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                    {activeMenu === item.label ? (
+                      <IoIosArrowUp />
+                    ) : (
+                      <IoIosArrowDown />
+                    )}
                   </span>
                 </button>
                 <div
                   className={`ml-5 flex flex-col  transition-all duration-300 overflow-hidden ${
-                    activeMenu === item.label ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+                    activeMenu === item.label
+                      ? "max-h-40 opacity-100"
+                      : "max-h-0 opacity-0"
                   }`}
                 >
                   {item.subItems?.map((subItem, subIndex) => (
@@ -105,10 +123,10 @@ function Sidebar() {
             ) : (
               <Link
                 key={index}
-                to={item.path}
+                to={item?.path!}
                 onClick={() => setActiveMenu(null)} // Close submenu when clicking another menu item
                 className={`flex items-center p-2 font-medium rounded-md transition-all duration-300 ${
-                  isActive(item.path)
+                  item.path && isActive(item.path)
                     ? "bg-primary text-white"
                     : "text-gray-600 hover:bg-lightBlue hover:text-primary"
                 }`}
