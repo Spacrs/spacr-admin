@@ -104,5 +104,6 @@ export const adminRoutes = [
   {
     path: "/logout",
     component: Logout,
+    breadcrumb: [],
   },
 ];
