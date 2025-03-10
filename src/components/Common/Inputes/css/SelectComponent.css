@@ -1,0 +1,8 @@
+select:focus {
+    box-shadow: 0 0 8px #131f5c;
+  }
+  
+  select:hover {
+    background-color: #f0f4ff;
+  }
+  

@@ -23,18 +23,12 @@ export const adminAuthApi: any = createApi({
       query: (userId) => ({
         url: `/admin/users/${userId}`,
         method: "GET",
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
       }),
     }),
     getUserInfo: builder.query<any, void>({
       query: (userId) => ({
         url: `/admin/get-user-details/${userId}`,
         method: "GET",
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
       }),
     }),
     updateUserInfo: builder.mutation<any, UserInfoRequest>({
@@ -42,9 +36,6 @@ export const adminAuthApi: any = createApi({
         url: `/admin/update-user-details/${credentials.userId}`,
         method: "PATCH",
         body: credentials,
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
       }),
     }),
     updateUserVerification: builder.mutation<any, UserInfoRequest>({
@@ -52,20 +43,19 @@ export const adminAuthApi: any = createApi({
         url: `/admin/update-verification/${credentials.userId}`,
         method: "PATCH",
         body: credentials,
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
       }),
     }),
-    getUsers: builder.query<any, { page: number; verified?: string; search?: string }>({
+    getUsers: builder.query<
+      any,
+      { page: number; verified?: string; search?: string }
+    >({
       query: ({ page, verified, search }) => ({
-        url: `/admin/get-all-users?page=${page}${verified ? `&verified=${verified}` : ""}${search ? `&search=${search}` : ""}`,
+        url: `/admin/get-all-users?page=${page}${
+          verified ? `&verified=${verified}` : ""
+        }${search ? `&search=${search}` : ""}`,
         method: "GET",
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
       }),
-    })
+    }),
   }),
 });
 
@@ -75,5 +65,5 @@ export const {
   useGetUserInfoQuery,
   useUpdateUserInfoMutation,
   useUpdateUserVerificationMutation,
-  useGetUsersQuery
+  useGetUsersQuery,
 } = adminAuthApi;
