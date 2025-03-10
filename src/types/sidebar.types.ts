@@ -6,7 +6,7 @@ import { ReactNode } from "react";
     icon: ReactNode;
   };
 
-  export type MenuItem = {
+  export type MenuItemTypes = {
     label: string;
     path?:string;
     isSubmenu?: boolean;

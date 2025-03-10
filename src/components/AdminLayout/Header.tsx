@@ -8,6 +8,18 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import hippoLogoWhite from "../../assets/images/hippoLogoWhite.png";
 
 import logo from '../../assets/images/logo.png'
+import { icons } from "../../Icons/constant";
+import menuItems from "../../constant/menuOption";
+import { Link } from "react-router-dom";
+
+const {
+  ImMenu3,
+  RxCross1,
+  IoIosLogOut,
+  IoIosArrowDown,
+  IoIosArrowUp,
+} = icons;
+
 
 interface IUserInfo {
   address: string;
@@ -34,6 +46,12 @@ function Header() {
   });
   const [updateUserInfo] = useUpdateUserInfoMutation();
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // New state for mobile menu
+
+  const [activeMenu, setActiveMenu] = useState<string | null>(null); // Track active menu
+
+  const isActive = (path: string) => location.pathname === path;
+
   const dispatch = useAppDispatch();
   const { userInfo } = useAppSelector((state) => state.userSlice);
 
@@ -48,6 +66,10 @@ function Header() {
     setIsModalOpen(!isModalOpen);
   };
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserData((prevData) => ({ ...prevData, [name]: value }));
@@ -59,18 +81,24 @@ function Header() {
     toggleModal();
   };
 
+  const handleMenuClick = (menu: string) => {
+    // If clicking the same menu, toggle; otherwise, set a new active menu
+    setActiveMenu(activeMenu === menu ? null : menu);
+  };
+
+
   return (
     <header className="border border-b h-[70px] text-black" style={{ backgroundColor: "#131f5c" }}>
       <div className="w-full mx-auto sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
+          <div className="ml-2 flex items-center">
             <div className="flex w-full justify-between items-center">
               <img src={logo} className="h-10" alt="Logo" />
             </div>
           </div>
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
-              <button className="bg-black p-1 rounded-full text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#3f9997] focus:ring-white">
+              <button className="bg-black p-1 rounded-full text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-primary focus:ring-white">
                 <span className="sr-only">View notifications</span>
                 <svg
                   className="h-6 w-6"
@@ -88,7 +116,7 @@ function Header() {
                   />
                 </svg>
               </button>
-              <div className="ml-3 relative">
+              {/* <div className="ml-3 relative">
                 <div>
                   <button
                     onClick={() => toggleModal()}
@@ -105,63 +133,103 @@ function Header() {
                     />
                   </button>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
-          <div className="-mr-2 flex md:hidden">
+          {/* <div className="-mr-2 flex md:hidden"> */}
+          <div className="mr-4 flex md:hidden">
             <button
-              className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-white hover:text-white hover:bg-[#3f9997] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#3f9997] focus:ring-white"
+              onClick={toggleMenu}
+              className="bg-white inline-flex items-center justify-center p-2 rounded-md text-black hover:text-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-primary focus:ring-white"
               aria-controls="mobile-menu"
-              aria-expanded="false"
+              aria-expanded={isMenuOpen}
             >
               <span className="sr-only">Open main menu</span>
-              <svg
-                className="h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16m-7 6h7"
-                />
-              </svg>
+              
+              {isMenuOpen ? (
+              <RxCross1 style={{ fontSize: "24px" }}/>
+              ) : (
+                <ImMenu3 style={{ fontSize: "24px" }} />
+              )}
             </button>
           </div>
         </div>
       </div>
-      <div className="md:hidden bg-[#3f9997]" id="mobile-menu">
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          <a
-            href="/"
-            className="text-white hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-          >
-            Dashboard
-          </a>
-          <a
-            href="/users"
-            className="text-white hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-          >
-            Users
-          </a>
-          <a
-            href="/settings"
-            className="text-white hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-          >
-            Settings
-          </a>
+      {isMenuOpen && (
+      // <div className={`md:hidden bg-red-800 transition-all duration-300 ease-in-out ${isMenuOpen ? "h-[200px] opacity-100 visible" : "h-0 opacity-0 invisible"}`} id="mobile-menu">
+      <div className={`md:hidden bg-white transition-all duration-300 ease-in-out fixed top-16 left-0 w-full z-50 ${isMenuOpen ? "h-auto opacity-100 visible" : "h-0 opacity-0 invisible"}`} id="mobile-menu">
+
+        <div className="transition-opacity duration-300 ease-in-out">
+        {menuItems.map((item, index) =>
+            item.isSubmenu ? (
+              <div key={index} className="flex flex-col">
+                <button
+                  onClick={() => handleMenuClick(item.label)}
+                  className={`flex items-center p-2 w-full font-medium rounded-md transition-all duration-300 ${
+                    activeMenu === item.label
+                      ? "bg-primary text-white"
+                      : "text-gray-600 hover:bg-lightBlue hover:text-primary"
+                  }`}
+                >
+                  {item.icon}
+                  {item.label}
+                  <span className="ml-auto">
+                    {activeMenu === item.label ? (
+                      <IoIosArrowUp />
+                    ) : (
+                      <IoIosArrowDown />
+                    )}
+                  </span>
+                </button>
+                <div
+                  className={`ml-5 flex flex-col  transition-all duration-300 overflow-hidden ${
+                    activeMenu === item.label
+                      ? "max-h-40 opacity-100"
+                      : "max-h-0 opacity-0"
+                  }`}
+                >
+                  {item.subItems?.map((subItem, subIndex) => (
+                    <Link
+                      key={subIndex}
+                      to={subItem.path}
+                      className={`flex items-center p-2 mt-2 font-medium rounded-md transition-all duration-300 ${
+                        isActive(subItem.path)
+                          ? "bg-primary text-white"
+                          : "text-gray-600 hover:bg-lightBlue hover:text-primary"
+                      }`}
+                    >
+                      {subItem.icon}
+                      {subItem.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <Link
+                key={index}
+                to={item?.path!}
+                onClick={() => setActiveMenu(null)} // Close submenu when clicking another menu item
+                className={`flex items-center p-2 font-medium rounded-md transition-all duration-300 ${
+                  item.path && isActive(item.path)
+                    ? "bg-primary text-white"
+                    : "text-gray-600 hover:bg-lightBlue hover:text-primary"
+                }`}
+              >
+                {item.icon}
+                {item.label}
+              </Link>
+            )
+          )}
           <a
             href="/reports"
-            className="text-white hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+            className="text-gray-800 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
           >
             Reports
           </a>
         </div>
       </div>
+    )}
+
       <ProfileModal
         isOpen={isModalOpen}
         toggleModal={toggleModal}

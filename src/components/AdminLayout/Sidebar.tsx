@@ -3,18 +3,15 @@ import { useState } from "react";
 import { icons } from "../../Icons/constant";
 import { logout } from "../../store/slices/userSlice/userSlice";
 import { useAppDispatch } from "../../store/hooks";
-import { MenuItem } from "../../types/sidebar.types";
+import menuItems from "../../constant/menuOption";
+
 
 const {
-  HiOutlineUsers,
+  
   IoIosLogOut,
-  BsCreditCard2Front,
-  TbTruckDelivery,
-  GrSend,
-  MdOutlineScheduleSend,
   IoIosArrowDown,
   IoIosArrowUp,
-  MdContactSupport
+  
 } = icons;
 
 function Sidebar() {
@@ -29,51 +26,7 @@ function Sidebar() {
     setActiveMenu(activeMenu === menu ? null : menu);
   };
 
-  const menuItems: MenuItem[] = [
-    {
-      label: "Users",
-      path: "/admin/users",
-      icon: <HiOutlineUsers style={{ fontSize: "20px", margin: "0 10px" }} />,
-    },
-    {
-      label: "Payment Config",
-      path: "/admin/payment-config",
-      icon: (
-        <BsCreditCard2Front style={{ fontSize: "20px", margin: "0 10px" }} />
-      ),
-    },
-    {
-      label: "Order List",
-      path: "/admin/order-list",
-      icon: <TbTruckDelivery style={{ fontSize: "20px", margin: "0 10px" }} />,
-    },
-    {
-      label: "Notifications",
-      isSubmenu: true,
-      icon: <GrSend style={{ fontSize: "20px", margin: "0 10px" }} />,
-      subItems: [
-        {
-          label: "Send Notification",
-          path: "/admin/send-notification",
-          icon: <GrSend style={{ fontSize: "18px", margin: "0 10px" }} />,
-        },
-        {
-          label: "Schedule Notification",
-          path: "/admin/schedule-notification",
-          icon: (
-            <MdOutlineScheduleSend
-              style={{ fontSize: "18px", margin: "0 10px" }}
-            />
-          ),
-        },
-      ],
-    },
-    {
-      label: "Contact Support List",
-      path: "/admin/contact-support-list",
-      icon: <MdContactSupport style={{ fontSize: "20px", margin: "0 10px" }} />,
-    },
-  ];
+  
 
   return (
     <div
