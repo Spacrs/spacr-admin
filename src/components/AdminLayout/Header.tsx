@@ -5,21 +5,13 @@ import {
   useUpdateUserInfoMutation,
 } from "../../store/slices/userSlice/apiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import hippoLogoWhite from "../../assets/images/hippoLogoWhite.png";
 
-import logo from '../../assets/images/logo.png'
+import logo from "../../assets/images/logo.png";
 import { icons } from "../../Icons/constant";
 import menuItems from "../../constant/menuOption";
 import { Link } from "react-router-dom";
 
-const {
-  ImMenu3,
-  RxCross1,
-  IoIosLogOut,
-  IoIosArrowDown,
-  IoIosArrowUp,
-} = icons;
-
+const { ImMenu3, RxCross1, IoIosLogOut, IoIosArrowDown, IoIosArrowUp } = icons;
 
 interface IUserInfo {
   address: string;
@@ -86,15 +78,15 @@ function Header() {
     setActiveMenu(activeMenu === menu ? null : menu);
   };
 
-
   return (
-    <header className="border border-b h-[70px] text-black" style={{ backgroundColor: "#131f5c" }}>
+    <header
+      className="border border-b h-[70px] text-black relative"
+      style={{ backgroundColor: "#131f5c" }}
+    >
       <div className="w-full mx-auto sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="ml-2 flex items-center">
-            <div className="flex w-full justify-between items-center">
-              <img src={logo} className="h-10" alt="Logo" />
-            </div>
+            <img src={logo} className="h-10" alt="Logo" />
           </div>
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
@@ -116,24 +108,6 @@ function Header() {
                   />
                 </svg>
               </button>
-              {/* <div className="ml-3 relative">
-                <div>
-                  <button
-                    onClick={() => toggleModal()}
-                    className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#3f9997] focus:ring-white"
-                    id="user-menu-button"
-                    aria-expanded="false"
-                    aria-haspopup="true"
-                  >
-                    <span className="sr-only">Open user menu</span>
-                    <img
-                      className="h-8 w-8 rounded-full"
-                      src="https://tecdn.b-cdn.net/img/new/avatars/2.webp"
-                      alt="User avatar"
-                    />
-                  </button>
-                </div>
-              </div> */}
             </div>
           </div>
           {/* <div className="-mr-2 flex md:hidden"> */}
@@ -145,9 +119,9 @@ function Header() {
               aria-expanded={isMenuOpen}
             >
               <span className="sr-only">Open main menu</span>
-              
+
               {isMenuOpen ? (
-              <RxCross1 style={{ fontSize: "24px" }}/>
+                <RxCross1 style={{ fontSize: "24px" }} />
               ) : (
                 <ImMenu3 style={{ fontSize: "24px" }} />
               )}
@@ -156,79 +130,71 @@ function Header() {
         </div>
       </div>
       {isMenuOpen && (
-      // <div className={`md:hidden bg-red-800 transition-all duration-300 ease-in-out ${isMenuOpen ? "h-[200px] opacity-100 visible" : "h-0 opacity-0 invisible"}`} id="mobile-menu">
-      <div className={`md:hidden bg-white transition-all duration-300 ease-in-out fixed top-16 left-0 w-full z-50 ${isMenuOpen ? "h-auto opacity-100 visible" : "h-0 opacity-0 invisible"}`} id="mobile-menu">
+  <div className="md:hidden bg-white transition-all duration-300 ease-in-out absolute top-[70px] left-0 w-full z-50">
+    <div className="p-4">
+      {menuItems.map((item, index) =>
+        item.isSubmenu ? (
+          <div key={index} className="flex flex-col p-2">
+            <button
+              onClick={() => handleMenuClick(item.label)}
+              className={`flex items-center p-2 w-full font-medium rounded-md transition-all duration-300 ${
+                activeMenu === item.label
+                  ? "bg-primary text-white"
+                  : "text-gray-600 hover:bg-lightBlue hover:text-primary"
+              }`}
+            >
+              {item.icon}
+              {item.label}
+              <span className="ml-auto">
+                {activeMenu === item.label ? <IoIosArrowUp /> : <IoIosArrowDown />}
+              </span>
+            </button>
 
-        <div className="transition-opacity duration-300 ease-in-out">
-        {menuItems.map((item, index) =>
-            item.isSubmenu ? (
-              <div key={index} className="flex flex-col">
-                <button
-                  onClick={() => handleMenuClick(item.label)}
-                  className={`flex items-center p-2 w-full font-medium rounded-md transition-all duration-300 ${
-                    activeMenu === item.label
+            <div
+              className={`ml-5 flex flex-col transition-all duration-300 overflow-hidden ${
+                activeMenu === item.label ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+              }`}
+            >
+              {item.subItems?.map((subItem, subIndex) => (
+                <Link
+                  key={subIndex}
+                  to={subItem.path || "#"}
+                  className={`flex items-center p-2 mt-2 font-medium rounded-md transition-all duration-300 ${
+                    isActive(subItem.path)
                       ? "bg-primary text-white"
                       : "text-gray-600 hover:bg-lightBlue hover:text-primary"
                   }`}
+                  onClick={() => setIsMenuOpen(false)}
                 >
-                  {item.icon}
-                  {item.label}
-                  <span className="ml-auto">
-                    {activeMenu === item.label ? (
-                      <IoIosArrowUp />
-                    ) : (
-                      <IoIosArrowDown />
-                    )}
-                  </span>
-                </button>
-                <div
-                  className={`ml-5 flex flex-col  transition-all duration-300 overflow-hidden ${
-                    activeMenu === item.label
-                      ? "max-h-40 opacity-100"
-                      : "max-h-0 opacity-0"
-                  }`}
-                >
-                  {item.subItems?.map((subItem, subIndex) => (
-                    <Link
-                      key={subIndex}
-                      to={subItem.path}
-                      className={`flex items-center p-2 mt-2 font-medium rounded-md transition-all duration-300 ${
-                        isActive(subItem.path)
-                          ? "bg-primary text-white"
-                          : "text-gray-600 hover:bg-lightBlue hover:text-primary"
-                      }`}
-                    >
-                      {subItem.icon}
-                      {subItem.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <Link
-                key={index}
-                to={item?.path!}
-                onClick={() => setActiveMenu(null)} // Close submenu when clicking another menu item
-                className={`flex items-center p-2 font-medium rounded-md transition-all duration-300 ${
-                  item.path && isActive(item.path)
-                    ? "bg-primary text-white"
-                    : "text-gray-600 hover:bg-lightBlue hover:text-primary"
-                }`}
-              >
-                {item.icon}
-                {item.label}
-              </Link>
-            )
-          )}
-          <a
-            href="/reports"
-            className="text-gray-800 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  {subItem.icon}
+                  {subItem.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <Link
+            key={index}
+            to={item.path || "#"}
+            className={`flex items-center p-2 font-medium rounded-md transition-all duration-300 ${
+              isActive(item.path!)
+                ? "bg-primary text-white"
+                : "text-gray-600 hover:bg-lightBlue hover:text-primary"
+            }`}
+            onClick={() => {
+              setIsMenuOpen(false);
+              setActiveMenu(null);
+            }}
           >
-            Reports
-          </a>
-        </div>
-      </div>
-    )}
+            {item.icon}
+            {item.label}
+          </Link>
+        )
+      )}
+    </div>
+  </div>
+)}
+
 
       <ProfileModal
         isOpen={isModalOpen}
