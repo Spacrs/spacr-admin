@@ -13,7 +13,7 @@ function TextInpute({
     <input
       type="text"
       name={name}
-      className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      className="w-full px-4 py-3 border border-gray-300 rounded-md transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-900"
       value={value}
       onChange={onChange}
     />

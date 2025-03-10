@@ -13,6 +13,10 @@ import DirectNotification from "../pages/NotificationManagement/DirectNotificati
 import ScheduleNotification from "../pages/NotificationManagement/ScheduleNotification";
 import ContactSupportList from "../pages/ContactSupportManagement/ContactSupportList"
 
+import InputPage from "../pages/Samples/InputPage"
+import Logout from "../pages/AuthManagement/Logout";
+
+
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
   {
@@ -26,7 +30,7 @@ export const authRoutes = [
   {
     path: "/",
     component: Authenticate,
-  },
+  }
 ];
 
 export const adminRoutes = [
@@ -79,6 +83,12 @@ export const adminRoutes = [
     breadcrumb: ["admin", "Contact Support"],
     showBreadcrumb: true,
   },
+  // {
+  //   path: "samples/inputes",
+  //   component: InputPage,
+  //   breadcrumb: ["samples", "Inputs"],
+  //   showBreadcrumb: true,
+  // },
   {
     path: "settings",
     component: Setting,
@@ -90,5 +100,9 @@ export const adminRoutes = [
     component: OrderDetails,
     breadcrumb: ["admin", "Order-Details"],
     showBreadcrumb: true,
-  }
+  },
+  {
+    path: "/logout",
+    component: Logout,
+  },
 ];

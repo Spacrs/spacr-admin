@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import ProfileModal from "./ProfileModal";
+import ProfileMenu from "./ProfileMenu";
 import {
   useGetUserInfoQuery,
   useUpdateUserInfoMutation,
@@ -11,7 +11,7 @@ import { icons } from "../../Icons/constant";
 import menuItems from "../../constant/menuOption";
 import { Link } from "react-router-dom";
 
-const { ImMenu3, RxCross1, IoIosLogOut, IoIosArrowDown, IoIosArrowUp } = icons;
+const { ImMenu3, RxCross1, IoIosArrowDown, IoIosArrowUp } = icons;
 
 interface IUserInfo {
   address: string;
@@ -108,8 +108,10 @@ function Header() {
                   />
                 </svg>
               </button>
+              <ProfileMenu userData={null} />
             </div>
           </div>
+
           {/* <div className="-mr-2 flex md:hidden"> */}
           <div className="mr-4 flex md:hidden">
             <button
@@ -130,80 +132,76 @@ function Header() {
         </div>
       </div>
       {isMenuOpen && (
-  <div className="md:hidden bg-white transition-all duration-300 ease-in-out absolute top-[70px] left-0 w-full z-50">
-    <div className="p-4">
-      {menuItems.map((item, index) =>
-        item.isSubmenu ? (
-          <div key={index} className="flex flex-col p-2">
-            <button
-              onClick={() => handleMenuClick(item.label)}
-              className={`flex items-center p-2 w-full font-medium rounded-md transition-all duration-300 ${
-                activeMenu === item.label
-                  ? "bg-primary text-white"
-                  : "text-gray-600 hover:bg-lightBlue hover:text-primary"
-              }`}
-            >
-              {item.icon}
-              {item.label}
-              <span className="ml-auto">
-                {activeMenu === item.label ? <IoIosArrowUp /> : <IoIosArrowDown />}
-              </span>
-            </button>
+        <div className="md:hidden bg-white transition-all duration-300 ease-in-out absolute top-[70px] left-0 w-full z-50">
+          <div className="p-4">
+            {menuItems.map((item, index) =>
+              item.isSubmenu ? (
+                <div key={index} className="flex flex-col p-2">
+                  <button
+                    onClick={() => handleMenuClick(item.label)}
+                    className={`flex items-center p-2 w-full font-medium rounded-md transition-all duration-300 ${
+                      activeMenu === item.label
+                        ? "bg-primary text-white"
+                        : "text-gray-600 hover:bg-lightBlue hover:text-primary"
+                    }`}
+                  >
+                    {item.icon}
+                    {item.label}
+                    <span className="ml-auto">
+                      {activeMenu === item.label ? (
+                        <IoIosArrowUp />
+                      ) : (
+                        <IoIosArrowDown />
+                      )}
+                    </span>
+                  </button>
 
-            <div
-              className={`ml-5 flex flex-col transition-all duration-300 overflow-hidden ${
-                activeMenu === item.label ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-              }`}
-            >
-              {item.subItems?.map((subItem, subIndex) => (
+                  <div
+                    className={`ml-5 flex flex-col transition-all duration-300 overflow-hidden ${
+                      activeMenu === item.label
+                        ? "max-h-40 opacity-100"
+                        : "max-h-0 opacity-0"
+                    }`}
+                  >
+                    {item.subItems?.map((subItem, subIndex) => (
+                      <Link
+                        key={subIndex}
+                        to={subItem.path || "#"}
+                        className={`flex items-center p-2 mt-2 font-medium rounded-md transition-all duration-300 ${
+                          isActive(subItem.path)
+                            ? "bg-primary text-white"
+                            : "text-gray-600 hover:bg-lightBlue hover:text-primary"
+                        }`}
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        {subItem.icon}
+                        {subItem.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : (
                 <Link
-                  key={subIndex}
-                  to={subItem.path || "#"}
-                  className={`flex items-center p-2 mt-2 font-medium rounded-md transition-all duration-300 ${
-                    isActive(subItem.path)
+                  key={index}
+                  to={item.path || "#"}
+                  className={`flex items-center p-2 font-medium rounded-md transition-all duration-300 ${
+                    isActive(item.path!)
                       ? "bg-primary text-white"
                       : "text-gray-600 hover:bg-lightBlue hover:text-primary"
                   }`}
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    setActiveMenu(null);
+                  }}
                 >
-                  {subItem.icon}
-                  {subItem.label}
+                  {item.icon}
+                  {item.label}
                 </Link>
-              ))}
-            </div>
+              )
+            )}
           </div>
-        ) : (
-          <Link
-            key={index}
-            to={item.path || "#"}
-            className={`flex items-center p-2 font-medium rounded-md transition-all duration-300 ${
-              isActive(item.path!)
-                ? "bg-primary text-white"
-                : "text-gray-600 hover:bg-lightBlue hover:text-primary"
-            }`}
-            onClick={() => {
-              setIsMenuOpen(false);
-              setActiveMenu(null);
-            }}
-          >
-            {item.icon}
-            {item.label}
-          </Link>
-        )
+        </div>
       )}
-    </div>
-  </div>
-)}
-
-
-      <ProfileModal
-        isOpen={isModalOpen}
-        toggleModal={toggleModal}
-        handleSubmit={handleSubmit}
-        handleInputChange={handleInputChange}
-        userData={userData}
-        isModalOpen={isModalOpen}
-      />
     </header>
   );
 }

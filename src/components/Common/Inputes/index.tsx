@@ -4,14 +4,15 @@ import TextInpute from "./TextInpute";
 import NumberInpute from "./NumberInpute";
 import SelectComponent from "./SelectInput";
 import SwitchButton from "./SwitchButton";
+import DatePickerComponent from "./DatePickerComponent";
 
 interface InputComponentProps {
-  type: string;
+  type: "color" | "text" | "number" | "select" | "switchButton" | "datePicker";
   name: string;
   value: any;
   label: string;
   onChange: (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement> | any
   ) => void;
   defaultValue?: any;
   min?: number;
@@ -59,9 +60,21 @@ function InputComponent({
       case "switchButton":
         return (
           <SwitchButton
-            options={options || []}
+            options={[
+              { label: "Option 1", value: "option1" },
+              { label: "Option 2", value: "option2" },
+            ]}
             value={value}
             onChange={onChange}
+          />
+        );
+
+      case "datePicker":
+        return (
+          <DatePickerComponent
+            selectedDate={value}
+            onChange={onChange}
+            label={label}
           />
         );
 
@@ -72,7 +85,9 @@ function InputComponent({
 
   return (
     <div className="flex flex-col sm:flex-row items-center sm:space-x-4 space-y-4 sm:space-y-0">
-      <label className="text-sm font-semibold text-gray-700">{label}:</label>
+      {label && (
+        <label className="text-sm font-semibold text-gray-700">{label}:</label>
+      )}
       {renderInput()}
     </div>
   );
