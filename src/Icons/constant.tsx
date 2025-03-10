@@ -62,6 +62,7 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { GrSend } from "react-icons/gr";
 import { MdOutlineScheduleSend } from "react-icons/md";
 import { MdContactSupport } from "react-icons/md";
+import { ImMenu3 } from "react-icons/im";
 
 export const icons = {
   CiHome: CiHome,
@@ -136,6 +137,7 @@ export const icons = {
   MdOutlineScheduleSend,
   IoIosArrowDown,
   IoIosArrowUp,
-  MdContactSupport
+  MdContactSupport,
+  ImMenu3
 };
 
