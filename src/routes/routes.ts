@@ -12,6 +12,9 @@ import OrderDetails from '../pages/OrderManagement/OrderDetails';
 import DirectNotification from "../pages/NotificationManagement/DirectNotification";
 import ScheduleNotification from "../pages/NotificationManagement/ScheduleNotification";
 import ContactSupportList from "../pages/ContactSupportManagement/ContactSupportList"
+import AddCountry from "../pages/PaymentConfigManagement/AddCountry";
+import AddCity from "../pages/PaymentConfigManagement/AddCity";
+import CountryList from "../pages/PaymentConfigManagement/CountryList"
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -90,5 +93,25 @@ export const adminRoutes = [
     component: OrderDetails,
     breadcrumb: ["admin", "Order-Details"],
     showBreadcrumb: true,
+  },
+  {
+    path: "country-list",
+    component: CountryList,
+    breadcrumb: ["admin", "Country List"],
+    showBreadcrumb: true,
+  },
+  {
+    path: "add-country",
+    component: AddCountry,
+    breadcrumb: ["admin", "Add Country"],
+    showBreadcrumb: true,
+  },
+  {
+    path: "add-city",
+    component: AddCity,
+    breadcrumb: ["admin", "Add City"],
+    showBreadcrumb: true,
   }
+  
+
 ];

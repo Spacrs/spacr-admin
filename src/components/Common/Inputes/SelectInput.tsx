@@ -18,7 +18,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
   return (
     <select
       name={name}
-      className={`block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200 ${className}`}
+      className={`block w-full px-3 py-3 border rounded-md focus:outline-none focus:ring focus:ring-blue-200 ${className}`}
       value={value}
       onChange={onChange}
     >

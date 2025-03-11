@@ -9,7 +9,10 @@ const {
     MdOutlineScheduleSend,
     IoIosArrowDown,
     IoIosArrowUp,
-    MdContactSupport
+    MdContactSupport,
+    IoIosFlag,
+    IoMdAddCircle,
+    FaCity
   } = icons;
 
 const menuItems: MenuItemTypes[] = [
@@ -56,6 +59,27 @@ const menuItems: MenuItemTypes[] = [
       path: "/admin/contact-support-list",
       icon: <MdContactSupport style={{ fontSize: "20px", margin: "0 10px" }} />,
     },
+    {
+      label: "Country List",
+      path: "/admin/country-list",
+      icon: <IoIosFlag style={{ fontSize: "20px", margin: "0 10px" }} />,
+    },
+    {
+      label: "Add Country",
+      path: "/admin/add-country",
+      icon: <IoMdAddCircle style={{ fontSize: "20px", margin: "0 10px" }} />,
+    },
+    {
+      label: "City List",
+      path: "/admin/city-list",
+      icon: <FaCity style={{ fontSize: "20px", margin: "0 10px" }} />,
+    },
+    {
+      label: "Add City",
+      path: "/admin/add-city",
+      icon: <IoMdAddCircle style={{ fontSize: "20px", margin: "0 10px" }} />,
+    }
+    
   ];
 
   export default menuItems;

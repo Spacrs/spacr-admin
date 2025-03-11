@@ -129,16 +129,18 @@ function Users() {
 
       {/* Table Section */}
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md">
-        <Table
-          data={users}
-          columns={columns}
-          loading={isLoading}
-          totalPages={data?.pagination?.totalPages || 1}
-          currentPage={currentPage}
-          onPageChange={setCurrentPage}
-          handleToggleStatus={handleToggleStatus}
-          handleView={handleView}
-        />
+        <div className="sm:overflow-x-auto xs:overflow-x-auto">
+          <Table
+            data={users}
+            columns={columns}
+            loading={isLoading}
+            totalPages={data?.pagination?.totalPages || 1}
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+            handleToggleStatus={handleToggleStatus}
+            handleView={handleView}
+          />
+        </div>
       </div>
 
       {/* Confirmation Modal */}

@@ -92,15 +92,20 @@ const ScheduleNotification = () => {
                     </div>
 
                     {/* Button Container for Inline Buttons */}
-                    <div className="flex gap-4 mt-4">
+                    <div className="flex gap-4 mt-4 w-full">
                         
                         <Button
-                            className="w-1/4 bg-gray-400 text-white py-3 rounded-md hover:bg-gray-500 transition"
+                            className="lg:w-1/5 sm:w-1/2 xs:w-1/2"
+                          type="secondary"
                             text="Cancel"
+                            onClick={()=>{}}
+
                         />
                         
                         <Button
-                            className="w-1/4 bg-primary text-white py-3 rounded-md hover:bg-dark transition"
+                            className="lg:w-1/5 sm:w-1/2 xs:w-1/2"
+                            type="primary"
+                            onClick={()=>{}}
                             text="Schedule Notification"
                         />
                     </div>
