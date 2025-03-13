@@ -3,14 +3,19 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAddPaymentConfigMutation } from "../../store/slices/paymentConfigSlice/apiSlice";
 import { addPaymentConfigToList } from "../../store/slices/paymentConfigSlice/paymentConfigSlice";
+import { useAddCityMutation } from "../../store/slices/paymentConfigSlice/apiSlice";
 import SelectComponent from '../../components/Common/Inputes/SelectInput';
 const AddCity = () => {
-    const [selectedCountry, setSelectedCountry] = useState<string | number>("");
-    const [cityName, setCityName] = useState("");
-    const [latitude, setLatitude] = useState("");
-    const [longitude, setLongitude] = useState("");
-    const [countries, setCountries] = useState<{ value: number; label: string }[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+  const dispatch = useDispatch();
+  const [selectedCountry, setSelectedCountry] = useState<string | number>("");
+  const [cityName, setCityName] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
+  const [countries, setCountries] = useState<{ value: number; label: string }[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  const [addCity, { isLoading: isAdding }] = useAddCityMutation();
 
     const cities = [
       { value: "new_york", label: "New York" },
@@ -39,13 +44,43 @@ const AddCity = () => {
             });
     }, []);
   
-    const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
       setSelectedCountry(e.target.value);
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
 
-    }
+      if (!selectedCountry || !cityName || !latitude || !longitude) {
+          alert("Please fill in all fields.");
+          return;
+      }
+
+      const formData = {
+          name: cityName,
+          latitude: latitude,
+          longitude: longitude,
+          countryId: Number(selectedCountry)
+      };
+
+      try {
+          const response = await addCity(formData).unwrap();
+          console.log("City Added Successfully:", response);
+
+          setSuccessMessage("City added successfully!");
+
+          setTimeout(() => {
+              setSuccessMessage(null);
+          }, 3000);
+
+          setCityName("");
+          setLatitude("");
+          setLongitude("");
+          setSelectedCountry("");
+      } catch (error) {
+          console.error("Failed to add city:", error);
+      }
+  };
 
   return (
     <div className="flex justify-center items-center p-20 bg-gray-50">
@@ -65,7 +100,8 @@ const AddCity = () => {
                 name="city"
                 options={countries}
                 value={selectedCountry}
-                onChange={handleCityChange}
+                onChange={handleCountryChange}
+                // onChange={() => {}}
                 className="border-gray-300"
                 />
             </div>
@@ -79,7 +115,7 @@ const AddCity = () => {
                 id="providers"
                 className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
                 value={cityName}
-                onChange={(e) => (e.target.value)}
+                onChange={(e) => setCityName(e.target.value)}
                 required
               />
             </div>
@@ -96,8 +132,8 @@ const AddCity = () => {
                 type="text"
                 id="providers"
                 className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
-                value={cityName}
-                onChange={(e) => (e.target.value)}
+                value={latitude}
+                onChange={(e) => setLatitude(e.target.value)}
                 required
               />
             </div>
@@ -110,8 +146,8 @@ const AddCity = () => {
                 type="text"
                 id="providers"
                 className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
-                value={cityName}
-                onChange={(e) => (e.target.value)}
+                value={longitude}
+                onChange={(e) => setLongitude(e.target.value)}
                 required
               />
             </div>

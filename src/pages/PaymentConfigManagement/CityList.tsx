@@ -10,19 +10,20 @@ import {
     setPaymentConfigs,
     updatePaymentConfigInList,
   } from "../../store/slices/paymentConfigSlice/paymentConfigSlice";
-import Button from "../../components/Common/Button/Button";
+import Button from "../../components/Common/Button";
 import { Tooltip } from "@material-tailwind/react";
 
   const columns = [
     
     { name: "name", Header: "Name", colName: "Default"},
-    { name: "providers", Header: "Providers", colName: "Default" },
-    { name: "createdAt", Header: "Created Date", colName: "Date" },
-    
+    { name: "latitude", Header: "Latitude", colName: "Default" },
+    { name: "longitude", Header: "Longitude", colName: "Default" },
+    { name: "countryId", Header: "Country", colName: "Default" },
+
   ];
 
-const CountryList = () => {
-  const [countries, setCountries] = useState<any[]>([]);
+const CityList = () => {
+  const [cities, setCities] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -56,15 +57,14 @@ const CountryList = () => {
     );
   }
 
-  const AddCountry = () => {
-    navigate('/admin/add-country');
+  const AddCity = () => {
+    navigate('/admin/add-city');
   }
 
   return (
 
     <div className="">
-
-  <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
+      <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         {/* Search Bar */}
         <div className="flex flex-1 max-w-lg">
           
@@ -74,19 +74,18 @@ const CountryList = () => {
         <div className="ml-4">
           <Tooltip content="Material Tailwind">
             <Button 
-              text="Add Country"
+              text="Add City"
               className=""
               type="lightBlue"
-              onClick={AddCountry}
+              onClick={AddCity}
             />
           </Tooltip>
           
         </div>
       </div>
-      
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md">
         <Table
-          data={paymentConfigs}
+          data={cities}
           columns={columns}
           loading={isLoading}
           totalPages={data?.pagination?.totalPages || 1}
@@ -99,4 +98,4 @@ const CountryList = () => {
   );
 };
 
-export default CountryList;
+export default CityList;

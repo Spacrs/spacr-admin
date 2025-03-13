@@ -25,7 +25,7 @@ const Button = ({
     warning: "bg-yellow-500 text-black",
     dark: "bg-gray-900 text-white",
     light: "bg-gray-200 text-black",
-    lightBlue: "bg-lightBlue text-primary",
+    lightBlue: "bg-lightBlue text-primary border-solid border-2 border-sky-700",
   };
 
   return (

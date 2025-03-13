@@ -54,20 +54,11 @@ const menuItems: MenuItemTypes[] = [
         },
       ],
     },
-    {
-      label: "Contact Support List",
-      path: "/admin/contact-support-list",
-      icon: <MdContactSupport style={{ fontSize: "20px", margin: "0 10px" }} />,
-    },
+    
     {
       label: "Country List",
       path: "/admin/country-list",
       icon: <IoIosFlag style={{ fontSize: "20px", margin: "0 10px" }} />,
-    },
-    {
-      label: "Add Country",
-      path: "/admin/add-country",
-      icon: <IoMdAddCircle style={{ fontSize: "20px", margin: "0 10px" }} />,
     },
     {
       label: "City List",
@@ -75,10 +66,10 @@ const menuItems: MenuItemTypes[] = [
       icon: <FaCity style={{ fontSize: "20px", margin: "0 10px" }} />,
     },
     {
-      label: "Add City",
-      path: "/admin/add-city",
-      icon: <IoMdAddCircle style={{ fontSize: "20px", margin: "0 10px" }} />,
-    }
+      label: "Contact Support List",
+      path: "/admin/contact-support-list",
+      icon: <MdContactSupport style={{ fontSize: "20px", margin: "0 10px" }} />,
+    },
     
   ];
 

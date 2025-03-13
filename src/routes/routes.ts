@@ -14,7 +14,8 @@ import ScheduleNotification from "../pages/NotificationManagement/ScheduleNotifi
 import ContactSupportList from "../pages/ContactSupportManagement/ContactSupportList"
 import AddCountry from "../pages/PaymentConfigManagement/AddCountry";
 import AddCity from "../pages/PaymentConfigManagement/AddCity";
-import CountryList from "../pages/PaymentConfigManagement/CountryList"
+import CountryList from "../pages/PaymentConfigManagement/CountryList";
+import CityList from "../pages/PaymentConfigManagement/CityList";
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -111,7 +112,14 @@ export const adminRoutes = [
     component: AddCity,
     breadcrumb: ["admin", "Add City"],
     showBreadcrumb: true,
-  }
+  },
+  {
+    path: "city-list",
+    component: CityList,
+    breadcrumb: ["admin", "City List"],
+    showBreadcrumb: true,
+  },
+  
   
 
 ];

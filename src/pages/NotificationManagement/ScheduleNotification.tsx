@@ -96,7 +96,7 @@ const ScheduleNotification = () => {
                         
                         <Button
                             className="lg:w-1/5 sm:w-1/2 xs:w-1/2"
-                          type="secondary"
+                            type="secondary"
                             text="Cancel"
                             onClick={()=>{}}
 
