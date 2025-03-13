@@ -3,12 +3,7 @@ import { IColumns, IAction } from "./index";
 import { icons } from "../../../Icons/constant";
 import KebabMenu from "./KebabMenu";
 
-const {
-  MdOutlineEdit,
-  AiOutlineDelete,
-  BsCopy,
-  BsEye
-} = icons;
+const { MdOutlineEdit, AiOutlineDelete, BsCopy, BsEye } = icons;
 
 export const renderColumns = (
   column: IColumns,
@@ -18,7 +13,9 @@ export const renderColumns = (
   switch (column.colName) {
     case "Default":
       return (
-        <p className="font-medium">{column.name ? row[column.name] : ""}</p>
+        <p className="font-medium">
+          {column.name ? (row[column.name] ? row[column.name] : "-") : ""}
+        </p>
       );
     case "Actions":
       return (
@@ -54,25 +51,29 @@ export const renderColumns = (
         <div className="relative flex items-center">
           {column.name && ["active", "verified"].includes(row[column.name]) && (
             <div className="bg-green-500 text-white text-xs font-medium rounded-full p-2">
-              {row[column.name]?.charAt(0).toUpperCase() + row[column.name]?.slice(1)}
+              {row[column.name]?.charAt(0).toUpperCase() +
+                row[column.name]?.slice(1)}
             </div>
           )}
 
           {column.name &&
-            ["inactive", "Pending","pending"].includes(row[column.name]) && (
+            ["inactive", "Pending", "pending"].includes(row[column.name]) && (
               <div className=" bg-orange-400 text-white text-xs font-medium rounded-full p-2">
-                {row[column.name]?.charAt(0).toUpperCase() + row[column.name]?.slice(1)}
+                {row[column.name]?.charAt(0).toUpperCase() +
+                  row[column.name]?.slice(1)}
               </div>
             )}
-            {column.name &&
-            ["Rejected","rejected"].includes(row[column.name]) && (
+          {column.name &&
+            ["Rejected", "rejected"].includes(row[column.name]) && (
               <div className=" bg-red-700 text-white text-xs font-medium rounded-full p-2">
-                {row[column.name]?.charAt(0).toUpperCase() + row[column.name]?.slice(1)}
+                {row[column.name]?.charAt(0).toUpperCase() +
+                  row[column.name]?.slice(1)}
               </div>
             )}
           {column.name && ["none"].includes(row[column.name]) && (
             <div className=" bg-orange-400 text-white text-xs font-medium rounded-full p-2">
-              {row[column.name]?.charAt(0).toUpperCase() + row[column.name]?.slice(1)}
+              {row[column.name]?.charAt(0).toUpperCase() +
+                row[column.name]?.slice(1)}
             </div>
           )}
         </div>

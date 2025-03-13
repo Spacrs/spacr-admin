@@ -3,182 +3,129 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAddPaymentConfigMutation } from "../../store/slices/paymentConfigSlice/apiSlice";
 import { addPaymentConfigToList } from "../../store/slices/paymentConfigSlice/paymentConfigSlice";
-import TextInpute from "../../components/Common/Inputes/TextInpute";
+import Inputes from "../../components/Common/Inputes";
 
 const AddCountry = () => {
   const dispatch = useDispatch();
   const [addPaymentConfig] = useAddPaymentConfigMutation();
-
-  const [name, setName] = useState("");
-  const [providers, setProviders] = useState("");
-  const [shortName, setShortName] = useState("");
-  const [wallet, setWallet] = useState(false);
-  const [cod, setCod] = useState(false);
-  const [stripe, setStripe] = useState(false);
-  const [destination, setDestination] = useState(false);
-  const [departure, setDeparture] = useState(false);
   const navigate = useNavigate();
 
+  const [formData, setFormData] = useState({
+    name: "",
+    providers: "",
+    shortName: "",
+    wallet: false,
+    cod: false,
+    stripe: false,
+    destination: false,
+    departure: false,
+  });
+  
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  const handleSubmit = async (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = { 
-      name, 
-      providers, 
-      shortName, 
-      wallet: wallet,  
-      cod: cod,
-      stripe: stripe,
-      destination: destination,
-      departure: departure
-    };
-    
-    console.log("Adding New Payment Config:", formData);
 
     try {
       const response = await addPaymentConfig(formData).unwrap();
-      console.log("Added Successfully:", response);
-
       dispatch(addPaymentConfigToList(response));
-      
       setSuccessMessage("Country added successfully!");
       setTimeout(() => setSuccessMessage(null), 3000);
 
-      setName("");
-      setProviders("");
-      setShortName("");
-      setWallet(false);
-      setCod(false);
-      setStripe(false);
-      setDestination(false);
-      setDeparture(false);
+      setFormData({
+        name: "",
+        providers: "",
+        shortName: "",
+        wallet: false,
+        cod: false,
+        stripe: false,
+        destination: false,
+        departure: false,
+      });
 
       // navigate('/admin/payment-config');
-
     } catch (error) {
       console.error("Failed to add:", error);
     }
   };
 
-return (
+  return (
     <div className="flex justify-center items-center p-20 bg-gray-50">
       <div className="w-full max-w-7xl bg-white p-6 shadow-lg rounded-lg">
-
         {successMessage && (
           <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
             {successMessage}
           </div>
         )}
 
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-start">
           Country Information
         </h2>
-  
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          {/* Text Fields in One Line */}
-          <div className="flex gap-4">
-            <div className="w-1/3">
-              <label className="block text-gray-700 font-medium mb-2" htmlFor="name">
-                <strong>Name</strong>
-              </label>
-              <input
-                type="text"
-                id="name"
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
 
-              {/* <TextInpute 
-                name="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              /> */}
-            </div>
-  
-            <div className="w-1/3">
-              <label className="block text-gray-700 font-medium mb-2" htmlFor="providers">
-                <strong>Providers</strong>
-              </label>
-              <input
-                type="text"
-                id="providers"
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
-                value={providers}
-                onChange={(e) => setProviders(e.target.value)}
-                required
-              />
-            </div>
-  
-            <div className="w-1/3">
-              <label className="block text-gray-700 font-medium mb-2" htmlFor="shortName">
-                <strong>Short Name</strong>
-              </label>
-              <input
-                type="text"
-                id="shortName"
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
-                value={shortName}
-                onChange={(e) => setShortName(e.target.value)}
-                required
-              />
-            </div>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <div className="flex gap-4">
+            {['name', 'providers', 'shortName'].map((field) => (
+              <div key={field} className="w-1/3">
+                <Inputes
+                  label={field.charAt(0).toUpperCase() + field.slice(1)}
+                  type="text"
+                  name={field}
+                  value={formData[field as keyof typeof formData] as string}
+                  onChange={handleChange}
+                />
+              </div>
+            ))}
           </div>
-  
-          {/* Payment Options */}
+
           <div>
-            <label className="block text-gray-700 font-medium mb-2"><strong>Payment Options</strong></label>
+            <strong className="block text-gray-700 font-medium mb-2">Payment Options</strong>
             <div className="grid grid-cols-3 gap-6">
-              {[
-                { label: "Wallet", state: wallet, setter: setWallet },
-                { label: "COD", state: cod, setter: setCod },
-                { label: "Stripe", state: stripe, setter: setStripe }
-              ].map(({ label, state, setter }) => (
-                <div key={label} className="flex items-center">
+              {["wallet", "cod", "stripe"].map(option => (
+                <label key={option} className="flex items-center">
                   <input
                     type="checkbox"
-                    id={label.toLowerCase()}
-                    checked={state}
-                    onChange={(e) => setter(e.target.checked)}
+                    name={option}
+                    checked={formData[option as keyof typeof formData] as boolean}
+                    onChange={handleChange}
                     className="w-5 h-5 mr-2"
                   />
-                  <label htmlFor={label.toLowerCase()} className="text-gray-700 font-medium">
-                    {label}
-                  </label>
-                </div>
+                  <span className="text-gray-700 font-medium">{option.toUpperCase()}</span>
+                </label>
               ))}
             </div>
           </div>
-  
-          {/* Travel Options */}
+
           <div>
-            <label className="block text-gray-700 font-medium mb-2"><strong>Travel Options</strong></label>
+            <strong className="block text-gray-700 font-medium mb-2">Travel Options</strong>
             <div className="grid grid-cols-3 gap-6">
-              {[
-                { label: "Destination", state: destination, setter: setDestination },
-                { label: "Departure", state: departure, setter: setDeparture }
-              ].map(({ label, state, setter }) => (
-                <div key={label} className="flex items-center">
+              {["destination", "departure"].map(option => (
+                <label key={option} className="flex items-center">
                   <input
                     type="checkbox"
-                    id={label.toLowerCase()}
-                    checked={state}
-                    onChange={(e) => setter(e.target.checked)}
+                    name={option}
+                    checked={formData[option as keyof typeof formData] as boolean}
+                    onChange={handleChange}
                     className="w-5 h-5 mr-2"
                   />
-                  <label htmlFor={label.toLowerCase()} className="text-gray-700 font-medium">
-                    {label}
-                  </label>
-                </div>
+                  <span className="text-gray-700 font-medium">{option.charAt(0).toUpperCase() + option.slice(1)}</span>
+                </label>
               ))}
             </div>
           </div>
-  
-          {/* Buttons */}
+
           <div className="flex gap-4 mt-4 w-full">
-            <button type="submit" className="w-1/5 px-4 py-3 bg-blue-900 text-white rounded-md hover:bg-blue-800">
+            <button
+              type="submit"
+              className="w-1/5 px-4 py-3 bg-blue-900 text-white rounded-md hover:bg-blue-800"
+            >
               Add Country
             </button>
           </div>
@@ -186,9 +133,6 @@ return (
       </div>
     </div>
   );
-  
-
 };
-
 
 export default AddCountry;
