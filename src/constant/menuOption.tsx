@@ -2,7 +2,6 @@ import { icons } from "../Icons/constant";
 import { MenuItemTypes } from "../types/sidebar.types";
 const {
     HiOutlineUsers,
-    IoIosLogOut,
     BsCreditCard2Front,
     TbTruckDelivery,
     GrSend,
@@ -70,7 +69,6 @@ const menuItems: MenuItemTypes[] = [
       path: "/admin/contact-support-list",
       icon: <MdContactSupport style={{ fontSize: "20px", margin: "0 10px" }} />,
     },
-    
   ];
 
   export default menuItems;

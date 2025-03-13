@@ -1,0 +1,51 @@
+/* Input Field Styling */
+.custom-date-picker {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #131f5c;
+    border-radius: 8px;
+    outline: none;
+    background-color: white;
+    color: #131f5c;
+    font-size: 14px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Focused State */
+.custom-date-picker:focus {
+    border-color: #131f5c;
+    box-shadow: 0 0 0 2px rgba(19, 31, 92, 0.2);
+}
+
+/* Calendar Popper Styling */
+.custom-calendar .react-datepicker__header {
+    background-color: #131f5c;
+    color: white;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+.custom-calendar .react-datepicker__header .react-datepicker__current-month,.react-datepicker__header .react-datepicker__day-name{
+    color: white;
+}
+
+/* Selected Date Styling */
+.custom-calendar .react-datepicker__day--selected,
+.custom-calendar .react-datepicker__day--keyboard-selected {
+    background-color: #131f5c;
+    color: white;
+    border-radius: 6px;
+}
+
+/* Hover Effect on Days */
+.custom-calendar .react-datepicker__day:hover {
+    background-color: rgba(19, 31, 92, 0.1);
+    color: #131f5c;
+}
+
+/* Month and Year Dropdown Styling */
+.custom-calendar .react-datepicker__month-dropdown,
+.custom-calendar .react-datepicker__year-dropdown {
+    background-color: white;
+    border: 1px solid #131f5c;
+    color: #131f5c;
+}

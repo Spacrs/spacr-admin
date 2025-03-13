@@ -1,4 +1,5 @@
 import React from "react";
+import "./css/SelectComponent.css";
 
 interface SelectComponentProps {
   name: string;
@@ -25,9 +26,9 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
       {options.map((option) => (
         <option key={option.value} value={option.value}>
           {option.label}
-        </option>
-      ))}
-    </select>
+          </option>
+        ))}
+      </select>
   );
 };
 

@@ -5,14 +5,7 @@ import { logout } from "../../store/slices/userSlice/userSlice";
 import { useAppDispatch } from "../../store/hooks";
 import menuItems from "../../constant/menuOption";
 
-
-const {
-  
-  IoIosLogOut,
-  IoIosArrowDown,
-  IoIosArrowUp,
-  
-} = icons;
+const { IoIosLogOut, IoIosArrowDown, IoIosArrowUp } = icons;
 
 function Sidebar() {
   const location = useLocation();
@@ -25,8 +18,6 @@ function Sidebar() {
     // If clicking the same menu, toggle; otherwise, set a new active menu
     setActiveMenu(activeMenu === menu ? null : menu);
   };
-
-  
 
   return (
     <div

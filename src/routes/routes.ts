@@ -17,6 +17,10 @@ import AddCity from "../pages/PaymentConfigManagement/AddCity";
 import CountryList from "../pages/PaymentConfigManagement/CountryList";
 import CityList from "../pages/PaymentConfigManagement/CityList";
 
+import InputPage from "../pages/Samples/InputPage"
+import Logout from "../pages/AuthManagement/Logout";
+
+
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
   {
@@ -30,7 +34,7 @@ export const authRoutes = [
   {
     path: "/",
     component: Authenticate,
-  },
+  }
 ];
 
 export const adminRoutes = [
@@ -83,6 +87,12 @@ export const adminRoutes = [
     breadcrumb: ["admin", "Contact Support"],
     showBreadcrumb: true,
   },
+  // {
+  //   path: "samples/inputes",
+  //   component: InputPage,
+  //   breadcrumb: ["samples", "Inputs"],
+  //   showBreadcrumb: true,
+  // },
   {
     path: "settings",
     component: Setting,
