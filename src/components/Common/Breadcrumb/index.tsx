@@ -2,7 +2,6 @@
 import { Link } from "react-router-dom";
 
 function Breadcrumb({ title="", breadcrumb }: { title: string; breadcrumb: string[] }) {
-  console.log(title)
   return (
     <nav className="bg-gray-100 rounded-md w-full flex justify-between items-center my-5 p-4">
       <h2 className="font-bold text-dark text-xl uppercase">{breadcrumb[breadcrumb.length-1]}</h2>

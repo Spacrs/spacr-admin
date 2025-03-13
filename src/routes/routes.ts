@@ -8,18 +8,18 @@ import UserDetails from "../pages/UserManagemnt/UserDetails";
 
 import AdminLayout from "../pages/AdminManagement/AdminLayout";
 import Orders from "../pages/OrderManagement/Orders";
-import OrderDetails from '../pages/OrderManagement/OrderDetails';
+import OrderDetails from "../pages/OrderManagement/OrderDetails";
 import DirectNotification from "../pages/NotificationManagement/DirectNotification";
 import ScheduleNotification from "../pages/NotificationManagement/ScheduleNotification";
-import ContactSupportList from "../pages/ContactSupportManagement/ContactSupportList"
+import ContactSupportList from "../pages/ContactSupportManagement/ContactSupportList";
 import AddCountry from "../pages/PaymentConfigManagement/AddCountry";
 import AddCity from "../pages/PaymentConfigManagement/AddCity";
 import CountryList from "../pages/PaymentConfigManagement/CountryList";
+import CountriesList from "../pages/CountriesManagement/CountriesList";
 import CityList from "../pages/PaymentConfigManagement/CityList";
 
-import InputPage from "../pages/Samples/InputPage"
+import InputPage from "../pages/Samples/InputPage";
 import Logout from "../pages/AuthManagement/Logout";
-
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -34,7 +34,7 @@ export const authRoutes = [
   {
     path: "/",
     component: Authenticate,
-  }
+  },
 ];
 
 export const adminRoutes = [
@@ -60,7 +60,7 @@ export const adminRoutes = [
   {
     path: "payment-config",
     component: PaymentConfig,
-    breadcrumb: ["admin", "Payment Config"],
+    breadcrumb: ["admin", "Payment Config Country List"],
     showBreadcrumb: true,
   },
   {
@@ -87,6 +87,12 @@ export const adminRoutes = [
     breadcrumb: ["admin", "Contact Support"],
     showBreadcrumb: true,
   },
+  {
+    path: "logout",
+    component: Logout,
+    breadcrumb: [],
+    showBreadcrumb: false,
+  },
   // {
   //   path: "samples/inputes",
   //   component: InputPage,
@@ -112,7 +118,7 @@ export const adminRoutes = [
     showBreadcrumb: true,
   },
   {
-    path: "add-country",
+    path: "add-payment-config-country",
     component: AddCountry,
     breadcrumb: ["admin", "Add Country"],
     showBreadcrumb: true,
@@ -129,7 +135,10 @@ export const adminRoutes = [
     breadcrumb: ["admin", "City List"],
     showBreadcrumb: true,
   },
-  
-  
-
+  {
+    path: "countries",
+    component: CountriesList,
+    breadcrumb: ["admin", "Countries"],
+    showBreadcrumb: true,
+  },
 ];

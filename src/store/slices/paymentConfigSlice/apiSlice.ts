@@ -62,16 +62,7 @@ export const paymentConfigApi: any = createApi({
           method: "GET",
         };
       },
-    }),    
-    getCountries: builder.query<any, { page?: number; limit?: string; isPagination?: boolean  }>({
-      query: ({ page, limit, isPagination = true }) => {
-        const query = isPagination ? `page=${page}${limit ? `&limit=${limit}` : ""}` : "";
-        return {
-          url: `/country/?${query}`,
-          method: "GET",
-        }
-      },
-    }),
+    })
   }),
 });
 
@@ -81,5 +72,4 @@ export const {
   useAddPaymentConfigMutation,
   useAddCityMutation,
   useGetCitiesQuery,
-  useGetCountriesQuery,
 } = paymentConfigApi;

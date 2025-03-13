@@ -24,9 +24,11 @@ const CityList = () => {
   // Fetch country list from API
   const dispatch = useAppDispatch();
 
+  const itemsPerPage = 5;
+
   const { data, isLoading, isError, refetch } = useGetCitiesQuery({
     page: currentPage,
-    limit: 5,
+    limit: itemsPerPage,
   });
 
   useEffect(() => {
@@ -65,7 +67,7 @@ const CityList = () => {
           </Tooltip>
         </div>
       </div>
-      <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md">
+      <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">
         <Table
           data={cities}
           columns={columns}
@@ -73,6 +75,7 @@ const CityList = () => {
           totalPages={data?.pagination?.totalPages || 1}
           currentPage={currentPage}
           onPageChange={setCurrentPage}
+          itemsPerPage={itemsPerPage}
           handleUpdate={() => {}}
         />
       </div>

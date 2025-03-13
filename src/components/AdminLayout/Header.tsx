@@ -116,14 +116,14 @@ function Header() {
           <div className="mr-4 flex md:hidden">
             <button
               onClick={toggleMenu}
-              className="bg-white inline-flex items-center justify-center p-2 rounded-md text-black hover:text-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-primary focus:ring-white"
+              className="bg-white inline-flex items-center justify-center p-2 rounded-md text-black hover:text-black hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-primary focus:ring-white"
               aria-controls="mobile-menu"
               aria-expanded={isMenuOpen}
             >
               <span className="sr-only">Open main menu</span>
 
               {isMenuOpen ? (
-                <RxCross1 style={{ fontSize: "24px" }} />
+                <RxCross1 style={{ fontSize: "23px" }} />
               ) : (
                 <ImMenu3 style={{ fontSize: "24px" }} />
               )}
