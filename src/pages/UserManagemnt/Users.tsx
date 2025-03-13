@@ -7,7 +7,8 @@ import {
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { setUsers, resetUsers } from "../../store/slices/userSlice/userSlice";
 import { useNavigate } from "react-router-dom";
-import ConfirmationModal from "../../components/Common/Modal/ConfirmationModal"; // Import the modal component
+import ConfirmationModal from "../../components/Common/Modal/ConfirmationModal";
+import Search from "../../components/Common/Search/index";
 
 const columns = [
   { name: "ProfilePictureURL", Header: "Profile Image", colName: "Image" },
@@ -103,12 +104,10 @@ function Users() {
       <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         {/* Search Bar */}
         <div className="flex flex-1 max-w-lg">
-          <input
-            type="text"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md"
-            placeholder="Search by name or email..."
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)} // Update search filter state
+          <Search
+            search={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            onReset={() => setFilter("")}
           />
         </div>
 

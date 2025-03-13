@@ -38,9 +38,19 @@ const menuItems: MenuItemTypes[] = [
     ],
   },
   {
+    label: "Countries",
+    path: "/admin/countries",
+    icon: <IoIosFlag style={{ fontSize: "20px", margin: "0 10px" }} />,
+  },
+  {
     label: "Order List",
     path: "/admin/order-list",
     icon: <TbTruckDelivery style={{ fontSize: "20px", margin: "0 10px" }} />,
+  },
+  {
+    label: "Contact Support List",
+    path: "/admin/contact-support-list",
+    icon: <MdContactSupport style={{ fontSize: "20px", margin: "0 10px" }} />,
   },
   {
     label: "Notifications",
@@ -62,16 +72,6 @@ const menuItems: MenuItemTypes[] = [
         ),
       },
     ],
-  },
-  {
-    label: "Countries",
-    path: "/admin/countries",
-    icon: <IoIosFlag style={{ fontSize: "20px", margin: "0 10px" }} />,
-  },
-  {
-    label: "Contact Support List",
-    path: "/admin/contact-support-list",
-    icon: <MdContactSupport style={{ fontSize: "20px", margin: "0 10px" }} />,
   },
 ];
 
