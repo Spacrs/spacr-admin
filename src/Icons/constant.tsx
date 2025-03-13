@@ -63,6 +63,10 @@ import { GrSend } from "react-icons/gr";
 import { MdOutlineScheduleSend } from "react-icons/md";
 import { MdContactSupport } from "react-icons/md";
 import { ImMenu3 } from "react-icons/im";
+import { IoIosFlag } from "react-icons/io";
+import { IoMdAddCircle } from "react-icons/io";
+import { FaCity } from "react-icons/fa";
+
 
 export const icons = {
   CiHome: CiHome,
@@ -138,6 +142,9 @@ export const icons = {
   IoIosArrowDown,
   IoIosArrowUp,
   MdContactSupport,
-  ImMenu3
+  ImMenu3,
+  IoIosFlag,
+  IoMdAddCircle,
+  FaCity
 };
 

@@ -55,8 +55,10 @@ const DirectNotification = () => {
                     </div>
 
                     <Button
-                        className="w-1/5 bg-primary text-white py-3 rounded-md hover:bg-primary transition"
+                        className="lg:w-1/5 sm:w-1/2 xs:w-1/2 bg-primary text-white py-3 rounded-md hover:bg-primary transition"
                         text="Send Notification"
+                        type="secondary"
+                        onClick={()=>{}}
                     />
                 </form>
             </div>

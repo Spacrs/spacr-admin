@@ -25,8 +25,36 @@ export const paymentConfigApi: any = createApi({
         };
       },
     }),
+
+    //Added on 11-03-2025
+
+    addPaymentConfig: builder.mutation<any, Partial<any>>({
+      query: (data) => {
+        
+        return {
+          url: `/payment-config`,
+          method: "POST",
+          body: data
+        };
+      },
+    }),
+
+    //Added on 11-03-2025
+
+    //Added on 12-03-2025
+    
+    addCity: builder.mutation<any, Partial<any>>({
+      query: (data) => ({
+        url: `/city`,
+        method: "POST",
+        body: data
+      }),
+    }),
+
+    //Added on 12-03-2025
+
   }),
 });
 
-export const { useGetPaymentConfigsQuery, useUpdatePaymentConfigMutation } =
+export const { useGetPaymentConfigsQuery, useUpdatePaymentConfigMutation, useAddPaymentConfigMutation, useAddCityMutation } =
   paymentConfigApi;

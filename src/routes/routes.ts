@@ -12,6 +12,10 @@ import OrderDetails from '../pages/OrderManagement/OrderDetails';
 import DirectNotification from "../pages/NotificationManagement/DirectNotification";
 import ScheduleNotification from "../pages/NotificationManagement/ScheduleNotification";
 import ContactSupportList from "../pages/ContactSupportManagement/ContactSupportList"
+import AddCountry from "../pages/PaymentConfigManagement/AddCountry";
+import AddCity from "../pages/PaymentConfigManagement/AddCity";
+import CountryList from "../pages/PaymentConfigManagement/CountryList";
+import CityList from "../pages/PaymentConfigManagement/CityList";
 
 import InputPage from "../pages/Samples/InputPage"
 import Logout from "../pages/AuthManagement/Logout";
@@ -102,8 +106,30 @@ export const adminRoutes = [
     showBreadcrumb: true,
   },
   {
-    path: "/logout",
-    component: Logout,
-    breadcrumb: [],
+    path: "country-list",
+    component: CountryList,
+    breadcrumb: ["admin", "Country List"],
+    showBreadcrumb: true,
   },
+  {
+    path: "add-country",
+    component: AddCountry,
+    breadcrumb: ["admin", "Add Country"],
+    showBreadcrumb: true,
+  },
+  {
+    path: "add-city",
+    component: AddCity,
+    breadcrumb: ["admin", "Add City"],
+    showBreadcrumb: true,
+  },
+  {
+    path: "city-list",
+    component: CityList,
+    breadcrumb: ["admin", "City List"],
+    showBreadcrumb: true,
+  },
+  
+  
+
 ];

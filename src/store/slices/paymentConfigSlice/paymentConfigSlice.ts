@@ -24,9 +24,12 @@ export const paymentConfigSlice = createSlice({
         config.Id === action.payload.Id ? action.payload : config
       );
     },
+    addPaymentConfigToList: (state: IState, action: PayloadAction<any>) => {
+      state.paymentConfigs.push(action.payload);
+    },
   },
 });
 
-export const { setPaymentConfigs, updatePaymentConfigInList } = paymentConfigSlice.actions;
+export const { setPaymentConfigs, updatePaymentConfigInList, addPaymentConfigToList } = paymentConfigSlice.actions;
 export const selectPaymentConfig = (state: RootState) => state.paymentConfigSlice.paymentConfigs;
 export default paymentConfigSlice.reducer;

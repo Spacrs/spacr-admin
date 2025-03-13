@@ -6,7 +6,12 @@ const {
     TbTruckDelivery,
     GrSend,
     MdOutlineScheduleSend,
-    MdContactSupport
+    IoIosArrowDown,
+    IoIosArrowUp,
+    MdContactSupport,
+    IoIosFlag,
+    IoMdAddCircle,
+    FaCity
   } = icons;
 
 const menuItems: MenuItemTypes[] = [
@@ -48,23 +53,22 @@ const menuItems: MenuItemTypes[] = [
         },
       ],
     },
+    
+    {
+      label: "Country List",
+      path: "/admin/country-list",
+      icon: <IoIosFlag style={{ fontSize: "20px", margin: "0 10px" }} />,
+    },
+    {
+      label: "City List",
+      path: "/admin/city-list",
+      icon: <FaCity style={{ fontSize: "20px", margin: "0 10px" }} />,
+    },
     {
       label: "Contact Support List",
       path: "/admin/contact-support-list",
       icon: <MdContactSupport style={{ fontSize: "20px", margin: "0 10px" }} />,
     },
-    // {
-    //   label: "Samples",
-    //   path: "/admin/samples*",
-    //   isSubmenu: true,
-    //   icon: "",
-    //   subItems: [
-    //     {
-    //       label: "Inputes",
-    //       path: "/admin/samples/inputes",
-    //       icon: "",
-    //     }]
-    // }
   ];
 
   export default menuItems;

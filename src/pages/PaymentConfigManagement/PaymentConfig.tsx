@@ -10,6 +10,8 @@ import {
   updatePaymentConfigInList,
 } from "../../store/slices/paymentConfigSlice/paymentConfigSlice";
 import Button from "../../components/Common/Button";
+import { useNavigate } from "react-router-dom";
+
 const columns = [
   { name: "shortName", Header: "Name", colName: "Default" },
   { name: "providers", Header: "Providers", colName: "Default" },
@@ -40,6 +42,7 @@ function PaymentConfig() {
   const [isOpen, setIsOpen] = useState(false);
 
   const [updatePaymentConfig] = useUpdatePaymentConfigMutation(); // ✅ Call the hook at the top level
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (data?.data) {
@@ -86,19 +89,19 @@ function PaymentConfig() {
   };
 
   const addPaymentConfig = () => {
-
+    navigate("/admin/add-payment-config-country");
   }
   const addCity = () => {
-
+    navigate("/admin/add-payment-config-city");
   }
 
   return (
     <div className="">
-      {/* <div className="flex justify-end p-4 bg-gray-100 rounded-lg shadow-md mb-5 space-x-2">
-          <Button type="secondary" text="Add Payment Config" onClick={addPaymentConfig}/>
-        
-          <Button type="secondary" text="Add City" onClick={addCity}/>
-      </div> */}
+      <div className="flex justify-end p-4 bg-gray-100 rounded-lg shadow-md mb-5 space-x-2">
+          {/* <Button type="secondary" text="Add Country" onClick={addPaymentConfig}/>
+          
+          <Button type="secondary" text="Add City" onClick={addCity}/> */}
+      </div>
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md">
         <Table
           data={paymentConfigs}

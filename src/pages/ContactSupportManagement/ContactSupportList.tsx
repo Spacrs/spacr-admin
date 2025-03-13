@@ -54,7 +54,7 @@ function ContactSupportList() {
         </div>
 
         <div className="ml-4">
-          <Button type="primary" onClick={onClick} text="Refresh" />
+          <Button type="lightBlue" onClick={onClick} text="Refresh" />
         </div>
       </div>
 
