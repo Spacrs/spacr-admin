@@ -116,7 +116,7 @@ function PaymentConfig() {
           </Tooltip>
         </div>
       </div>
-      <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md">
+      <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">
         <Table
           data={paymentConfigs}
           columns={columns}
