@@ -7,9 +7,9 @@ export const paymentConfigApi: any = createApi({
   endpoints: (builder) => ({
     getPaymentConfigs: builder.query<any,  { page?: number; limit?: string; isPagination?: boolean }>({
       query: ({ page, limit, isPagination = true }) => {
-        const query = isPagination ? `page=${page}${limit ? `&limit=${limit}` : ""}` : "";
+        const query = isPagination ? `?page=${page}${limit ? `&limit=${limit}` : ""}` : "";
         return ({
-          url: `/payment-config/?${query}}`,
+          url: `/payment-config${query}`,
           method: "GET",
         })
       },
