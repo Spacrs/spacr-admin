@@ -19,6 +19,7 @@ import CityList from "../pages/PaymentConfigManagement/CityList";
 
 import InputPage from "../pages/Samples/InputPage"
 import Logout from "../pages/AuthManagement/Logout";
+import SpacrConfig from "../pages/SpacrConfig/SpacrConfig";
 
 
 export const protectedRoutes = [
@@ -129,6 +130,13 @@ export const adminRoutes = [
     breadcrumb: ["admin", "City List"],
     showBreadcrumb: true,
   },
+  {
+    path: "spacr-config",
+    component: SpacrConfig,
+    breadcrumb: ["admin", "Spacr Config"],
+    showBreadcrumb: true,
+  },
+  
   
   
 

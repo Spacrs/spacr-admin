@@ -11,7 +11,8 @@ const {
     MdContactSupport,
     IoIosFlag,
     IoMdAddCircle,
-    FaCity
+    FaCity,
+    CiSettings
   } = icons;
 
 const menuItems: MenuItemTypes[] = [
@@ -21,6 +22,21 @@ const menuItems: MenuItemTypes[] = [
       icon: <HiOutlineUsers style={{ fontSize: "20px", margin: "0 10px" }} />,
     },
     {
+      label: "Country List",
+      path: "/admin/country-list",
+      icon: <IoIosFlag style={{ fontSize: "20px", margin: "0 10px" }} />,
+    },
+    {
+      label: "City List",
+      path: "/admin/city-list",
+      icon: <FaCity style={{ fontSize: "20px", margin: "0 10px" }} />,
+    },
+    {
+      label: "Order List",
+      path: "/admin/order-list",
+      icon: <TbTruckDelivery style={{ fontSize: "20px", margin: "0 10px" }} />,
+    },
+    {
       label: "Payment Config",
       path: "/admin/payment-config",
       icon: (
@@ -28,10 +44,14 @@ const menuItems: MenuItemTypes[] = [
       ),
     },
     {
-      label: "Order List",
-      path: "/admin/order-list",
-      icon: <TbTruckDelivery style={{ fontSize: "20px", margin: "0 10px" }} />,
+      label: "Spacr Config",
+      path: "/admin/spacr-config",
+      icon: <CiSettings style={{ fontSize: "20px", margin: "0 10px" }} />,
     },
+    
+    
+    
+    
     {
       label: "Notifications",
       isSubmenu: true,
@@ -54,16 +74,6 @@ const menuItems: MenuItemTypes[] = [
       ],
     },
     
-    {
-      label: "Country List",
-      path: "/admin/country-list",
-      icon: <IoIosFlag style={{ fontSize: "20px", margin: "0 10px" }} />,
-    },
-    {
-      label: "City List",
-      path: "/admin/city-list",
-      icon: <FaCity style={{ fontSize: "20px", margin: "0 10px" }} />,
-    },
     {
       label: "Contact Support List",
       path: "/admin/contact-support-list",
