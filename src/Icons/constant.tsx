@@ -36,6 +36,8 @@ import {
   RiCheckboxBlankCircleLine,
   RiCheckboxBlankLine,
   RiApps2AddLine,
+  RiExpandLeftLine,
+  RiExpandRightLine 
 } from "react-icons/ri";
 import { IoTabletLandscapeSharp, IoTabletPortraitSharp } from "react-icons/io5";
 import {
@@ -171,4 +173,6 @@ export const icons = {
   IoIosFlag,
   IoMdAddCircle,
   FaCity,
+  RiExpandLeftLine,
+  RiExpandRightLine 
 };

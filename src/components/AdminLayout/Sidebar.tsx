@@ -2,15 +2,20 @@ import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { icons } from "../../Icons/constant";
 import { logout } from "../../store/slices/userSlice/userSlice";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import menuItems from "../../constant/menuOption";
+import {
+  selectLayout,
+  updateLayout,
+} from "../../store/slices/adminLayoutSlice/adminLayoutSlice";
 
-const { IoIosLogOut, IoIosArrowDown, IoIosArrowUp } = icons;
+const { IoIosLogOut, IoIosArrowDown, IoIosArrowUp, RiExpandLeftLine } = icons;
 
 function Sidebar() {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const [activeMenu, setActiveMenu] = useState<string | null>(null); // Track active menu
+  const layout = useAppSelector(selectLayout);
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -21,11 +26,27 @@ function Sidebar() {
 
   return (
     <div
-      style={{ width: "300px" }}
-      className="h-full flex-col bg-white text-white hidden md:flex"
+      style={{ width: "350px" }}
+      className="h-full flex-col bg-white text-white hidden md:flex transition-all duration-300"
     >
       <div className="flex flex-col justify-between flex-grow p-4">
         <nav className="flex flex-col space-y-2">
+          <div className=" w-full flex justify-end text-gray">
+            <RiExpandLeftLine
+              className="text-primary bg-lightBlue rounded-full cursor-pointer"
+              style={{
+                fontSize: "12px",
+                padding: "5px",
+                width: "25px",
+                height: "25px",
+              }}
+              onClick={() =>
+                dispatch(
+                  updateLayout({ showLeftSidebar: !layout?.showLeftSidebar })
+                )
+              }
+            />
+          </div>
           {menuItems.map((item, index) =>
             item.isSubmenu ? (
               <div key={index} className="flex flex-col">
