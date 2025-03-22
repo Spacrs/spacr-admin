@@ -15,11 +15,12 @@ import ContactSupportList from "../pages/ContactSupportManagement/ContactSupport
 import AddCountry from "../pages/PaymentConfigManagement/AddCountry";
 import AddCity from "../pages/PaymentConfigManagement/AddCity";
 import CountryList from "../pages/PaymentConfigManagement/CountryList";
-import CountriesList from "../pages/CountriesManagement/CountriesList";
+// import CountriesList from "../pages/CountriesManagement/CountriesList";
 import CityList from "../pages/PaymentConfigManagement/CityList";
 
 import InputPage from "../pages/Samples/InputPage";
 import Logout from "../pages/AuthManagement/Logout";
+import SpacrConfig from "../pages/SpacrConfig/SpacrConfig";
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -136,9 +137,9 @@ export const adminRoutes = [
     showBreadcrumb: true,
   },
   {
-    path: "countries",
-    component: CountriesList,
-    breadcrumb: ["admin", "Countries"],
+    path: "spacr-config",
+    component: SpacrConfig,
+    breadcrumb: ["admin", "Spacr Config"],
     showBreadcrumb: true,
   },
 ];

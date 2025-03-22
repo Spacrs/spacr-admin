@@ -1,14 +1,18 @@
 import { icons } from "../Icons/constant";
 import { MenuItemTypes } from "../types/sidebar.types";
 const {
-  HiOutlineUsers,
-  BsCreditCard2Front,
-  TbTruckDelivery,
-  GrSend,
-  MdOutlineScheduleSend,
-  MdContactSupport,
-  FaCity,
-  IoIosFlag
+   HiOutlineUsers,
+    BsCreditCard2Front,
+    TbTruckDelivery,
+    GrSend,
+    MdOutlineScheduleSend,
+    IoIosArrowDown,
+    IoIosArrowUp,
+    MdContactSupport,
+    IoIosFlag,
+    IoMdAddCircle,
+    FaCity,
+    CiSettings
 } = icons;
 
 const menuItems: MenuItemTypes[] = [
@@ -16,6 +20,16 @@ const menuItems: MenuItemTypes[] = [
     label: "Users",
     path: "/admin/users",
     icon: <HiOutlineUsers style={{ fontSize: "20px", margin: "0 10px" }} />,
+  },
+  {
+    label: "Order List",
+    path: "/admin/order-list",
+    icon: <TbTruckDelivery style={{ fontSize: "20px", margin: "0 10px" }} />,
+  },
+  {
+    label: "Contact Support List",
+    path: "/admin/contact-support-list",
+    icon: <MdContactSupport style={{ fontSize: "20px", margin: "0 10px" }} />,
   },
   {
     label: "Payment Config",
@@ -37,21 +51,11 @@ const menuItems: MenuItemTypes[] = [
       },
     ],
   },
-  {
-    label: "Countries",
-    path: "/admin/countries",
-    icon: <IoIosFlag style={{ fontSize: "20px", margin: "0 10px" }} />,
-  },
-  {
-    label: "Order List",
-    path: "/admin/order-list",
-    icon: <TbTruckDelivery style={{ fontSize: "20px", margin: "0 10px" }} />,
-  },
-  {
-    label: "Contact Support List",
-    path: "/admin/contact-support-list",
-    icon: <MdContactSupport style={{ fontSize: "20px", margin: "0 10px" }} />,
-  },
+   {
+      label: "Spacr Config",
+      path: "/admin/spacr-config",
+      icon: <CiSettings style={{ fontSize: "20px", margin: "0 10px" }} />,
+    },
   {
     label: "Notifications",
     isSubmenu: true,
