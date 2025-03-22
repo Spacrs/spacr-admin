@@ -8,35 +8,27 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { setUsers, resetUsers } from "../../store/slices/userSlice/userSlice";
 import { useNavigate } from "react-router-dom";
 import ConfirmationModal from "../../components/Common/Modal/ConfirmationModal"; // Import the modal component
-import Button from '../../components/Common/Button';
+import Button from "../../components/Common/Button";
 
 const columns = [
-  
   { name: "Name", Header: "Name", colName: "Default" },
   { name: "Mobile Number", Header: "Mobile Number", colName: "Default" },
   { name: "Email", Header: "Email", colName: "Default" },
   { name: "Message", Header: "Message", colName: "Default" },
-  
 ];
 
 function ContactSupportList() {
-  
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { users,isloading } = useAppSelector((state) => state.userSlice);
+  const { users, isloading } = useAppSelector((state) => state.userSlice);
   const [filter, setFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  
 
   const [updateUserStatus] = useUpdateUserInfoMutation();
 
-  const { data, isLoading, isError, refetch } = useGetUsersQuery({
-    
-  });
+  const { data, isLoading, isError, refetch } = useGetUsersQuery({});
 
-  const onClick = () => {
-
-  }
+  const onClick = () => {};
 
   return (
     <div className="flex flex-col">
@@ -49,7 +41,7 @@ function ContactSupportList() {
             className="w-full px-4 py-2 border border-gray-300 rounded-md"
             placeholder="Search here..."
             value={filter}
-             // Update search filter state
+            // Update search filter state
           />
         </div>
 
@@ -59,7 +51,7 @@ function ContactSupportList() {
       </div>
 
       {/* Table Section */}
-      <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md">
+      <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">
         <Table
           data={users}
           columns={columns}
@@ -69,11 +61,8 @@ function ContactSupportList() {
           onPageChange={setCurrentPage}
         />
       </div>
-
-      
     </div>
   );
 }
 
 export default ContactSupportList;
-

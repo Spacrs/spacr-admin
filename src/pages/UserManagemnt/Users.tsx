@@ -7,7 +7,8 @@ import {
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { setUsers, resetUsers } from "../../store/slices/userSlice/userSlice";
 import { useNavigate } from "react-router-dom";
-import ConfirmationModal from "../../components/Common/Modal/ConfirmationModal"; // Import the modal component
+import ConfirmationModal from "../../components/Common/Modal/ConfirmationModal";
+import Search from "../../components/Common/Search/index";
 
 const columns = [
   { name: "ProfilePictureURL", Header: "Profile Image", colName: "Image" },
@@ -32,7 +33,8 @@ const columns = [
 function Users() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { users,isloading } = useAppSelector((state) => state.userSlice);
+  const { users, isloading } = useAppSelector((state) => state.userSlice);
+  const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState(""); // Search term
   const [verificationStatus, setVerificationStatus] = useState(""); // Verification filter
@@ -48,19 +50,18 @@ function Users() {
 
   const [updateUserStatus] = useUpdateUserInfoMutation();
 
-
   useEffect(() => {
     if (data?.data) {
-      dispatch(setUsers(data.data)); 
+      dispatch(setUsers(data.data));
     }
     return () => {
-       dispatch(resetUsers({ users: [] }));
+      dispatch(resetUsers({ users: [] }));
     };
   }, [data, dispatch]);
 
   useEffect(() => {
-    refetch()
-  }, [isloading,refetch])
+    refetch();
+  }, [isloading, refetch]);
 
   if (isError) {
     return (
@@ -77,7 +78,8 @@ function Users() {
 
   const handleConfirmToggleStatus = async () => {
     if (userToUpdate) {
-      const newStatus = userToUpdate.Status === "active" ? "inactive" : "active";
+      const newStatus =
+        userToUpdate.Status === "active" ? "inactive" : "active";
 
       try {
         await updateUserStatus({
@@ -102,12 +104,10 @@ function Users() {
       <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         {/* Search Bar */}
         <div className="flex flex-1 max-w-lg">
-          <input
-            type="text"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md"
-            placeholder="Search by name or email..."
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)} // Update search filter state
+          <Search
+            search={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            onReset={() => setFilter("")}
           />
         </div>
 
@@ -128,19 +128,18 @@ function Users() {
       </div>
 
       {/* Table Section */}
-      <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md">
-        <div className="sm:overflow-x-auto xs:overflow-x-auto">
-          <Table
-            data={users}
-            columns={columns}
-            loading={isLoading}
-            totalPages={data?.pagination?.totalPages || 1}
-            currentPage={currentPage}
-            onPageChange={setCurrentPage}
-            handleToggleStatus={handleToggleStatus}
-            handleView={handleView}
-          />
-        </div>
+      <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">
+        <Table
+          data={users}
+          columns={columns}
+          loading={isLoading}
+          totalPages={data?.pagination?.totalPages || 1}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+          handleToggleStatus={handleToggleStatus}
+          handleView={handleView}
+          itemsPerPage={itemsPerPage}
+        />
       </div>
 
       {/* Confirmation Modal */}
@@ -148,11 +147,12 @@ function Users() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleConfirmToggleStatus}
-        message={`Are you sure you want to ${userToUpdate?.Status === "active" ? "deactivate" : "activate"} this user?`}
+        message={`Are you sure you want to ${
+          userToUpdate?.Status === "active" ? "deactivate" : "activate"
+        } this user?`}
       />
     </div>
   );
 }
 
 export default Users;
-

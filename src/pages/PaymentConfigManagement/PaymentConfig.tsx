@@ -11,6 +11,7 @@ import {
 } from "../../store/slices/paymentConfigSlice/paymentConfigSlice";
 import Button from "../../components/Common/Button";
 import { useNavigate } from "react-router-dom";
+import { Tooltip } from "@material-tailwind/react";
 
 const columns = [
   { name: "shortName", Header: "Name", colName: "Default" },
@@ -33,9 +34,10 @@ function PaymentConfig() {
     (state) => state.paymentConfigSlice
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const { data, isLoading, isError,refetch } = useGetPaymentConfigsQuery({
+  const itemsPerPage = 5;
+  const { data, isLoading, isError, refetch } = useGetPaymentConfigsQuery({
     page: currentPage,
-    limit:5
+    limit: itemsPerPage,
   });
 
   const [selectedConfig, setSelectedConfig] = useState<any>(null);
@@ -90,19 +92,31 @@ function PaymentConfig() {
 
   const addPaymentConfig = () => {
     navigate("/admin/add-payment-config-country");
-  }
-  const addCity = () => {
-    navigate("/admin/add-payment-config-city");
-  }
+  };
+
+  const AddCountry = () => {
+    navigate("/admin/add-payment-config-country");
+  };
 
   return (
     <div className="">
-      <div className="flex justify-end p-4 bg-gray-100 rounded-lg shadow-md mb-5 space-x-2">
-          {/* <Button type="secondary" text="Add Country" onClick={addPaymentConfig}/>
-          
-          <Button type="secondary" text="Add City" onClick={addCity}/> */}
+      <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
+        {/* Search Bar */}
+        <div className="flex flex-1 max-w-lg"></div>
+
+        {/* Verification Status Filter */}
+        <div className="ml-4">
+          <Tooltip content="Material Tailwind">
+            <Button
+              text="Add Country"
+              className=""
+              type="lightBlue"
+              onClick={AddCountry}
+            />
+          </Tooltip>
+        </div>
       </div>
-      <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md">
+      <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">
         <Table
           data={paymentConfigs}
           columns={columns}
@@ -111,6 +125,7 @@ function PaymentConfig() {
           currentPage={currentPage}
           onPageChange={setCurrentPage}
           handleUpdate={handleUpdate}
+          itemsPerPage={itemsPerPage}
         />
       </div>
 
@@ -120,7 +135,7 @@ function PaymentConfig() {
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             {/* Centered Title */}
             <h2 className="text-xl font-bold text-center mb-4">
-              {selectedConfig.sortName}
+              {selectedConfig.shortName}
             </h2>
 
             {/* Inline Labels and Checkboxes */}
@@ -161,7 +176,7 @@ function PaymentConfig() {
             <div className="flex justify-center gap-4 mt-5">
               <Button onClick={closeModal} text="Cancel" type="lightBlue" />
               <Button
-                onClick={() => handleUpdateConfig(selectedConfig)}
+                onClick={handleUpdateConfig}
                 text="Update"
                 type="primary"
               />

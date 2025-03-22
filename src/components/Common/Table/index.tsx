@@ -24,6 +24,7 @@ interface ITableProps {
   loading: boolean;
   totalPages: number;
   currentPage: number;
+  itemsPerPage?:number;
   onPageChange: (page: number) => void;
   handleDelete?: (row: any) => void;
   handleUpdate?: (row: any) => void;
@@ -38,6 +39,7 @@ function Table({
   loading,
   totalPages,
   currentPage,
+  itemsPerPage=10,
   onPageChange,
   handleClone,
   handleDelete,
@@ -52,15 +54,11 @@ function Table({
     handleToggleStatus,
     handleView
   };
-
-  // Define the number of items per page (this can be dynamic if needed)
-  const itemsPerPage = 10;
-
   return (
     <>
       <div className="flex flex-col overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-          <div className="overflow-hidden border border-gray-200 rounded-lg">
+          <div className="overflow-x-scroll border border-gray-200 rounded-lg">
             <table className="min-w-full text-left text-sm font-light text-surface dark:text-white">
               <thead className="bg-primary text-white text-xs font-semibold tracking-wider">
                 <tr>

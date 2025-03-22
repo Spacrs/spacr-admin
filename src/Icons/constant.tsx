@@ -1,72 +1,98 @@
-import { CiHome } from "react-icons/ci";
-import { RxDashboard } from "react-icons/rx";
-import { HiOutlineUsers } from "react-icons/hi";
-import { HiOutlineDocumentReport } from "react-icons/hi";
-import { CiSettings } from "react-icons/ci";
-import { IoIosArrowDown,IoIosArrowUp, IoIosLogOut } from "react-icons/io";
-import { GrTemplate } from "react-icons/gr";
+import {
+  CiHome,
+  CiZoomIn,
+  CiZoomOut,
+  CiSettings,
+  CiLock,
+  CiCircleAlert,
+  CiBoxList,
+  CiMenuKebab,
+} from "react-icons/ci";
+import { RxDashboard, RxCross1 } from "react-icons/rx";
+import {
+  HiOutlineUsers,
+  HiOutlineDocumentReport,
+  HiOutlineDesktopComputer,
+} from "react-icons/hi";
+import {
+  IoIosArrowDown,
+  IoIosArrowUp,
+  IoIosLogOut,
+  IoIosFlag,
+  IoMdAddCircle,
+  IoMdArrowRoundBack,
+  IoIosContact,
+} from "react-icons/io";
+import {
+  GrTemplate,
+  GrGallery,
+  GrCut,
+  GrDocumentUser,
+  GrSend,
+  GrUserExpert,
+} from "react-icons/gr";
 import { CgFormatText } from "react-icons/cg";
-import { GrGallery } from "react-icons/gr";
-import { RiCheckboxBlankCircleLine, RiCheckboxBlankLine } from "react-icons/ri";
-import { IoTabletLandscapeSharp } from "react-icons/io5";
-import { IoTabletPortraitSharp } from "react-icons/io5";
-import { CiZoomIn } from "react-icons/ci";
-import { CiZoomOut } from "react-icons/ci";
-import { MdOutlineZoomInMap } from "react-icons/md";
-import { BsEye, BsSave2 } from "react-icons/bs";
-import { FaRegWindowMinimize } from "react-icons/fa6";
-import { MdOutlineCategory } from "react-icons/md";
-import { RiApps2AddLine } from "react-icons/ri";
-import { MdOutlineEdit } from "react-icons/md";
+import {
+  RiCheckboxBlankCircleLine,
+  RiCheckboxBlankLine,
+  RiApps2AddLine,
+  RiExpandLeftLine,
+  RiExpandRightLine 
+} from "react-icons/ri";
+import { IoTabletLandscapeSharp, IoTabletPortraitSharp } from "react-icons/io5";
+import {
+  MdOutlineZoomInMap,
+  MdOutlineDeleteOutline,
+  MdOutlineCategory,
+  MdOutlineMarkEmailRead,
+  MdOutlineMarkEmailUnread,
+  MdOutlineEdit,
+} from "react-icons/md";
+import {
+  BsEye,
+  BsSave2,
+  BsCopy,
+  BsGrid3X2Gap,
+  BsCreditCard2Front,
+} from "react-icons/bs";
+import { FaRegWindowMinimize, FaArrowsToEye, FaCheck } from "react-icons/fa6";
 import { AiOutlineDelete } from "react-icons/ai";
-import { BsCopy } from "react-icons/bs";
-import { MdOutlineMarkEmailRead } from "react-icons/md";
-import { MdOutlineMarkEmailUnread } from "react-icons/md";
-import { FaArrowsToEye } from "react-icons/fa6";
-import { IoAddCircleOutline } from "react-icons/io5";
-import { FaRegFileAlt } from "react-icons/fa";
-import { TfiPencil } from "react-icons/tfi";
-import { HiOutlineDesktopComputer } from "react-icons/hi";
-import { IoBriefcaseOutline } from "react-icons/io5";
-import { LuBringToFront } from "react-icons/lu";
-import { LuSendToBack } from "react-icons/lu";
-import { GrCut } from "react-icons/gr";
+import {
+  IoAddCircleOutline,
+  IoBriefcaseOutline,
+  IoDuplicateOutline,
+} from "react-icons/io5";
+import {
+  FaRegFileAlt,
+  FaUnsplash,
+  FaCity,
+  FaBookReader,
+  FaObjectGroup,
+} from "react-icons/fa";
+import { TfiPencil, TfiWrite } from "react-icons/tfi";
+import { LuBringToFront, LuBadgeAlert, LuSendToBack } from "react-icons/lu";
 import { GoPaste } from "react-icons/go";
-import { IoDuplicateOutline } from "react-icons/io5";
-import { MdOutlineDeleteOutline } from "react-icons/md";
-import { CiLock } from "react-icons/ci";
-import { FaUnsplash } from "react-icons/fa";
 import { PiUploadFill } from "react-icons/pi";
-import { SiPexels } from "react-icons/si";
-import { SiIconify } from "react-icons/si";
-import { RxCross1 } from "react-icons/rx";
-import { FaCheck } from "react-icons/fa6";
-import { CiCircleAlert } from "react-icons/ci";
-import { LuBadgeAlert } from "react-icons/lu";
-import { IoIosContact } from "react-icons/io";
-import { FaBookReader } from "react-icons/fa";
-import { GrUserExpert } from "react-icons/gr";
+import { SiPexels, SiIconify } from "react-icons/si";
 import { GiSkills } from "react-icons/gi";
-import { GrDocumentUser } from "react-icons/gr";
-import { TfiWrite } from "react-icons/tfi";
-import { IoMdArrowRoundBack } from "react-icons/io";
-import { FaObjectGroup } from "react-icons/fa";
-import { TbBorderBottomPlus, TbBorderLeftPlus, TbBorderTopPlus,TbBorderRightPlus ,TbBorderOuter } from "react-icons/tb";
-import { BsGrid3X2Gap } from "react-icons/bs";
-import { CiBoxList } from "react-icons/ci";
-import { MdOutlineArrowRightAlt,MdOutlineArrowDownward} from "react-icons/md";
+import { FiSearch } from "react-icons/fi";
+import {
+  TbBorderBottomPlus,
+  TbBorderLeftPlus,
+  TbBorderTopPlus,
+  TbBorderRightPlus,
+  TbTruckDelivery,
+  TbBorderOuter,
+} from "react-icons/tb";
+import {
+  MdOutlineArrowRightAlt,
+  MdOutlineScheduleSend,
+  MdContactSupport,
+  MdOutlineArrowDownward,
+} from "react-icons/md";
 import { IoReturnDownBack } from "react-icons/io5";
-import { CiMenuKebab } from "react-icons/ci";
-import { BsCreditCard2Front } from "react-icons/bs";
-import { TbTruckDelivery } from "react-icons/tb";
-import { GrSend } from "react-icons/gr";
-import { MdOutlineScheduleSend } from "react-icons/md";
-import { MdContactSupport } from "react-icons/md";
-import { ImMenu3 } from "react-icons/im";
-import { IoIosFlag } from "react-icons/io";
-import { IoMdAddCircle } from "react-icons/io";
-import { FaCity } from "react-icons/fa";
 
+import { ImMenu3 } from "react-icons/im";
 
 export const icons = {
   CiHome: CiHome,
@@ -113,6 +139,7 @@ export const icons = {
   SiPexels: SiPexels,
   SiIconify: SiIconify,
   RxCross1: RxCross1,
+  FiSearch: FiSearch,
   FaCheck: FaCheck,
   CiCircleAlert: CiCircleAlert,
   LuBadgeAlert: LuBadgeAlert,
@@ -121,16 +148,16 @@ export const icons = {
   GrUserExpert: GrUserExpert,
   GiSkills: GiSkills,
   GrDocumentUser: GrDocumentUser,
-  TfiWrite:TfiWrite,
-  IoMdArrowRoundBack:IoMdArrowRoundBack,
+  TfiWrite: TfiWrite,
+  IoMdArrowRoundBack: IoMdArrowRoundBack,
   FaObjectGroup: FaObjectGroup,
-  TbBorderTopPlus:TbBorderTopPlus,
-  TbBorderBottomPlus:TbBorderBottomPlus,
-  TbBorderLeftPlus:TbBorderLeftPlus,
-  TbBorderRightPlus:TbBorderRightPlus,
-  TbBorderOuter:TbBorderOuter,
-  BsGrid3X2Gap:BsGrid3X2Gap,
-  CiBoxList:CiBoxList,
+  TbBorderTopPlus: TbBorderTopPlus,
+  TbBorderBottomPlus: TbBorderBottomPlus,
+  TbBorderLeftPlus: TbBorderLeftPlus,
+  TbBorderRightPlus: TbBorderRightPlus,
+  TbBorderOuter: TbBorderOuter,
+  BsGrid3X2Gap: BsGrid3X2Gap,
+  CiBoxList: CiBoxList,
   MdOutlineArrowRightAlt,
   MdOutlineArrowDownward,
   IoReturnDownBack,
@@ -145,6 +172,7 @@ export const icons = {
   ImMenu3,
   IoIosFlag,
   IoMdAddCircle,
-  FaCity
+  FaCity,
+  RiExpandLeftLine,
+  RiExpandRightLine 
 };
-

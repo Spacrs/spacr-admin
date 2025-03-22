@@ -6,7 +6,6 @@ import Loading  from "../../components/Common/Loader/index";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import type { RootState } from "../../store";
 import { useGetUserQuery } from "../../store/slices/userSlice/apiSlice";
-import { getLoggedInUser } from "../../store/slices/userSlice/userSlice";
 
 const statCardsdata: {
   title: string;

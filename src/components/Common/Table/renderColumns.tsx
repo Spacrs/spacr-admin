@@ -17,6 +17,28 @@ export const renderColumns = (
           {column.name ? (row[column.name] ? row[column.name] : "-") : ""}
         </p>
       );
+    case "Emogi": {
+      console.log('ayaya')
+      const convertEmojiCode = (emojiU: string): string => {
+        if (!emojiU) return "-";
+        try {
+          return emojiU
+            .split(" ")
+            .map((code) => `&#x${code.replace("U+", "").toLowerCase()};`)
+            .join(" ");
+        } catch (error) {
+          console.error("Error converting emoji:", error);
+          return "-";
+        }
+      };
+
+      const emojiU: string =
+        (row[column.name as keyof typeof row] as string) || ""; // Get the emoji code from the row data
+      const emoji: string = convertEmojiCode(emojiU); // Convert it to the actual emoji
+
+      return <p className="font-medium">{emoji}</p>;
+    }
+
     case "Actions":
       return (
         <div className="flex space-x-2 items-center">
@@ -81,12 +103,12 @@ export const renderColumns = (
     case "Image":
       return (
         <div>
-          <img src={row[column.name]} alt={column.name} className="w-10 h" />
+          <img src={row[column.name!]} alt={column.name} className="w-10 h" />
         </div>
       );
     case "Date": {
-      const formattedDate = row[column.name]
-        ? new Date(row[column.name]).toLocaleDateString("en-US", {
+      const formattedDate = row[column.name!]
+        ? new Date(row[column.name!]).toLocaleDateString("en-US", {
             year: "numeric",
             month: "short",
             day: "2-digit",
