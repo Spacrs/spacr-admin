@@ -26,11 +26,7 @@ const menuItems: MenuItemTypes[] = [
     path: "/admin/order-list",
     icon: <TbTruckDelivery style={{ fontSize: "20px", margin: "0 10px" }} />,
   },
-  {
-    label: "Contact Support List",
-    path: "/admin/contact-support-list",
-    icon: <MdContactSupport style={{ fontSize: "20px", margin: "0 10px" }} />,
-  },
+  
   {
     label: "Payment Config",
     path: "/admin/payment-config",
@@ -38,7 +34,7 @@ const menuItems: MenuItemTypes[] = [
     isSubmenu: true,
     subItems: [
       {
-        label: "County List",
+        label: "Country List",
         path: "/admin/payment-config",
         icon: (
           <IoIosFlag style={{ fontSize: "18px", margin: "0 10px" }} />
@@ -56,26 +52,41 @@ const menuItems: MenuItemTypes[] = [
       path: "/admin/spacr-config",
       icon: <CiSettings style={{ fontSize: "20px", margin: "0 10px" }} />,
     },
+  // {
+  //   label: "Notifications",
+  //   isSubmenu: true,
+  //   icon: <GrSend style={{ fontSize: "20px", margin: "0 10px" }} />,
+  //   subItems: [
+  //     {
+  //       label: "Notification List",
+  //       path: "/admin/notification-list",
+  //       icon: <GrSend style={{ fontSize: "18px", margin: "0 10px" }} />,
+  //     },
+  //     {
+  //       label: "Send Notification",
+  //       path: "/admin/send-notification",
+  //       icon: <GrSend style={{ fontSize: "18px", margin: "0 10px" }} />,
+  //     },
+  //     {
+  //       label: "Schedule Notification",
+  //       path: "/admin/schedule-notification",
+  //       icon: (
+  //         <MdOutlineScheduleSend
+  //           style={{ fontSize: "18px", margin: "0 10px" }}
+  //         />
+  //       ),
+  //     },
+  //   ],
+  // },
   {
-    label: "Notifications",
-    isSubmenu: true,
-    icon: <GrSend style={{ fontSize: "20px", margin: "0 10px" }} />,
-    subItems: [
-      {
-        label: "Send Notification",
-        path: "/admin/send-notification",
-        icon: <GrSend style={{ fontSize: "18px", margin: "0 10px" }} />,
-      },
-      {
-        label: "Schedule Notification",
-        path: "/admin/schedule-notification",
-        icon: (
-          <MdOutlineScheduleSend
-            style={{ fontSize: "18px", margin: "0 10px" }}
-          />
-        ),
-      },
-    ],
+    label: "Notification List",
+      path: "/admin/notification-list",
+      icon: <GrSend style={{ fontSize: "18px", margin: "0 10px" }} />,
+  },
+  {
+    label: "Contact Support List",
+    path: "/admin/contact-support-list",
+    icon: <MdContactSupport style={{ fontSize: "20px", margin: "0 10px" }} />,
   },
 ];
 
