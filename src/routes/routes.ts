@@ -20,6 +20,7 @@ import CityList from "../pages/PaymentConfigManagement/CityList";
 
 import InputPage from "../pages/Samples/InputPage";
 import Logout from "../pages/AuthManagement/Logout";
+import SpacrConfig from "../pages/SpacrConfig/SpacrConfig";
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -136,9 +137,9 @@ export const adminRoutes = [
     showBreadcrumb: true,
   },
   {
-    path: "countries",
-    component: CountriesList,
-    breadcrumb: ["admin", "Countries"],
+    path: "spacr-config",
+    component: SpacrConfig,
+    breadcrumb: ["admin", "Spacr Config"],
     showBreadcrumb: true,
   },
 ];

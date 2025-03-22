@@ -4,7 +4,6 @@ import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { logout } from "./slices/userSlice/userSlice"; 
 
 const baseQuery = fetchBaseQuery({
-  // baseUrl: "http://localhost:8000/api/v2",
   baseUrl: "https://api-v2.spa-cr.com/api/v2",
   prepareHeaders: (headers) => {
     const token = localStorage.getItem("access_token");
