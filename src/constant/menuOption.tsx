@@ -22,11 +22,6 @@ const menuItems: MenuItemTypes[] = [
     icon: <HiOutlineUsers style={{ fontSize: "20px", margin: "0 10px" }} />,
   },
   {
-    label: "Countries",
-    path: "/admin/countries",
-    icon: <IoIosFlag style={{ fontSize: "20px", margin: "0 10px" }} />,
-  },
-  {
     label: "Order List",
     path: "/admin/order-list",
     icon: <TbTruckDelivery style={{ fontSize: "20px", margin: "0 10px" }} />,
