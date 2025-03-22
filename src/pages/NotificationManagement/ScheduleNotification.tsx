@@ -1,11 +1,14 @@
 import { useState } from "react";
 import Button from "../../components/Common/Button";
+import { useNavigate } from "react-router-dom";
 
 const ScheduleNotification = () => {
     const [title, setTitle] = useState("");
     const [message, setMessage] = useState("");
     const [scheduleDate, setScheduleDate] = useState("");
     const [scheduleTime, setScheduleTime] = useState("");
+
+    const navigate = useNavigate();
 
     const handleSubmit = (e: any) => {
         e.preventDefault(); // Prevent page refresh
@@ -19,6 +22,23 @@ const ScheduleNotification = () => {
     };
 
     return (
+        <div className="">
+            <div className="flex justify-start items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
+                {/* Search Bar */}
+                {/* <div className="flex flex-1 max-w-lg"></div> */}
+
+                {/* Verification Status Filter */}
+                <div className="ml-4">
+                
+                <Button
+                        text="Back"
+                        className="mr-2"
+                        type="lightBlue"
+                        onClick={() => navigate("/admin/notification-list")}
+                    />
+          
+                </div>
+            </div>
         <div className="flex justify-center items-center p-20 bg-gray-50">
             <div className="w-full max-w-7xl bg-white p-6 shadow-lg rounded-lg">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
@@ -111,6 +131,7 @@ const ScheduleNotification = () => {
                     </div>
                 </form>
             </div>
+        </div>
         </div>
     );
 };

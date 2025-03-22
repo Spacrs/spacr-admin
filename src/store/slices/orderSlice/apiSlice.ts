@@ -20,7 +20,14 @@ export const ordersApi: any = createApi({
         }
       }),
     }),
+    getOrderDetails: builder.query<any, string>({
+      query: (orderId) => ({
+        url: `/admin/order-details/${orderId}`,
+        method: "GET"
+      }),
+    }),
+    
   }),
 });
 
-export const { useGetOrdersQuery, useUpdateOrderTrendMutation } = ordersApi;
+export const { useGetOrdersQuery, useUpdateOrderTrendMutation, useGetOrderDetailsQuery } = ordersApi;

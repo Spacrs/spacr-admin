@@ -14,8 +14,8 @@ import { useNavigate } from "react-router-dom";
 import { Tooltip } from "@material-tailwind/react";
 
 const columns = [
-  { name: "shortName", Header: "Name", colName: "Default" },
-  { name: "providers", Header: "Providers", colName: "Default" },
+  { name: "name", Header: "Name", colName: "Default" },
+  { name: "shortName", Header: "Providers", colName: "Default" },
   { name: "wallet", Header: "Wallet", colName: "Boolean" },
   { name: "COD", Header: "COD", colName: "Boolean" },
   { name: "stripe", Header: "Stripe", colName: "Boolean" },

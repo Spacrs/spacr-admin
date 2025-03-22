@@ -14,13 +14,13 @@ import ScheduleNotification from "../pages/NotificationManagement/ScheduleNotifi
 import ContactSupportList from "../pages/ContactSupportManagement/ContactSupportList";
 import AddCountry from "../pages/PaymentConfigManagement/AddCountry";
 import AddCity from "../pages/PaymentConfigManagement/AddCity";
-import CountryList from "../pages/PaymentConfigManagement/CountryList";
 import CountriesList from "../pages/CountriesManagement/CountriesList";
 import CityList from "../pages/PaymentConfigManagement/CityList";
 
 import InputPage from "../pages/Samples/InputPage";
 import Logout from "../pages/AuthManagement/Logout";
 import SpacrConfig from "../pages/SpacrConfig/SpacrConfig";
+import NotificationList from "../pages/NotificationManagement/NotificationList";
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -83,6 +83,12 @@ export const adminRoutes = [
     showBreadcrumb: true,
   },
   {
+    path: "notification-list",
+    component: NotificationList,
+    breadcrumb: ["admin", "Notification List"],
+    showBreadcrumb: true,
+  },
+  {
     path: "contact-support-list",
     component: ContactSupportList,
     breadcrumb: ["admin", "Contact Support"],
@@ -107,17 +113,12 @@ export const adminRoutes = [
     showBreadcrumb: true,
   },
   {
-    path: "order-details/:order-id",
+    path: "order-details/:orderId",
     component: OrderDetails,
     breadcrumb: ["admin", "Order-Details"],
     showBreadcrumb: true,
   },
-  {
-    path: "country-list",
-    component: CountryList,
-    breadcrumb: ["admin", "Country List"],
-    showBreadcrumb: true,
-  },
+  
   {
     path: "add-payment-config-country",
     component: AddCountry,
