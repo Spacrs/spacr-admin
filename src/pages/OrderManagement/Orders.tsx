@@ -35,8 +35,11 @@ function Orders() {
   const dispatch = useAppDispatch();
   const orders = useAppSelector((state) => state.orderSlice.orders);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
-  const { data, isLoading, isError } = useGetOrdersQuery();
+  const itemsPerPage = 10;
+  const { data, isLoading, isError } = useGetOrdersQuery({
+    page: currentPage,
+    limit: itemsPerPage
+  });
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
   const [isOpen, setIsOpen] = useState(false);
 

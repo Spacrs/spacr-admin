@@ -1,6 +1,7 @@
 import Table from "../../components/Common/Table";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Common/Button";
+import SelectComponent from '../../components/Common/Inputes/SelectInput'
 
 const columns = [
   { name: "ProductName", Header: "Title", colName: "Default" },
@@ -15,6 +16,12 @@ const columns = [
     colName: "Actions",
     Actions: ["UPDATE", "VIEW"],
   },
+];
+
+const options = [
+  { value: "", label: "Select Notification Type" },
+  { value: "upcoming", label: "Upcoming Notifications" },
+  { value: "all", label: "All Notifications" },
 ];
 
 
@@ -39,7 +46,15 @@ const handleView = () => {
     <div className="">
         <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         {/* Search Bar */}
-        <div className="flex flex-1 max-w-lg"></div>
+        
+        <div className="flex flex-1 max-w-lg">
+            <SelectComponent
+              options={options} // Now it's a valid array
+              className="mr-2"
+              value="one" // Provide a default value
+              onChange={(e) => console.log(e.target.value)}
+            />
+        </div>
 
         {/* Verification Status Filter */}
         <div className="ml-4">
@@ -58,12 +73,7 @@ const handleView = () => {
               onClick={() => navigate("/admin/schedule-notification")}
             />
 
-            <Button
-              text="Upcoming Notification"
-              className="mr-2"
-              type="danger"
-              onClick={() => {}}
-            />
+            
           
         </div>
       </div>

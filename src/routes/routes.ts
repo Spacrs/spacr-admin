@@ -21,6 +21,7 @@ import InputPage from "../pages/Samples/InputPage";
 import Logout from "../pages/AuthManagement/Logout";
 import SpacrConfig from "../pages/SpacrConfig/SpacrConfig";
 import NotificationList from "../pages/NotificationManagement/NotificationList";
+import OrderOffers from '../pages/OrderManagement/OrderOffers';
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -116,6 +117,12 @@ export const adminRoutes = [
     path: "order-details/:orderId",
     component: OrderDetails,
     breadcrumb: ["admin", "Order-Details"],
+    showBreadcrumb: true,
+  },
+  {
+    path: "order-offers/:orderId",
+    component: OrderOffers,
+    breadcrumb: ["admin", "Order-Offers"],
     showBreadcrumb: true,
   },
   
