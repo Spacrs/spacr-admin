@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { setOrderOffers } from "../../store/slices/orderSlice/orderSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/Common/Button";
+import ErrorMsg from "../../components/ErrorComponent/ErrorMsg";
 
 const columns = [
   { name: "userProfileImage", Header: "Profile Image", colName: "Image" },
@@ -21,8 +22,8 @@ function OrderOffers() {
   const { orderId } = useParams();
   const offers = useAppSelector((state) => state.orderSlice.offers);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
-  const { data, isLoading, isError } = useGetOrderOffersQuery({
+  const itemsPerPage = 10;
+  const { data, isLoading, isFetching, isError } = useGetOrderOffersQuery({
     page: currentPage,
     limit: itemsPerPage,
     orderId: orderId,
@@ -37,9 +38,7 @@ function OrderOffers() {
   }, [data, dispatch]);
 
   if (isError) {
-    return (
-      <div className="text-red-500 text-center mt-4">Error loading orders</div>
-    );
+    return <ErrorMsg errorMsg="Error in loading offers" />;
   }
 
   return (
@@ -62,7 +61,7 @@ function OrderOffers() {
         <Table
           data={offers}
           columns={columns}
-          loading={isLoading}
+          loading={isLoading || isFetching}
           totalPages={data?.pagination?.totalPages || 1}
           currentPage={currentPage}
           onPageChange={setCurrentPage}

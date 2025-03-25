@@ -35,7 +35,7 @@ function PaymentConfig() {
   );
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const { data, isLoading, isError, refetch } = useGetPaymentConfigsQuery({
+  const { data, isLoading, isFetching, isError } = useGetPaymentConfigsQuery({
     page: currentPage,
     limit: itemsPerPage,
   });
@@ -120,7 +120,7 @@ function PaymentConfig() {
         <Table
           data={paymentConfigs}
           columns={columns}
-          loading={isLoading}
+          loading={isLoading || isFetching}
           totalPages={data?.pagination?.totalPages || 1}
           currentPage={currentPage}
           onPageChange={setCurrentPage}

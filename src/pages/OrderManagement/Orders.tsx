@@ -11,6 +11,7 @@ import {
 } from "../../store/slices/orderSlice/orderSlice";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Common/Button";
+import ErrorMsg from "../../components/ErrorComponent/ErrorMsg";
 
 const columns = [
   { name: "ProductName", Header: "Product Name", colName: "Default" },
@@ -37,7 +38,7 @@ function Orders() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const { data, isLoading, isError } = useGetOrdersQuery({
+  const { data, isLoading, isFetching, isError } = useGetOrdersQuery({
     page: currentPage,
     limit: itemsPerPage,
   });
@@ -56,9 +57,7 @@ function Orders() {
   }, [data, dispatch]);
 
   if (isError) {
-    return (
-      <div className="text-red-500 text-center mt-4">Error loading orders</div>
-    );
+    return <ErrorMsg errorMsg="Error loading orders" />;
   }
 
   const handleUpdate = (order: any) => {
@@ -109,7 +108,7 @@ function Orders() {
         <Table
           data={orders}
           columns={columns}
-          loading={isLoading}
+          loading={isLoading || isFetching}
           totalPages={data?.pagination?.totalPages || 1}
           currentPage={currentPage}
           onPageChange={setCurrentPage}
