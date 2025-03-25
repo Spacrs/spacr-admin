@@ -14,7 +14,7 @@ import ScheduleNotification from "../pages/NotificationManagement/ScheduleNotifi
 import ContactSupportList from "../pages/ContactSupportManagement/ContactSupportList";
 import AddCountry from "../pages/PaymentConfigManagement/AddCountry";
 import AddCity from "../pages/PaymentConfigManagement/AddCity";
-import CountriesList from "../pages/CountriesManagement/CountriesList";
+import CountryList from "../pages/PaymentConfigManagement/CountryList";
 import CityList from "../pages/PaymentConfigManagement/CityList";
 
 import InputPage from "../pages/Samples/InputPage";

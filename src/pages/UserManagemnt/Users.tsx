@@ -34,7 +34,7 @@ function Users() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { users, isloading } = useAppSelector((state) => state.userSlice);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState(""); // Search term
   const [verificationStatus, setVerificationStatus] = useState(""); // Verification filter

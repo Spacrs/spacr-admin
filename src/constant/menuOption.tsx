@@ -21,7 +21,6 @@ const menuItems: MenuItemTypes[] = [
     path: "/admin/users",
     icon: <HiOutlineUsers style={{ fontSize: "20px", margin: "0 10px" }} />,
   },
-  
   {
     label: "Order List",
     path: "/admin/order-list",
