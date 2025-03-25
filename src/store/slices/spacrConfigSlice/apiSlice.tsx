@@ -1,28 +1,25 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithInterceptor } from "../../baseQuery";
 
-export const paymentConfigApi: any = createApi({
-  reducerPath: "paymentConfigApi",
+export const spacrConfigAPi = createApi({
+  reducerPath: "spacrConfigAPi",
   baseQuery: baseQueryWithInterceptor,
   endpoints: (builder) => ({
-    
-    updateConfigFees: builder.mutation<any, Partial<any>>({
-      query: (customFees) => {
-        
-        return {
-          url: `/admin/spacr-config/update/`,
-          method: "PATCH",
-          body: {
-            customFees: customFees
-          }
-        };
-      },
+    updateConfigFeesApi: builder.mutation<any, { CustomFees: number }>({
+      query: (customFees) => ({
+        url: `/admin/spacr-config/update/`,
+        method: "PATCH",
+        body: customFees,
+      }),
     }),
-
-    
+    getConfigFees: builder.query<any, void>({
+      query: () => ({
+        url: `/admin/spacr-config/`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const {
-  useUpdateConfigFeesMutation,
-} = paymentConfigApi;
+export const { useUpdateConfigFeesApiMutation, useGetConfigFeesQuery } =
+  spacrConfigAPi;

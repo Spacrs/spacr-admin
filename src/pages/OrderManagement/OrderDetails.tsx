@@ -85,10 +85,10 @@ const OrderDetails = () => {
             <p className="text-green-500 text-2xl font-medium mt-6">
               <strong
                 onClick={goToOffers}
-                className="px-4 py-2 bg-green-100 border border-green-600 shadow-lg hover:bg-transparent hover:shadow-xl transition duration-200 ease-in-out cursor-pointer rounded-lg"
+                className="px-4 py-2 text-md font-medium bg-green-100 border border-green-600 shadow-lg hover:bg-transparent hover:shadow-xl transition duration-200 ease-in-out cursor-pointer rounded-lg"
               >
                 Offers:{" "}
-                <span className="text-black font-bold px-2">
+                <span className="text-black font-medium px-2">
                   {order.data.totalOfferCount}
                 </span>
               </strong>

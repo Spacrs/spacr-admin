@@ -5,10 +5,10 @@ export const ordersApi: any = createApi({
   reducerPath: "ordersApi",
   baseQuery: baseQueryWithInterceptor,
   endpoints: (builder) => ({
-    getOrders: builder.query<any, { page: number, limit: number }>({
-      query: ({page, limit}) => ({
+    getOrders: builder.query<any, { page: number; limit: number }>({
+      query: ({ page, limit }) => ({
         url: `/admin/all-orders?page=${page}&limit=${limit}`, // ✅ Corrected endpoint
-        method: "GET"
+        method: "GET",
       }),
     }),
     updateOrderTrend: builder.mutation<any, Partial<any>>({
@@ -17,23 +17,30 @@ export const ordersApi: any = createApi({
         method: "PATCH",
         body: {
           IsTrending: order.IsTrending,
-        }
+        },
       }),
     }),
     getOrderDetails: builder.query<any, string>({
       query: (orderId) => ({
         url: `/admin/order-details/${orderId}`,
-        method: "GET"
+        method: "GET",
       }),
     }),
-    getOrderOffers: builder.query<any, string>({
-      query: (orderId) => ({
-        url: `/admin/all-offers?orderId=${orderId}`,
-        method: "GET"
+    getOrderOffers: builder.query<
+      any,
+      { orderId: string; page?: number; limit?: number }
+    >({
+      query: ({ orderId, page, limit }) => ({
+        url: `/admin/all-offers?orderId=${orderId}&page=${page}&limit=${limit}`,
+        method: "GET",
       }),
     }),
-    
   }),
 });
 
-export const { useGetOrdersQuery, useUpdateOrderTrendMutation, useGetOrderDetailsQuery, useGetOrderOffersQuery } = ordersApi;
+export const {
+  useGetOrdersQuery,
+  useUpdateOrderTrendMutation,
+  useGetOrderDetailsQuery,
+  useGetOrderOffersQuery,
+} = ordersApi;

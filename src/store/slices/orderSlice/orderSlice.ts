@@ -25,15 +25,29 @@ export const orderSlice = createSlice({
     },
     updateOrderList: (state: IState, action: PayloadAction<any>) => {
       state.orders = state.orders.map((order) =>
-        order.Id === action.payload.Id ? {...order,...action.payload} : order
+        order.Id === action.payload.Id ? { ...order, ...action.payload } : order
       );
     },
     setOrderOffers: (state: IState, action: PayloadAction<any[]>) => {
-      state.offers = action.payload;
+      console.log(action.payload, "action.payload");
+      state.offers =
+        Array.isArray(action.payload) && action.payload.length > 0
+          ? action.payload.map((list) => {
+              return {
+                ...list,
+                User: null,
+                userProfileImage: list.User.ProfilePictureURL,
+                offeredByName: list.User.FullName,
+                offeredByEmail: list.User.Email,
+                OfferedPrice: list.OfferedPrice || '0',
+              };
+            })
+          : [];
     },
   },
 });
 
-export const { setOrders, updateOrderList, setOrderOffers } = orderSlice.actions;
+export const { setOrders, updateOrderList, setOrderOffers } =
+  orderSlice.actions;
 export const selectOrders = (state: RootState) => state.orderSlice.orders;
 export default orderSlice.reducer;
