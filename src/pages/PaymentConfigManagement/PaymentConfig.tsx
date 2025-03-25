@@ -14,8 +14,8 @@ import { useNavigate } from "react-router-dom";
 import { Tooltip } from "@material-tailwind/react";
 
 const columns = [
-  { name: "shortName", Header: "Name", colName: "Default" },
-  { name: "providers", Header: "Providers", colName: "Default" },
+  { name: "name", Header: "Name", colName: "Default" },
+  { name: "shortName", Header: "Providers", colName: "Default" },
   { name: "wallet", Header: "Wallet", colName: "Boolean" },
   { name: "COD", Header: "COD", colName: "Boolean" },
   { name: "stripe", Header: "Stripe", colName: "Boolean" },
@@ -35,7 +35,7 @@ function PaymentConfig() {
   );
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const { data, isLoading, isError, refetch } = useGetPaymentConfigsQuery({
+  const { data, isLoading, isFetching, isError } = useGetPaymentConfigsQuery({
     page: currentPage,
     limit: itemsPerPage,
   });
@@ -120,7 +120,7 @@ function PaymentConfig() {
         <Table
           data={paymentConfigs}
           columns={columns}
-          loading={isLoading}
+          loading={isLoading || isFetching}
           totalPages={data?.pagination?.totalPages || 1}
           currentPage={currentPage}
           onPageChange={setCurrentPage}

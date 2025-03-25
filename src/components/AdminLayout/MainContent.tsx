@@ -18,7 +18,10 @@ function MainContent({
   const { showLeftSidebar } = useAppSelector(selectLayout);
 
   return showBreadcrumb ? (
-    <div style={{ width: "100%" }} className="h-full flex-col bg-white">
+    <div
+      style={{ width: showLeftSidebar ? "calc(100% - 300px)" : "100%" }}
+      className="h-full flex-col bg-white"
+    >
       <div className="h-full w-full flex-col overflow-y-scroll rounded-md bg-gray-200 p-2">
         {breadcrumb && <Breadcrumb title={path} breadcrumb={breadcrumb} />}
         <ResponsiveComponent />

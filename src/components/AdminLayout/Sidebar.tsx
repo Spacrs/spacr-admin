@@ -16,6 +16,7 @@ function Sidebar() {
   const dispatch = useAppDispatch();
   const [activeMenu, setActiveMenu] = useState<string | null>(null); // Track active menu
   const layout = useAppSelector(selectLayout);
+  const { showLeftSidebar, sidebarWidth } = layout;
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -26,7 +27,7 @@ function Sidebar() {
 
   return (
     <div
-      style={{ width: "350px" }}
+      style={{ width: showLeftSidebar ? sidebarWidth + "px" : "0px" }}
       className="h-full flex-col bg-white text-white hidden md:flex transition-all duration-300"
     >
       <div className="flex flex-col justify-between flex-grow p-4">
