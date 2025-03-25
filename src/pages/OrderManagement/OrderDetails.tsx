@@ -1,32 +1,13 @@
 import { useEffect, useState } from "react";
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useGetOrderDetailsQuery } from "../../store/slices/orderSlice/apiSlice";
 
 const OrderDetails = () => {
   const params = useParams();
+  const navigate = useNavigate();
 
-  // Mock order data based on the provided structure
-  // const order = {
-  //   OrderID: "6d08fbc6-649e-4d0e-971c-f8e4bb33077e",
-  //   ProductName: "Wireless Headphones",
-  //   Descriptions: "High-quality wireless headphones with noise cancellation.",
-  //   ProductUrl: "https://example.com/wireless-headphones",
-  //   Price: 79,
-  //   DeliveryReward: 5,
-  //   Quantity: 2,
-  //   IsWithBox: 1,
-  //   EstimatedDeliveryDate: "2025-03-10",
-  //   Status: "Pending",
-  //   From_address: "123 Main St, Los Angeles, CA",
-  //   To_address: "456 Elm St, New York, NY",
-  //   IsDeleted: 0,
-  //   CreatedAt: "2025-03-03 12:44:49.468",
-  //   UpdatedAt: "2025-03-03 12:44:49.468",
-  //   IsTrending: 0
-  // };
-
-  const { orderId } = useParams(); // Get order ID from URL params
+  const { orderId } = useParams();
   const { data: order, isLoading, error } = useGetOrderDetailsQuery(orderId!); 
 
   console.log("Order ID from URL:", orderId);
@@ -37,13 +18,12 @@ const OrderDetails = () => {
 
   useEffect(() => {
     if (order) {
-      setStatus(order.Status); // Set initial status when order loads
+      setStatus(order.Status);
     }
   }, [order]);
 
-  // Handle status change
   const handleOnChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setStatus(event.target.value); // Update the local state
+    setStatus(event.target.value);
   };
 
   if (isLoading) return <p>Loading order details...</p>;
@@ -51,9 +31,12 @@ const OrderDetails = () => {
     console.error("Order Details API Error:", error);
     if (error.status === 401) {
       console.log("Unauthorized! Redirecting to login...");
-      // Perform logout logic if needed
     }
     return <p className="text-center text-red-500">Failed to load order details. Error: {error.status}</p>;
+  }
+
+  const goToOffers = () => {
+    navigate('/admin/order-offers/' + orderId);
   }
 
   return (
@@ -74,6 +57,18 @@ const OrderDetails = () => {
             <p><strong>Delivery Reward:</strong> ${order.data.DeliveryReward}</p>
             <p><strong>Is With Box:</strong> {order.data.IsWithBox === 1 ? "Yes" : "No"}</p>
             <p><strong>Estimated Delivery Date:</strong> {new Date(order.data.EstimatedDeliveryDate).toLocaleDateString()}</p>
+            {/* <p className="text-red-900 text-3xl font-bold mt-6">
+              <strong className="px-4 py-2 bg-red-100 border border-red-600 shadow-lg hover:bg-red-200 hover:shadow-xl transition duration-200 ease-in-out cursor-pointer rounded-lg">
+                Offers: <span className="text-red-700 font-extrabold px-2">5</span>
+              </strong>
+            </p> */}
+
+            <p className="text-green-500 text-5xl font-bold mt-6">
+              <strong onClick={goToOffers} className="px-4 py-2 bg-green-100 border border-green-600 shadow-lg hover:bg-transparent hover:shadow-xl transition duration-200 ease-in-out cursor-pointer rounded-lg">
+                Offers: <span className="text-black font-extrabold px-2">{order.data.totalOfferCount}</span>
+              </strong>
+            </p>
+
           </div>
         </div>
 
