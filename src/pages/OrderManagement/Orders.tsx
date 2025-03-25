@@ -39,9 +39,8 @@ function Orders() {
 
   const { data, isLoading, isError } = useGetOrdersQuery({
     page: currentPage,
-    limit: itemsPerPage
+    limit: itemsPerPage,
   });
-  
 
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -65,13 +64,6 @@ function Orders() {
   const handleUpdate = (order: any) => {
     setSelectedOrder(order);
     setIsOpen(true);
-  };
-
-  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOrder((prevOrder: any) => ({
-      ...prevOrder,
-      status: e.target.value,
-    }));
   };
 
   const handleToggleTrending = () => {
@@ -110,8 +102,6 @@ function Orders() {
     setIsOpen(false);
     setSelectedOrder(null);
   };
-
-  console.log(orders, "orders");
 
   return (
     <div className="">

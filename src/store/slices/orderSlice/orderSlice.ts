@@ -5,11 +5,15 @@ import type { RootState } from "../..";
 interface IState {
   orders: any[];
   orderDetail: {};
+  offers: any[];
+  offerDetail: {};
 }
 
 const initialState: IState = {
   orders: [],
   orderDetail: {},
+  offers: [],
+  offerDetail: {},
 };
 
 export const orderSlice = createSlice({
@@ -24,11 +28,9 @@ export const orderSlice = createSlice({
         order.Id === action.payload.Id ? {...order,...action.payload} : order
       );
     },
-    //Added on 24-03-2025
     setOrderOffers: (state: IState, action: PayloadAction<any[]>) => {
-      state.orders = action.payload;
+      state.offers = action.payload;
     },
-    //Added on 24-03-2025
   },
 });
 
