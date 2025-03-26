@@ -8,7 +8,7 @@ const OrderDetails = () => {
   const navigate = useNavigate();
 
   const { orderId } = useParams();
-  const { data: order, isLoading, error } = useGetOrderDetailsQuery(orderId!); 
+  const { data: order, isLoading, error } = useGetOrderDetailsQuery(orderId!);
 
   console.log("Order ID from URL:", orderId);
   console.log("API Response:", order);
@@ -32,12 +32,16 @@ const OrderDetails = () => {
     if (error.status === 401) {
       console.log("Unauthorized! Redirecting to login...");
     }
-    return <p className="text-center text-red-500">Failed to load order details. Error: {error.status}</p>;
+    return (
+      <p className="text-center text-red-500">
+        Failed to load order details. Error: {error.status}
+      </p>
+    );
   }
 
   const goToOffers = () => {
-    navigate('/admin/order-offers/' + orderId);
-  }
+    navigate("/admin/order-offers/" + orderId);
+  };
 
   return (
     <div className="p-6 max-w-7xl mx-auto bg-white shadow-xl rounded-lg">
@@ -45,68 +49,90 @@ const OrderDetails = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Side - Product Details */}
         <div className="flex flex-col bg-gray-50 p-6 rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold mb-2">{order.data.ProductName}</h2>
-          <p className="text-gray-500 text-sm mb-4">{order.data.Descriptions}</p>
-          <a href={order.data.ProductUrl} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800 text-sm">
+          <h2 className="text-2xl font-semibold mb-2">
+            {order.data.ProductName}
+          </h2>
+          <p className="text-gray-500 text-sm mb-4">
+            {order.data.Descriptions}
+          </p>
+          <a
+            href={order.data.ProductUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-indigo-600 hover:text-indigo-800 text-sm"
+          >
             View Product
           </a>
 
           <div className="mt-6 w-full">
-            <p><strong>Price:</strong> ${order.data.Price}</p>
-            <p><strong>Quantity:</strong> {order.data.Quantity}</p>
-            <p><strong>Delivery Reward:</strong> ${order.data.DeliveryReward}</p>
-            <p><strong>Is With Box:</strong> {order.data.IsWithBox === 1 ? "Yes" : "No"}</p>
-            <p><strong>Estimated Delivery Date:</strong> {new Date(order.data.EstimatedDeliveryDate).toLocaleDateString()}</p>
-            {/* <p className="text-red-900 text-3xl font-bold mt-6">
-              <strong className="px-4 py-2 bg-red-100 border border-red-600 shadow-lg hover:bg-red-200 hover:shadow-xl transition duration-200 ease-in-out cursor-pointer rounded-lg">
-                Offers: <span className="text-red-700 font-extrabold px-2">5</span>
-              </strong>
-            </p> */}
-
-            <p className="text-green-500 text-5xl font-bold mt-6">
-              <strong onClick={goToOffers} className="px-4 py-2 bg-green-100 border border-green-600 shadow-lg hover:bg-transparent hover:shadow-xl transition duration-200 ease-in-out cursor-pointer rounded-lg">
-                Offers: <span className="text-black font-extrabold px-2">{order.data.totalOfferCount}</span>
+            <p>
+              <strong>Price:</strong> ${order.data.Price}
+            </p>
+            <p>
+              <strong>Quantity:</strong> {order.data.Quantity}
+            </p>
+            <p>
+              <strong>Delivery Reward:</strong> ${order.data.DeliveryReward}
+            </p>
+            <p>
+              <strong>Is With Box:</strong>{" "}
+              {order.data.IsWithBox === 1 ? "Yes" : "No"}
+            </p>
+            <p>
+              <strong>Estimated Delivery Date:</strong>{" "}
+              {new Date(order.data.EstimatedDeliveryDate).toLocaleDateString()}
+            </p>
+            <p className="text-green-500 text-2xl font-medium mt-6">
+              <strong
+                onClick={goToOffers}
+                className="px-4 py-2 text-md font-medium bg-green-100 border border-green-600 shadow-lg hover:bg-transparent hover:shadow-xl transition duration-200 ease-in-out cursor-pointer rounded-lg"
+              >
+                Offers:{" "}
+                <span className="text-black font-medium px-2">
+                  {order.data.totalOfferCount}
+                </span>
               </strong>
             </p>
-
           </div>
         </div>
 
         {/* Right Side - Address and Status */}
         <div className="flex flex-col bg-gray-50 p-6 rounded-lg shadow-md">
           <h3 className="text-xl font-semibold mb-3">Shipping Details</h3>
-          <p><strong>From Address:</strong> {order.data.From_address}</p>
-          <p><strong>To Address:</strong> {order.data.To_address}</p>
+          <p>
+            <strong>From Address:</strong> {order.data.From_address}
+          </p>
+          <p>
+            <strong>To Address:</strong> {order.data.To_address}
+          </p>
 
           <div className="mt-6">
-            <p><strong>Status:</strong>
-              <span className={`ml-2 px-3 py-1 rounded-full text-sm font-medium 
-                ${status === "Pending" ? "bg-yellow-300 text-gray-800" : 
-                  status === "Shipped" ? "bg-blue-300 text-gray-800" : 
-                  "bg-green-300 text-gray-800"}`}>
-                {status}
+            <p>
+              <strong>Status:</strong>
+              <span
+                className={`ml-2 px-3 py-1 rounded-full text-sm font-medium 
+                ${
+                  order.data?.Status === "Pending"
+                    ? "bg-yellow-300 text-gray-800"
+                    : order.data?.Status === "Shipped"
+                    ? "bg-blue-300 text-gray-800"
+                    : "bg-green-300 text-gray-800"
+                }`}
+              >
+                {order.data?.Status}
               </span>
             </p>
-
-            <div className="mt-4">
-              <label htmlFor="status" className="block text-sm font-medium text-gray-700">Update Order Status</label>
-              <select
-                id="status"
-                value={status}
-                onChange={handleOnChange}
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              >
-                <option value="Pending">Pending</option>
-                <option value="Shipped">Shipped</option>
-                <option value="Completed">Completed</option>
-                <option value="Cancelled">Cancelled</option>
-              </select>
-            </div>
           </div>
         </div>
       </div>
+      {/* "LIVE",
+  "ACCEPTED",
+  "PURCHASED",
+  "IN_TRANSIT",
+  "READY_TO_RECEIVE",
+  "COMPLETED",
+  "CANCELLED", */}
 
-      
       {/* {order.data.medias && order.data.medias.length > 0 && (
         <div className="mt-6 bg-gray-50 p-6 rounded-lg shadow-md">
           <h3 className="text-xl font-semibold mb-3">Product Images</h3>
@@ -124,36 +150,41 @@ const OrderDetails = () => {
       )} */}
 
       {/* ✅ Product Images Section with Dynamic Sizing */}
-{order.data.medias && order.data.medias.length > 0 && (
-  <div className="mt-6 bg-gray-50 p-6 rounded-lg shadow-md">
-    <h3 className="text-xl font-semibold mb-3">Product Images</h3>
-    <div className="flex flex-wrap gap-4 justify-center">
-      {order.data.medias.map((media: any, index: number) => {
-        // Adjust size based on the number of images
-        const imageSize =
-          order.data.medias.length === 1 ? "w-64 h-64" : // 1 Image - Large
-          order.data.medias.length === 2 ? "w-48 h-48" : // 2 Images - Medium
-          "w-32 h-32"; // 3 or More Images - Small
+      {order.data.medias && order.data.medias.length > 0 && (
+        <div className="mt-6 bg-gray-50 p-6 rounded-lg shadow-md">
+          <h3 className="text-xl font-semibold mb-3">Product Images</h3>
+          <div className="flex flex-wrap gap-4 justify-center">
+            {order.data.medias.map((media: any, index: number) => {
+              // Adjust size based on the number of images
+              const imageSize =
+                order.data.medias.length === 1
+                  ? "w-64 h-64" // 1 Image - Large
+                  : order.data.medias.length === 2
+                  ? "w-48 h-48" // 2 Images - Medium
+                  : "w-32 h-32"; // 3 or More Images - Small
 
-        return (
-          <img
-            key={index}
-            src={media.url} // ✅ Ensure correct property for image URL
-            alt={media.description || `Product Image ${index + 1}`}
-            className={`${imageSize} object-cover rounded-lg shadow-md border`}
-          />
-        );
-      })}
-    </div>
-  </div>
-)}
-
-
+              return (
+                <img
+                  key={index}
+                  src={media.url} // ✅ Ensure correct property for image URL
+                  alt={media.description || `Product Image ${index + 1}`}
+                  className={`${imageSize} object-cover rounded-lg shadow-md border`}
+                />
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Footer - Order Metadata */}
       <div className="mt-6 flex justify-between items-center text-sm text-gray-500">
-        <p><strong>Order ID</strong>: {order.data.OrderID}</p>
-        <p><strong>Created Date</strong>: {new Date(order.data.CreatedAt).toLocaleDateString()}</p>
+        <p>
+          <strong>Order ID</strong>: {order.data.OrderID}
+        </p>
+        <p>
+          <strong>Created Date</strong>:{" "}
+          {new Date(order.data.CreatedAt).toLocaleDateString()}
+        </p>
       </div>
     </div>
   );

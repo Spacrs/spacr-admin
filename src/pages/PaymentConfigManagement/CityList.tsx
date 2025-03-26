@@ -26,7 +26,7 @@ const CityList = () => {
 
   const itemsPerPage = 5;
 
-  const { data, isLoading, isError, refetch } = useGetCitiesQuery({
+  const { data, isLoading, isFetching, isError } = useGetCitiesQuery({
     page: currentPage,
     limit: itemsPerPage,
   });
@@ -71,7 +71,7 @@ const CityList = () => {
         <Table
           data={cities}
           columns={columns}
-          loading={isLoading}
+          loading={isLoading || isFetching}
           totalPages={data?.pagination?.totalPages || 1}
           currentPage={currentPage}
           onPageChange={setCurrentPage}

@@ -47,10 +47,10 @@ export const adminAuthApi: any = createApi({
     }),
     getUsers: builder.query<
       any,
-      { page: number; verified?: string; search?: string }
+      { page: number; limit: number; verified?: string; search?: string }
     >({
-      query: ({ page, verified, search }) => ({
-        url: `/admin/get-all-users?page=${page}${
+      query: ({ page,limit, verified, search }) => ({
+        url: `/admin/get-all-users?page=${page}&limit=${limit}${
           verified ? `&verified=${verified}` : ""
         }${search ? `&search=${search}` : ""}`,
         method: "GET",

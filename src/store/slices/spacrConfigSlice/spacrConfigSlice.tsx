@@ -1,23 +1,22 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface IState {
-  customFees: any;
+  CustomFees: number | null;
 }
 
 const initialState: IState = {
-  customFees: null,
+  CustomFees: 0,
 };
 
-export const orderSlice = createSlice({
+export const spacrConfigSlice = createSlice({
   name: "SPACR_CONFIG_ACTIONS",
   initialState,
   reducers: {
-    updateSpacrConfig: (state: IState, action: PayloadAction<any>) => {
-      state.customFees = action.payload.id
+    updateSpacrConfig: (state, action: PayloadAction<{ CustomFees: number }>) => {
+      state.CustomFees = action.payload.CustomFees;
     },
   },
 });
 
-export const { updateSpacrConfig } = orderSlice.actions;
-export default orderSlice.reducer;
+export const { updateSpacrConfig } = spacrConfigSlice.actions;
+export default spacrConfigSlice.reducer;

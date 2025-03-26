@@ -7,7 +7,8 @@ interface IState {
     showTemplateRightSidebar: boolean;
     showHeader: boolean;
     showLoginButton: boolean;
-    mainContentWidth:number
+    mainContentWidth:number;
+    sidebarWidth:number
   };
 }
 
@@ -17,7 +18,8 @@ const initialState: IState = {
     showTemplateRightSidebar: true,
     showHeader: true,
     showLoginButton: true,
-    mainContentWidth:0
+    mainContentWidth:100,
+    sidebarWidth: 300
   },
 };
 

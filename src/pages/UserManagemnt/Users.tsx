@@ -9,28 +9,10 @@ import { setUsers, resetUsers } from "../../store/slices/userSlice/userSlice";
 import { useNavigate } from "react-router-dom";
 import ConfirmationModal from "../../components/Common/Modal/ConfirmationModal";
 import Search from "../../components/Common/Search/index";
+import { columns } from "../../constant/Columns";
+import ErrorMsg from "../../components/ErrorComponent/ErrorMsg";
 
-const columns = [
-  { name: "ProfilePictureURL", Header: "Profile Image", colName: "Image" },
-  { name: "FullName", Header: "Name", colName: "Default" },
-  { name: "Email", Header: "Email", colName: "Default" },
-  { name: "Type", Header: "Type", colName: "Default" },
-  { name: "Status", Header: "Status", colName: "Status" },
-  { name: "Verified", Header: "Verification Status", colName: "Status" },
-  { name: "CreatedAt", Header: "CreatedAt", colName: "Date" },
-  {
-    name: "action",
-    Header: "Action",
-    colName: "KebabMenu",
-    options: [
-      { label: "Activate", value: "active", type: "toggle" },
-      { label: "Deactivate", value: "inactive", type: "toggle" },
-      { label: "View Profile", value: "", type: "button" },
-    ],
-  },
-];
-
-function Users() {
+const Users = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { users, isloading } = useAppSelector((state) => state.userSlice);
@@ -42,8 +24,9 @@ function Users() {
   const [userToUpdate, setUserToUpdate] = useState<any>(null); // Store the user whose status is being changed
 
   // Pass both filters (search and verified) to the API call
-  const { data, isLoading, isError, refetch } = useGetUsersQuery({
+  const { data, isLoading, isFetching, isError, refetch } = useGetUsersQuery({
     page: currentPage,
+    limit: itemsPerPage,
     verified: verificationStatus !== "" ? verificationStatus : undefined,
     search: filter !== "" ? filter : undefined,
   });
@@ -64,11 +47,7 @@ function Users() {
   }, [isloading, refetch]);
 
   if (isError) {
-    return (
-      <div className="text-red-500 text-center mt-4">
-        Error loading user data
-      </div>
-    );
+    return <ErrorMsg errorMsg="Error loading user data" />;
   }
 
   const handleToggleStatus = (val: any) => {
@@ -131,8 +110,8 @@ function Users() {
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">
         <Table
           data={users}
-          columns={columns}
-          loading={isLoading}
+          columns={columns.user}
+          loading={isLoading || isFetching}
           totalPages={data?.pagination?.totalPages || 1}
           currentPage={currentPage}
           onPageChange={setCurrentPage}
@@ -153,6 +132,6 @@ function Users() {
       />
     </div>
   );
-}
+};
 
 export default Users;

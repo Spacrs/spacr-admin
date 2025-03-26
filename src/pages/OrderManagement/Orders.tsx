@@ -11,6 +11,7 @@ import {
 } from "../../store/slices/orderSlice/orderSlice";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Common/Button";
+import ErrorMsg from "../../components/ErrorComponent/ErrorMsg";
 
 const columns = [
   { name: "ProductName", Header: "Product Name", colName: "Default" },
@@ -37,11 +38,10 @@ function Orders() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const { data, isLoading, isError } = useGetOrdersQuery({
+  const { data, isLoading, isFetching, isError } = useGetOrdersQuery({
     page: currentPage,
-    limit: itemsPerPage
+    limit: itemsPerPage,
   });
-  
 
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -57,21 +57,12 @@ function Orders() {
   }, [data, dispatch]);
 
   if (isError) {
-    return (
-      <div className="text-red-500 text-center mt-4">Error loading orders</div>
-    );
+    return <ErrorMsg errorMsg="Error loading orders" />;
   }
 
   const handleUpdate = (order: any) => {
     setSelectedOrder(order);
     setIsOpen(true);
-  };
-
-  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOrder((prevOrder: any) => ({
-      ...prevOrder,
-      status: e.target.value,
-    }));
   };
 
   const handleToggleTrending = () => {
@@ -111,15 +102,13 @@ function Orders() {
     setSelectedOrder(null);
   };
 
-  console.log(orders, "orders");
-
   return (
     <div className="">
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">
         <Table
           data={orders}
           columns={columns}
-          loading={isLoading}
+          loading={isLoading || isFetching}
           totalPages={data?.pagination?.totalPages || 1}
           currentPage={currentPage}
           onPageChange={setCurrentPage}

@@ -6,7 +6,7 @@ const Button = ({
 }: {
   className?: string;
   text: string;
-  onClick: () => void;
+  onClick: (e:any) => void;
   type:
     | "primary"
     | "secondary"
