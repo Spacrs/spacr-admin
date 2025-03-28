@@ -1,9 +1,16 @@
 import { useEffect, useState } from "react";
-import { useGetUserInfoQuery, useUpdateUserVerificationMutation } from "../../store/slices/userSlice/apiSlice";
+import {
+  useGetUserInfoQuery,
+  useUpdateUserVerificationMutation,
+} from "../../store/slices/userSlice/apiSlice";
 import { useParams } from "react-router-dom";
-import {updateIsLoading, updateUserInUserList} from '../../store/slices/userSlice/userSlice'
+import {
+  updateIsLoading,
+  updateUserInUserList,
+} from "../../store/slices/userSlice/userSlice";
 import { useDispatch } from "react-redux";
 import Loading from "../../components/Common/Loader";
+import UserDevices from "./UserDevices";
 
 const UserDetails = () => {
   const params = useParams();
@@ -11,7 +18,7 @@ const UserDetails = () => {
 
   const [status, setStatus] = useState<string>("pending");
   const [updateUserVerification] = useUpdateUserVerificationMutation(); // Mutation hook to update status
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
     if (data?.data) {
       setStatus(data?.data.Verified); // Initialize the dropdown with the current status of the user
@@ -19,14 +26,26 @@ const UserDetails = () => {
   }, [data]);
 
   // If loading or error states
-  if (isLoading) return <div className="text-center text-gray-500"><Loading/></div>;
-  if (isError) return <div className="text-red-500 text-center mt-4">Error loading user data</div>;
+  if (isLoading)
+    return (
+      <div className="text-center text-gray-500">
+        <Loading />
+      </div>
+    );
+  if (isError)
+    return (
+      <div className="text-red-500 text-center mt-4">
+        Error loading user data
+      </div>
+    );
 
   const user = data?.data;
   const IdentificationDocuments = user?.IdentificationDocuments || [];
 
   // Handle status change
-  const handleOnChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleOnChange = async (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     const verificationStatus = event.target.value;
     setStatus(verificationStatus); // Update the local state
 
@@ -37,7 +56,9 @@ const UserDetails = () => {
         userId: user.UserID,
         verified: verificationStatus,
       }).unwrap();
-      dispatch(updateUserInUserList({ ...data.data,  Verified: verificationStatus}));
+      dispatch(
+        updateUserInUserList({ ...data.data, Verified: verificationStatus })
+      );
       dispatch(updateIsLoading(false));
     } catch (error) {
       console.error("Error updating status:", error);
@@ -59,26 +80,46 @@ const UserDetails = () => {
             <p className="text-gray-500">{user?.Email}</p>
           </div>
           <div className="mt-4 space-y-2 text-gray-700">
-            <p><strong>Login type:</strong> {user?.Type}</p>
-            <p><strong>Date of creation:</strong> {new Date(user?.CreatedAt).toLocaleDateString()}</p>
-            <p><strong>Phone number:</strong> {user?.Phone}</p>
-            <p><strong>Location:</strong> {user?.Location || "N/A"}</p>
-            <p><strong>Birthday:</strong> {user?.DOB}</p>
+            <p>
+              <strong>Login type:</strong> {user?.Type}
+            </p>
+            <p>
+              <strong>Date of creation:</strong>{" "}
+              {new Date(user?.CreatedAt).toLocaleDateString()}
+            </p>
+            <p>
+              <strong>Phone number:</strong> {user?.Phone}
+            </p>
+            <p>
+              <strong>Location:</strong> {user?.Location || "N/A"}
+            </p>
+            <p>
+              <strong>Birthday:</strong> {user?.DOB}
+            </p>
             <p>
               <strong>Status:</strong>
-              <span className={`ml-2 px-3 py-1 rounded-full text-sm font-medium transition-all 
-                ${user?.Status === "active" ? "bg-green-400 text-white" : "bg-red-400 text-white"}`}>
+              <span
+                className={`ml-2 px-3 py-1 rounded-full text-sm font-medium transition-all 
+                ${
+                  user?.Status === "active"
+                    ? "bg-green-400 text-white"
+                    : "bg-red-400 text-white"
+                }`}
+              >
                 {user?.Status}
               </span>
             </p>
 
             <div className="mt-4">
-              <label htmlFor="status" className="block text-sm font-medium text-gray-700">
-              <strong>Change Verification Status</strong>
+              <label
+                htmlFor="status"
+                className="block text-sm font-medium text-gray-700"
+              >
+                <strong>Change Verification Status</strong>
               </label>
               <select
                 id="status"
-                value={status} 
+                value={status}
                 onChange={handleOnChange} // Trigger on change to update status
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               >
@@ -91,30 +132,9 @@ const UserDetails = () => {
         </div>
 
         {/* Right Side - Device List */}
-        <div className="col-span-2 bg-white shadow-md rounded-lg p-6">
-          <h3 className="text-lg font-semibold mb-3">Device List</h3>
-          {user?.devices?.length > 0 ? (
-            <table className="w-full border-collapse border">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="border p-2">Device Name</th>
-                  <th className="border p-2">Status</th>
-                  <th className="border p-2">Last Active</th>
-                </tr>
-              </thead>
-              <tbody>
-                {user.devices.map((device: any, index: any) => (
-                  <tr key={index} className="border hover:bg-gray-100 transition">
-                    <td className="border p-2">{device.name}</td>
-                    <td className="border p-2">{device.status}</td>
-                    <td className="border p-2">{device.lastActive}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p className="text-gray-500">No devices found.</p>
-          )}
+        <div className="col-span-2 flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">
+        <h3 className="text-lg font-semibold mb-3">Device List</h3>
+          <UserDevices />
         </div>
       </div>
 

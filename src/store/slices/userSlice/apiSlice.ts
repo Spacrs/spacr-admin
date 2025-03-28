@@ -49,10 +49,19 @@ export const adminAuthApi: any = createApi({
       any,
       { page: number; limit: number; verified?: string; search?: string }
     >({
-      query: ({ page,limit, verified, search }) => ({
+      query: ({ page, limit, verified, search }) => ({
         url: `/admin/get-all-users?page=${page}&limit=${limit}${
           verified ? `&verified=${verified}` : ""
         }${search ? `&search=${search}` : ""}`,
+        method: "GET",
+      }),
+    }),
+    getUserDevices: builder.query<
+      any,
+      { page: number; limit: number; uId: string }
+    >({
+      query: ({ page, limit, uId }) => ({
+        url: `/admin/get-user-devices?page=${page}&limit=${limit}&userID=${uId}`,
         method: "GET",
       }),
     }),
@@ -66,4 +75,5 @@ export const {
   useUpdateUserInfoMutation,
   useUpdateUserVerificationMutation,
   useGetUsersQuery,
+  useGetUserDevicesQuery
 } = adminAuthApi;
