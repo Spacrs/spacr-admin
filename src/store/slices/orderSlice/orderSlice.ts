@@ -7,6 +7,8 @@ interface IState {
   orderDetail: {};
   offers: any[];
   offerDetail: {};
+  products: any[];
+  productDetail: {};
 }
 
 const initialState: IState = {
@@ -14,6 +16,8 @@ const initialState: IState = {
   orderDetail: {},
   offers: [],
   offerDetail: {},
+  products: [],
+  productDetail: {},
 };
 
 export const orderSlice = createSlice({
@@ -28,6 +32,16 @@ export const orderSlice = createSlice({
         order.Id === action.payload.Id ? { ...order, ...action.payload } : order
       );
     },
+    setProducts: (state: IState, action: PayloadAction<any[]>) => {
+      state.products = action.payload;
+    },
+    updateProductList: (state: IState, action: PayloadAction<any>) => {
+      state.products = state.products.map((product) =>
+        product.Id === action.payload.Id
+          ? { ...product, ...action.payload }
+          : product
+      );
+    },
     setOrderOffers: (state: IState, action: PayloadAction<any[]>) => {
       console.log(action.payload, "action.payload");
       state.offers =
@@ -39,7 +53,7 @@ export const orderSlice = createSlice({
                 userProfileImage: list.User.ProfilePictureURL,
                 offeredByName: list.User.FullName,
                 offeredByEmail: list.User.Email,
-                OfferedPrice: list.OfferedPrice || '0',
+                OfferedPrice: list.OfferedPrice || "0",
               };
             })
           : [];
@@ -47,7 +61,12 @@ export const orderSlice = createSlice({
   },
 });
 
-export const { setOrders, updateOrderList, setOrderOffers } =
-  orderSlice.actions;
+export const {
+  setOrders,
+  updateOrderList,
+  setProducts,
+  updateProductList,
+  setOrderOffers,
+} = orderSlice.actions;
 export const selectOrders = (state: RootState) => state.orderSlice.orders;
 export default orderSlice.reducer;
