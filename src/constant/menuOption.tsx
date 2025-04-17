@@ -1,18 +1,18 @@
 import { icons } from "../Icons/constant";
 import { MenuItemTypes } from "../types/sidebar.types";
 const {
-   HiOutlineUsers,
-    BsCreditCard2Front,
-    TbTruckDelivery,
-    GrSend,
-    MdOutlineScheduleSend,
-    IoIosArrowDown,
-    IoIosArrowUp,
-    MdContactSupport,
-    IoIosFlag,
-    IoMdAddCircle,
-    FaCity,
-    CiSettings
+  HiOutlineUsers,
+  BsCreditCard2Front,
+  TbTruckDelivery,
+  GrSend,
+  MdOutlineScheduleSend,
+  IoIosArrowDown,
+  IoIosArrowUp,
+  MdContactSupport,
+  IoIosFlag,
+  IoMdAddCircle,
+  FaCity,
+  CiSettings,
 } = icons;
 
 const menuItems: MenuItemTypes[] = [
@@ -22,11 +22,15 @@ const menuItems: MenuItemTypes[] = [
     icon: <HiOutlineUsers style={{ fontSize: "20px", margin: "0 10px" }} />,
   },
   {
+    label: "Product List",
+    path: "/admin/product-list",
+    icon: <TbTruckDelivery style={{ fontSize: "20px", margin: "0 10px" }} />,
+  },
+  {
     label: "Order List",
     path: "/admin/order-list",
     icon: <TbTruckDelivery style={{ fontSize: "20px", margin: "0 10px" }} />,
   },
-  
   {
     label: "Payment Config",
     path: "/admin/payment-config",
@@ -36,9 +40,7 @@ const menuItems: MenuItemTypes[] = [
       {
         label: "Country List",
         path: "/admin/payment-config",
-        icon: (
-          <IoIosFlag style={{ fontSize: "18px", margin: "0 10px" }} />
-        ),
+        icon: <IoIosFlag style={{ fontSize: "18px", margin: "0 10px" }} />,
       },
       {
         label: "City List",
@@ -47,11 +49,11 @@ const menuItems: MenuItemTypes[] = [
       },
     ],
   },
-   {
-      label: "Spacr Config",
-      path: "/admin/spacr-config",
-      icon: <CiSettings style={{ fontSize: "20px", margin: "0 10px" }} />,
-    },
+  {
+    label: "Spacr Config",
+    path: "/admin/spacr-config",
+    icon: <CiSettings style={{ fontSize: "20px", margin: "0 10px" }} />,
+  },
   // {
   //   label: "Notifications",
   //   isSubmenu: true,
@@ -80,8 +82,8 @@ const menuItems: MenuItemTypes[] = [
   // },
   {
     label: "Notification List",
-      path: "/admin/notification-list",
-      icon: <GrSend style={{ fontSize: "18px", margin: "0 10px" }} />,
+    path: "/admin/notification-list",
+    icon: <GrSend style={{ fontSize: "18px", margin: "0 10px" }} />,
   },
   {
     label: "Contact Support List",

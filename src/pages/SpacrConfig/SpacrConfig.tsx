@@ -64,15 +64,19 @@ const SpacrConfig = () => {
                 className="block text-gray-700 font-medium mb-2"
                 htmlFor="fees"
               >
-                Config Fees
+                Fees
               </label>
               <input
                 type="number"
                 id="fees"
+                min={0}
                 className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
                 placeholder="Enter Fees"
                 value={fees}
-                onChange={(e) => setFees(Number(e.target.value) || "")}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setFees(value === "" ? "" : Number(value));
+                }}
                 required
               />
             </div>

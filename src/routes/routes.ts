@@ -20,7 +20,8 @@ import InputPage from "../pages/Samples/InputPage";
 import Logout from "../pages/AuthManagement/Logout";
 import SpacrConfig from "../pages/SpacrConfig/SpacrConfig";
 import NotificationList from "../pages/NotificationManagement/NotificationList";
-import OrderOffers from '../pages/OrderManagement/OrderOffers';
+import OrderOffers from "../pages/OrderManagement/OrderOffers";
+import AdminProducts from "../pages/OrderManagement/AdminProducts";
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -71,6 +72,12 @@ export const adminRoutes = [
     showBreadcrumb: true,
   },
   {
+    path: "product-list",
+    component: AdminProducts,
+    breadcrumb: ["admin", "products"],
+    showBreadcrumb: true,
+  },
+  {
     path: "send-notification",
     component: DirectNotification,
     breadcrumb: ["admin", "Send Notification"],
@@ -118,7 +125,7 @@ export const adminRoutes = [
     breadcrumb: ["admin", "Order-Offers"],
     showBreadcrumb: true,
   },
-  
+
   {
     path: "add-payment-config-country",
     component: AddCountry,
