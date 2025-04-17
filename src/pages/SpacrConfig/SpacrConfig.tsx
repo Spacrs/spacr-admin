@@ -64,7 +64,7 @@ const SpacrConfig = () => {
                 className="block text-gray-700 font-medium mb-2"
                 htmlFor="fees"
               >
-                Config Fees
+                Fees
               </label>
               <input
                 type="number"

@@ -12,7 +12,8 @@ const {
     IoIosFlag,
     IoMdAddCircle,
     FaCity,
-    CiSettings
+    CiSettings,
+    MdProductionQuantityLimits
 } = icons;
 
 const menuItems: MenuItemTypes[] = [
@@ -26,7 +27,11 @@ const menuItems: MenuItemTypes[] = [
     path: "/admin/order-list",
     icon: <TbTruckDelivery style={{ fontSize: "20px", margin: "0 10px" }} />,
   },
-  
+  {
+    label: "Suggested Product",
+    path: "/admin/suggested-product-list",
+    icon: <MdProductionQuantityLimits style={{ fontSize: "20px", margin: "0 10px" }} />,
+  },
   {
     label: "Payment Config",
     path: "/admin/payment-config",

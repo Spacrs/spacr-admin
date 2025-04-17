@@ -12,6 +12,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Common/Button";
 import ErrorMsg from "../../components/ErrorComponent/ErrorMsg";
+import Search from "../../components/Common/Search/index";
+
 
 const columns = [
   { name: "ProductName", Header: "Product Name", colName: "Default" },
@@ -22,7 +24,7 @@ const columns = [
   { name: "IsWithBox", Header: "Is With Box", colName: "Boolean" },
 
   { name: "Status", Header: "Status", colName: "Status" },
-  { name: "IsTrending", Header: "Is Trending", colName: "Boolean" }, // New Column
+  // { name: "IsTrending", Header: "Is Trending", colName: "Boolean" },
   { name: "CreatedAt", Header: "Created At", colName: "Date" },
   {
     name: "action",
@@ -47,6 +49,8 @@ function Orders() {
   const [isOpen, setIsOpen] = useState(false);
 
   const [updateOrderTrend] = useUpdateOrderTrendMutation();
+
+  const [filter, setFilter] = useState(""); // Search term
 
   const navigate = useNavigate();
 
@@ -104,9 +108,29 @@ function Orders() {
 
   return (
     <div className="">
+
+<div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
+        {/* Search Bar */}
+        <div className="flex flex-1 max-w-lg">
+          <Search
+            search={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            onReset={() => setFilter("")}
+          />
+        </div>
+
+        {/* Verification Status Filter */}
+        <div className="ml-4">
+          
+        </div>
+      </div>
+      
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">
         <Table
-          data={orders}
+          // data={orders}
+          data={orders.filter((order: any) =>
+            order.ProductName?.toLowerCase().includes(filter.toLowerCase())
+          )}
           columns={columns}
           loading={isLoading || isFetching}
           totalPages={data?.pagination?.totalPages || 1}
