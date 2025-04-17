@@ -1,6 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../..";
+
+export type UserDevice = {
+  Id: number;
+  UserID: string;
+  DeviceType: string;
+  DeviceName: string;
+  DeviceUniqueId: string;
+  FirebaseToken: string;
+  IsLoggedIn: boolean;
+  LoggedInAt: string;
+  CreatedAt: string;
+  DeletedAt: string | null;
+};
+
 interface IState {
   users: string[];
   user: {};
@@ -16,6 +30,8 @@ interface IState {
     description: string;
     title: string;
   };
+  userDevices: UserDevice[];
+  userDevicesDetails: UserDevice | {};
 }
 
 const initialState: IState = {
@@ -23,6 +39,8 @@ const initialState: IState = {
   user: {},
   template: {},
   templates: [],
+  userDevices: [],
+  userDevicesDetails: {},
   accessToken: null,
   isloading: false,
   userInfo: {
@@ -56,22 +74,24 @@ export const createUserSlice = createSlice({
     },
     updateUserInUserList: (state: IState, action: PayloadAction<any>) => {
       const user = action.payload;
-    
+
       // Ensure we return a new updated users array
       const newUsers = state.users.map((u: any) =>
         u.UserID === user.UserID ? { ...u, ...user } : u
       );
-    
-      state.users = newUsers; 
-      return state
-    }    
-    ,
-    resetUsers:(state: IState, action: PayloadAction<any>) => {
-      return (state = {...state,...action.payload});
+
+      state.users = newUsers;
+      return state;
     },
-    
+    resetUsers: (state: IState, action: PayloadAction<any>) => {
+      return (state = { ...state, ...action.payload });
+    },
     updateUser: (state: IState, action: PayloadAction<any>) => {
       return (state.user = action.payload);
+    },
+    setUserDevices: (state: IState, action: PayloadAction<any>) => {
+      state.userDevices = action.payload;
+      return state;
     },
   },
 });
@@ -82,7 +102,8 @@ export const {
   logout,
   updateUser,
   updateUserInUserList,
-  updateIsLoading
+  updateIsLoading,
+  setUserDevices,
 } = createUserSlice.actions;
 
 export const selectUser = (state: RootState) => state.userSlice.users;

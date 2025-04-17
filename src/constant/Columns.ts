@@ -18,6 +18,13 @@ const user = [
   },
 ];
 
+const userDevices = [
+  { name: "DeviceName", Header: "Device Name", colName: "Default" },
+  { name: "IsLoggedIn", Header: "Is LoggedIn", colName: "Boolean" },
+  { name: "LoggedInAt", Header: "Last Active", colName: "Date" },
+];
+
 export const columns = {
   user: user,
+  userDevices: userDevices,
 };
