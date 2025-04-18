@@ -23,7 +23,7 @@ import NotificationList from "../pages/NotificationManagement/NotificationList";
 import AdminProducts from "../pages/OrderManagement/AdminProducts";
 import OrderOffers from '../pages/OrderManagement/OrderOffers';
 import SuggestedProductList from '../pages/SuggestedProductManagement/SuggestedProductList';
-import AddSuggestedProduct from '../pages/SuggestedProductManagement/addSuggestedProduct'
+import AddSuggestedProduct from '../pages/SuggestedProductManagement/AddSuggestedProduct'
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
