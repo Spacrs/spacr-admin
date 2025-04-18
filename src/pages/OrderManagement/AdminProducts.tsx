@@ -105,11 +105,17 @@ function AdminOrders() {
 
         {/* Verification Status Filter */}
         <div className="ml-4">
-          <Button
+          {/* <Button
             text="Create Product"
             className="mr-2"
             type="primary"
             onClick={() => {}}
+          /> */}
+          <Button
+            text="Add Product"
+            className="mr-2"
+            type="dark"
+            onClick={() => navigate("/admin/add-suggested-product")}
           />
         </div>
       </div>
