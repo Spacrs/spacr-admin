@@ -24,7 +24,7 @@ const CityList = () => {
   // Fetch country list from API
   const dispatch = useAppDispatch();
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   const { data, isLoading, isFetching, isError } = useGetCitiesQuery({
     page: currentPage,

@@ -23,14 +23,31 @@ const Users = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Track if modal is open
   const [userToUpdate, setUserToUpdate] = useState<any>(null); // Store the user whose status is being changed
 
+  //Added on 17-04-2024 - VASU
+  const [sortBy, setSortBy] = useState<string>(""); // e.g., "name" or "email"
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
+  //Added on 17-04-2024 - VASU
+
   // Pass both filters (search and verified) to the API call
   const { data, isLoading, isFetching, isError, refetch } = useGetUsersQuery({
     page: currentPage,
     limit: itemsPerPage,
     verified: verificationStatus !== "" ? verificationStatus : undefined,
     search: filter !== "" ? filter : undefined,
+
+    sortBy: sortBy !== "" ? sortBy : undefined,
+    sortOrder: sortOrder,
   });
 
+  const handleSort = (field: string) => {
+    if (sortBy === field) {
+      setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortBy(field);
+      setSortOrder("asc");
+    }
+  };
   const [updateUserStatus] = useUpdateUserInfoMutation();
 
   useEffect(() => {

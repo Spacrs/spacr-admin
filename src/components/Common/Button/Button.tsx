@@ -14,7 +14,8 @@ const Button = ({
     | "warning"
     | "dark"
     | "light"
-    | "lightBlue";
+    | "lightBlue"
+    | "transparent";
 }) => {
   const baseStyles = `px-4 py-2 rounded-md focus:outline-none transition`;
 
@@ -26,6 +27,7 @@ const Button = ({
     dark: "bg-gray-900 text-white",
     light: "bg-gray-200 text-black",
     lightBlue: "bg-lightBlue text-primary border-solid border-2 border-sky-700",
+    transparent: "bg-white text-primary border-solid border-2 border-sky-700"
   };
 
   return (
