@@ -19,7 +19,16 @@ export const countriesConfigApi: any = createApi({
         };
       },
     }),
+    getCountryCity: builder.query<any, {}>({
+      query: () => {
+        return {
+          url: `/country-city`,
+          method: "GET",
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetCountriesQuery } = countriesConfigApi;
+export const { useGetCountriesQuery, useGetCountryCityQuery } =
+  countriesConfigApi;
