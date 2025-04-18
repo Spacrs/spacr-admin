@@ -20,8 +20,10 @@ import InputPage from "../pages/Samples/InputPage";
 import Logout from "../pages/AuthManagement/Logout";
 import SpacrConfig from "../pages/SpacrConfig/SpacrConfig";
 import NotificationList from "../pages/NotificationManagement/NotificationList";
-import OrderOffers from "../pages/OrderManagement/OrderOffers";
 import AdminProducts from "../pages/OrderManagement/AdminProducts";
+import OrderOffers from '../pages/OrderManagement/OrderOffers';
+import SuggestedProductList from '../pages/SuggestedProductManagement/SuggestedProductList';
+import AddSuggestedProduct from '../pages/SuggestedProductManagement/addSuggestedProduct'
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -148,6 +150,18 @@ export const adminRoutes = [
     path: "spacr-config",
     component: SpacrConfig,
     breadcrumb: ["admin", "Spacr Config"],
+    showBreadcrumb: true,
+  },
+  {
+    path: "suggested-product-list",
+    component: SuggestedProductList,
+    breadcrumb: ["admin", "Suggested Products"],
+    showBreadcrumb: true,
+  },
+  {
+    path: "add-suggested-product",
+    component: AddSuggestedProduct,
+    breadcrumb: ["admin", "Add Suggested Product"],
     showBreadcrumb: true,
   },
 ];

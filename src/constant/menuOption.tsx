@@ -1,18 +1,19 @@
 import { icons } from "../Icons/constant";
 import { MenuItemTypes } from "../types/sidebar.types";
 const {
-  HiOutlineUsers,
-  BsCreditCard2Front,
-  TbTruckDelivery,
-  GrSend,
-  MdOutlineScheduleSend,
-  IoIosArrowDown,
-  IoIosArrowUp,
-  MdContactSupport,
-  IoIosFlag,
-  IoMdAddCircle,
-  FaCity,
-  CiSettings,
+   HiOutlineUsers,
+    BsCreditCard2Front,
+    TbTruckDelivery,
+    GrSend,
+    MdOutlineScheduleSend,
+    IoIosArrowDown,
+    IoIosArrowUp,
+    MdContactSupport,
+    IoIosFlag,
+    IoMdAddCircle,
+    FaCity,
+    CiSettings,
+    MdProductionQuantityLimits
 } = icons;
 
 const menuItems: MenuItemTypes[] = [
@@ -30,6 +31,11 @@ const menuItems: MenuItemTypes[] = [
     label: "Order List",
     path: "/admin/order-list",
     icon: <TbTruckDelivery style={{ fontSize: "20px", margin: "0 10px" }} />,
+  },
+  {
+    label: "Suggested Product",
+    path: "/admin/suggested-product-list",
+    icon: <MdProductionQuantityLimits style={{ fontSize: "20px", margin: "0 10px" }} />,
   },
   {
     label: "Payment Config",
