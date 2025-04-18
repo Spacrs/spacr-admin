@@ -1,17 +1,33 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithInterceptor } from "../../baseQuery";
+import { buildQueryParams } from "../../../utills/buildQueryParams";
 
 export const paymentConfigApi: any = createApi({
   reducerPath: "paymentConfigApi",
   baseQuery: baseQueryWithInterceptor,
   endpoints: (builder) => ({
-    getPaymentConfigs: builder.query<any,  { page?: number; limit?: string; isPagination?: boolean }>({
-      query: ({ page, limit, isPagination = true }) => {
-        const query = isPagination ? `?page=${page}${limit ? `&limit=${limit}` : ""}` : "";
-        return ({
-          url: `/payment-config${query}`,
+    getPaymentConfigs: builder.query<
+      any,
+      {
+        page?: number;
+        limit?: string;
+        isPagination?: boolean;
+        sortBy?: string;
+        sort?: "asc" | "desc";
+      }
+    >({
+      query: ({ page, limit, sortBy, sort, isPagination }) => {
+        const queryParams: Record<string, any> = {
+          ...(isPagination && page ? { page } : {}),
+          ...(isPagination && limit ? { limit } : {}),
+          ...(sortBy ? { sortBy } : {}),
+          ...(sort ? { sort } : {}),
+        };
+        const queryString = buildQueryParams(queryParams);
+        return {
+          url: `/payment-config${queryString ? `?${queryString}` : ""}`,
           method: "GET",
-        })
+        };
       },
     }),
     updatePaymentConfig: builder.mutation<any, Partial<any>>({
@@ -54,15 +70,31 @@ export const paymentConfigApi: any = createApi({
     }),
 
     //Added on 12-03-2025
-    getCities: builder.query<any, { page?: number; limit?: string; isPagination?: boolean }>({
-      query: ({ page, limit, isPagination = true }) => {
-        const query = isPagination ? `page=${page}${limit ? `&limit=${limit}` : ""}` : "";
+    getCities: builder.query<
+      any,
+      {
+        page?: number;
+        limit?: string;
+        isPagination?: boolean;
+        sortBy?: string;
+        sort?: "asc" | "desc";
+      }
+    >({
+      query: ({ page, limit, isPagination = true, sortBy, sort }) => {
+        const queryParams: Record<string, any> = {
+          ...(isPagination && page ? { page } : {}),
+          ...(isPagination && limit ? { limit } : {}),
+          ...(sortBy ? { sortBy } : {}),
+          ...(sort ? { sort } : {}),
+        };
+        const queryString = buildQueryParams(queryParams);
+
         return {
-          url: `/city/?${query}`,
+          url: `/city/${queryString ? `?${queryString}` : ""}`,
           method: "GET",
         };
       },
-    })
+    }),
   }),
 });
 

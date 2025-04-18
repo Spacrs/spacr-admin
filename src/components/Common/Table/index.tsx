@@ -48,6 +48,7 @@ function Table({
   handleUpdate,
   handleToggleStatus,
   handleView,
+  onSort
 }: ITableProps) {
   const actions: IAction = {
     handleDelete,
@@ -91,15 +92,15 @@ function Table({
                       scope="col"
                       className="px-6 py-4 whitespace-nowrap cursor-pointer select-none"
                       onClick={() =>
-                        column.sortable && handleSortClick(column.colName)
+                        column.sortable && column.name && handleSortClick(column.name)
                       }
                     >
                       <div className="flex items-center gap-1">
                         {column.Header}
                         {column.sortable && (
-                          <span>
-                            {sortConfig?.colName === column.colName
-                              ? sortConfig.direction === "asc"
+                          <span className="text-white">
+                            {sortConfig?.colName === column.name
+                              ? sortConfig?.direction === "asc"
                                 ? "▲"
                                 : "▼"
                               : "↕"}

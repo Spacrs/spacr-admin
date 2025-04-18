@@ -1,6 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithInterceptor } from "../../baseQuery";
 import { ADMIN } from "../../../constant/ApiConstant";
+import { buildQueryParams } from "../../../utills/buildQueryParams";
 
 export const ordersApi: any = createApi({
   reducerPath: "ordersApi",
@@ -8,12 +9,22 @@ export const ordersApi: any = createApi({
   endpoints: (builder) => ({
     getOrders: builder.query<
       any,
-      { page: number; limit: number; createdBy: string }
+      {
+        page?: number;
+        limit?: number;
+        createdBy?: string;
+        sortBy?: string;
+        sort?: "asc" | "desc";
+        search?: string;
+      }
     >({
-      query: ({ page, limit, createdBy }) => ({
-        url: `/${ADMIN}/all-orders?createdBy=${createdBy}&page=${page}&limit=${limit}`,
-        method: "GET",
-      }),
+      query: (paramsObj) => {
+        const queryString = buildQueryParams(paramsObj);
+        return {
+          url: `/${ADMIN}/all-orders?${queryString}`,
+          method: "GET",
+        };
+      },
     }),
     updateOrderTrend: builder.mutation<any, Partial<any>>({
       query: (order) => ({
