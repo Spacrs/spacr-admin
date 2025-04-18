@@ -1,5 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithInterceptor } from "../../baseQuery";
+import { buildQueryParams } from "../../../utills/buildQueryParams";
 
 export interface LoginRequest {
   secret: string;
@@ -47,14 +48,22 @@ export const adminAuthApi: any = createApi({
     }),
     getUsers: builder.query<
       any,
-      { page: number; limit: number; verified?: string; search?: string }
+      {
+        page: number;
+        limit: number;
+        verified?: string;
+        search?: string;
+        sortBy?: string;
+        sort?: "asc" | "desc";
+      }
     >({
-      query: ({ page, limit, verified, search }) => ({
-        url: `/admin/get-all-users?page=${page}&limit=${limit}${
-          verified ? `&verified=${verified}` : ""
-        }${search ? `&search=${search}` : ""}`,
-        method: "GET",
-      }),
+      query: (paramsObj) => {
+        const queryString = buildQueryParams(paramsObj);
+        return {
+          url: `/admin/get-all-users?${queryString}`,
+          method: "GET",
+        };
+      },
     }),
     getUserDevices: builder.query<
       any,
@@ -75,5 +84,5 @@ export const {
   useUpdateUserInfoMutation,
   useUpdateUserVerificationMutation,
   useGetUsersQuery,
-  useGetUserDevicesQuery
+  useGetUserDevicesQuery,
 } = adminAuthApi;

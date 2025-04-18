@@ -14,18 +14,26 @@ import Button from "../../components/Common/Button";
 import ErrorMsg from "../../components/ErrorComponent/ErrorMsg";
 import Search from "../../components/Common/Search/index";
 
-
 const columns = [
-  { name: "ProductName", Header: "Product Name", colName: "Default" },
-  //   { name: "Descriptions", Header: "Descriptions", colName: "Default" },
-  { name: "Price", Header: "Price", colName: "Default" },
-  { name: "DeliveryReward", Header: "Delivery Reward", colName: "Default" },
-  { name: "Quantity", Header: "Quantity", colName: "Default" },
+  {
+    name: "ProductName",
+    Header: "Product Name",
+    colName: "Default",
+    sortable: true,
+  },
+  { name: "Price", Header: "Price", colName: "Default", sortable: true },
+  {
+    name: "DeliveryReward",
+    Header: "Delivery Reward",
+    colName: "Default",
+    sortable: true,
+  },
+  { name: "Quantity", Header: "Quantity", colName: "Default", sortable: true },
   { name: "IsWithBox", Header: "Is With Box", colName: "Boolean" },
 
   { name: "Status", Header: "Status", colName: "Status" },
   // { name: "IsTrending", Header: "Is Trending", colName: "Boolean" },
-  { name: "CreatedAt", Header: "Created At", colName: "Date" },
+  { name: "CreatedAt", Header: "Created At", colName: "Date", sortable: true },
   {
     name: "action",
     Header: "Actions",
@@ -40,10 +48,15 @@ function Orders() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
+  const [sortBy, setSortBy] = useState("CreatedAt");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+
   const { data, isLoading, isFetching, isError } = useGetOrdersQuery({
     page: currentPage,
     limit: itemsPerPage,
-    createdBy:'user'
+    createdBy: "user",
+    sort: sortDirection,
+    sortBy: sortBy,
   });
 
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
@@ -107,10 +120,14 @@ function Orders() {
     setSelectedOrder(null);
   };
 
+  const onSort = (colName: string, direction: "asc" | "desc") => {
+    setSortBy(colName);
+    setSortDirection(direction);
+  };
+
   return (
     <div className="">
-
-<div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
+      <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         {/* Search Bar */}
         <div className="flex flex-1 max-w-lg">
           <Search
@@ -121,11 +138,9 @@ function Orders() {
         </div>
 
         {/* Verification Status Filter */}
-        <div className="ml-4">
-          
-        </div>
+        <div className="ml-4"></div>
       </div>
-      
+
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">
         <Table
           // data={orders}
@@ -140,6 +155,7 @@ function Orders() {
           handleUpdate={handleUpdate}
           handleView={handleView}
           itemsPerPage={itemsPerPage}
+          onSort={onSort}
         />
       </div>
 
