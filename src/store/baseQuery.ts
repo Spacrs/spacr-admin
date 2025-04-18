@@ -1,10 +1,11 @@
 import type { BaseQueryFn } from "@reduxjs/toolkit/query";
 import type { FetchArgs, FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { logout } from "./slices/userSlice/userSlice"; 
+import { logout } from "./slices/userSlice/userSlice";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://api-v2.spa-cr.com/api/v2",
+  // baseUrl: `${import.meta.env.VITE_API_BASE_URL}/api/v2`,
+  baseUrl: `${import.meta.env.VITE_API_BASE_URL}/api/v2`,
   prepareHeaders: (headers) => {
     const token = localStorage.getItem("access_token");
     if (token) {

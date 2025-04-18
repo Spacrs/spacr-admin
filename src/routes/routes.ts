@@ -20,6 +20,7 @@ import InputPage from "../pages/Samples/InputPage";
 import Logout from "../pages/AuthManagement/Logout";
 import SpacrConfig from "../pages/SpacrConfig/SpacrConfig";
 import NotificationList from "../pages/NotificationManagement/NotificationList";
+import AdminProducts from "../pages/OrderManagement/AdminProducts";
 import OrderOffers from '../pages/OrderManagement/OrderOffers';
 import SuggestedProductList from '../pages/SuggestedProductManagement/SuggestedProductList';
 import AddSuggestedProduct from '../pages/SuggestedProductManagement/addSuggestedProduct'
@@ -73,6 +74,12 @@ export const adminRoutes = [
     showBreadcrumb: true,
   },
   {
+    path: "product-list",
+    component: AdminProducts,
+    breadcrumb: ["admin", "products"],
+    showBreadcrumb: true,
+  },
+  {
     path: "send-notification",
     component: DirectNotification,
     breadcrumb: ["admin", "Send Notification"],
@@ -120,7 +127,7 @@ export const adminRoutes = [
     breadcrumb: ["admin", "Order-Offers"],
     showBreadcrumb: true,
   },
-  
+
   {
     path: "add-payment-config-country",
     component: AddCountry,

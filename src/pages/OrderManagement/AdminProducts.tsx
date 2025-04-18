@@ -6,26 +6,18 @@ import {
 } from "../../store/slices/orderSlice/apiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
-  setOrders,
-  updateOrderList,
+  setProducts,
+  updateProductList,
 } from "../../store/slices/orderSlice/orderSlice";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Common/Button";
 import ErrorMsg from "../../components/ErrorComponent/ErrorMsg";
-import Search from "../../components/Common/Search/index";
-
 
 const columns = [
   { name: "ProductName", Header: "Product Name", colName: "Default" },
-  //   { name: "Descriptions", Header: "Descriptions", colName: "Default" },
-  { name: "Price", Header: "Price", colName: "Default" },
-  { name: "DeliveryReward", Header: "Delivery Reward", colName: "Default" },
-  { name: "Quantity", Header: "Quantity", colName: "Default" },
-  { name: "IsWithBox", Header: "Is With Box", colName: "Boolean" },
-
-  { name: "Status", Header: "Status", colName: "Status" },
-  // { name: "IsTrending", Header: "Is Trending", colName: "Boolean" },
+  { name: "IsTrending", Header: "Is Trending", colName: "Boolean" }, // New Column
   { name: "CreatedAt", Header: "Created At", colName: "Date" },
+  { name: "UpdatedAt", Header: "Updated At", colName: "Date" },
   {
     name: "action",
     Header: "Actions",
@@ -34,16 +26,16 @@ const columns = [
   },
 ];
 
-function Orders() {
+function AdminOrders() {
   const dispatch = useAppDispatch();
-  const orders = useAppSelector((state) => state.orderSlice.orders);
+  const products = useAppSelector((state) => state.orderSlice.products);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
   const { data, isLoading, isFetching, isError } = useGetOrdersQuery({
     page: currentPage,
     limit: itemsPerPage,
-    createdBy:'user'
+    createdBy: "admin",
   });
 
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
@@ -51,13 +43,11 @@ function Orders() {
 
   const [updateOrderTrend] = useUpdateOrderTrendMutation();
 
-  const [filter, setFilter] = useState(""); // Search term
-
   const navigate = useNavigate();
 
   useEffect(() => {
     if (data?.data) {
-      dispatch(setOrders(data.data));
+      dispatch(setProducts(data.data));
     }
   }, [data, dispatch]);
 
@@ -65,8 +55,8 @@ function Orders() {
     return <ErrorMsg errorMsg="Error loading orders" />;
   }
 
-  const handleUpdate = (order: any) => {
-    setSelectedOrder(order);
+  const handleUpdate = (product: any) => {
+    setSelectedOrder(product);
     setIsOpen(true);
   };
 
@@ -81,7 +71,7 @@ function Orders() {
     try {
       console.log(selectedOrder.IsTrending, "selectedOrder");
       await updateOrderTrend(selectedOrder).unwrap();
-      dispatch(updateOrderList(selectedOrder));
+      dispatch(updateProductList(selectedOrder));
       setIsOpen(false);
     } catch (error) {
       console.error("Error updating order:", error);
@@ -89,11 +79,10 @@ function Orders() {
   };
 
   const handleView = (data: any) => {
-    console.log("data", data);
+    const productId = data.OrderID;
     if (data) {
       try {
-        console.log(data.OrderId, "orderId selectedorder");
-        navigate(`/admin/order-details/${data.OrderID}`);
+        navigate(`/admin/order-details/${productId}`);
       } catch (error) {
         console.log(error, "error in handleView");
       }
@@ -109,29 +98,24 @@ function Orders() {
 
   return (
     <div className="">
-
-<div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
+      <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         {/* Search Bar */}
-        <div className="flex flex-1 max-w-lg">
-          <Search
-            search={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            onReset={() => setFilter("")}
-          />
-        </div>
+
+        <div className="flex flex-1 max-w-lg"></div>
 
         {/* Verification Status Filter */}
         <div className="ml-4">
-          
+          <Button
+            text="Create Product"
+            className="mr-2"
+            type="primary"
+            onClick={() => {}}
+          />
         </div>
       </div>
-      
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">
         <Table
-          // data={orders}
-          data={orders.filter((order: any) =>
-            order.ProductName?.toLowerCase().includes(filter.toLowerCase())
-          )}
+          data={products}
           columns={columns}
           loading={isLoading || isFetching}
           totalPages={data?.pagination?.totalPages || 1}
@@ -188,4 +172,4 @@ function Orders() {
   );
 }
 
-export default Orders;
+export default AdminOrders;
