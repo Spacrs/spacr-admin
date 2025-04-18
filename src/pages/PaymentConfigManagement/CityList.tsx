@@ -11,9 +11,14 @@ import Button from "../../components/Common/Button";
 import { Tooltip } from "@material-tailwind/react";
 
 const columns = [
-  { name: "name", Header: "Name", colName: "Default" },
-  { name: "latitude", Header: "Latitude", colName: "Default" },
-  { name: "longitude", Header: "Longitude", colName: "Default" },
+  { name: "name", Header: "Name", colName: "Default", sortable: true },
+  { name: "latitude", Header: "Latitude", colName: "Default", sortable: true },
+  {
+    name: "longitude",
+    Header: "Longitude",
+    colName: "Default",
+    sortable: true,
+  },
   { name: "countryName", Header: "Country", colName: "Default" },
 ];
 
@@ -26,9 +31,14 @@ const CityList = () => {
 
   const itemsPerPage = 10;
 
+  const [sortBy, setSortBy] = useState("createdAt");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+
   const { data, isLoading, isFetching, isError } = useGetCitiesQuery({
     page: currentPage,
     limit: itemsPerPage,
+    sort: sortDirection,
+    sortBy: sortBy
   });
 
   useEffect(() => {
@@ -47,6 +57,11 @@ const CityList = () => {
 
   const AddCity = () => {
     navigate("/admin/add-city");
+  };
+
+  const onSort = (colName: string, direction: "asc" | "desc") => {
+    setSortBy(colName);
+    setSortDirection(direction);
   };
 
   return (
@@ -77,6 +92,7 @@ const CityList = () => {
           onPageChange={setCurrentPage}
           itemsPerPage={itemsPerPage}
           handleUpdate={() => {}}
+          onSort={onSort}
         />
       </div>
     </div>
