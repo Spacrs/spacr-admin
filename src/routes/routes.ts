@@ -21,9 +21,9 @@ import Logout from "../pages/AuthManagement/Logout";
 import SpacrConfig from "../pages/SpacrConfig/SpacrConfig";
 import NotificationList from "../pages/NotificationManagement/NotificationList";
 import AdminProducts from "../pages/OrderManagement/AdminProducts";
+import AddSuggestedProduct from "../pages/OrderManagement/AddSuggestedProduct";
 import OrderOffers from '../pages/OrderManagement/OrderOffers';
 import SuggestedProductList from '../pages/SuggestedProductManagement/SuggestedProductList';
-import AddSuggestedProduct from '../pages/SuggestedProductManagement/AddSuggestedProduct'
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -74,7 +74,7 @@ export const adminRoutes = [
     showBreadcrumb: true,
   },
   {
-    path: "product-list",
+    path: "suggested-product-list",
     component: AdminProducts,
     breadcrumb: ["admin", "products"],
     showBreadcrumb: true,
@@ -152,12 +152,12 @@ export const adminRoutes = [
     breadcrumb: ["admin", "Spacr Config"],
     showBreadcrumb: true,
   },
-  {
-    path: "suggested-product-list",
-    component: SuggestedProductList,
-    breadcrumb: ["admin", "Suggested Products"],
-    showBreadcrumb: true,
-  },
+  // {
+  //   path: "suggested-product-list",
+  //   component: SuggestedProductList,
+  //   breadcrumb: ["admin", "Suggested Products"],
+  //   showBreadcrumb: true,
+  // },
   {
     path: "add-suggested-product",
     component: AddSuggestedProduct,
