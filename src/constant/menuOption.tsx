@@ -22,11 +22,11 @@ const menuItems: MenuItemTypes[] = [
     path: "/admin/users",
     icon: <HiOutlineUsers style={{ fontSize: "20px", margin: "0 10px" }} />,
   },
-  {
-    label: "Product List",
-    path: "/admin/product-list",
-    icon: <TbTruckDelivery style={{ fontSize: "20px", margin: "0 10px" }} />,
-  },
+  // {
+  //   label: "Product List",
+  //   path: "/admin/product-list",
+  //   icon: <TbTruckDelivery style={{ fontSize: "20px", margin: "0 10px" }} />,
+  // },
   {
     label: "Order List",
     path: "/admin/order-list",
