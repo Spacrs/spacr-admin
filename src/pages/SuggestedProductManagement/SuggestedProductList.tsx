@@ -55,7 +55,7 @@ function SuggestedProductList() {
           <Button
             text="Add Product"
             className="mr-2"
-            type="dark"
+            variant="dark"
             onClick={() => navigate("/admin/add-suggested-product")}
           />
         </div>

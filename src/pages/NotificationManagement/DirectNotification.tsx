@@ -84,7 +84,7 @@ const DirectNotification = () => {
           <Button
             text="Back"
             className="mr-2"
-            type="lightBlue"
+            variant="lightBlue"
             onClick={() => navigate("/admin/notification-list")}
           />
         </div>
@@ -137,14 +137,14 @@ const DirectNotification = () => {
               <Button
                 text="Select Users"
                 className="w-40"
-                type="transparent"
+                variant="transparent"
                 onClick={() => setShowModal(true)}
               />
 
               <Button
                 className="lg:w-1/5 sm:w-1/2 xs:w-1/2 bg-primary text-white py-3 rounded-md hover:bg-primary transition"
                 text="Send Notification"
-                type="secondary"
+                variant="secondary"
                 onClick={() => {}}
               />
               
@@ -195,13 +195,13 @@ const DirectNotification = () => {
         <Button
           text="Cancel"
           className="bg-gray-300 text-black"
-          type="secondary"
+          variant="secondary"
           onClick={() => setShowModal(false)}
         />
         <Button
           text="Confirm"
           className="bg-blue-600 text-white"
-          type="secondary"
+          variant="secondary"
           onClick={() => setShowModal(false)}
         />
       </div>

@@ -34,8 +34,8 @@ const ConfirmationModal: React.FC<ModalProps> = ({
           <div className="text-center mx-auto shrink-0">
             <h3 className="text-lg font-semibold">{message}</h3>
             <div className="mt-6 flex justify-center gap-4">
-              <Button text="Cancel" onClick={onClose} type="lightBlue" />
-              <Button text="Confirm" onClick={onConfirm} type="primary" />
+              <Button text="Cancel" onClick={onClose} variant="lightBlue" />
+              <Button text="Confirm" onClick={onConfirm} variant="primary" />
             </div>
           </div>
         </div>

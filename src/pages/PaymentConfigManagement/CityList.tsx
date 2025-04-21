@@ -76,7 +76,7 @@ const CityList = () => {
             <Button
               text="Add City"
               className=""
-              type="lightBlue"
+              variant="lightBlue"
               onClick={AddCity}
             />
           </Tooltip>
