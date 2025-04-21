@@ -108,7 +108,7 @@ function AdminOrders() {
           <Button
             text="Create Product"
             className="mr-2"
-            type="primary"
+            variant="primary"
             onClick={() => {}}
           />
         </div>
@@ -155,14 +155,14 @@ function AdminOrders() {
                 className="px-4 py-2 bg-gray-300 rounded-md"
                 onClick={closeModal}
                 text="Cancel"
-                type="lightBlue"
+                variant="lightBlue"
               />
 
               <Button
                 className="px-4 py-2 bg-primary text-white rounded-md"
                 onClick={handleUpdateOrder}
                 text="Update"
-                type="primary"
+                variant="primary"
               />
             </div>
           </div>

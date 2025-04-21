@@ -2,12 +2,13 @@ const Button = ({
   className = "",
   text,
   onClick,
-  type,
+  variant,
+  type="button"
 }: {
   className?: string;
   text: string;
   onClick: (e:any) => void;
-  type:
+  variant:
     | "primary"
     | "secondary"
     | "danger"
@@ -16,6 +17,7 @@ const Button = ({
     | "light"
     | "lightBlue"
     | "transparent";
+    type?: 'button' | 'submit' | 'reset';
 }) => {
   const baseStyles = `px-4 py-2 rounded-md focus:outline-none transition`;
 
@@ -32,8 +34,9 @@ const Button = ({
 
   return (
     <button
-      className={`${baseStyles} ${typeStyles[type]} ${className}`}
+      className={`${baseStyles} ${typeStyles[variant]} ${className}`}
       onClick={onClick}
+      type={type}
     >
       {text}
     </button>
