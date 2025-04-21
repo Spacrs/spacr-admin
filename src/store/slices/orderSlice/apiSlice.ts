@@ -50,12 +50,19 @@ export const ordersApi: any = createApi({
         method: "GET",
       }),
     }),
+    createProduct: builder.mutation<any, Partial<any>>({
+      query: (productData) => ({
+        url: `/${ADMIN}/create-product`,
+        method: "POST",
+        body: productData,
+      }),
+    }),
   }),
 });
-
 export const {
   useGetOrdersQuery,
   useUpdateOrderTrendMutation,
   useGetOrderDetailsQuery,
   useGetOrderOffersQuery,
+  useCreateProductMutation
 } = ordersApi;
