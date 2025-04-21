@@ -1,254 +1,265 @@
-import { useState } from "react";
-import Button from "../../components/Common/Button";
+import React, { useEffect, useRef, useState } from "react";
+import { LuPlus } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
-
-//Added on 18-04-2025
-import { useRef } from "react";
-import { Plus } from "lucide-react";
+import Button from "../../components/Common/Button";
 import SelectComponent from "../../components/Common/Inputes/SelectInput";
-//Added on 18-04-2025
+import { useCreateProductMutation } from "../../store/slices/orderSlice/apiSlice";
+import { useGetCountryCityQuery } from "../../store/slices/countries/apiSlice";
+import { useAppDispatch } from "../../store/hooks";
+import { setCountryCityData } from "../../store/slices/countries/locationSlice";
+import {
+  selectCountryOptions,
+  selectFromCityOptions,
+  selectToCityOptions,
+  setSelectedCountry,
+} from "../../store/slices/countries/locationSlice";
+import { useAppSelector } from "../../store/hooks";
 
-const AddSuggestedProduct = () => {
-  const [title, setTitle] = useState("");
-  const [message, setMessage] = useState("");
-  const [scheduleDate, setScheduleDate] = useState("");
-  const [scheduleTime, setScheduleTime] = useState("");
+type BodyPayload = {
+  ProductName: string;
+  Descriptions: string;
+  ProductUrl: string;
+  CreatedBy: string;
+  From_CountryId: number;
+  From_CityId: number;
+  To_CountryId: number;
+  To_CityId: number;
+  images: { mediaId: string; url: string }[];
+  isSuggested: boolean;
+  Price: number;
+};
 
-  const [isSuggested, setIsSuggested] = useState(false);
-
-  const fileInputRef = useRef(null); //Added on 18-04-2025
-
+const AddSuggestedProduct: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const options: string[] = [];
-  
+  const { data: ccData, isLoading: ccLoading } = useGetCountryCityQuery();
+  const [createProduct, { isLoading: creating }] = useCreateProductMutation();
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault(); // Prevent page refresh
-    console.log("Scheduled Notification Sent:", {
-      title,
-      message,
-      scheduleDate,
-      scheduleTime,
-    });
+  const countryOptions = useAppSelector(selectCountryOptions);
+  const fromCityOptions = useAppSelector(selectFromCityOptions);
+  const toCityOptions = useAppSelector(selectToCityOptions);
 
-    // Clear form fields after submission
-    setTitle("");
-    setMessage("");
-    setScheduleDate("");
-    setScheduleTime("");
+  useEffect(() => {
+    if (ccData?.data && Array.isArray(ccData?.data)) {
+      dispatch(setCountryCityData(ccData?.data));
+    }
+  }, [ccData]);
+
+  // return !ccData;
+
+  const [payload, setPayload] = useState<BodyPayload>({
+    ProductName: "",
+    Descriptions: "",
+    ProductUrl: "",
+    CreatedBy: "admin",
+    From_CountryId: 0,
+    From_CityId: 0,
+    To_CountryId: 0,
+    To_CityId: 0,
+    images: [],
+    isSuggested: false,
+    Price: 0,
+  });
+
+  // uniform change handler for both selects and text inputs
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    const numericValue = Number(value);
+
+    setPayload((p) => ({
+      ...p,
+      [name]: name.endsWith("Id") ? numericValue : value,
+    }));
+
+    if (name === "From_CountryId") {
+      dispatch(setSelectedCountry({ selectedFromCountryId: numericValue }));
+    }
+    if (name === "To_CountryId") {
+      dispatch(setSelectedCountry({ selectedToCountryId: numericValue }));
+    }
   };
 
-  return (
-    <div className="">
-      <div className="flex justify-start items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
-        {/* Search Bar */}
-        {/* <div className="flex flex-1 max-w-lg"></div> */}
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log(payload,"payload>>>>")
+    await createProduct(payload).unwrap();
+    navigate("/admin/suggested-product-list");
+  };
 
-        {/* Verification Status Filter */}
-        <div className="ml-4">
-          <Button
-            text="Back"
-            className="mr-2"
-            type="lightBlue"
-            onClick={() => navigate("/admin/suggested-product-list")}
+  if (ccLoading) return <p>Loading countries…</p>;
+
+  return (
+    <div className="p-8 bg-gray-50 min-h-screen">
+      <div className="mb-6 flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Add Suggested Product</h1>
+        <Button text="Back" variant="lightBlue" onClick={() => navigate(-1)} />
+      </div>
+
+      {/* Form */}
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-4xl mx-auto bg-white p-6 shadow rounded-lg space-y-6"
+      >
+        {/* ProductName */}
+        <div>
+          <label className="block mb-1 font-medium">Product Name</label>
+          <input
+            name="ProductName"
+            type="text"
+            value={payload.ProductName}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
           />
         </div>
-      </div>
-      <div className="flex justify-center items-center p-20 bg-gray-50">
-        <div className="w-full max-w-7xl bg-white p-6 shadow-lg rounded-lg">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
-            Add Product
-          </h2>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            {/* Schedule Date and Time Input Fields */}
-            
-
-            {/* Title Input */}
-            <div>
-              <label
-                className="block text-gray-700 font-medium mb-2"
-                htmlFor="title"
-              >
-                Product Name
-              </label>
-              <input
-                type="text"
-                id="title"
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
-                placeholder=""
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-              />
-            </div>
-
-            <div>
-              <label
-                className="block text-gray-700 font-medium mb-2"
-                htmlFor="message"
-              >
-                Description
-              </label>
-              <textarea
-                id="message"
-                className="w-full px-4 py-3 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-900"
-                placeholder=""
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                rows={5}
-                required
-              />
-            </div>
-
-            <div className="flex gap-4 mb-6">
-              <div className="w-1/2">
-                {/* Schedule Date Label and Input */}
-                <label
-                  className="block text-gray-700 font-medium mb-2"
-                  htmlFor="scheduleDate"
-                >
-                  Product URL
-                </label>
-                <input
-                  type="text"
-                  id="scheduleDate"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
-                  value={scheduleDate}
-                  onChange={(e) => setScheduleDate(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="w-1/2">
-                {/* Schedule Time Label and Input */}
-                <label
-                  className="block text-gray-700 font-medium mb-2"
-                  htmlFor="scheduleTime"
-                >
-                  Price
-                </label>
-                <input
-                  type="text"
-                  id="scheduleTime"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
-                  value={scheduleTime}
-                  onChange={(e) => setScheduleTime(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="flex gap-4 mb-6">
-              <div className="w-1/2">
-                {/* Schedule Date Label and Input */}
-                <label
-                  className="block text-gray-700 font-medium mb-2"
-                  htmlFor="scheduleDate"
-                >
-                  From City
-                </label>
-                <SelectComponent
-                  options={options} // Now it's a valid array
-                  className="mr-2"
-                  value="one" // Provide a default value
-                  onChange={(e) => console.log(e.target.value)}
-                  name=""
-                />
-              </div>
-
-              <div className="w-1/2">
-                {/* Schedule Time Label and Input */}
-                <label
-                  className="block text-gray-700 font-medium mb-2"
-                  htmlFor="scheduleTime"
-                >
-                  To City
-                </label>
-                <SelectComponent
-                  options={options} // Now it's a valid array
-                  className="mr-2"
-                  value="one" // Provide a default value
-                  onChange={(e) => console.log(e.target.value)}
-                  name=""
-                />
-              </div>
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-gray-700 font-medium mb-2">
-                Is Suggested?
-              </label>
-
-              <div
-                onClick={() => setIsSuggested(!isSuggested)}
-                className={`relative w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-300 ${
-                  isSuggested ? "bg-green-600" : "bg-gray-300"
-                }`}
-              >
-                <div
-                  className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${
-                    isSuggested ? "translate-x-6" : "translate-x-0"
-                  }`}
-                />
-              </div>
-            </div>
-
-            {/* Message Textarea */}
-            
-            <div>
-              <label
-                className="block text-gray-700 font-medium mb-2"
-                htmlFor="title"
-              >
-                Product Image
-              </label>
-              <div
-                  onClick={() => fileInputRef.current?.click()}
-                  className="w-full h-40 border bg-gray-100 border-dashed border-gray-400 rounded-md flex items-center justify-center cursor-pointer hover:border-blue-500"
-                >
-                  <Plus className="text-gray-500" size={32} />
-                </div>
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      console.log("Selected file:", file);
-                      // Handle file state if needed
-                    }
-                  }}
-                />
-              </div>
-
-            {/* Button Container for Inline Buttons */}
-            <div className="flex gap-4 mt-4 w-full">
-              {/* <Button
-                className="lg:w-1/5 sm:w-1/2 xs:w-1/2"
-                type="secondary"
-                text="Cancel"
-                onClick={() => {}}
-              /> */}
-
-            
-
-              <Button
-                className="lg:w-1/5 sm:w-1/2 xs:w-1/2"
-                type="primary"
-                onClick={() => {}}
-                text="Submit"
-              />
-            </div>
-            
-          </form>
+        {/* Descriptions */}
+        <div>
+          <label className="block mb-1 font-medium">Description</label>
+          <textarea
+            name="Descriptions"
+            value={payload.Descriptions}
+            onChange={handleChange}
+            rows={4}
+            required
+            className="w-full px-4 py-3 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-900"
+          />
         </div>
-      </div>
 
-              
+        {/* ProductUrl  */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block mb-1 font-medium">Product URL</label>
+            <input
+              name="ProductUrl"
+              type="text"
+              value={payload.ProductUrl}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
+            />
+          </div>
+          {/*  Price */}
+          <div>
+            <label className="block mb-1 font-medium">Price</label>
+            <input
+              name="Price"
+              type="text"
+              value={payload.Price}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
+            />
+          </div>
+        </div>
 
+        {/* From Country & City */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block mb-1 font-medium">From Country</label>
+            <SelectComponent
+              name="From_CountryId"
+              options={countryOptions}
+              value={payload.From_CountryId}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label className="block mb-1 font-medium">From City</label>
+            <SelectComponent
+              name="From_CityId"
+              options={fromCityOptions}
+              value={payload.From_CityId}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
+        {/* To Country & City */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block mb-1 font-medium">To Country</label>
+            <SelectComponent
+              name="To_CountryId"
+              options={countryOptions}
+              value={payload.To_CountryId}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <label className="block mb-1 font-medium">To City</label>
+            <SelectComponent
+              name="To_CityId"
+              options={toCityOptions}
+              value={payload.To_CityId}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-2">
+            Is Suggested?
+          </label>
+
+          <div
+            onClick={() =>
+              setPayload((prev) => ({
+                ...prev,
+                isSuggested: !payload.isSuggested,
+              }))
+            }
+            className={`relative w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-300 ${
+              payload.isSuggested ? "bg-green-600" : "bg-gray-300"
+            }`}
+          >
+            <div
+              className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${
+                payload.isSuggested ? "translate-x-6" : "translate-x-0"
+              }`}
+            />
+          </div>
+        </div>
+
+        {/* Image upload */}
+        <div>
+          <label className="block mb-1 font-medium">Product Image</label>
+          <div
+            onClick={() => fileInputRef.current?.click()}
+            className="h-40 border-dashed border-2 border-gray-300 rounded flex items-center justify-center cursor-pointer hover:border-blue-500"
+          >
+            <LuPlus size={32} className="text-gray-400" />
+          </div>
+          <input
+            type="file"
+            ref={fileInputRef}
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                // here you’d upload the file and push { mediaId, url } into payload.images
+                console.log("Selected file:", file);
+              }
+            }}
+          />
+        </div>
+
+        {/* Submit */}
+        <div className="text-right">
+          <Button
+            text={creating ? "Submitting…" : "Submit"}
+            variant="primary"
+            type="submit"
+            onClick={()=>{}}
+          />
+        </div>
+      </form>
     </div>
   );
 };
