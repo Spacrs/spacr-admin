@@ -24,11 +24,6 @@ import AdminProducts from "../pages/OrderManagement/AdminProducts";
 import AddSuggestedProduct from "../pages/OrderManagement/AddSuggestedProduct";
 import OrderOffers from '../pages/OrderManagement/OrderOffers';
 import SuggestedProductList from '../pages/SuggestedProductManagement/SuggestedProductList';
-<<<<<<< Updated upstream
-import AddSuggestedProduct from '../pages/SuggestedProductManagement/AddSuggestedProduct'
-=======
-// import AddSuggestedProduct from '../pages/SuggestedProductManagement/addSuggestedProduct'
->>>>>>> Stashed changes
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
