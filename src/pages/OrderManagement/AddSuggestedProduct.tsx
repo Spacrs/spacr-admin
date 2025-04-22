@@ -24,7 +24,8 @@ type BodyPayload = {
   From_CityId: number;
   To_CountryId: number;
   To_CityId: number;
-  images: { mediaId: string; url: string }[];
+  // images: { mediaId: string; url: string }[];
+  images: any[];
   isSuggested: boolean;
   Price: number;
 };
@@ -87,9 +88,37 @@ const AddSuggestedProduct: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(payload,"payload>>>>")
-    await createProduct(payload).unwrap();
-    navigate("/admin/suggested-product-list");
+
+    const formData = new FormData();
+
+    Object.keys(payload).forEach((key) => {
+      if (key === "images") {
+        (payload.images as File[]).forEach((file) => {
+          formData.append("images", file);
+        });
+      } else {
+        const value = payload[key as keyof typeof payload];
+        formData.append(key, value as string);
+      }
+    });
+
+    await createProduct(formData);
+    navigate('/admin/suggested-product-list')
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (payload.images.length >= 3) {
+      alert("You can only upload up to 3 images.");
+      return;
+    }
+
+    setPayload((prev) => ({
+      ...prev,
+      images: [...prev.images, file], // directly storing File
+    }));
   };
 
   if (ccLoading) return <p>Loading countries…</p>;
@@ -240,15 +269,35 @@ const AddSuggestedProduct: React.FC = () => {
             type="file"
             ref={fileInputRef}
             className="hidden"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) {
-                // here you’d upload the file and push { mediaId, url } into payload.images
-                console.log("Selected file:", file);
-              }
-            }}
+            onChange={handleFileChange}
           />
         </div>
+
+        {payload.images.length > 0 && (
+          <div className="mt-2 grid grid-cols-3 gap-2">
+            {payload.images.map((file, index) => (
+              <div key={index} className="relative group">
+                <img
+                  src={URL.createObjectURL(file)}
+                  alt={`preview-${index}`}
+                  className="w-24 h-24 object-cover rounded"
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setPayload((prev) => ({
+                      ...prev,
+                      images: prev.images.filter((_, i) => i !== index),
+                    }))
+                  }
+                  className="absolute top-0 right-0 bg-black bg-opacity-50 text-white rounded-full p-1 hover:bg-red-600"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Submit */}
         <div className="text-right">
@@ -256,7 +305,7 @@ const AddSuggestedProduct: React.FC = () => {
             text={creating ? "Submitting…" : "Submit"}
             variant="primary"
             type="submit"
-            onClick={()=>{}}
+            onClick={() => {}}
           />
         </div>
       </form>

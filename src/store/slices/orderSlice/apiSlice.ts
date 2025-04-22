@@ -51,11 +51,13 @@ export const ordersApi: any = createApi({
       }),
     }),
     createProduct: builder.mutation<any, Partial<any>>({
-      query: (productData) => ({
-        url: `/${ADMIN}/create-product`,
-        method: "POST",
-        body: productData,
-      }),
+      query: (productData) => {
+        return ({
+          url: `/${ADMIN}/create-product`,
+          method: "POST",
+          body: productData,
+        })
+      }
     }),
   }),
 });
