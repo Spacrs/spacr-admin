@@ -84,7 +84,7 @@ const SpacrConfig = () => {
             <Button
               className="lg:w-1/5 sm:w-1/2 xs:w-1/2 bg-primary text-white py-3 rounded-md hover:bg-primary transition"
               text="Update"
-              type="secondary"
+              variant="secondary"
               onClick={handleSubmit}
             />
           </form>

@@ -124,7 +124,7 @@ function PaymentConfig() {
             <Button
               text="Add Country"
               className=""
-              type="lightBlue"
+              variant="lightBlue"
               onClick={AddCountry}
             />
           </Tooltip>
@@ -189,11 +189,11 @@ function PaymentConfig() {
 
             {/* Centered Buttons */}
             <div className="flex justify-center gap-4 mt-5">
-              <Button onClick={closeModal} text="Cancel" type="lightBlue" />
+              <Button onClick={closeModal} text="Cancel" variant="lightBlue" />
               <Button
                 onClick={handleUpdateConfig}
                 text="Update"
-                type="primary"
+                variant="primary"
               />
             </div>
           </div>

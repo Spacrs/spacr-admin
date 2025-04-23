@@ -37,7 +37,7 @@ const ScheduleNotification = () => {
           <Button
             text="Back"
             className="mr-2"
-            type="lightBlue"
+            variant="lightBlue"
             onClick={() => navigate("/admin/notification-list")}
           />
         </div>
@@ -130,14 +130,14 @@ const ScheduleNotification = () => {
             <div className="flex gap-4 mt-4 w-full">
               <Button
                 className="lg:w-1/5 sm:w-1/2 xs:w-1/2"
-                type="secondary"
+                variant="secondary"
                 text="Cancel"
                 onClick={() => {}}
               />
 
               <Button
                 className="lg:w-1/5 sm:w-1/2 xs:w-1/2"
-                type="primary"
+                variant="primary"
                 onClick={() => {}}
                 text="Schedule Notification"
               />

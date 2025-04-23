@@ -52,7 +52,7 @@ function OrderOffers() {
           <Button
             text="Back"
             className="mr-2"
-            type="lightBlue"
+            variant="lightBlue"
             onClick={() => navigate("/admin/order-details/" + orderId)}
           />
         </div>

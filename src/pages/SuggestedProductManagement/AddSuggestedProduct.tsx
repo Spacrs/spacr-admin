@@ -41,7 +41,7 @@ const AddSuggestedProduct = () => {
           <Button
             text="Back"
             className="mr-2"
-            type="lightBlue"
+            variant="lightBlue"
             onClick={() => navigate("/admin/notification-list")}
           />
         </div>
@@ -147,7 +147,7 @@ const AddSuggestedProduct = () => {
 
               <Button
                 className="lg:w-1/5 sm:w-1/2 xs:w-1/2"
-                type="primary"
+                variant="primary"
                 onClick={() => {}}
                 text="Submit"
               />

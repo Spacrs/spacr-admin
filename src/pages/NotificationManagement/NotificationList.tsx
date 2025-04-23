@@ -54,14 +54,14 @@ function NotificationList() {
           <Button
             text="Send Notification"
             className="mr-2"
-            type="primary"
+            variant="primary"
             onClick={() => navigate("/admin/send-notification")}
           />
 
           <Button
             text="Schedule Notification"
             className="mr-2"
-            type="dark"
+            variant="dark"
             onClick={() => navigate("/admin/schedule-notification")}
           />
         </div>

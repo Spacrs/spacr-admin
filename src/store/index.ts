@@ -6,6 +6,7 @@ import paymentConfigSlice from "./slices/paymentConfigSlice/paymentConfigSlice";
 import { paymentConfigApi } from "./slices/paymentConfigSlice/apiSlice";
 import spacrConfigSlice from "./slices/spacrConfigSlice/spacrConfigSlice";
 import { spacrConfigAPi } from "./slices/spacrConfigSlice/apiSlice";
+import  locationSlice from "./slices/countries/locationSlice";
 
 import orderSlice from "./slices/orderSlice/orderSlice";
 import { ordersApi } from "./slices/orderSlice/apiSlice";
@@ -23,6 +24,7 @@ export const store: Store = configureStore({
     spacrConfigSlice,
     adminLayoutSlice,
     orderSlice,
+    locationSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
