@@ -49,8 +49,8 @@ export const adminAuthApi: any = createApi({
     getUsers: builder.query<
       any,
       {
-        page: number;
-        limit: number;
+        page?: number;
+        limit?: number;
         verified?: string;
         search?: string;
         sortBy?: string;

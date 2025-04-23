@@ -12,12 +12,23 @@ import {
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Common/Button";
 import ErrorMsg from "../../components/ErrorComponent/ErrorMsg";
-
+import { ProductData } from "../../types/ProductData.types";
 const columns = [
-  { name: "ProductName", Header: "Product Name", colName: "Default" },
-  { name: "IsTrending", Header: "Is Trending", colName: "Boolean" }, // New Column
-  { name: "CreatedAt", Header: "Created At", colName: "Date" },
-  { name: "UpdatedAt", Header: "Updated At", colName: "Date" },
+  { name: "image", Header: "Image", colName: "Image" },
+  {
+    name: "ProductName",
+    Header: "Product Name",
+    colName: "Default",
+    sortable: true,
+  },
+  {
+    name: "IsTrending",
+    Header: "Is Trending",
+    colName: "Boolean",
+    sortable: true,
+  },
+  { name: "CreatedAt", Header: "Created At", colName: "Date", sortable: true },
+  { name: "UpdatedAt", Header: "Updated At", colName: "Date", sortable: true },
   {
     name: "action",
     Header: "Actions",
@@ -28,14 +39,20 @@ const columns = [
 
 function AdminOrders() {
   const dispatch = useAppDispatch();
-  const products = useAppSelector((state) => state.orderSlice.products);
+  const products: ProductData[] = useAppSelector(
+    (state) => state.orderSlice.products
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const [sortBy, setSortBy] = useState("CreatedAt");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
 
   const { data, isLoading, isFetching, isError } = useGetOrdersQuery({
     page: currentPage,
     limit: itemsPerPage,
     createdBy: "admin",
+    sort: sortDirection,
+    sortBy: sortBy,
   });
 
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
@@ -47,7 +64,14 @@ function AdminOrders() {
 
   useEffect(() => {
     if (data?.data) {
-      dispatch(setProducts(data.data));
+      dispatch(
+        setProducts(
+          data.data.map((product: ProductData) => ({
+            ...product,
+            image: product.medias?.[0]?.url || "",
+          }))
+        )
+      );
     }
   }, [data, dispatch]);
 
@@ -100,6 +124,11 @@ function AdminOrders() {
     setSelectedOrder(null);
   };
 
+  const onSort = (colName: string, direction: "asc" | "desc") => {
+    setSortBy(colName);
+    setSortDirection(direction);
+  };
+
   return (
     <div className="">
       <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
@@ -118,7 +147,8 @@ function AdminOrders() {
           <Button
             text="Add Product"
             className="mr-2"
-            type="dark"
+            variant="dark"
+            type="button"
             onClick={() => navigate("/admin/add-suggested-product")}
           />
         </div>
@@ -134,6 +164,7 @@ function AdminOrders() {
           handleUpdate={handleUpdate}
           handleView={handleView}
           itemsPerPage={itemsPerPage}
+          onSort={onSort}
         />
       </div>
 
