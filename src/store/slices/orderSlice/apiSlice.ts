@@ -60,6 +60,15 @@ export const ordersApi: any = createApi({
         };
       },
     }),
+    updateProduct: builder.mutation<any, Partial<any>>({
+      query: (productData) => {
+        return {
+          url: `/${ADMIN}/update-product/${productData.OrderID}`,
+          method: "PATCH",
+          body: productData,
+        };
+      },
+    }),
   }),
 });
 export const {
@@ -68,4 +77,5 @@ export const {
   useGetOrderDetailsQuery,
   useGetOrderOffersQuery,
   useCreateProductMutation,
+  useUpdateProductMutation,
 } = ordersApi;

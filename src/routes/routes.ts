@@ -23,8 +23,6 @@ import NotificationList from "../pages/NotificationManagement/NotificationList";
 import AdminProducts from "../pages/OrderManagement/AdminProducts";
 import AddSuggestedProduct from "../pages/OrderManagement/AddSuggestedProduct";
 import OrderOffers from '../pages/OrderManagement/OrderOffers';
-import SuggestedProductList from '../pages/SuggestedProductManagement/SuggestedProductList';
-import EditSuggestedProduct from "../pages/OrderManagement/EditSuggestedProduct";
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -167,7 +165,7 @@ export const adminRoutes = [
   },
   {
     path: "edit-suggested-product/:productId",
-    component: EditSuggestedProduct,
+    component: AddSuggestedProduct,
     breadcrumb: ["admin", "Edit Suggested Product"],
     showBreadcrumb: true,
   },
