@@ -6,11 +6,12 @@ import paymentConfigSlice from "./slices/paymentConfigSlice/paymentConfigSlice";
 import { paymentConfigApi } from "./slices/paymentConfigSlice/apiSlice";
 import spacrConfigSlice from "./slices/spacrConfigSlice/spacrConfigSlice";
 import { spacrConfigAPi } from "./slices/spacrConfigSlice/apiSlice";
-import  locationSlice from "./slices/countries/locationSlice";
+import locationSlice from "./slices/countries/locationSlice";
 
 import orderSlice from "./slices/orderSlice/orderSlice";
 import { ordersApi } from "./slices/orderSlice/apiSlice";
 import { countriesConfigApi } from "./slices/countries/apiSlice";
+import { notificationApi } from "./slices/notificationSlice/apiSlice";
 
 export const store: Store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ export const store: Store = configureStore({
     [spacrConfigAPi.reducerPath]: spacrConfigAPi.reducer,
     [ordersApi.reducerPath]: ordersApi.reducer,
     [countriesConfigApi.reducerPath]: countriesConfigApi.reducer,
+    [notificationApi.reducerPath]: notificationApi.reducer,
     userSlice,
     paymentConfigSlice,
     spacrConfigSlice,
@@ -32,7 +34,8 @@ export const store: Store = configureStore({
       .concat(paymentConfigApi.middleware)
       .concat(spacrConfigAPi.middleware)
       .concat(ordersApi.middleware)
-      .concat(countriesConfigApi.middleware),
+      .concat(countriesConfigApi.middleware)
+      .concat(notificationApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

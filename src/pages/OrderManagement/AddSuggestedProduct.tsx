@@ -55,13 +55,13 @@ const AddSuggestedProduct: React.FC = () => {
     Descriptions: "",
     ProductUrl: "",
     CreatedBy: "admin",
-    From_CountryId: 0,
-    From_CityId: 0,
-    To_CountryId: 0,
-    To_CityId: 0,
+    From_CountryId: 1,
+    From_CityId: 1,
+    To_CountryId: 1,
+    To_CityId: 1,
     images: [],
     isSuggested: false,
-    Price: 0,
+    Price: 0.0,
   });
 
   // uniform change handler for both selects and text inputs
@@ -73,10 +73,18 @@ const AddSuggestedProduct: React.FC = () => {
     const { name, value } = e.target;
     const numericValue = Number(value);
 
-    setPayload((p) => ({
-      ...p,
-      [name]: name.endsWith("Id") ? numericValue : value,
-    }));
+    if (name === "Price") {
+      const floatVal = parseFloat(value);
+      if (!isNaN(floatVal)) {
+        setPayload((p) => ({ ...p, Price: floatVal }));
+      }
+      return;
+    } else {
+      setPayload((p) => ({
+        ...p,
+        [name]: name.endsWith("Id") ? numericValue : value,
+      }));
+    }
 
     if (name === "From_CountryId") {
       dispatch(setSelectedCountry({ selectedFromCountryId: numericValue }));
@@ -89,6 +97,11 @@ const AddSuggestedProduct: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (payload.images.length === 0) {
+      alert("Please upload at least one image.");
+      return;
+    }
+
     const formData = new FormData();
 
     Object.keys(payload).forEach((key) => {
@@ -98,12 +111,16 @@ const AddSuggestedProduct: React.FC = () => {
         });
       } else {
         const value = payload[key as keyof typeof payload];
-        formData.append(key, value as string);
+        if (key === "Price") {
+          formData.append("Price", parseFloat(value as string).toFixed(2));
+        } else {
+          formData.append(key, value as string);
+        }
       }
     });
 
     await createProduct(formData);
-    navigate('/admin/suggested-product-list')
+    navigate("/admin/suggested-product-list");
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -203,7 +220,10 @@ const AddSuggestedProduct: React.FC = () => {
             <label className="block mb-1 font-medium">From City</label>
             <SelectComponent
               name="From_CityId"
-              options={fromCityOptions}
+              options={[
+                { label: "Select from city", value: "" },
+                ...fromCityOptions,
+              ]}
               value={payload.From_CityId}
               onChange={handleChange}
             />
@@ -225,7 +245,10 @@ const AddSuggestedProduct: React.FC = () => {
             <label className="block mb-1 font-medium">To City</label>
             <SelectComponent
               name="To_CityId"
-              options={toCityOptions}
+              options={[
+                { label: "Select to city", value: "" },
+                ...toCityOptions,
+              ]}
               value={payload.To_CityId}
               onChange={handleChange}
             />

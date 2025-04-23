@@ -2,13 +2,14 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithInterceptor } from "../../baseQuery";
 import { ADMIN } from "../../../constant/ApiConstant";
 import { buildQueryParams } from "../../../utills/buildQueryParams";
+import { ProductData } from "../../../types/ProductData.types";
 
 export const ordersApi: any = createApi({
   reducerPath: "ordersApi",
   baseQuery: baseQueryWithInterceptor,
   endpoints: (builder) => ({
     getOrders: builder.query<
-      any,
+      { data: ProductData[] },
       {
         page?: number;
         limit?: number;
@@ -52,12 +53,12 @@ export const ordersApi: any = createApi({
     }),
     createProduct: builder.mutation<any, Partial<any>>({
       query: (productData) => {
-        return ({
+        return {
           url: `/${ADMIN}/create-product`,
           method: "POST",
           body: productData,
-        })
-      }
+        };
+      },
     }),
   }),
 });
@@ -66,5 +67,5 @@ export const {
   useUpdateOrderTrendMutation,
   useGetOrderDetailsQuery,
   useGetOrderOffersQuery,
-  useCreateProductMutation
+  useCreateProductMutation,
 } = ordersApi;

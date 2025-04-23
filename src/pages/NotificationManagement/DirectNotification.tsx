@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import Button from "../../components/Common/Button";
 import { useNavigate } from "react-router-dom";
+import { useGetUsersQuery } from "../../store/slices/userSlice/apiSlice";
+import Search from "../../components/Common/Search/index";
+import { useSendNotificationMutation } from "../../store/slices/notificationSlice/apiSlice";
 
 const DirectNotification = () => {
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
-
+  const [filter, setFilter] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   // const [users, setUsers] = useState<{ id: string; name: string }[]>([]);
@@ -13,48 +16,61 @@ const DirectNotification = () => {
 
   const navigate = useNavigate();
 
-  const users = [
-    { id: "user1", name: "John Doe" },
-    { id: "user2", name: "Jane Smith" },
-    { id: "user3", name: "Alice Johnson" },
-    { id: "user4", name: "Bob Williams" },
-    { id: "user5", name: "Charlie Brown" },
-    { id: "user6", name: "Emily Davis" },
-    { id: "user7", name: "Frank Miller" },
-    { id: "user8", name: "Grace Lee" },
-    { id: "user9", name: "Henry Wilson" },
-    { id: "user10", name: "Isabella Moore" },
-    { id: "user11", name: "Jack Taylor" },
-    { id: "user12", name: "Katie Anderson" },
-    { id: "user13", name: "Liam Thomas" },
-    { id: "user14", name: "Mia Martin" },
-    { id: "user15", name: "Noah White" },
-    { id: "user16", name: "Olivia Harris" },
-    { id: "user17", name: "Paul Clark" },
-    { id: "user18", name: "Queenie Lewis" },
-    { id: "user19", name: "Ryan Hall" },
-    { id: "user20", name: "Sophia Allen" },
-  ];
+  const {
+    data: userData,
+    isLoading,
+    isFetching,
+    isError,
+    refetch,
+  } = useGetUsersQuery({
+    sort: "desc",
+    sortBy: "CreatedAt",
+    search: filter !== "" ? filter : undefined,
+  });
 
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     try {
-  //       const res = await fetch("https://api-v2.spa-cr.com/api/v2/get-all-users", {
-  //         method: "GET",
-  //         headers: {
-  //           'Content-Type': 'application/json'
-  //         }
-  //       }); // 🔁 Replace with your actual API endpoint
-  //       setUsers(res.response_data);
-  //       setLoading(false);
-  //     } catch (error) {
-  //       console.error("Failed to fetch users:", error);
-  //       setLoading(false);
-  //     }
-  //   };
+  const [sendNotification, { data, isLoading: isSending }] =
+    useSendNotificationMutation();
 
-  //   fetchUsers();
-  // }, []);
+  // {
+  //   page: currentPage,
+  //   limit: itemsPerPage,
+  //   verified: verificationStatus !== "" ? verificationStatus : undefined,
+  //   search: filter !== "" ? filter : undefined,
+  //   sort: sortDirection,
+  //   sortBy: sortBy,
+  // }
+
+  //   { id: "user1", name: "John Doe" },
+  //   { id: "user2", name: "Jane Smith" },
+  //   { id: "user3", name: "Alice Johnson" },
+  //   { id: "user4", name: "Bob Williams" },
+  //   { id: "user5", name: "Charlie Brown" },
+  //   { id: "user6", name: "Emily Davis" },
+  //   { id: "user7", name: "Frank Miller" },
+  //   { id: "user8", name: "Grace Lee" },
+  //   { id: "user9", name: "Henry Wilson" },
+  //   { id: "user10", name: "Isabella Moore" },
+  //   { id: "user11", name: "Jack Taylor" },
+  //   { id: "user12", name: "Katie Anderson" },
+  //   { id: "user13", name: "Liam Thomas" },
+  //   { id: "user14", name: "Mia Martin" },
+  //   { id: "user15", name: "Noah White" },
+  //   { id: "user16", name: "Olivia Harris" },
+  //   { id: "user17", name: "Paul Clark" },
+  //   { id: "user18", name: "Queenie Lewis" },
+  //   { id: "user19", name: "Ryan Hall" },
+  //   { id: "user20", name: "Sophia Allen" },
+  // ];
+
+  const users =
+    userData?.data && Array.isArray(userData?.data)
+      ? userData?.data.map(
+          ({ UserID, Email }: { UserID: string; Email: string }) => ({
+            value: UserID,
+            label: Email,
+          })
+        )
+      : [];
 
   const handleCheckboxChange = (userId: string) => {
     setSelectedUsers((prev) =>
@@ -64,11 +80,21 @@ const DirectNotification = () => {
     );
   };
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault(); // Prevent page refresh
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
     console.log("Notification Sent:", { title, message });
+    const notificationPayload = {
+      title,
+      body: message,
+      notificationType: "send_notification",
+      sendToAllUsers: selectedUsers.length === users.length,
+      ...(selectedUsers.length < users.length
+        ? { userIds: selectedUsers }
+        : {}),
+    };
 
-    // Clear form fields after submission
+    await sendNotification(notificationPayload).unwrap();
+
     setTitle("");
     setMessage("");
   };
@@ -146,69 +172,73 @@ const DirectNotification = () => {
                 text="Send Notification"
                 variant="secondary"
                 onClick={() => {}}
+                type="submit"
               />
-              
             </div>
-            
-
           </form>
         </div>
       </div>
+      {/* Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white w-full max-w-md p-6 rounded shadow-lg">
+            <h3 className="text-lg font-semibold mb-4">Select Users</h3>
+            <button
+              type="button"
+              className="mb-4 px-4 py-2 bg-red-500 text-white rounded"
+              onClick={() => {
+                if (selectedUsers.length === users.length) {
+                  setSelectedUsers([]); // Unselect all
+                } else {
+                  setSelectedUsers(
+                    users.map((u: { value: string; label: string }) => u.value)
+                  ); // Select all
+                }
+              }}
+            >
+              {selectedUsers.length === users.length
+                ? "Unselect All"
+                : "Select All"}
+            </button>
+            <div className="mb-4">
+              <Search
+                search={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                onReset={() => setFilter("")}
+              />
+            </div>
+            <div className="space-y-2 max-h-64 overflow-y-auto">
+              {users.map((user: { value: string; label: string }) => (
+                <label key={user.value} className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    value={user.value}
+                    checked={selectedUsers.includes(user.value)}
+                    onChange={() => handleCheckboxChange(user.value)}
+                    className="accent-blue-600"
+                  />
+                  <span>{user.label}</span>
+                </label>
+              ))}
+            </div>
 
-{/* Modal */}
-{/* Modal */}
-{showModal && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-    <div className="bg-white w-full max-w-md p-6 rounded shadow-lg">
-      <h3 className="text-lg font-semibold mb-4">Select Users</h3>
-      <button
-          type="button"
-          className="mb-4 px-4 py-2 bg-red-500 text-white rounded"
-          onClick={() => {
-            if (selectedUsers.length === users.length) {
-              setSelectedUsers([]); // Unselect all
-            } else {
-              setSelectedUsers(users.map((u) => u.id)); // Select all
-            }
-          }}
-        >
-          {selectedUsers.length === users.length ? "Unselect All" : "Select All"}
-        </button>
-      <div className="space-y-2 max-h-64 overflow-y-auto">
-        
-
-        {users.map((user) => (
-          <label key={user.id} className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              value={user.id}
-              checked={selectedUsers.includes(user.id)}
-              onChange={() => handleCheckboxChange(user.id)}
-              className="accent-blue-600"
-            />
-            <span>{user.name}</span>
-          </label>
-        ))}
-      </div>
-
-      <div className="flex justify-end gap-3 mt-6">
-        <Button
-          text="Cancel"
-          className="bg-gray-300 text-black"
-          variant="secondary"
-          onClick={() => setShowModal(false)}
-        />
-        <Button
-          text="Confirm"
-          className="bg-blue-600 text-white"
-          variant="secondary"
-          onClick={() => setShowModal(false)}
-        />
-      </div>
-    </div>
-  </div>
-)}
-
+            <div className="flex justify-end gap-3 mt-6">
+              <Button
+                text="Cancel"
+                className="bg-gray-300 text-black"
+                variant="secondary"
+                onClick={() => setShowModal(false)}
+              />
+              <Button
+                text="Confirm"
+                className="bg-blue-600 text-white"
+                variant="secondary"
+                onClick={() => setShowModal(false)}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
