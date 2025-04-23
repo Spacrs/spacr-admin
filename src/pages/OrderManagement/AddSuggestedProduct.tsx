@@ -24,6 +24,7 @@ import {
   setIsEdit,
 } from "../../store/slices/orderSlice/orderSlice";
 import { useSelector } from "react-redux";
+import { Media } from "../../types/ProductData.types";
 
 type BodyPayload = {
   ProductName: string;
@@ -47,6 +48,9 @@ const AddSuggestedProduct: React.FC = () => {
   const isEditProduct = useSelector(selectIsEditProduct);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
+
   const { data: ccData, isLoading: ccLoading } = useGetCountryCityQuery();
   const [createProduct, { isLoading: creating }] = useCreateProductMutation();
   const [updateProduct, { isLoading: updating }] = useUpdateProductMutation();
@@ -68,7 +72,9 @@ const AddSuggestedProduct: React.FC = () => {
     if (productId) {
       dispatch(setIsEdit({ isEditProduct: true }));
     }
-    () => dispatch(setIsEdit({ isEditProduct: false }));
+    return () => {
+      dispatch(setIsEdit({ isEditProduct: false }));
+    };
   }, [productId]);
 
   // Populate payload from fetched data
@@ -76,8 +82,24 @@ const AddSuggestedProduct: React.FC = () => {
     if (suggestedProduct?.data) {
       setPayload((prev) => ({
         ...prev,
-        ...suggestedProduct.data,
+        ProductName: suggestedProduct?.data?.ProductName,
+        Descriptions: suggestedProduct?.data?.Descriptions,
+        ProductUrl: suggestedProduct?.data?.ProductUrl,
+        From_CountryId: suggestedProduct?.data?.From_CountryId,
+        From_CityId: suggestedProduct?.data?.From_CityId,
+        To_CountryId: suggestedProduct?.data?.To_CountryId,
+        To_CityId: suggestedProduct?.data?.To_CityId,
+        images: [],
+        Price: suggestedProduct?.data?.Price,
       }));
+
+      if (suggestedProduct?.data?.medias?.length > 0) {
+        // Set pre-filled image URLs
+        const urls = suggestedProduct?.data?.medias.map(
+          (img: Media) => img.url
+        ); // or whatever the image field is
+        setPreviewImages(urls);
+      }
 
       dispatch(
         setSelectedCountry({
@@ -160,6 +182,7 @@ const AddSuggestedProduct: React.FC = () => {
     });
 
     if (isEditProduct) {
+      productId && formData.append("OrderID", productId);
       await updateProduct(formData);
     } else {
       await createProduct(formData);
@@ -183,7 +206,6 @@ const AddSuggestedProduct: React.FC = () => {
     }));
   };
 
-  console.log(isEditProduct, "isEditProduct");
   return (
     <div className="min-h-screen">
       <div className="flex justify-end items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
@@ -347,9 +369,9 @@ const AddSuggestedProduct: React.FC = () => {
               />
             </div>
 
-            {payload.images.length > 0 && (
+            {payload?.images && payload?.images.length > 0 && (
               <div className="mt-2 grid grid-cols-3 gap-2">
-                {payload.images.map((file, index) => (
+                {payload?.images.map((file, index) => (
                   <div key={index} className="relative group">
                     <img
                       src={URL.createObjectURL(file)}
@@ -368,6 +390,20 @@ const AddSuggestedProduct: React.FC = () => {
                     >
                       ✕
                     </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {previewImages && previewImages.length > 0 && (
+              <div className="mt-2 grid grid-cols-3 gap-2">
+                {previewImages.map((url, index) => (
+                  <div key={index} className="relative group">
+                    <img
+                      src={url}
+                      alt={`preview-${payload.ProductName}`}
+                      className="w-24 h-24 object-cover rounded"
+                    />
                   </div>
                 ))}
               </div>

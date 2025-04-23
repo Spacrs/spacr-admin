@@ -66,9 +66,11 @@ export const orderSlice = createSlice({
       state: IState,
       action: PayloadAction<{ isEditProduct?: boolean; isEditOrder?: boolean }>
     ) => {
-      state = {
-        ...state,
-        ...action.payload
+      if (action.payload.isEditProduct !== undefined) {
+        state.isEditProduct = action.payload.isEditProduct;
+      }
+      if (action.payload.isEditOrder !== undefined) {
+        state.isEditOrder = action.payload.isEditOrder;
       }
     },
   },
