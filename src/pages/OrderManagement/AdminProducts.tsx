@@ -55,9 +55,13 @@ function AdminOrders() {
     return <ErrorMsg errorMsg="Error loading orders" />;
   }
 
-  const handleUpdate = (product: any) => {
-    setSelectedOrder(product);
-    setIsOpen(true);
+  // const handleUpdate = (product: any) => {
+  //   setSelectedOrder(product);
+  //   setIsOpen(true);
+  // };
+  const handleUpdate = (data: any) => {
+    const productId = data.OrderID;
+    navigate(`/admin/edit-suggested-product/${productId}`)
   };
 
   const handleToggleTrending = () => {
