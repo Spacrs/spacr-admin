@@ -24,6 +24,7 @@ import AdminProducts from "../pages/OrderManagement/AdminProducts";
 import AddSuggestedProduct from "../pages/OrderManagement/AddSuggestedProduct";
 import OrderOffers from '../pages/OrderManagement/OrderOffers';
 import SuggestedProductList from '../pages/SuggestedProductManagement/SuggestedProductList';
+import EditSuggestedProduct from "../pages/OrderManagement/EditSuggestedProduct";
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -162,6 +163,12 @@ export const adminRoutes = [
     path: "add-suggested-product",
     component: AddSuggestedProduct,
     breadcrumb: ["admin", "Add Suggested Product"],
+    showBreadcrumb: true,
+  },
+  {
+    path: "edit-suggested-product/:productId",
+    component: EditSuggestedProduct,
+    breadcrumb: ["admin", "Edit Suggested Product"],
     showBreadcrumb: true,
   },
 ];
