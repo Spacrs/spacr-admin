@@ -1,14 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../..";
-
+import { ProductData } from "../../../types/ProductData.types";
 interface IState {
   orders: any[];
   orderDetail: {};
   offers: any[];
   offerDetail: {};
-  products: any[];
+  products: ProductData[];
   productDetail: {};
+  isEditProduct: boolean;
+  isEditOrder: boolean;
 }
 
 const initialState: IState = {
@@ -18,6 +20,8 @@ const initialState: IState = {
   offerDetail: {},
   products: [],
   productDetail: {},
+  isEditProduct: false,
+  isEditOrder: false,
 };
 
 export const orderSlice = createSlice({
@@ -58,6 +62,15 @@ export const orderSlice = createSlice({
             })
           : [];
     },
+    setIsEdit: (
+      state: IState,
+      action: PayloadAction<{ isEditProduct?: boolean; isEditOrder?: boolean }>
+    ) => {
+      state = {
+        ...state,
+        ...action.payload
+      }
+    },
   },
 });
 
@@ -67,6 +80,11 @@ export const {
   setProducts,
   updateProductList,
   setOrderOffers,
+  setIsEdit
 } = orderSlice.actions;
 export const selectOrders = (state: RootState) => state.orderSlice.orders;
+export const selectIsEditProduct = (state: RootState) =>
+  state.orderSlice.isEditProduct;
+export const selectIsEditOrder = (state: RootState) =>
+  state.orderSlice.isEditOrder;
 export default orderSlice.reducer;

@@ -13,8 +13,10 @@ import { useNavigate } from "react-router-dom";
 import Button from "../../components/Common/Button";
 import ErrorMsg from "../../components/ErrorComponent/ErrorMsg";
 import Search from "../../components/Common/Search/index";
+import { ProductData } from "../../types/ProductData.types";
 
 const columns = [
+  { name: "image", Header: "Image", colName: "Image" },
   {
     name: "ProductName",
     Header: "Product Name",
@@ -32,8 +34,8 @@ const columns = [
   { name: "IsWithBox", Header: "Is With Box", colName: "Boolean" },
 
   { name: "Status", Header: "Status", colName: "Status" },
-  // { name: "IsTrending", Header: "Is Trending", colName: "Boolean" },
   { name: "CreatedAt", Header: "Created At", colName: "Date", sortable: true },
+  { name: "UpdatedAt", Header: "Updated At", colName: "Date", sortable: true },
   {
     name: "action",
     Header: "Actions",
@@ -44,7 +46,9 @@ const columns = [
 
 function Orders() {
   const dispatch = useAppDispatch();
-  const orders = useAppSelector((state) => state.orderSlice.orders);
+  const orders: ProductData[] = useAppSelector(
+    (state) => state.orderSlice.orders
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -70,7 +74,14 @@ function Orders() {
 
   useEffect(() => {
     if (data?.data) {
-      dispatch(setOrders(data.data));
+      dispatch(
+        setOrders(
+          data.data.map((order: ProductData) => ({
+            ...order,
+            image: order.medias?.[0]?.url || "",
+          }))
+        )
+      );
     }
   }, [data, dispatch]);
 
@@ -143,7 +154,6 @@ function Orders() {
 
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">
         <Table
-          // data={orders}
           data={orders.filter((order: any) =>
             order.ProductName?.toLowerCase().includes(filter.toLowerCase())
           )}

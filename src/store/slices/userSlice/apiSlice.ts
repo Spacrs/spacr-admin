@@ -1,12 +1,19 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithInterceptor } from "../../baseQuery";
 import { buildQueryParams } from "../../../utills/buildQueryParams";
-
+import { UserData, UserDevice } from "../../../types/UserData.types";
+import { Pagination } from "../../../types/Pagination.type";
 export interface LoginRequest {
   secret: string;
 }
 export interface UserInfoRequest {
   userId: string;
+}
+
+export interface UserInfoResponse {
+  data: UserData[];
+  pagination: Pagination;
+  message: string;
 }
 
 export const adminAuthApi: any = createApi({
@@ -47,10 +54,10 @@ export const adminAuthApi: any = createApi({
       }),
     }),
     getUsers: builder.query<
-      any,
+      UserInfoResponse,
       {
-        page: number;
-        limit: number;
+        page?: number;
+        limit?: number;
         verified?: string;
         search?: string;
         sortBy?: string;

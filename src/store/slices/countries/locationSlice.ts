@@ -87,8 +87,10 @@ export const locationSlice = createSlice({
       state.toCityOptions = state.cityOptionsMap[countryId] || [];
     },
     clearSelection(state) {
-      //   state.selectedCountryId = null;
-      //   state.cityOptions = [];
+        state.selectedFromCountryId = null;
+        state.selectedToCountryId = null;
+        state.fromCityOptions = [];
+        state.toCityOptions = [];
     },
   },
 });

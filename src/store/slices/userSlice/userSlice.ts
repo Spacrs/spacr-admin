@@ -1,56 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../..";
-
-export type UserDevice = {
-  Id: number;
-  UserID: string;
-  DeviceType: string;
-  DeviceName: string;
-  DeviceUniqueId: string;
-  FirebaseToken: string;
-  IsLoggedIn: boolean;
-  LoggedInAt: string;
-  CreatedAt: string;
-  DeletedAt: string | null;
-};
+import { UserData, UserDevice } from "../../../types/UserData.types";
 
 interface IState {
-  users: string[];
-  user: {};
-  template: {};
-  templates: { document: string; _id: string; userId: string }[];
+  users: UserData[];
+  user: UserData | null;
   accessToken: null | string;
   isloading: boolean;
-  userInfo?: {
-    address: string;
-    phone: string;
-    website: string;
-    gender: string;
-    description: string;
-    title: string;
-  };
   userDevices: UserDevice[];
   userDevicesDetails: UserDevice | {};
 }
 
 const initialState: IState = {
   users: [],
-  user: {},
-  template: {},
-  templates: [],
+  user: null,
   userDevices: [],
   userDevicesDetails: {},
   accessToken: null,
   isloading: false,
-  userInfo: {
-    address: "",
-    phone: "",
-    website: "",
-    gender: "",
-    description: "",
-    title: "",
-  },
 };
 
 export const createUserSlice = createSlice({
@@ -62,7 +30,7 @@ export const createUserSlice = createSlice({
       return state;
     },
     logout: (state) => {
-      state.user = {};
+      state.user = null;
       state.accessToken = null;
       localStorage.removeItem("access_token");
       localStorage.removeItem("user");
