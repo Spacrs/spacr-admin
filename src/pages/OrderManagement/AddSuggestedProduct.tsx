@@ -37,7 +37,7 @@ type BodyPayload = {
   To_CityId: number;
   // images: { mediaId: string; url: string }[];
   images: any[];
-  isSuggested: boolean;
+  IsTrending: boolean;
   Price: number;
 };
 
@@ -89,6 +89,7 @@ const AddSuggestedProduct: React.FC = () => {
         From_CityId: suggestedProduct?.data?.From_CityId,
         To_CountryId: suggestedProduct?.data?.To_CountryId,
         To_CityId: suggestedProduct?.data?.To_CityId,
+        IsTrending: suggestedProduct?.data?.IsTrending,
         images: [],
         Price: suggestedProduct?.data?.Price,
       }));
@@ -122,7 +123,7 @@ const AddSuggestedProduct: React.FC = () => {
     To_CountryId: 1,
     To_CityId: 1,
     images: [],
-    isSuggested: false,
+    IsTrending: false,
     Price: 0.0,
   });
 
@@ -159,7 +160,7 @@ const AddSuggestedProduct: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (payload.images.length === 0) {
+    if (!isEditProduct && payload.images.length === 0) {
       alert("Please upload at least one image.");
       return;
     }
@@ -337,16 +338,16 @@ const AddSuggestedProduct: React.FC = () => {
                 onClick={() =>
                   setPayload((prev) => ({
                     ...prev,
-                    isSuggested: !payload.isSuggested,
+                    IsTrending: !payload.IsTrending,
                   }))
                 }
                 className={`relative w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-300 ${
-                  payload.isSuggested ? "bg-green-600" : "bg-gray-300"
+                  payload.IsTrending ? "bg-green-600" : "bg-gray-300"
                 }`}
               >
                 <div
                   className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${
-                    payload.isSuggested ? "translate-x-6" : "translate-x-0"
+                    payload.IsTrending ? "translate-x-6" : "translate-x-0"
                   }`}
                 />
               </div>
