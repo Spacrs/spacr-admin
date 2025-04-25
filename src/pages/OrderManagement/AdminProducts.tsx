@@ -47,7 +47,7 @@ function AdminOrders() {
   const [sortBy, setSortBy] = useState("CreatedAt");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
 
-  const { data, isLoading, isFetching, isError } = useGetOrdersQuery({
+  const { data, isLoading, isFetching, isError, refetch } = useGetOrdersQuery({
     page: currentPage,
     limit: itemsPerPage,
     createdBy: "admin",
@@ -75,6 +75,16 @@ function AdminOrders() {
     }
   }, [data, dispatch]);
 
+  useEffect(() => {
+    refetch(); // Refetch data when the component mounts
+  }, [refetch]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(setProducts([])); // Clear products when the component unmounts
+    };
+  }, [dispatch]);
+
   if (isError) {
     return <ErrorMsg errorMsg="Error loading orders" />;
   }
@@ -85,7 +95,7 @@ function AdminOrders() {
   // };
   const handleUpdate = (data: any) => {
     const productId = data.OrderID;
-    navigate(`/admin/edit-suggested-product/${productId}`)
+    navigate(`/admin/edit-suggested-product/${productId}`);
   };
 
   const handleToggleTrending = () => {
@@ -124,9 +134,15 @@ function AdminOrders() {
     setSelectedOrder(null);
   };
 
+  const onPageChange = (page: number) => {
+    setCurrentPage(page);
+    refetch(); // Refetch data when the page changes
+  };
+
   const onSort = (colName: string, direction: "asc" | "desc") => {
     setSortBy(colName);
     setSortDirection(direction);
+    refetch();
   };
 
   return (
@@ -160,7 +176,7 @@ function AdminOrders() {
           loading={isLoading || isFetching}
           totalPages={data?.pagination?.totalPages || 1}
           currentPage={currentPage}
-          onPageChange={setCurrentPage}
+          onPageChange={onPageChange}
           handleUpdate={handleUpdate}
           handleView={handleView}
           itemsPerPage={itemsPerPage}

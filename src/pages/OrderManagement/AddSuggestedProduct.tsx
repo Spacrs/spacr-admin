@@ -22,6 +22,7 @@ import Loading from "../../components/Common/Loader";
 import {
   selectIsEditProduct,
   setIsEdit,
+  updateProductList,
 } from "../../store/slices/orderSlice/orderSlice";
 import { useSelector } from "react-redux";
 import { Media } from "../../types/ProductData.types";
@@ -54,9 +55,11 @@ const AddSuggestedProduct: React.FC = () => {
   const { data: ccData, isLoading: ccLoading } = useGetCountryCityQuery();
   const [createProduct, { isLoading: creating }] = useCreateProductMutation();
   const [updateProduct, { isLoading: updating }] = useUpdateProductMutation();
-  const { data: suggestedProduct, isLoading } = useGetOrderDetailsQuery(
-    productId!
-  );
+  const {
+    data: suggestedProduct,
+    isLoading,
+    refetch: refetchGetOrder,
+  } = useGetOrderDetailsQuery(productId!);
 
   const countryOptions = useAppSelector(selectCountryOptions);
   const fromCityOptions = useAppSelector(selectFromCityOptions);
@@ -110,6 +113,27 @@ const AddSuggestedProduct: React.FC = () => {
       );
     }
   }, [suggestedProduct]);
+
+  useEffect(() => {
+    if (productId) {
+      refetchGetOrder(); // Refetch the order details
+    }
+    return () => {
+      setPayload({
+        ProductName: "",
+        Descriptions: "",
+        ProductUrl: "",
+        CreatedBy: "admin",
+        From_CountryId: 1,
+        From_CityId: 1,
+        To_CountryId: 1,
+        To_CityId: 1,
+        images: [],
+        IsTrending: false,
+        Price: 0.0,
+      });
+    };
+  }, [productId]);
 
   // return !ccData;
 
@@ -184,9 +208,12 @@ const AddSuggestedProduct: React.FC = () => {
 
     if (isEditProduct) {
       productId && formData.append("OrderID", productId);
-      await updateProduct(formData);
+      const updatedData = await updateProduct(formData);
+      dispatch(updateProductList(updatedData.data.data));
+       refetchGetOrder();
     } else {
       await createProduct(formData);
+      refetchGetOrder(); 
     }
 
     navigate("/admin/suggested-product-list");
@@ -270,8 +297,9 @@ const AddSuggestedProduct: React.FC = () => {
                 <label className="block mb-1 font-medium">Price</label>
                 <input
                   name="Price"
-                  type="text"
+                  type="number"
                   value={payload.Price}
+                  min={0}
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
