@@ -22,6 +22,7 @@ function NumberInpute({
       max={max}
       min={min}
       defaultValue={defaultValue}
+      step="0.01"
       className="w-full px-4 py-3 border border-gray-300 rounded-md transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-900"
       value={value}
       onChange={onChange}

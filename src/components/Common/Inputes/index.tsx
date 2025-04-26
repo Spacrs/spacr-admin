@@ -5,9 +5,17 @@ import NumberInpute from "./NumberInpute";
 import SelectComponent from "./SelectInput";
 import SwitchButton from "./SwitchButton";
 import DatePickerComponent from "./DatePickerComponent";
+import TextArea from "./TextArea";
 
 interface InputComponentProps {
-  type: "color" | "text" | "number" | "select" | "switchButton" | "datePicker";
+  type:
+    | "color"
+    | "text"
+    | "textarea"
+    | "number"
+    | "select"
+    | "switchButton"
+    | "datePicker";
   name: string;
   value: any;
   label: string;
@@ -37,6 +45,8 @@ function InputComponent({
         return <ColorInpute name={name} value={value} onChange={onChange} />;
       case "text":
         return <TextInpute name={name} value={value} onChange={onChange} />;
+      case "textarea":
+        return <TextArea name={name} value={value} onChange={onChange} />;
       case "number":
         return (
           <NumberInpute
