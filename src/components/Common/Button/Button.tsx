@@ -1,14 +1,14 @@
 const Button = ({
   className = "",
   text,
-  onClick,
+  onClick = () => {},
   variant,
   type = "button",
   disabled = false,
 }: {
   className?: string;
   text: string;
-  onClick: (e: any) => void;
+  onClick?: (e: any) => void;
   disabled?: boolean;
   variant:
     | "primary"

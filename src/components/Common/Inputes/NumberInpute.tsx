@@ -6,7 +6,8 @@ function NumberInpute({
   onChange,
   defaultValue = 16,
   min = 0,
-  max = 100,
+  max,
+  required = false,
 }: {
   name: string;
   value: string | number;
@@ -14,18 +15,20 @@ function NumberInpute({
   defaultValue?: string | number;
   min?: number | string;
   max?: number | string;
+  required?: boolean;
 }) {
   return (
     <input
       type="number"
       name={name}
-      max={max}
+      {...(max !== undefined && { max })}
       min={min}
       defaultValue={defaultValue}
       step="0.01"
       className="w-full px-4 py-3 border border-gray-300 rounded-md transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-900"
       value={value}
       onChange={onChange}
+      required={required}
     />
   );
 }

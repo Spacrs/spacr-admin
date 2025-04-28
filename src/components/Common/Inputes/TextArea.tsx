@@ -5,11 +5,13 @@ function TextArea({
   value,
   onChange,
   rows = 4,
+  required = false,
 }: {
   name: string;
   value: string | number;
   onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   rows?: number;
+  required?: boolean;
 }) {
   return (
     <textarea
@@ -18,6 +20,7 @@ function TextArea({
       value={value}
       onChange={onChange}
       rows={rows}
+      required={required}
     />
   );
 }

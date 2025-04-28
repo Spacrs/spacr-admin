@@ -28,6 +28,7 @@ import { useSelector } from "react-redux";
 import { Media } from "../../types/ProductData.types";
 import ImageGallery from "../../components/Common/ImageGallery/Index";
 import InputComponent from "../../components/Common/Inputes";
+import ToggleSwitch from "../../components/Common/Inputes/ToggleSwitch";
 
 type BodyPayload = {
   ProductName: string;
@@ -230,6 +231,7 @@ const AddSuggestedProduct: React.FC = () => {
       ...prev,
       images: [...prev.images, file], // directly storing File
     }));
+    e.target.value = "";
   };
 
   const handleRemoveImage = (index: number) => {
@@ -265,6 +267,7 @@ const AddSuggestedProduct: React.FC = () => {
               label="Product Name"
               value={payload.ProductName}
               onChange={handleChange}
+              required={true}
             />
             {/* Descriptions */}
             <div>
@@ -274,6 +277,7 @@ const AddSuggestedProduct: React.FC = () => {
                 value={payload.Descriptions}
                 onChange={handleChange}
                 type="textarea"
+                required={true}
               />
             </div>
 
@@ -286,6 +290,7 @@ const AddSuggestedProduct: React.FC = () => {
                   label="Product URL"
                   value={payload.ProductUrl}
                   onChange={handleChange}
+                  required={true}
                 />
               </div>
               {/*  Price */}
@@ -297,6 +302,7 @@ const AddSuggestedProduct: React.FC = () => {
                   value={payload.Price}
                   min={0}
                   onChange={handleChange}
+                  required={true}
                 />
               </div>
             </div>
@@ -313,6 +319,7 @@ const AddSuggestedProduct: React.FC = () => {
                   ]}
                   value={payload.From_CountryId}
                   onChange={handleChange}
+                  required={true}
                 />
               </div>
               <div>
@@ -325,6 +332,7 @@ const AddSuggestedProduct: React.FC = () => {
                   ]}
                   value={payload.From_CityId}
                   onChange={handleChange}
+                  required={true}
                 />
               </div>
             </div>
@@ -341,6 +349,7 @@ const AddSuggestedProduct: React.FC = () => {
                   ]}
                   value={payload.To_CountryId}
                   onChange={handleChange}
+                  required={true}
                 />
               </div>
               <div>
@@ -353,32 +362,22 @@ const AddSuggestedProduct: React.FC = () => {
                   ]}
                   value={payload.To_CityId}
                   onChange={handleChange}
+                  required={true}
                 />
               </div>
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700 font-medium mb-2">
-                Is Suggested?
-              </label>
-
-              <div
-                onClick={() =>
+              <ToggleSwitch
+                label="Is Suggested?"
+                isChecked={payload.IsTrending}
+                onToggle={() =>
                   setPayload((prev) => ({
                     ...prev,
                     IsTrending: !payload.IsTrending,
                   }))
                 }
-                className={`relative w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-300 ${
-                  payload.IsTrending ? "bg-green-600" : "bg-gray-300"
-                }`}
-              >
-                <div
-                  className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${
-                    payload.IsTrending ? "translate-x-6" : "translate-x-0"
-                  }`}
-                />
-              </div>
+              />
             </div>
 
             {/* Image upload */}
