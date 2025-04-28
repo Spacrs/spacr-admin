@@ -2,17 +2,21 @@ import { useState, useEffect } from "react";
 import Button from "../../components/Common/Button";
 import { useNavigate } from "react-router-dom";
 import { useGetUsersQuery } from "../../store/slices/userSlice/apiSlice";
-import Search from "../../components/Common/Search/index";
 import { useSendNotificationMutation } from "../../store/slices/notificationSlice/apiSlice";
 import UserSelectModal from "../../components/Common/Modal/UserSelectModal";
+import InputComponent from "../../components/Common/Inputes";
+
 type User = {
   UserID: string;
   Email: string;
   FullName: string;
 };
+
 const DirectNotification = () => {
-  const [title, setTitle] = useState("");
-  const [message, setMessage] = useState("");
+  const [formData, setFormData] = useState({
+    title: "",
+    message: "",
+  });
   const [filter, setFilter] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
@@ -35,10 +39,7 @@ const DirectNotification = () => {
     limit: itemsPerPage,
   });
 
-  console.log(userData, "userData");
-
   useEffect(() => {
-    console.log(currentPage, "currentPage");
     refetch();
   }, [filter, currentPage, refetch]);
 
@@ -51,12 +52,12 @@ const DirectNotification = () => {
       Email,
       FullName,
     })) || [];
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    console.log("Notification Sent:", { title, message });
     const notificationPayload = {
-      title,
-      body: message,
+      title: formData.title,
+      body: formData.message,
       notificationType: "send_notification",
       sendToAllUsers: selectedUsers.length === users.length,
       ...(selectedUsers.length < users.length
@@ -66,14 +67,22 @@ const DirectNotification = () => {
 
     await sendNotification(notificationPayload).unwrap();
 
-    setTitle("");
-    setMessage("");
+    setFormData({ title: "", message: "" });
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (
     <div className="">
       <div className="flex justify-end items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
-        {/* Verification Status Filter */}
         <div className="ml-4 flex justify-end">
           <Button
             text="Back"
@@ -90,7 +99,6 @@ const DirectNotification = () => {
           </h2>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            {/* Title Input */}
             <Button
               text="Select Users"
               className="w-40"
@@ -98,47 +106,61 @@ const DirectNotification = () => {
               onClick={() => setShowModal(true)}
             />
             <div>
-              <label
-                className="block text-gray-700 font-medium mb-2"
-                htmlFor="title"
-              >
-                Title
-              </label>
-              <input
+              <InputComponent
                 type="text"
-                id="title"
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
                 placeholder="Notification Title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
+                name="title"
+                label="Title"
+                value={formData.title}
+                onChange={handleChange}
+                required={true}
               />
             </div>
 
-            {/* Message Textarea */}
             <div>
-              <label
-                className="block text-gray-700 font-medium mb-2"
-                htmlFor="message"
-              >
-                Description
-              </label>
-              <textarea
-                id="message"
-                className="w-full px-4 py-3 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-900"
-                placeholder=""
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                rows={5}
-                required
+              <InputComponent
+                label="Description"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                type="textarea"
+                required={true}
               />
             </div>
+
+            {selectedUsers.length > 0 &&
+              selectedUsers.length !== users.length && (
+                <div className="mt-4">
+                  <label className="block text-gray-700 font-medium mb-2">
+                    Selected Users
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                    {users
+                      .filter((user) => selectedUsers.includes(user.UserID))
+                      .map((user) => (
+                        <div
+                          key={user.UserID}
+                          className="flex items-center p-2 border border-gray-300 rounded-lg shadow-sm bg-gray-50 hover:bg-gray-100 transition"
+                        >
+                          <div className="flex-grow">
+                            <p className="text-sm font-medium text-gray-800">
+                              {user.FullName}
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              {user.Email}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              )}
+
             <div className="flex gap-4 mt-4 w-full">
               <Button
                 className="lg:w-1/5 sm:w-1/2 xs:w-1/2 bg-primary text-white py-3 rounded-md hover:bg-primary transition"
                 text="Send Notification"
                 variant="secondary"
-                onClick={() => {}}
                 type="submit"
                 disabled={isSending}
               />
@@ -146,7 +168,6 @@ const DirectNotification = () => {
           </form>
         </div>
       </div>
-      {/* Modal */}
       <UserSelectModal
         users={users}
         selectedUsers={selectedUsers}

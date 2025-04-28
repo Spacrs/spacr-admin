@@ -1,38 +1,45 @@
 import { useState } from "react";
 import Button from "../../components/Common/Button";
+import InputComponent from "../../components/Common/Inputes";
 import { useNavigate } from "react-router-dom";
 
 const ScheduleNotification = () => {
-  const [title, setTitle] = useState("");
-  const [message, setMessage] = useState("");
-  const [scheduleDate, setScheduleDate] = useState("");
-  const [scheduleTime, setScheduleTime] = useState("");
+  const [formData, setFormData] = useState({
+    title: "",
+    message: "",
+    scheduleDate: "",
+    scheduleTime: "",
+  });
 
   const navigate = useNavigate();
 
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    console.log(e)
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const handleSubmit = (e: any) => {
     e.preventDefault(); // Prevent page refresh
-    console.log("Scheduled Notification Sent:", {
-      title,
-      message,
-      scheduleDate,
-      scheduleTime,
-    });
+    console.log("Scheduled Notification Sent:", formData);
 
     // Clear form fields after submission
-    setTitle("");
-    setMessage("");
-    setScheduleDate("");
-    setScheduleTime("");
+    setFormData({
+      title: "",
+      message: "",
+      scheduleDate: "",
+      scheduleTime: "",
+    });
   };
 
   return (
     <div className="">
       <div className="flex justify-start items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
-        {/* Search Bar */}
-        {/* <div className="flex flex-1 max-w-lg"></div> */}
-
-        {/* Verification Status Filter */}
         <div className="ml-4">
           <Button
             text="Back"
@@ -50,81 +57,49 @@ const ScheduleNotification = () => {
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             {/* Schedule Date and Time Input Fields */}
-            <div className="flex gap-4 mb-6">
-              <div className="w-1/2">
-                {/* Schedule Date Label and Input */}
-                <label
-                  className="block text-gray-700 font-medium mb-2"
-                  htmlFor="scheduleDate"
-                >
-                  Schedule Date
-                </label>
-                <input
-                  type="date"
-                  id="scheduleDate"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
-                  value={scheduleDate}
-                  onChange={(e) => setScheduleDate(e.target.value)}
-                  required
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <InputComponent
+                  type="datePicker"
+                  name="scheduleDate"
+                  label="Schedule Date"
+                  value={formData.scheduleDate}
+                  onChange={handleChange}
+                  required={true}
                 />
               </div>
-
-              <div className="w-1/2">
-                {/* Schedule Time Label and Input */}
-                <label
-                  className="block text-gray-700 font-medium mb-2"
-                  htmlFor="scheduleTime"
-                >
-                  Schedule Time
-                </label>
-                <input
-                  type="time"
-                  id="scheduleTime"
-                  className="w-full px-4 py-3 border bg-gray-100 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
-                  value={scheduleTime}
-                  onChange={(e) => setScheduleTime(e.target.value)}
-                  required
+              <div>
+                <InputComponent
+                  type="timePicker"
+                  name="scheduleTime"
+                  label="Schedule Time"
+                  value={formData.scheduleTime}
+                  onChange={handleChange}
+                  required={true}
                 />
               </div>
             </div>
 
             {/* Title Input */}
-            <div>
-              <label
-                className="block text-gray-700 font-medium mb-2"
-                htmlFor="title"
-              >
-                Title
-              </label>
-              <input
-                type="text"
-                id="title"
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
-                placeholder="Notification Title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-              />
-            </div>
+            <InputComponent
+              type="text"
+              name="title"
+              label="Title"
+              placeholder="Notification Title"
+              value={formData.title}
+              onChange={handleChange}
+              required={true}
+            />
 
             {/* Message Textarea */}
-            <div>
-              <label
-                className="block text-gray-700 font-medium mb-2"
-                htmlFor="message"
-              >
-                Description
-              </label>
-              <textarea
-                id="message"
-                className="w-full px-4 py-3 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-900"
-                placeholder=""
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                rows={5}
-                required
-              />
-            </div>
+            <InputComponent
+              type="textarea"
+              name="message"
+              label="Description"
+              value={formData.message}
+              onChange={handleChange}
+              required={true}
+            />
 
             {/* Button Container for Inline Buttons */}
             <div className="flex gap-4 mt-4 w-full">
@@ -138,8 +113,8 @@ const ScheduleNotification = () => {
               <Button
                 className="lg:w-1/5 sm:w-1/2 xs:w-1/2"
                 variant="primary"
-                onClick={() => {}}
                 text="Schedule Notification"
+                type="submit"
               />
             </div>
           </form>
