@@ -16,7 +16,7 @@ import AddCountry from "../pages/PaymentConfigManagement/AddCountry";
 import AddCity from "../pages/PaymentConfigManagement/AddCity";
 import CityList from "../pages/PaymentConfigManagement/CityList";
 
-import InputPage from "../pages/Samples/InputPage";
+// import InputPage from "../pages/Samples/InputPage";
 import Logout from "../pages/AuthManagement/Logout";
 import SpacrConfig from "../pages/SpacrConfig/SpacrConfig";
 import NotificationList from "../pages/NotificationManagement/NotificationList";
@@ -151,12 +151,6 @@ export const adminRoutes = [
     breadcrumb: ["admin", "Spacr Config"],
     showBreadcrumb: true,
   },
-  // {
-  //   path: "suggested-product-list",
-  //   component: SuggestedProductList,
-  //   breadcrumb: ["admin", "Suggested Products"],
-  //   showBreadcrumb: true,
-  // },
   {
     path: "add-suggested-product",
     component: AddSuggestedProduct,
