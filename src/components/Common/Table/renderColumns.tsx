@@ -18,7 +18,7 @@ export const renderColumns = (
         </p>
       );
     case "Emogi": {
-      console.log('ayaya')
+      console.log("ayaya");
       const convertEmojiCode = (emojiU: string): string => {
         if (!emojiU) return "-";
         try {
@@ -119,6 +119,30 @@ export const renderColumns = (
         <div className="text-gray-700 text-sm font-medium">{formattedDate}</div>
       );
     }
+    case "DateAndTime": {
+      const formattedDate = row[column.name!]
+        ? new Date(row[column.name!]).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "2-digit",
+          })
+        : "N/A";
+
+      const formattedTime = row[column.name!]
+        ? new Date(row[column.name!]).toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+          })
+        : "N/A";
+
+      return (
+        <div className="text-gray-700 text-sm font-medium">
+          {formattedDate} {formattedTime !== "N/A" && `at ${formattedTime}`}
+        </div>
+      );
+    }
+
     case "KebabMenu":
       return <KebabMenu row={row} actions={actions} />;
     case "Boolean":

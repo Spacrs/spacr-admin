@@ -13,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 import Button from "../../components/Common/Button";
 import ErrorMsg from "../../components/ErrorComponent/ErrorMsg";
 import { ProductData } from "../../types/ProductData.types";
+import Search from "../../components/Common/Search/index";
+
 const columns = [
   { name: "image", Header: "Image", colName: "Image" },
   {
@@ -27,8 +29,8 @@ const columns = [
     colName: "Boolean",
     sortable: true,
   },
-  { name: "CreatedAt", Header: "Created At", colName: "Date", sortable: true },
-  { name: "UpdatedAt", Header: "Updated At", colName: "Date", sortable: true },
+  { name: "CreatedAt", Header: "Created At", colName: "DateAndTime", sortable: true },
+  { name: "UpdatedAt", Header: "Updated At", colName: "DateAndTime", sortable: true },
   {
     name: "action",
     Header: "Actions",
@@ -46,6 +48,7 @@ function AdminOrders() {
   const itemsPerPage = 10;
   const [sortBy, setSortBy] = useState("CreatedAt");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+  const [filter, setFilter] = useState(""); // Search term
 
   const { data, isLoading, isFetching, isError, refetch } = useGetOrdersQuery({
     page: currentPage,
@@ -53,6 +56,7 @@ function AdminOrders() {
     createdBy: "admin",
     sort: sortDirection,
     sortBy: sortBy,
+    search: filter !== "" ? filter : undefined,
   });
 
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
@@ -149,24 +153,23 @@ function AdminOrders() {
     <div className="">
       <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         {/* Search Bar */}
-
-        <div className="flex flex-1 max-w-lg"></div>
-
-        {/* Verification Status Filter */}
-        <div className="ml-4">
-          {/* <Button
-            text="Create Product"
-            className="mr-2"
-            variant="primary"
-            onClick={() => {}}
-          /> */}
-          <Button
-            text="Add Product"
-            className="mr-2"
-            variant="dark"
-            type="button"
-            onClick={() => navigate("/admin/add-suggested-product")}
-          />
+        <div className="flex justify-between items-center w-full">
+          <div className="flex flex-1 max-w-lg">
+            <Search
+              search={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              onReset={() => setFilter("")}
+            />
+          </div>
+          <div className="ml-4">
+            <Button
+              text="Add Product"
+              className="mr-2"
+              variant="dark"
+              type="button"
+              onClick={() => navigate("/admin/add-suggested-product")}
+            />
+          </div>
         </div>
       </div>
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">

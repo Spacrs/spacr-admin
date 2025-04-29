@@ -1,13 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Table from "../../components/Common/Table";
-import {
-  useGetUsersQuery,
-  useUpdateUserInfoMutation,
-} from "../../store/slices/userSlice/apiSlice";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { setUsers, resetUsers } from "../../store/slices/userSlice/userSlice";
-import { useNavigate } from "react-router-dom";
-import ConfirmationModal from "../../components/Common/Modal/ConfirmationModal"; // Import the modal component
+import { useGetUsersQuery } from "../../store/slices/userSlice/apiSlice";
+import { useAppSelector } from "../../store/hooks";
 import Button from "../../components/Common/Button";
 
 const columns = [
@@ -15,18 +9,26 @@ const columns = [
   { name: "Mobile Number", Header: "Mobile Number", colName: "Default" },
   { name: "Email", Header: "Email", colName: "Default" },
   { name: "Message", Header: "Message", colName: "Default" },
+  {
+    name: "CreatedAt",
+    Header: "Created At",
+    colName: "DateAndTime",
+    sortable: true,
+  },
+  {
+    name: "UpdatedAt",
+    Header: "Updated At",
+    colName: "DateAndTime",
+    sortable: true,
+  },
 ];
 
 function ContactSupportList() {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const { users, isloading } = useAppSelector((state) => state.userSlice);
+  const { users } = useAppSelector((state) => state.userSlice);
   const [filter, setFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [updateUserStatus] = useUpdateUserInfoMutation();
-
-  const { data, isLoading, isError, refetch } = useGetUsersQuery({});
+  const { data, isLoading } = useGetUsersQuery({});
 
   const onClick = () => {};
 

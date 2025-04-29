@@ -28,6 +28,8 @@ const columns = [
     sortable: true,
   },
   { name: "status", Header: "Status", colName: "Default", sortable: true },
+  { name: "CreatedAt", Header: "Created At", colName: "DateAndTime", sortable: true },
+  { name: "UpdatedAt", Header: "Updated At", colName: "DateAndTime", sortable: true },
   {
     name: "action",
     Header: "Actions",

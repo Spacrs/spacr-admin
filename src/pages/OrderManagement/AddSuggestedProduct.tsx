@@ -245,6 +245,7 @@ const AddSuggestedProduct: React.FC = () => {
     <div className="min-h-screen">
       <div className="flex justify-end items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         <div className="ml-4 flex justify-end items-center ">
+          
           <Button
             text="Back"
             variant="lightBlue"
