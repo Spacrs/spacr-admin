@@ -3,6 +3,8 @@ import Table from "../../components/Common/Table";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useGetCitiesQuery } from "../../store/slices/paymentConfigSlice/apiSlice";
+import Search from "../../components/Common/Search/index";
+
 import {
   selectCities,
   setCities,
@@ -20,6 +22,8 @@ const columns = [
     sortable: true,
   },
   { name: "countryName", Header: "Country", colName: "Default" },
+  { name: "CreatedAt", Header: "Created At", colName: "DateAndTime", sortable: true },
+  { name: "UpdatedAt", Header: "Updated At", colName: "DateAndTime", sortable: true },
 ];
 
 const CityList = () => {
@@ -33,12 +37,14 @@ const CityList = () => {
 
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+  const [filter, setFilter] = useState(""); // Search term
 
   const { data, isLoading, isFetching, isError } = useGetCitiesQuery({
     page: currentPage,
     limit: itemsPerPage,
     sort: sortDirection,
-    sortBy: sortBy
+    sortBy: sortBy,
+    search: filter !== "" ? filter : undefined,
   });
 
   useEffect(() => {
@@ -68,7 +74,13 @@ const CityList = () => {
     <div className="">
       <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         {/* Search Bar */}
-        <div className="flex flex-1 max-w-lg"></div>
+        <div className="flex flex-1 max-w-lg">
+          <Search
+            search={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            onReset={() => setFilter("")}
+          />
+        </div>
 
         {/* Verification Status Filter */}
         <div className="ml-4">

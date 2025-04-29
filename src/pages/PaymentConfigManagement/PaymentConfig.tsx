@@ -12,6 +12,7 @@ import {
 import Button from "../../components/Common/Button";
 import { useNavigate } from "react-router-dom";
 import { Tooltip } from "@material-tailwind/react";
+import Search from "../../components/Common/Search/index";
 
 const columns = [
   { name: "name", Header: "Name", colName: "Default", sortable: true },
@@ -24,7 +25,8 @@ const columns = [
   { name: "wallet", Header: "Wallet", colName: "Boolean" },
   { name: "COD", Header: "COD", colName: "Boolean" },
   { name: "stripe", Header: "Stripe", colName: "Boolean" },
-  { name: "createdAt", Header: "Created At", colName: "Date", sortable: true },
+  { name: "createdAt", Header: "Created At", colName: "DateAndTime", sortable: true },
+  { name: "updatedAt", Header: "Updated At", colName: "DateAndTime", sortable: true },
   {
     name: "action",
     Header: "Actions",
@@ -42,11 +44,14 @@ function PaymentConfig() {
   const itemsPerPage = 5;
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+  const [filter, setFilter] = useState(""); // Search term
+
   const { data, isLoading, isFetching, isError } = useGetPaymentConfigsQuery({
     page: currentPage,
     limit: itemsPerPage,
     sort: sortDirection,
     sortBy: sortBy,
+    search: filter !== "" ? filter : undefined,
   });
 
   const [selectedConfig, setSelectedConfig] = useState<any>(null);
@@ -116,7 +121,13 @@ function PaymentConfig() {
     <div className="">
       <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         {/* Search Bar */}
-        <div className="flex flex-1 max-w-lg"></div>
+        <div className="flex flex-1 max-w-lg">
+          <Search
+            search={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            onReset={() => setFilter("")}
+          />
+        </div>
 
         {/* Verification Status Filter */}
         <div className="ml-4">
