@@ -32,17 +32,20 @@ export const paymentConfigApi: any = createApi({
         };
       },
     }),
+    getPaymentConfigById: builder.query<any, { countryId: number }>({
+      query: (countryId) => {
+        return {
+          url: `/payment-config/${countryId}`,
+          method: "GET",
+        };
+      },
+    }),
     updatePaymentConfig: builder.mutation<any, Partial<any>>({
       query: (credentials) => {
-        const val = {
-          wallet: credentials.wallet,
-          COD: credentials.COD,
-          stripe: credentials.stripe,
-        };
         return {
-          url: `/payment-config/update/${credentials.Id}`,
+          url: `/payment-config/update/${credentials.countryId}`,
           method: "PATCH",
-          body: val,
+          body: credentials.data,
         };
       },
     }),
@@ -69,6 +72,21 @@ export const paymentConfigApi: any = createApi({
         method: "POST",
         body: data,
       }),
+    }),
+    updateCity: builder.mutation<any, Partial<any>>({
+      query: (credentials) => ({
+        url: `/city/${credentials.cityId}`,
+        method: "PATCH",
+        body: credentials.data,
+      }),
+    }),
+    getCityById: builder.query<any, { cityId: number }>({
+      query: (cityId) => {
+        return {
+          url: `/city/city-detail/${cityId}`,
+          method: "GET",
+        };
+      },
     }),
 
     //Added on 12-03-2025
@@ -104,8 +122,11 @@ export const paymentConfigApi: any = createApi({
 
 export const {
   useGetPaymentConfigsQuery,
+  useGetPaymentConfigByIdQuery,
   useUpdatePaymentConfigMutation,
   useAddPaymentConfigMutation,
   useAddCityMutation,
   useGetCitiesQuery,
+  useUpdateCityMutation,
+  useGetCityByIdQuery,
 } = paymentConfigApi;

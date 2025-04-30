@@ -12,8 +12,8 @@ import OrderDetails from "../pages/OrderManagement/OrderDetails";
 import DirectNotification from "../pages/NotificationManagement/DirectNotification";
 import ScheduleNotification from "../pages/NotificationManagement/ScheduleNotification";
 import ContactSupportList from "../pages/ContactSupportManagement/ContactSupportList";
-import AddCountry from "../pages/PaymentConfigManagement/AddCountry";
-import AddCity from "../pages/PaymentConfigManagement/AddCity";
+import AddAndEditCountry from "../pages/PaymentConfigManagement/AddAndEditCountry";
+import AddAndEditCity from "../pages/PaymentConfigManagement/AddAndEditCity";
 import CityList from "../pages/PaymentConfigManagement/CityList";
 
 // import InputPage from "../pages/Samples/InputPage";
@@ -22,7 +22,7 @@ import SpacrConfig from "../pages/SpacrConfig/SpacrConfig";
 import NotificationList from "../pages/NotificationManagement/NotificationList";
 import AdminProducts from "../pages/OrderManagement/AdminProducts";
 import AddSuggestedProduct from "../pages/OrderManagement/AddSuggestedProduct";
-import OrderOffers from '../pages/OrderManagement/OrderOffers';
+import OrderOffers from "../pages/OrderManagement/OrderOffers";
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -126,17 +126,28 @@ export const adminRoutes = [
     breadcrumb: ["admin", "Order-Offers"],
     showBreadcrumb: true,
   },
-
   {
     path: "add-payment-config-country",
-    component: AddCountry,
+    component: AddAndEditCountry,
     breadcrumb: ["admin", "Add Country"],
     showBreadcrumb: true,
   },
   {
+    path: "edit-payment-config-country/:countryId",
+    component: AddAndEditCountry,
+    breadcrumb: ["admin", "Edit Country"],
+    showBreadcrumb: true,
+  },
+  {
     path: "add-city",
-    component: AddCity,
+    component: AddAndEditCity,
     breadcrumb: ["admin", "Add City"],
+    showBreadcrumb: true,
+  },
+  {
+    path: "edit-city/:cityId",
+    component: AddAndEditCity,
+    breadcrumb: ["admin", "Edit City"],
     showBreadcrumb: true,
   },
   {

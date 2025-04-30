@@ -2,6 +2,9 @@ import React from "react";
 import { IColumns, IAction } from "./index";
 import { icons } from "../../../Icons/constant";
 import KebabMenu from "./KebabMenu";
+import { TbBrandAppgallery } from "react-icons/tb";
+import { FaRegUser } from "react-icons/fa6";
+import { CiImageOn } from "react-icons/ci";
 
 const { MdOutlineEdit, AiOutlineDelete, BsCopy, BsEye } = icons;
 
@@ -10,6 +13,12 @@ export const renderColumns = (
   row: any,
   actions: IAction
 ): React.ReactNode => {
+  const icon = {
+    user: <FaRegUser className="text-gray-400 w-10 h-10" />,
+    order: <TbBrandAppgallery className="text-gray-400 w-10 h-10" />,
+    default: <CiImageOn className="text-gray-400 w-10 h-10" />,
+  };
+
   switch (column.colName) {
     case "Default":
       return (
@@ -100,12 +109,21 @@ export const renderColumns = (
           )}
         </div>
       );
-    case "Image":
+    case "Image": {
       return (
-        <div>
-          <img src={row[column.name!]} alt={column.name} className="w-10 h" />
+        <div className="flex items-center justify-center">
+          {row[column.name!] === "" || row[column.name!] === null ? (
+            icon[column.icon ? column.icon : "default"]
+          ) : (
+            <img
+              src={row[column.name!]}
+              alt={column.name}
+              className="w-10 h-10 object-cover rounded-md"
+            />
+          )}
         </div>
       );
+    }
     case "Date": {
       const formattedDate = row[column.name!]
         ? new Date(row[column.name!]).toLocaleDateString("en-US", {

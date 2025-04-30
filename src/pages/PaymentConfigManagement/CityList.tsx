@@ -1,30 +1,14 @@
 import { useState, useEffect } from "react";
-import Table from "../../components/Common/Table";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useGetCitiesQuery } from "../../store/slices/paymentConfigSlice/apiSlice";
-import Search from "../../components/Common/Search/index";
-
 import {
   selectCities,
   setCities,
 } from "../../store/slices/paymentConfigSlice/paymentConfigSlice";
-import Button from "../../components/Common/Button";
 import { Tooltip } from "@material-tailwind/react";
-
-const columns = [
-  { name: "name", Header: "Name", colName: "Default", sortable: true },
-  { name: "latitude", Header: "Latitude", colName: "Default", sortable: true },
-  {
-    name: "longitude",
-    Header: "Longitude",
-    colName: "Default",
-    sortable: true,
-  },
-  { name: "countryName", Header: "Country", colName: "Default" },
-  { name: "CreatedAt", Header: "Created At", colName: "DateAndTime", sortable: true },
-  { name: "UpdatedAt", Header: "Updated At", colName: "DateAndTime", sortable: true },
-];
+import { columns } from "../../constant/Columns";
+import { Search, Table, Button } from "../../components/Common";
 
 const CityList = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -70,6 +54,15 @@ const CityList = () => {
     setSortDirection(direction);
   };
 
+  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleUpdate = (config: any) => {
+    navigate(`/admin/edit-city/${config.Id}`);
+  };
+
   return (
     <div className="">
       <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
@@ -77,7 +70,7 @@ const CityList = () => {
         <div className="flex flex-1 max-w-lg">
           <Search
             search={filter}
-            onChange={(e) => setFilter(e.target.value)}
+            onChange={onSearch}
             onReset={() => setFilter("")}
           />
         </div>
@@ -97,13 +90,13 @@ const CityList = () => {
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">
         <Table
           data={cities}
-          columns={columns}
+          columns={columns.city}
           loading={isLoading || isFetching}
           totalPages={data?.pagination?.totalPages || 1}
           currentPage={currentPage}
           onPageChange={setCurrentPage}
           itemsPerPage={itemsPerPage}
-          handleUpdate={() => {}}
+          handleUpdate={handleUpdate}
           onSort={onSort}
         />
       </div>

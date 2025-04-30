@@ -1,8 +1,7 @@
 import { useState } from "react";
-import Table from "../../components/Common/Table";
 import { useGetUsersQuery } from "../../store/slices/userSlice/apiSlice";
 import { useAppSelector } from "../../store/hooks";
-import Button from "../../components/Common/Button";
+import { Table, Button, Search } from "../../components/Common";
 
 const columns = [
   { name: "Name", Header: "Name", colName: "Default" },
@@ -32,18 +31,21 @@ function ContactSupportList() {
 
   const onClick = () => {};
 
+  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter(e.target.value);
+    setCurrentPage(1);
+  };
+
   return (
     <div className="flex flex-col">
       {/* Filters Section */}
       <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         {/* Search Bar */}
         <div className="flex flex-1 max-w-lg">
-          <input
-            type="text"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md"
-            placeholder="Search here..."
-            value={filter}
-            // Update search filter state
+          <Search
+            search={filter}
+            onChange={onSearch}
+            onReset={() => setFilter("")}
           />
         </div>
 

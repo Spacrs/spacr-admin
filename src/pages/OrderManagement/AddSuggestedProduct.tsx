@@ -42,7 +42,7 @@ type BodyPayload = {
   // images: { mediaId: string; url: string }[];
   images: any[];
   IsTrending: boolean;
-  Price: number;
+  Price: number | string;
 };
 
 const AddSuggestedProduct: React.FC = () => {
@@ -123,10 +123,10 @@ const AddSuggestedProduct: React.FC = () => {
         Descriptions: "",
         ProductUrl: "",
         CreatedBy: "admin",
-        From_CountryId: 1,
-        From_CityId: 1,
-        To_CountryId: 1,
-        To_CityId: 1,
+        From_CountryId: 0,
+        From_CityId: 0,
+        To_CountryId: 0,
+        To_CityId: 0,
         images: [],
         IsTrending: false,
         Price: 0.0,
@@ -141,10 +141,10 @@ const AddSuggestedProduct: React.FC = () => {
     Descriptions: "",
     ProductUrl: "",
     CreatedBy: "admin",
-    From_CountryId: 1,
-    From_CityId: 1,
-    To_CountryId: 1,
-    To_CityId: 1,
+    From_CountryId: 0,
+    From_CityId: 0,
+    To_CountryId: 0,
+    To_CityId: 0,
     images: [],
     IsTrending: false,
     Price: 0.0,
@@ -160,9 +160,12 @@ const AddSuggestedProduct: React.FC = () => {
     const numericValue = Number(value);
 
     if (name === "Price") {
-      const floatVal = parseFloat(value);
-      if (!isNaN(floatVal)) {
-        setPayload((p) => ({ ...p, Price: floatVal }));
+      // Allow only valid numbers or an empty string
+      if (/^\d*\.?\d*$/.test(value)) {
+        setPayload((p) => ({
+          ...p,
+          Price: value === "" ? "" : parseFloat(value),
+        }));
       }
       return;
     } else {
@@ -182,6 +185,23 @@ const AddSuggestedProduct: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (payload.Price === 0) {
+      // Check if price is 0 and not empty
+      alert("Price cannot be 0.");
+      return;
+    }
+
+    if (
+      payload.To_CityId === 0 ||
+      payload.From_CityId === 0 ||
+      payload.To_CountryId === 0 ||
+      payload.From_CountryId === 0
+    ) {
+      // Check if any of the city or country IDs are 0
+      alert("Please select valid countries and cities.");
+      return;
+    }
 
     if (!isEditProduct && payload.images.length === 0) {
       alert("Please upload at least one image.");
@@ -222,7 +242,9 @@ const AddSuggestedProduct: React.FC = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (payload.images.length >= 3) {
+    const totalImages = payload.images.length + previewImages.length;
+
+    if (totalImages >= 3) {
       alert("You can only upload up to 3 images.");
       return;
     }
@@ -234,18 +256,23 @@ const AddSuggestedProduct: React.FC = () => {
     e.target.value = "";
   };
 
-  const handleRemoveImage = (index: number) => {
-    setPayload((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index),
-    }));
+  const handleRemoveImage = (index: number, isPreview: boolean = false) => {
+    if (isPreview) {
+      // Remove from previewImages (existing images)
+      setPreviewImages((prev) => prev.filter((_, i) => i !== index));
+    } else {
+      // Remove from payload.images (newly uploaded images)
+      setPayload((prev) => ({
+        ...prev,
+        images: prev.images.filter((_, i) => i !== index),
+      }));
+    }
   };
 
   return (
     <div className="min-h-screen">
       <div className="flex justify-end items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         <div className="ml-4 flex justify-end items-center ">
-          
           <Button
             text="Back"
             variant="lightBlue"
@@ -301,7 +328,6 @@ const AddSuggestedProduct: React.FC = () => {
                   name="Price"
                   type="number"
                   value={payload.Price}
-                  min={0}
                   onChange={handleChange}
                   required={true}
                 />
@@ -315,7 +341,7 @@ const AddSuggestedProduct: React.FC = () => {
                 <SelectComponent
                   name="From_CountryId"
                   options={[
-                    { label: "Select from country", value: "" },
+                    { label: "Select from country", value: 0 },
                     ...countryOptions,
                   ]}
                   value={payload.From_CountryId}
@@ -328,7 +354,7 @@ const AddSuggestedProduct: React.FC = () => {
                 <SelectComponent
                   name="From_CityId"
                   options={[
-                    { label: "Select from city", value: "" },
+                    { label: "Select from city", value: 0 },
                     ...fromCityOptions,
                   ]}
                   value={payload.From_CityId}
@@ -345,7 +371,7 @@ const AddSuggestedProduct: React.FC = () => {
                 <SelectComponent
                   name="To_CountryId"
                   options={[
-                    { label: "Select to country", value: "" },
+                    { label: "Select to country", value: 0 },
                     ...countryOptions,
                   ]}
                   value={payload.To_CountryId}
@@ -358,7 +384,7 @@ const AddSuggestedProduct: React.FC = () => {
                 <SelectComponent
                   name="To_CityId"
                   options={[
-                    { label: "Select to city", value: "" },
+                    { label: "Select to city", value: 0 },
                     ...toCityOptions,
                   ]}
                   value={payload.To_CityId}

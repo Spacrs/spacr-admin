@@ -17,6 +17,7 @@ export interface IColumns {
   Actions?: string[];
   colName: string;
   sortable?: boolean;
+  icon?: 'user' | 'order' | 'default';
 }
 
 interface ITableProps {

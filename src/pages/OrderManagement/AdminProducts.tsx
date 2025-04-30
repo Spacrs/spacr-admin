@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Table from "../../components/Common/Table";
 import {
   useGetOrdersQuery,
   useUpdateOrderTrendMutation,
@@ -10,34 +9,9 @@ import {
   updateProductList,
 } from "../../store/slices/orderSlice/orderSlice";
 import { useNavigate } from "react-router-dom";
-import Button from "../../components/Common/Button";
-import ErrorMsg from "../../components/ErrorComponent/ErrorMsg";
 import { ProductData } from "../../types/ProductData.types";
-import Search from "../../components/Common/Search/index";
-
-const columns = [
-  { name: "image", Header: "Image", colName: "Image" },
-  {
-    name: "ProductName",
-    Header: "Product Name",
-    colName: "Default",
-    sortable: true,
-  },
-  {
-    name: "IsTrending",
-    Header: "Is Trending",
-    colName: "Boolean",
-    sortable: true,
-  },
-  { name: "CreatedAt", Header: "Created At", colName: "DateAndTime", sortable: true },
-  { name: "UpdatedAt", Header: "Updated At", colName: "DateAndTime", sortable: true },
-  {
-    name: "action",
-    Header: "Actions",
-    colName: "Actions",
-    Actions: ["UPDATE", "VIEW"],
-  },
-];
+import { columns } from "../../constant/Columns";
+import { Search, ErrorMsg, Table, Button } from "../../components/Common";
 
 function AdminOrders() {
   const dispatch = useAppDispatch();
@@ -149,6 +123,11 @@ function AdminOrders() {
     refetch();
   };
 
+  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter(e.target.value)
+    setCurrentPage(1);
+  }
+
   return (
     <div className="">
       <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
@@ -157,7 +136,7 @@ function AdminOrders() {
           <div className="flex flex-1 max-w-lg">
             <Search
               search={filter}
-              onChange={(e) => setFilter(e.target.value)}
+              onChange={onSearch}
               onReset={() => setFilter("")}
             />
           </div>
@@ -175,7 +154,7 @@ function AdminOrders() {
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">
         <Table
           data={products}
-          columns={columns}
+          columns={columns.productColumn}
           loading={isLoading || isFetching}
           totalPages={data?.pagination?.totalPages || 1}
           currentPage={currentPage}

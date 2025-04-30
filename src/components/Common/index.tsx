@@ -6,6 +6,11 @@ import Modal from "./Modal";
 import Search from "./Search";
 import Table from "./Table";
 import ImageGallery from "./ImageGallery/Index";
+import ErrorMsg from "./ErrorComponent/ErrorMsg";
+import ConfirmationModal from "./Modal/ConfirmationModal";
+import DeleteModal from "./Modal/DeleteModal";
+import UserSelectModal from "./Modal/UserSelectModal";
+import ViewModal from "./Modal/ViewModal";
 
 export {
   Breadcrumb,
@@ -16,4 +21,9 @@ export {
   Search,
   Table,
   ImageGallery,
+  ErrorMsg,
+  ConfirmationModal,
+  DeleteModal,
+  UserSelectModal,
+  ViewModal,
 };

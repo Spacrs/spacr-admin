@@ -1,10 +1,12 @@
-import Table from "../../components/Common/Table";
 import { useNavigate } from "react-router-dom";
-import Button from "../../components/Common/Button";
 import SelectComponent from "../../components/Common/Inputes/SelectInput";
 import { useGetNotificationsQuery } from "../../store/slices/notificationSlice/apiSlice";
 import { useEffect, useState } from "react";
-import Search from "../../components/Common/Search/index";
+import {
+  Search,
+  Table,
+  Button,
+} from "../../components/Common";
 
 const columns = [
   { name: "title", Header: "Title", colName: "Default", sortable: true },
@@ -28,8 +30,18 @@ const columns = [
     sortable: true,
   },
   { name: "status", Header: "Status", colName: "Default", sortable: true },
-  { name: "CreatedAt", Header: "Created At", colName: "DateAndTime", sortable: true },
-  { name: "UpdatedAt", Header: "Updated At", colName: "DateAndTime", sortable: true },
+  {
+    name: "CreatedAt",
+    Header: "Created At",
+    colName: "DateAndTime",
+    sortable: true,
+  },
+  {
+    name: "UpdatedAt",
+    Header: "Updated At",
+    colName: "DateAndTime",
+    sortable: true,
+  },
   {
     name: "action",
     Header: "Actions",
@@ -86,6 +98,11 @@ function NotificationList() {
     setSortDirection(direction);
   };
 
+  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter(e.target.value);
+    setCurrentPage(1);
+  };
+
   return (
     <div className="">
       <div className="flex flex-col mb-4 p-4 space-y-2 bg-gray-100 shadow-md rounded-lg">
@@ -93,7 +110,7 @@ function NotificationList() {
         <div className="flex flex-1 max-w-lg">
           <Search
             search={filter}
-            onChange={(e) => setFilter(e.target.value)}
+            onChange={onSearch}
             onReset={() => setFilter("")}
           />
         </div>

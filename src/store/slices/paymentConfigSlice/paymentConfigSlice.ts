@@ -11,6 +11,8 @@ interface IState {
   countryOptions: any[];
   country: any[];
   countries: {};
+  isEditPaymentConfig: boolean;
+  isEditCity: boolean,
 }
 
 const initialState: IState = {
@@ -22,6 +24,8 @@ const initialState: IState = {
   countries: {},
   cityOptions: [],
   countryOptions: [],
+  isEditPaymentConfig: false,
+  isEditCity: false,
 };
 
 export const paymentConfigSlice = createSlice({
@@ -60,6 +64,22 @@ export const paymentConfigSlice = createSlice({
             }))
           : [];
     },
+    setIsEditCountry: (
+      state: IState,
+      action: PayloadAction<{ isEditPaymentConfig?: boolean }>
+    ) => {
+      if (action.payload.isEditPaymentConfig !== undefined) {
+        state.isEditPaymentConfig = action.payload.isEditPaymentConfig;
+      }
+    },
+    setIsEditCity: (
+      state: IState,
+      action: PayloadAction<{ isEditCity?: boolean }>
+    ) => {
+      if (action.payload.isEditCity !== undefined) {
+        state.isEditCity = action.payload.isEditCity;
+      }
+    },
   },
 });
 
@@ -70,6 +90,8 @@ export const {
   setCities,
   setCountries,
   setCountryOptions,
+  setIsEditCountry,
+  setIsEditCity,
 } = paymentConfigSlice.actions;
 export const selectPaymentConfig = (state: RootState) =>
   state.paymentConfigSlice.paymentConfigs;
@@ -81,4 +103,8 @@ export const selectCounyOptions = (state: RootState) =>
   state.paymentConfigSlice.countryOptions;
 export const selectCityOptions = (state: RootState) =>
   state.paymentConfigSlice.cityOptions;
+export const selectIsEditPaymentConfig = (state: RootState) =>
+  state.paymentConfigSlice.isEditPaymentConfig;
+export const selectIsEditCity = (state: RootState) =>
+  state.paymentConfigSlice.isEditCity;
 export default paymentConfigSlice.reducer;

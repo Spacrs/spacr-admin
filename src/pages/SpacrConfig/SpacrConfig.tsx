@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Button from "../../components/Common/Button";
 import {
   useGetConfigFeesQuery,
   useUpdateConfigFeesApiMutation,
 } from "../../store/slices/spacrConfigSlice/apiSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { updateSpacrConfig } from "../../store/slices/spacrConfigSlice/spacrConfigSlice";
-import Loading from "../../components/Common/Loader/index";
+import { Loader as Loading, Button } from "../../components/Common";
 
 const SpacrConfig = () => {
   const dispatch = useAppDispatch();

@@ -1,7 +1,6 @@
 import { useState } from "react";
-import Button from "../../components/Common/Button";
-import InputComponent from "../../components/Common/Inputes";
 import { useNavigate } from "react-router-dom";
+import { Inputes as InputComponent, Button } from "../../components/Common";
 
 const ScheduleNotification = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +15,7 @@ const ScheduleNotification = () => {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    console.log(e)
+    console.log(e);
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
