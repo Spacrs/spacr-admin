@@ -4,11 +4,17 @@ const { RxCross1, FiSearch } = icons;
 
 interface SearchInputProps {
   search: string;
+  placeholder?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onReset?: () => void;
 }
 
-const Index: React.FC<SearchInputProps> = ({ search, onChange, onReset }) => {
+const Index: React.FC<SearchInputProps> = ({
+  search,
+  placeholder = "Search by name or email...",
+  onChange,
+  onReset,
+}) => {
   return (
     <div className="relative w-full">
       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -17,7 +23,7 @@ const Index: React.FC<SearchInputProps> = ({ search, onChange, onReset }) => {
       <input
         type="text"
         className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        placeholder="Search by name or email..."
+        placeholder={placeholder}
         value={search}
         onChange={onChange}
       />

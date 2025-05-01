@@ -5,7 +5,7 @@ function NumberInpute({
   value,
   onChange,
   defaultValue = 16,
-  min = 0,
+  min,
   max,
   required = false,
 }: {
@@ -22,7 +22,7 @@ function NumberInpute({
       type="number"
       name={name}
       {...(max !== undefined && { max })}
-      min={min}
+      {...(min !== undefined && { min })}
       defaultValue={defaultValue}
       step="0.01"
       className="w-full px-4 py-3 border border-gray-300 rounded-md transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-900"

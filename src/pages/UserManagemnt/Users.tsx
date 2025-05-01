@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Table from "../../components/Common/Table";
 import {
   useGetUsersQuery,
   useUpdateUserInfoMutation,
@@ -7,10 +6,13 @@ import {
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { setUsers, resetUsers } from "../../store/slices/userSlice/userSlice";
 import { useNavigate } from "react-router-dom";
-import ConfirmationModal from "../../components/Common/Modal/ConfirmationModal";
-import Search from "../../components/Common/Search/index";
 import { columns } from "../../constant/Columns";
-import ErrorMsg from "../../components/ErrorComponent/ErrorMsg";
+import {
+  Search,
+  ErrorMsg,
+  ConfirmationModal,
+  Table,
+} from "../../components/Common";
 
 const Users = () => {
   const dispatch = useAppDispatch();
@@ -87,6 +89,11 @@ const Users = () => {
     setSortDirection(direction);
   };
 
+  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter(e.target.value);
+    setCurrentPage(1);
+  };
+
   return (
     <div className="flex flex-col">
       {/* Filters Section */}
@@ -95,7 +102,7 @@ const Users = () => {
         <div className="flex flex-1 max-w-lg">
           <Search
             search={filter}
-            onChange={(e) => setFilter(e.target.value)}
+            onChange={onSearch}
             onReset={() => setFilter("")}
           />
         </div>

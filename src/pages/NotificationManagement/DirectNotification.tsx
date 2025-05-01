@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import Button from "../../components/Common/Button";
 import { useNavigate } from "react-router-dom";
 import { useGetUsersQuery } from "../../store/slices/userSlice/apiSlice";
 import { useSendNotificationMutation } from "../../store/slices/notificationSlice/apiSlice";
-import UserSelectModal from "../../components/Common/Modal/UserSelectModal";
-import InputComponent from "../../components/Common/Inputes";
+import {
+  Inputes as InputComponent,
+  Button,
+  UserSelectModal,
+} from "../../components/Common";
 
 type User = {
   UserID: string;

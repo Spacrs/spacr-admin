@@ -2,6 +2,9 @@ import React from "react";
 import { IColumns, IAction } from "./index";
 import { icons } from "../../../Icons/constant";
 import KebabMenu from "./KebabMenu";
+import { TbBrandAppgallery } from "react-icons/tb";
+import { FaRegUser } from "react-icons/fa6";
+import { CiImageOn } from "react-icons/ci";
 
 const { MdOutlineEdit, AiOutlineDelete, BsCopy, BsEye } = icons;
 
@@ -10,6 +13,12 @@ export const renderColumns = (
   row: any,
   actions: IAction
 ): React.ReactNode => {
+  const icon = {
+    user: <FaRegUser className="text-gray-400 w-10 h-10" />,
+    order: <TbBrandAppgallery className="text-gray-400 w-10 h-10" />,
+    default: <CiImageOn className="text-gray-400 w-10 h-10" />,
+  };
+
   switch (column.colName) {
     case "Default":
       return (
@@ -18,7 +27,6 @@ export const renderColumns = (
         </p>
       );
     case "Emogi": {
-      console.log("ayaya");
       const convertEmojiCode = (emojiU: string): string => {
         if (!emojiU) return "-";
         try {
@@ -71,41 +79,63 @@ export const renderColumns = (
     case "Status":
       return (
         <div className="relative flex items-center">
-          {column.name && ["active", "verified"].includes(row[column.name]) && (
-            <div className="bg-green-500 text-white text-xs font-medium rounded-full p-2">
-              {row[column.name]?.charAt(0).toUpperCase() +
-                row[column.name]?.slice(1)}
-            </div>
-          )}
+          {column.name &&
+            [
+              "active",
+              "verified",
+              "ACCEPTED",
+              "LIVE",
+              "PURCHASED",
+              "COMPLETED",
+              "READY_TO_RECEIVE",
+            ].includes(row[column.name]) && (
+              <div className="bg-green-500 text-white text-xs font-medium rounded-full p-2 ">
+                {row[column.name]?.charAt(0).toUpperCase() +
+                  row[column.name]?.slice(1).toLowerCase()}
+              </div>
+            )}
 
           {column.name &&
-            ["inactive", "Pending", "pending"].includes(row[column.name]) && (
+            ["inactive", "Pending", "pending", "IN_TRANSIT"].includes(
+              row[column.name]
+            ) && (
               <div className=" bg-orange-400 text-white text-xs font-medium rounded-full p-2">
                 {row[column.name]?.charAt(0).toUpperCase() +
-                  row[column.name]?.slice(1)}
+                  row[column.name]?.slice(1).toLowerCase()}
               </div>
             )}
           {column.name &&
-            ["Rejected", "rejected"].includes(row[column.name]) && (
+            ["Rejected", "rejected", "CANCELLED"].includes(
+              row[column.name]
+            ) && (
               <div className=" bg-red-700 text-white text-xs font-medium rounded-full p-2">
                 {row[column.name]?.charAt(0).toUpperCase() +
-                  row[column.name]?.slice(1)}
+                  row[column.name]?.slice(1).toLowerCase()}
               </div>
             )}
           {column.name && ["none"].includes(row[column.name]) && (
             <div className=" bg-orange-400 text-white text-xs font-medium rounded-full p-2">
               {row[column.name]?.charAt(0).toUpperCase() +
-                row[column.name]?.slice(1)}
+                row[column.name]?.slice(1).toLowerCase()}
             </div>
           )}
         </div>
       );
-    case "Image":
+    case "Image": {
       return (
-        <div>
-          <img src={row[column.name!]} alt={column.name} className="w-10 h" />
+        <div className="flex items-center justify-center">
+          {row[column.name!] === "" || row[column.name!] === null ? (
+            icon[column.icon ? column.icon : "default"]
+          ) : (
+            <img
+              src={row[column.name!]}
+              alt={column.name}
+              className="w-10 h-10 object-cover rounded-md"
+            />
+          )}
         </div>
       );
+    }
     case "Date": {
       const formattedDate = row[column.name!]
         ? new Date(row[column.name!]).toLocaleDateString("en-US", {

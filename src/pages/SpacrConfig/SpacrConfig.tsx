@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Button from "../../components/Common/Button";
 import {
   useGetConfigFeesQuery,
   useUpdateConfigFeesApiMutation,
 } from "../../store/slices/spacrConfigSlice/apiSlice";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { updateSpacrConfig } from "../../store/slices/spacrConfigSlice/spacrConfigSlice";
-import Loading from "../../components/Common/Loader/index";
+import { Loader as Loading, Button } from "../../components/Common";
+import { toast, ToastContainer } from "react-toastify";
 
 const SpacrConfig = () => {
   const dispatch = useAppDispatch();
@@ -28,14 +28,17 @@ const SpacrConfig = () => {
 
     try {
       await updateConfigFeesApi({ CustomFees: fees }).unwrap();
-      dispatch(updateSpacrConfig({ CustomFees: fees })); // Dispatch correctly
+      dispatch(updateSpacrConfig({ CustomFees: fees }));
+      toast.success("Fees updated successfully!"); 
     } catch (error) {
       console.error("Failed to update fees", error);
+      toast.error("Failed to update fees. Please try again.");
     }
   };
 
   return (
     <div className="flex justify-center items-center flex-col bg-gray-50 rounded-lg">
+      <ToastContainer />
       {isLoading ? (
         <div className="text-center text-gray-500 mt-2">
           <Loading />
