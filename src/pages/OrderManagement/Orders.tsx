@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Table from "../../components/Common/Table";
 import {
   useGetOrdersQuery,
   useUpdateOrderTrendMutation,
@@ -10,39 +9,9 @@ import {
   updateOrderList,
 } from "../../store/slices/orderSlice/orderSlice";
 import { useNavigate } from "react-router-dom";
-import Button from "../../components/Common/Button";
-import ErrorMsg from "../../components/ErrorComponent/ErrorMsg";
-import Search from "../../components/Common/Search/index";
 import { ProductData } from "../../types/ProductData.types";
-
-const columns = [
-  { name: "image", Header: "Image", colName: "Image" },
-  {
-    name: "ProductName",
-    Header: "Product Name",
-    colName: "Default",
-    sortable: true,
-  },
-  { name: "Price", Header: "Price", colName: "Default", sortable: true },
-  {
-    name: "DeliveryReward",
-    Header: "Delivery Reward",
-    colName: "Default",
-    sortable: true,
-  },
-  { name: "Quantity", Header: "Quantity", colName: "Default", sortable: true },
-  { name: "IsWithBox", Header: "Is With Box", colName: "Boolean" },
-
-  { name: "Status", Header: "Status", colName: "Status" },
-  { name: "CreatedAt", Header: "Created At", colName: "DateAndTime", sortable: true },
-  { name: "UpdatedAt", Header: "Updated At", colName: "DateAndTime", sortable: true },
-  {
-    name: "action",
-    Header: "Actions",
-    colName: "Actions",
-    Actions: ["UPDATE", "VIEW"],
-  },
-];
+import { columns } from "../../constant/Columns";
+import { Search, ErrorMsg, Table, Button } from "../../components/Common";
 
 function Orders() {
   const dispatch = useAppDispatch();
@@ -136,6 +105,13 @@ function Orders() {
     setSortDirection(direction);
   };
 
+  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter(e.target.value);
+    setCurrentPage(1);
+  };
+
+  console.log(orders, "orders from redux");
+
   return (
     <div className="">
       <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
@@ -143,7 +119,7 @@ function Orders() {
         <div className="flex flex-1 max-w-lg">
           <Search
             search={filter}
-            onChange={(e) => setFilter(e.target.value)}
+            onChange={onSearch}
             onReset={() => setFilter("")}
           />
         </div>
@@ -151,10 +127,8 @@ function Orders() {
 
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">
         <Table
-          data={orders.filter((order: any) =>
-            order.ProductName?.toLowerCase().includes(filter.toLowerCase())
-          )}
-          columns={columns}
+          data={orders}
+          columns={columns.orderColumn}
           loading={isLoading || isFetching}
           totalPages={data?.pagination?.totalPages || 1}
           currentPage={currentPage}

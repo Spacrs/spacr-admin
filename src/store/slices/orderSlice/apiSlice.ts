@@ -71,6 +71,15 @@ export const ordersApi: any = createApi({
         };
       },
     }),
+    deleteOrderMedia: builder.mutation<any, Partial<any>>({
+      query: (productData) => {
+        return {
+          url: `/${ADMIN}/media/update-media-relation`,
+          method: "PATCH",
+          body: productData,
+        };
+      },
+    }),
   }),
 });
 export const {
@@ -80,4 +89,5 @@ export const {
   useGetOrderOffersQuery,
   useCreateProductMutation,
   useUpdateProductMutation,
+  useDeleteOrderMediaMutation,
 } = ordersApi;

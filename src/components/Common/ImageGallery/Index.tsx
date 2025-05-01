@@ -3,7 +3,7 @@ import React from "react";
 interface ImageGalleryProps {
   images: File[];
   previewImages: string[];
-  onRemoveImage: (index: number) => void;
+  onRemoveImage: (index: number, isPreview: boolean) => void;
 }
 
 const ImageGallery: React.FC<ImageGalleryProps> = ({
@@ -25,7 +25,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
             />
             <button
               type="button"
-              onClick={() => onRemoveImage(index)}
+              onClick={() => onRemoveImage(index, false)}
               className="absolute top-0 right-0 bg-black bg-opacity-50 text-white rounded-full p-1 hover:bg-red-600"
             >
               ✕
@@ -44,6 +44,13 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
             <span className="absolute top-0 left-0 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
               Preview
             </span>
+            <button
+              type="button"
+              onClick={() => onRemoveImage(index, true)} // Pass `true` for preview images
+              className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1"
+            >
+              X
+            </button>
           </div>
         ))}
       </div>

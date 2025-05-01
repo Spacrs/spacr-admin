@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { setOrderOffers } from "../../store/slices/orderSlice/orderSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../../components/Common/Button";
-import ErrorMsg from "../../components/ErrorComponent/ErrorMsg";
+import ErrorMsg from "../../components/Common/ErrorComponent/ErrorMsg";
 
 const columns = [
   { name: "userProfileImage", Header: "Profile Image", colName: "Image" },

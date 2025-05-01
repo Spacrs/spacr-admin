@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Table from "../../components/Common/Table";
 import { useGetUserDevicesQuery } from "../../store/slices/userSlice/apiSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
@@ -7,8 +6,8 @@ import {
   resetUsers,
 } from "../../store/slices/userSlice/userSlice";
 import { columns } from "../../constant/Columns";
-import ErrorMsg from "../../components/ErrorComponent/ErrorMsg";
 import { useParams } from "react-router-dom";
+import { ErrorMsg, Table } from "../../components/Common";
 
 const UserDevices = ({ userId = "" }: { userId?: string }) => {
   const dispatch = useAppDispatch();

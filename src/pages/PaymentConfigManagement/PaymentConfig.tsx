@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Table from "../../components/Common/Table";
 import {
   useGetPaymentConfigsQuery,
   useUpdatePaymentConfigMutation,
@@ -9,31 +8,10 @@ import {
   setPaymentConfigs,
   updatePaymentConfigInList,
 } from "../../store/slices/paymentConfigSlice/paymentConfigSlice";
-import Button from "../../components/Common/Button";
 import { useNavigate } from "react-router-dom";
 import { Tooltip } from "@material-tailwind/react";
-import Search from "../../components/Common/Search/index";
-
-const columns = [
-  { name: "name", Header: "Name", colName: "Default", sortable: true },
-  {
-    name: "shortName",
-    Header: "Short Name",
-    colName: "Default",
-    sortable: true,
-  },
-  { name: "wallet", Header: "Wallet", colName: "Boolean" },
-  { name: "COD", Header: "COD", colName: "Boolean" },
-  { name: "stripe", Header: "Stripe", colName: "Boolean" },
-  { name: "createdAt", Header: "Created At", colName: "DateAndTime", sortable: true },
-  { name: "updatedAt", Header: "Updated At", colName: "DateAndTime", sortable: true },
-  {
-    name: "action",
-    Header: "Actions",
-    colName: "Actions",
-    Actions: ["UPDATE"],
-  },
-];
+import { columns } from "../../constant/Columns";
+import { Search, Table, Button } from "../../components/Common";
 
 function PaymentConfig() {
   const dispatch = useAppDispatch();
@@ -76,8 +54,7 @@ function PaymentConfig() {
 
   // Open modal and set selected row data
   const handleUpdate = (config: any) => {
-    setSelectedConfig(config);
-    setIsOpen(true);
+    navigate(`/admin/edit-payment-config-country/${config.Id}`);
   };
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,10 +81,7 @@ function PaymentConfig() {
     setSelectedConfig(null);
   };
 
-  const addPaymentConfig = () => {
-    navigate("/admin/add-payment-config-country");
-  };
-
+  // Add country button handler
   const AddCountry = () => {
     navigate("/admin/add-payment-config-country");
   };
@@ -117,6 +91,11 @@ function PaymentConfig() {
     setSortDirection(direction);
   };
 
+  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter(e.target.value);
+    setCurrentPage(1);
+  };
+  
   return (
     <div className="">
       <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
@@ -124,7 +103,7 @@ function PaymentConfig() {
         <div className="flex flex-1 max-w-lg">
           <Search
             search={filter}
-            onChange={(e) => setFilter(e.target.value)}
+            onChange={onSearch}
             onReset={() => setFilter("")}
           />
         </div>
@@ -144,7 +123,7 @@ function PaymentConfig() {
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">
         <Table
           data={paymentConfigs}
-          columns={columns}
+          columns={columns.paymentConfig}
           loading={isLoading || isFetching}
           totalPages={data?.pagination?.totalPages || 1}
           currentPage={currentPage}
