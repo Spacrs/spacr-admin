@@ -117,7 +117,13 @@ export const adminRoutes = [
   {
     path: "order-details/:orderId",
     component: OrderDetails,
-    breadcrumb: ["admin", "Order-Details"],
+    breadcrumb: ["admin", "Order Details"],
+    showBreadcrumb: true,
+  },
+  {
+    path: "product-details/:orderId",
+    component: OrderDetails,
+    breadcrumb: ["admin", "Product Details"],
     showBreadcrumb: true,
   },
   {

@@ -110,6 +110,8 @@ function Orders() {
     setCurrentPage(1);
   };
 
+  console.log(orders, "orders from redux");
+
   return (
     <div className="">
       <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
@@ -125,9 +127,7 @@ function Orders() {
 
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">
         <Table
-          data={orders.filter((order: any) =>
-            order.ProductName?.toLowerCase().includes(filter.toLowerCase())
-          )}
+          data={orders}
           columns={columns.orderColumn}
           loading={isLoading || isFetching}
           totalPages={data?.pagination?.totalPages || 1}

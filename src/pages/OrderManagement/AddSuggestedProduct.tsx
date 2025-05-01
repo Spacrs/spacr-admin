@@ -7,6 +7,7 @@ import {
   useCreateProductMutation,
   useGetOrderDetailsQuery,
   useUpdateProductMutation,
+  useDeleteOrderMediaMutation,
 } from "../../store/slices/orderSlice/apiSlice";
 import { useGetCountryCityQuery } from "../../store/slices/countries/apiSlice";
 import { useAppDispatch } from "../../store/hooks";
@@ -59,6 +60,7 @@ const AddSuggestedProduct: React.FC = () => {
   const [updateProduct] = useUpdateProductMutation();
   const { data: suggestedProduct, refetch: refetchGetOrder } =
     useGetOrderDetailsQuery(productId!);
+  const [deleteOrderMedia] = useDeleteOrderMediaMutation();
 
   const countryOptions = useAppSelector(selectCountryOptions);
   const fromCityOptions = useAppSelector(selectFromCityOptions);
@@ -258,10 +260,24 @@ const AddSuggestedProduct: React.FC = () => {
 
   const handleRemoveImage = (index: number, isPreview: boolean = false) => {
     if (isPreview) {
-      // Remove from previewImages (existing images)
-      setPreviewImages((prev) => prev.filter((_, i) => i !== index));
+      const mediaId = suggestedProduct?.data?.medias[index]?.mediaId; // Assuming `mediaId` is part of the `medias` array
+      const orderID = productId;
+      if (mediaId && orderID) {
+        // Call deleteOrderMedia mutation
+        deleteOrderMedia({ orderID, mediaId })
+          .unwrap()
+          .then(() => {
+            // Remove the image from the previewImages array
+            setPreviewImages((prev) => prev.filter((_, i) => i !== index));
+          })
+          .catch((error:any) => {
+            console.error("Failed to delete image:", error);
+            alert("Failed to delete the image. Please try again.");
+          });
+      } else {
+        alert("Unable to delete the image. Missing order ID or media ID.");
+      }
     } else {
-      // Remove from payload.images (newly uploaded images)
       setPayload((prev) => ({
         ...prev,
         images: prev.images.filter((_, i) => i !== index),

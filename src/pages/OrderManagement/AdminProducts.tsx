@@ -98,7 +98,7 @@ function AdminOrders() {
     const productId = data.OrderID;
     if (data) {
       try {
-        navigate(`/admin/order-details/${productId}`);
+        navigate(`/admin/product-details/${productId}`);
       } catch (error) {
         console.log(error, "error in handleView");
       }

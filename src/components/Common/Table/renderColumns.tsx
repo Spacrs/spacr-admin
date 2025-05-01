@@ -27,7 +27,6 @@ export const renderColumns = (
         </p>
       );
     case "Emogi": {
-      console.log("ayaya");
       const convertEmojiCode = (emojiU: string): string => {
         if (!emojiU) return "-";
         try {
@@ -80,31 +79,44 @@ export const renderColumns = (
     case "Status":
       return (
         <div className="relative flex items-center">
-          {column.name && ["active", "verified"].includes(row[column.name]) && (
-            <div className="bg-green-500 text-white text-xs font-medium rounded-full p-2">
-              {row[column.name]?.charAt(0).toUpperCase() +
-                row[column.name]?.slice(1)}
-            </div>
-          )}
+          {column.name &&
+            [
+              "active",
+              "verified",
+              "ACCEPTED",
+              "LIVE",
+              "PURCHASED",
+              "COMPLETED",
+              "READY_TO_RECEIVE",
+            ].includes(row[column.name]) && (
+              <div className="bg-green-500 text-white text-xs font-medium rounded-full p-2 ">
+                {row[column.name]?.charAt(0).toUpperCase() +
+                  row[column.name]?.slice(1).toLowerCase()}
+              </div>
+            )}
 
           {column.name &&
-            ["inactive", "Pending", "pending"].includes(row[column.name]) && (
+            ["inactive", "Pending", "pending", "IN_TRANSIT"].includes(
+              row[column.name]
+            ) && (
               <div className=" bg-orange-400 text-white text-xs font-medium rounded-full p-2">
                 {row[column.name]?.charAt(0).toUpperCase() +
-                  row[column.name]?.slice(1)}
+                  row[column.name]?.slice(1).toLowerCase()}
               </div>
             )}
           {column.name &&
-            ["Rejected", "rejected"].includes(row[column.name]) && (
+            ["Rejected", "rejected", "CANCELLED"].includes(
+              row[column.name]
+            ) && (
               <div className=" bg-red-700 text-white text-xs font-medium rounded-full p-2">
                 {row[column.name]?.charAt(0).toUpperCase() +
-                  row[column.name]?.slice(1)}
+                  row[column.name]?.slice(1).toLowerCase()}
               </div>
             )}
           {column.name && ["none"].includes(row[column.name]) && (
             <div className=" bg-orange-400 text-white text-xs font-medium rounded-full p-2">
               {row[column.name]?.charAt(0).toUpperCase() +
-                row[column.name]?.slice(1)}
+                row[column.name]?.slice(1).toLowerCase()}
             </div>
           )}
         </div>

@@ -17,7 +17,7 @@ export interface IColumns {
   Actions?: string[];
   colName: string;
   sortable?: boolean;
-  icon?: 'user' | 'order' | 'default';
+  icon?: "user" | "order" | "default";
 }
 
 interface ITableProps {
@@ -49,7 +49,7 @@ function Table({
   handleUpdate,
   handleToggleStatus,
   handleView,
-  onSort
+  onSort,
 }: ITableProps) {
   const actions: IAction = {
     handleDelete,
@@ -93,7 +93,9 @@ function Table({
                       scope="col"
                       className="px-6 py-4 whitespace-nowrap cursor-pointer select-none"
                       onClick={() =>
-                        column.sortable && column.name && handleSortClick(column.name)
+                        column.sortable &&
+                        column.name &&
+                        handleSortClick(column.name)
                       }
                     >
                       <div className="flex items-center gap-1">
