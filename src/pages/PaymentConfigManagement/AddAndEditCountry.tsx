@@ -13,6 +13,7 @@ import {
 } from "../../store/slices/paymentConfigSlice/paymentConfigSlice";
 import Inputes from "../../components/Common/Inputes";
 import { Button, Loader } from "../../components/Common";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddAndUpdateCountry = () => {
   const dispatch = useDispatch();
@@ -109,11 +110,13 @@ const AddAndUpdateCountry = () => {
           ...val,
         }).unwrap();
         dispatch(addPaymentConfigToList(updatedConfig.data)); // ✅ Update Redux store
+        toast.success("Country updated successfully");
         setSuccessMessage("Country updated successfully!");
         setTimeout(() => setSuccessMessage(null), 3000);
       } else {
         const response = await addPaymentConfig(formData).unwrap();
         dispatch(addPaymentConfigToList(response));
+        toast.success("Country added successfully");
         setSuccessMessage("Country added successfully!");
         setTimeout(() => setSuccessMessage(null), 3000);
       }
@@ -131,13 +134,15 @@ const AddAndUpdateCountry = () => {
 
       // navigate('/admin/payment-config');
     } catch (error) {
-      console.error("Failed to add:", error);
+      // console.error("Failed to add:", error);
+      toast.error("Failed to add");
     }
   };
 
   return (
     <div>
       <div className="flex justify-end items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
+        <ToastContainer />
         <div className="ml-4 flex justify-end items-center ">
           <Button
             text="Back"

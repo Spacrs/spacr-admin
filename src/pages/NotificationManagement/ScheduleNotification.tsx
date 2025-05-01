@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Inputes as InputComponent, Button } from "../../components/Common";
+import { toast, ToastContainer } from "react-toastify";
 
 const ScheduleNotification = () => {
   const [formData, setFormData] = useState({
@@ -26,7 +27,7 @@ const ScheduleNotification = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault(); // Prevent page refresh
     console.log("Scheduled Notification Sent:", formData);
-
+    toast.success("Notification scheduled!"); 
     // Clear form fields after submission
     setFormData({
       title: "",
@@ -39,6 +40,7 @@ const ScheduleNotification = () => {
   return (
     <div className="">
       <div className="flex justify-start items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
+        <ToastContainer />
         <div className="ml-4">
           <Button
             text="Back"

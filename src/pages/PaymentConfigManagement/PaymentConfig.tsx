@@ -19,7 +19,7 @@ function PaymentConfig() {
     (state) => state.paymentConfigSlice
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [filter, setFilter] = useState(""); // Search term
@@ -30,6 +30,7 @@ function PaymentConfig() {
     sort: sortDirection,
     sortBy: sortBy,
     search: filter !== "" ? filter : undefined,
+    isPagination: true
   });
 
   const [selectedConfig, setSelectedConfig] = useState<any>(null);

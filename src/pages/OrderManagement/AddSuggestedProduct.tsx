@@ -30,6 +30,7 @@ import { Media } from "../../types/ProductData.types";
 import ImageGallery from "../../components/Common/ImageGallery/Index";
 import InputComponent from "../../components/Common/Inputes";
 import ToggleSwitch from "../../components/Common/Inputes/ToggleSwitch";
+import { toast, ToastContainer } from "react-toastify";
 
 type BodyPayload = {
   ProductName: string;
@@ -190,7 +191,8 @@ const AddSuggestedProduct: React.FC = () => {
 
     if (payload.Price === 0) {
       // Check if price is 0 and not empty
-      alert("Price cannot be 0.");
+      // alert("Price cannot be 0.");
+      toast.error("Price cannot be 0.");
       return;
     }
 
@@ -201,12 +203,14 @@ const AddSuggestedProduct: React.FC = () => {
       payload.From_CountryId === 0
     ) {
       // Check if any of the city or country IDs are 0
-      alert("Please select valid countries and cities.");
+      // alert("Please select valid countries and cities.");
+      toast.error("Please select valid countries and cities.");
       return;
     }
 
     if (!isEditProduct && payload.images.length === 0) {
-      alert("Please upload at least one image.");
+      // alert("Please upload at least one image.");
+      toast.error("Please upload at least one image.");
       return;
     }
 
@@ -247,7 +251,8 @@ const AddSuggestedProduct: React.FC = () => {
     const totalImages = payload.images.length + previewImages.length;
 
     if (totalImages >= 3) {
-      alert("You can only upload up to 3 images.");
+      // alert("You can only upload up to 3 images.");
+      toast.error("You can only upload up to 3 images.");
       return;
     }
 
@@ -272,10 +277,13 @@ const AddSuggestedProduct: React.FC = () => {
           })
           .catch((error:any) => {
             console.error("Failed to delete image:", error);
-            alert("Failed to delete the image. Please try again.");
+            // alert("Failed to delete the image. Please try again.");
+            toast.error("Failed to delete the image. Please try again.");
+            
           });
       } else {
-        alert("Unable to delete the image. Missing order ID or media ID.");
+        // alert("Unable to delete the image. Missing order ID or media ID.");
+        toast.error("Unable to delete the image. Missing order ID or media ID.");
       }
     } else {
       setPayload((prev) => ({
@@ -288,6 +296,7 @@ const AddSuggestedProduct: React.FC = () => {
   return (
     <div className="min-h-screen">
       <div className="flex justify-end items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
+        <ToastContainer />
         <div className="ml-4 flex justify-end items-center ">
           <Button
             text="Back"
