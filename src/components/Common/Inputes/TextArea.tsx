@@ -1,36 +1,28 @@
 import React from "react";
 
-function NumberInpute({
+function TextArea({
   name,
   value,
   onChange,
-  defaultValue = 16,
-  min = 0,
-  max,
+  rows = 4,
   required = false,
 }: {
   name: string;
   value: string | number;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  defaultValue?: string | number;
-  min?: number | string;
-  max?: number | string;
+  onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  rows?: number;
   required?: boolean;
 }) {
   return (
-    <input
-      type="number"
+    <textarea
       name={name}
-      {...(max !== undefined && { max })}
-      min={min}
-      defaultValue={defaultValue}
-      step="0.01"
       className="w-full px-4 py-3 border border-gray-300 rounded-md transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-900"
       value={value}
       onChange={onChange}
+      rows={rows}
       required={required}
     />
   );
 }
 
-export default NumberInpute;
+export default TextArea;

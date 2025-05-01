@@ -62,8 +62,10 @@ export const ordersApi: any = createApi({
     }),
     updateProduct: builder.mutation<any, Partial<any>>({
       query: (productData) => {
+        const OrderID = productData.get("OrderID");
+        console.log(OrderID,"productData.OrderID")
         return {
-          url: `/${ADMIN}/update-product/${productData.OrderID}`,
+          url: `/${ADMIN}/update-product/${OrderID}`,
           method: "PATCH",
           body: productData,
         };

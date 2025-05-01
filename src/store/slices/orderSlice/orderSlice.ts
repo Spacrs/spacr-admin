@@ -39,12 +39,18 @@ export const orderSlice = createSlice({
     setProducts: (state: IState, action: PayloadAction<any[]>) => {
       state.products = action.payload;
     },
-    updateProductList: (state: IState, action: PayloadAction<any>) => {
-      state.products = state.products.map((product) =>
-        product.Id === action.payload.Id
-          ? { ...product, ...action.payload }
-          : product
-      );
+    updateProductList: (state: IState, action: PayloadAction<ProductData>) => {
+      const productToUpdate = state.products.find((product) => product.Id === action.payload.Id);
+
+      if (productToUpdate) {
+        state.products = state.products.map((product) =>
+          product.Id === action.payload.Id
+            ? { ...product, ...action.payload }
+            : product
+        );
+      } else {
+        console.warn(`Product with Id ${action.payload.Id} not found.`);
+      }
     },
     setOrderOffers: (state: IState, action: PayloadAction<any[]>) => {
       console.log(action.payload, "action.payload");
@@ -66,9 +72,11 @@ export const orderSlice = createSlice({
       state: IState,
       action: PayloadAction<{ isEditProduct?: boolean; isEditOrder?: boolean }>
     ) => {
-      state = {
-        ...state,
-        ...action.payload
+      if (action.payload.isEditProduct !== undefined) {
+        state.isEditProduct = action.payload.isEditProduct;
+      }
+      if (action.payload.isEditOrder !== undefined) {
+        state.isEditOrder = action.payload.isEditOrder;
       }
     },
   },
@@ -80,7 +88,7 @@ export const {
   setProducts,
   updateProductList,
   setOrderOffers,
-  setIsEdit
+  setIsEdit,
 } = orderSlice.actions;
 export const selectOrders = (state: RootState) => state.orderSlice.orders;
 export const selectIsEditProduct = (state: RootState) =>

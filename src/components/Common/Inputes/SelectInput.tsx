@@ -7,6 +7,7 @@ interface SelectComponentProps {
   value: string | number;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   className?: string;
+  required?: boolean;
 }
 
 const SelectComponent: React.FC<SelectComponentProps> = ({
@@ -15,6 +16,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
   value,
   onChange,
   className = "",
+  required = false,
 }) => {
   return (
     <select
@@ -22,6 +24,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
       className={`block w-full px-3 py-3 border rounded-md focus:outline-none focus:ring focus:ring-blue-200 ${className}`}
       value={value}
       onChange={onChange}
+      required={required}
     >
       {options.map((option) => (
         <option key={option.value} value={option.value}>

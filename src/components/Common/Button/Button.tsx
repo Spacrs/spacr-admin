@@ -1,13 +1,15 @@
 const Button = ({
   className = "",
   text,
-  onClick,
+  onClick = () => {},
   variant,
-  type="button"
+  type = "button",
+  disabled = false,
 }: {
   className?: string;
   text: string;
-  onClick: (e:any) => void;
+  onClick?: (e: any) => void;
+  disabled?: boolean;
   variant:
     | "primary"
     | "secondary"
@@ -17,9 +19,9 @@ const Button = ({
     | "light"
     | "lightBlue"
     | "transparent";
-    type?: 'button' | 'submit' | 'reset';
+  type?: "button" | "submit" | "reset";
 }) => {
-  const baseStyles = `px-4 py-2 rounded-md focus:outline-none transition`;
+  const baseStyles = `px-4 py-2 rounded-md focus:outline-none transition disabled:bg-gray-200 disabled:text-gray-700`;
 
   const typeStyles: Record<string, string> = {
     primary: "bg-primary text-white",
@@ -29,7 +31,7 @@ const Button = ({
     dark: "bg-gray-900 text-white",
     light: "bg-gray-200 text-black",
     lightBlue: "bg-lightBlue text-primary border-solid border-2 border-sky-700",
-    transparent: "bg-white text-primary border-solid border-2 border-sky-700"
+    transparent: "bg-white text-primary border-solid border-2 border-sky-700",
   };
 
   return (
@@ -37,6 +39,7 @@ const Button = ({
       className={`${baseStyles} ${typeStyles[variant]} ${className}`}
       onClick={onClick}
       type={type}
+      disabled={disabled}
     >
       {text}
     </button>

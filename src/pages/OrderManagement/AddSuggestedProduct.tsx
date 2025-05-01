@@ -22,8 +22,13 @@ import Loading from "../../components/Common/Loader";
 import {
   selectIsEditProduct,
   setIsEdit,
+  updateProductList,
 } from "../../store/slices/orderSlice/orderSlice";
 import { useSelector } from "react-redux";
+import { Media } from "../../types/ProductData.types";
+import ImageGallery from "../../components/Common/ImageGallery/Index";
+import InputComponent from "../../components/Common/Inputes";
+import ToggleSwitch from "../../components/Common/Inputes/ToggleSwitch";
 
 type BodyPayload = {
   ProductName: string;
@@ -36,7 +41,7 @@ type BodyPayload = {
   To_CityId: number;
   // images: { mediaId: string; url: string }[];
   images: any[];
-  isSuggested: boolean;
+  IsTrending: boolean;
   Price: number;
 };
 
@@ -47,12 +52,13 @@ const AddSuggestedProduct: React.FC = () => {
   const isEditProduct = useSelector(selectIsEditProduct);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
+
   const { data: ccData, isLoading: ccLoading } = useGetCountryCityQuery();
   const [createProduct, { isLoading: creating }] = useCreateProductMutation();
-  const [updateProduct, { isLoading: updating }] = useUpdateProductMutation();
-  const { data: suggestedProduct, isLoading } = useGetOrderDetailsQuery(
-    productId!
-  );
+  const [updateProduct] = useUpdateProductMutation();
+  const { data: suggestedProduct, refetch: refetchGetOrder } =
+    useGetOrderDetailsQuery(productId!);
 
   const countryOptions = useAppSelector(selectCountryOptions);
   const fromCityOptions = useAppSelector(selectFromCityOptions);
@@ -68,7 +74,9 @@ const AddSuggestedProduct: React.FC = () => {
     if (productId) {
       dispatch(setIsEdit({ isEditProduct: true }));
     }
-    () => dispatch(setIsEdit({ isEditProduct: false }));
+    return () => {
+      dispatch(setIsEdit({ isEditProduct: false }));
+    };
   }, [productId]);
 
   // Populate payload from fetched data
@@ -76,8 +84,25 @@ const AddSuggestedProduct: React.FC = () => {
     if (suggestedProduct?.data) {
       setPayload((prev) => ({
         ...prev,
-        ...suggestedProduct.data,
+        ProductName: suggestedProduct?.data?.ProductName,
+        Descriptions: suggestedProduct?.data?.Descriptions,
+        ProductUrl: suggestedProduct?.data?.ProductUrl,
+        From_CountryId: suggestedProduct?.data?.From_CountryId,
+        From_CityId: suggestedProduct?.data?.From_CityId,
+        To_CountryId: suggestedProduct?.data?.To_CountryId,
+        To_CityId: suggestedProduct?.data?.To_CityId,
+        IsTrending: suggestedProduct?.data?.IsTrending,
+        images: [],
+        Price: suggestedProduct?.data?.Price,
       }));
+
+      if (suggestedProduct?.data?.medias?.length > 0) {
+        // Set pre-filled image URLs
+        const urls = suggestedProduct?.data?.medias.map(
+          (img: Media) => img.url
+        ); // or whatever the image field is
+        setPreviewImages(urls);
+      }
 
       dispatch(
         setSelectedCountry({
@@ -87,6 +112,27 @@ const AddSuggestedProduct: React.FC = () => {
       );
     }
   }, [suggestedProduct]);
+
+  useEffect(() => {
+    if (productId) {
+      refetchGetOrder(); // Refetch the order details
+    }
+    return () => {
+      setPayload({
+        ProductName: "",
+        Descriptions: "",
+        ProductUrl: "",
+        CreatedBy: "admin",
+        From_CountryId: 1,
+        From_CityId: 1,
+        To_CountryId: 1,
+        To_CityId: 1,
+        images: [],
+        IsTrending: false,
+        Price: 0.0,
+      });
+    };
+  }, [productId]);
 
   // return !ccData;
 
@@ -100,7 +146,7 @@ const AddSuggestedProduct: React.FC = () => {
     To_CountryId: 1,
     To_CityId: 1,
     images: [],
-    isSuggested: false,
+    IsTrending: false,
     Price: 0.0,
   });
 
@@ -137,7 +183,7 @@ const AddSuggestedProduct: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (payload.images.length === 0) {
+    if (!isEditProduct && payload.images.length === 0) {
       alert("Please upload at least one image.");
       return;
     }
@@ -160,9 +206,13 @@ const AddSuggestedProduct: React.FC = () => {
     });
 
     if (isEditProduct) {
-      await updateProduct(formData);
+      productId && formData.append("OrderID", productId);
+      const updatedData = await updateProduct(formData);
+      dispatch(updateProductList(updatedData.data.data));
+      refetchGetOrder();
     } else {
       await createProduct(formData);
+      refetchGetOrder();
     }
 
     navigate("/admin/suggested-product-list");
@@ -181,13 +231,21 @@ const AddSuggestedProduct: React.FC = () => {
       ...prev,
       images: [...prev.images, file], // directly storing File
     }));
+    e.target.value = "";
   };
 
-  console.log(isEditProduct, "isEditProduct");
+  const handleRemoveImage = (index: number) => {
+    setPayload((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
+  };
+
   return (
     <div className="min-h-screen">
       <div className="flex justify-end items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         <div className="ml-4 flex justify-end items-center ">
+          
           <Button
             text="Back"
             variant="lightBlue"
@@ -204,54 +262,48 @@ const AddSuggestedProduct: React.FC = () => {
             className="max-w-4xl mx-auto bg-white p-6 shadow rounded-lg space-y-6"
           >
             {/* ProductName */}
-            <div>
-              <label className="block mb-1 font-medium">Product Name</label>
-              <input
-                name="ProductName"
-                type="text"
-                value={payload.ProductName}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
-              />
-            </div>
-
+            <InputComponent
+              type="text"
+              name="ProductName"
+              label="Product Name"
+              value={payload.ProductName}
+              onChange={handleChange}
+              required={true}
+            />
             {/* Descriptions */}
             <div>
-              <label className="block mb-1 font-medium">Description</label>
-              <textarea
+              <InputComponent
+                label="Description"
                 name="Descriptions"
                 value={payload.Descriptions}
                 onChange={handleChange}
-                rows={4}
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-900"
+                type="textarea"
+                required={true}
               />
             </div>
 
             {/* ProductUrl  */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block mb-1 font-medium">Product URL</label>
-                <input
-                  name="ProductUrl"
+                <InputComponent
                   type="text"
+                  name="ProductUrl"
+                  label="Product URL"
                   value={payload.ProductUrl}
                   onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
+                  required={true}
                 />
               </div>
               {/*  Price */}
               <div>
-                <label className="block mb-1 font-medium">Price</label>
-                <input
+                <InputComponent
+                  label="Price"
                   name="Price"
-                  type="text"
+                  type="number"
                   value={payload.Price}
+                  min={0}
                   onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-900"
+                  required={true}
                 />
               </div>
             </div>
@@ -262,9 +314,13 @@ const AddSuggestedProduct: React.FC = () => {
                 <label className="block mb-1 font-medium">From Country</label>
                 <SelectComponent
                   name="From_CountryId"
-                  options={countryOptions}
+                  options={[
+                    { label: "Select from country", value: "" },
+                    ...countryOptions,
+                  ]}
                   value={payload.From_CountryId}
                   onChange={handleChange}
+                  required={true}
                 />
               </div>
               <div>
@@ -277,6 +333,7 @@ const AddSuggestedProduct: React.FC = () => {
                   ]}
                   value={payload.From_CityId}
                   onChange={handleChange}
+                  required={true}
                 />
               </div>
             </div>
@@ -287,9 +344,13 @@ const AddSuggestedProduct: React.FC = () => {
                 <label className="block mb-1 font-medium">To Country</label>
                 <SelectComponent
                   name="To_CountryId"
-                  options={countryOptions}
+                  options={[
+                    { label: "Select to country", value: "" },
+                    ...countryOptions,
+                  ]}
                   value={payload.To_CountryId}
                   onChange={handleChange}
+                  required={true}
                 />
               </div>
               <div>
@@ -302,32 +363,22 @@ const AddSuggestedProduct: React.FC = () => {
                   ]}
                   value={payload.To_CityId}
                   onChange={handleChange}
+                  required={true}
                 />
               </div>
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700 font-medium mb-2">
-                Is Suggested?
-              </label>
-
-              <div
-                onClick={() =>
+              <ToggleSwitch
+                label="Is Suggested?"
+                isChecked={payload.IsTrending}
+                onToggle={() =>
                   setPayload((prev) => ({
                     ...prev,
-                    isSuggested: !payload.isSuggested,
+                    IsTrending: !payload.IsTrending,
                   }))
                 }
-                className={`relative w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-300 ${
-                  payload.isSuggested ? "bg-green-600" : "bg-gray-300"
-                }`}
-              >
-                <div
-                  className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${
-                    payload.isSuggested ? "translate-x-6" : "translate-x-0"
-                  }`}
-                />
-              </div>
+              />
             </div>
 
             {/* Image upload */}
@@ -347,31 +398,11 @@ const AddSuggestedProduct: React.FC = () => {
               />
             </div>
 
-            {payload.images.length > 0 && (
-              <div className="mt-2 grid grid-cols-3 gap-2">
-                {payload.images.map((file, index) => (
-                  <div key={index} className="relative group">
-                    <img
-                      src={URL.createObjectURL(file)}
-                      alt={`preview-${index}`}
-                      className="w-24 h-24 object-cover rounded"
-                    />
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setPayload((prev) => ({
-                          ...prev,
-                          images: prev.images.filter((_, i) => i !== index),
-                        }))
-                      }
-                      className="absolute top-0 right-0 bg-black bg-opacity-50 text-white rounded-full p-1 hover:bg-red-600"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
+            <ImageGallery
+              images={payload.images}
+              previewImages={previewImages}
+              onRemoveImage={handleRemoveImage}
+            />
 
             {/* Submit */}
             <div className="text-right">

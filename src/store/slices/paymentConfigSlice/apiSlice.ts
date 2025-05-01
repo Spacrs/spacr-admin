@@ -10,18 +10,20 @@ export const paymentConfigApi: any = createApi({
       any,
       {
         page?: number;
-        limit?: string;
+        limit?: number;
         isPagination?: boolean;
         sortBy?: string;
         sort?: "asc" | "desc";
+        search?: string;
       }
     >({
-      query: ({ page, limit, sortBy, sort, isPagination }) => {
+      query: ({ page, limit, sortBy, sort, isPagination, search }) => {
         const queryParams: Record<string, any> = {
           ...(isPagination && page ? { page } : {}),
           ...(isPagination && limit ? { limit } : {}),
           ...(sortBy ? { sortBy } : {}),
           ...(sort ? { sort } : {}),
+          ...(search ? { search } : {}),
         };
         const queryString = buildQueryParams(queryParams);
         return {
@@ -74,18 +76,20 @@ export const paymentConfigApi: any = createApi({
       any,
       {
         page?: number;
-        limit?: string;
+        limit?: number;
         isPagination?: boolean;
         sortBy?: string;
         sort?: "asc" | "desc";
+        search?: string;
       }
     >({
-      query: ({ page, limit, isPagination = true, sortBy, sort }) => {
+      query: ({ page, limit, isPagination = true, sortBy, sort, search }) => {
         const queryParams: Record<string, any> = {
           ...(isPagination && page ? { page } : {}),
           ...(isPagination && limit ? { limit } : {}),
           ...(sortBy ? { sortBy } : {}),
           ...(sort ? { sort } : {}),
+          ...(search ? { search } : {}),
         };
         const queryString = buildQueryParams(queryParams);
 

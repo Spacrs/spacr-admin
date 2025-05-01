@@ -5,8 +5,8 @@ const user = [
   { name: "Type", Header: "Type", colName: "Default" },
   { name: "Status", Header: "Status", colName: "Status" },
   { name: "Verified", Header: "Verification Status", colName: "Status" },
-  { name: "CreatedAt", Header: "CreatedAt", colName: "Date", sortable: true },
-  { name: "UpdatedAt", Header: "UpdatedAt", colName: "Date" },
+  { name: "CreatedAt", Header: "Created At", colName: "DateAndTime", sortable: true },
+  { name: "UpdatedAt", Header: "Updated At", colName: "DateAndTime" },
   {
     name: "action",
     Header: "Action",

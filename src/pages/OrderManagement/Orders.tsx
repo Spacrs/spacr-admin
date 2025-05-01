@@ -34,8 +34,8 @@ const columns = [
   { name: "IsWithBox", Header: "Is With Box", colName: "Boolean" },
 
   { name: "Status", Header: "Status", colName: "Status" },
-  { name: "CreatedAt", Header: "Created At", colName: "Date", sortable: true },
-  { name: "UpdatedAt", Header: "Updated At", colName: "Date", sortable: true },
+  { name: "CreatedAt", Header: "Created At", colName: "DateAndTime", sortable: true },
+  { name: "UpdatedAt", Header: "Updated At", colName: "DateAndTime", sortable: true },
   {
     name: "action",
     Header: "Actions",
@@ -54,6 +54,7 @@ function Orders() {
 
   const [sortBy, setSortBy] = useState("CreatedAt");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+  const [filter, setFilter] = useState(""); // Search term
 
   const { data, isLoading, isFetching, isError } = useGetOrdersQuery({
     page: currentPage,
@@ -61,14 +62,13 @@ function Orders() {
     createdBy: "user",
     sort: sortDirection,
     sortBy: sortBy,
+    search: filter !== "" ? filter : undefined,
   });
 
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const [updateOrderTrend] = useUpdateOrderTrendMutation();
-
-  const [filter, setFilter] = useState(""); // Search term
 
   const navigate = useNavigate();
 
@@ -147,9 +147,6 @@ function Orders() {
             onReset={() => setFilter("")}
           />
         </div>
-
-        {/* Verification Status Filter */}
-        <div className="ml-4"></div>
       </div>
 
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">
