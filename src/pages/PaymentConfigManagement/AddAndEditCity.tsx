@@ -16,6 +16,7 @@ import {
 import { useAppSelector } from "../../store/hooks";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Loader } from "../../components/Common";
+import { toast, ToastContainer } from "react-toastify";
 
 const AddAndUpdateCity = () => {
   const dispatch = useDispatch();
@@ -100,7 +101,8 @@ const AddAndUpdateCity = () => {
     const { selectedCountry, cityName, latitude, longitude } = formData;
 
     if (!selectedCountry || !cityName || !latitude || !longitude) {
-      alert("Please fill in all fields.");
+      // alert("Please fill in all fields.");
+      toast.error("Please fill in all fields.");
       return;
     }
 
@@ -127,7 +129,8 @@ const AddAndUpdateCity = () => {
           countryId: Number(selectedCountry),
         }).unwrap();
 
-        console.log("City Added Successfully:", response);
+        // console.log("City Added Successfully:", response);
+        toast.success("City Added Successfully:");
         setSuccessMessage("City added successfully!");
 
         setTimeout(() => setSuccessMessage(null), 3000);
@@ -139,12 +142,14 @@ const AddAndUpdateCity = () => {
         longitude: "",
       });
     } catch (error) {
-      console.error("Failed to add city:", error);
+      // console.error("Failed to add city:", error);
+      toast.error("Failed to add city:");
     }
   };
   return (
     <div>
       <div className="flex justify-end items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
+        <ToastContainer />
         <div className="ml-4 flex justify-end items-center ">
           <Button
             text="Back"

@@ -137,6 +137,7 @@ function AdminOrders() {
             <Search
               search={filter}
               onChange={onSearch}
+              placeholder="Search by name..."
               onReset={() => setFilter("")}
             />
           </div>
