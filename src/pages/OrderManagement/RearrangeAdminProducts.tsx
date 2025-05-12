@@ -69,8 +69,8 @@ if (isError) return <div className="p-4 bg-red-500 text-white rounded-lg">Error 
   
     // Update in DB
     try {
-      await fetch("/api/admin/reorder-suggested-products", {
-        method: "POST",
+      await fetch("https://api-v2.spa-cr.com/admin/reorder-suggested-products", {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
