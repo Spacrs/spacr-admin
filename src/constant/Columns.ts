@@ -18,6 +18,7 @@ const user: IColumns[] = [
     name: "action",
     Header: "Action",
     colName: "KebabMenu",
+    // @ts-ignore
     options: [
       { label: "Activate", value: "active", type: "toggle" },
       { label: "Deactivate", value: "inactive", type: "toggle" },

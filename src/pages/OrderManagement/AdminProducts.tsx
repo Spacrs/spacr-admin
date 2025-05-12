@@ -141,6 +141,7 @@ function AdminOrders() {
               onReset={() => setFilter("")}
             />
           </div>
+          
           <div className="ml-4">
             <Button
               text="Add Product"
@@ -148,6 +149,13 @@ function AdminOrders() {
               variant="dark"
               type="button"
               onClick={() => navigate("/admin/add-suggested-product")}
+            />
+            <Button
+              text="Rearrange"
+              className="mr-2"
+              variant="dark"
+              type="button"
+              onClick={() => navigate("/admin/rearrage-suggested-product-list")}
             />
           </div>
         </div>

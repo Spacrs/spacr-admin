@@ -7,14 +7,14 @@ export const countriesConfigApi = createApi({
   endpoints: (builder) => ({
     getCountries: builder.query<
       any,
-      { page?: number; limit?: string; isPagination?: boolean; search?: string }
+      { page?: number; limit?: number; isPagination?: boolean; search?: string }
     >({
       query: ({ page, limit, isPagination = true, search }) => {
         const params = new URLSearchParams();
 
         if (isPagination) {
           if (page != null) params.append("page", String(page));
-          if (limit) params.append("limit", limit);
+          if (limit) params.append("limit", String(limit));
         }
 
         if (search) {
