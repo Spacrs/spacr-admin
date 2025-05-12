@@ -65,6 +65,7 @@ const menuItems: MenuItemTypes[] = [
     path: "/admin/contact-support-list",
     icon: <MdContactSupport style={{ fontSize: "20px", margin: "0 10px" }} />,
   },
+  
 ];
 
 export default menuItems;

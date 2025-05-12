@@ -23,6 +23,7 @@ import NotificationList from "../pages/NotificationManagement/NotificationList";
 import AdminProducts from "../pages/OrderManagement/AdminProducts";
 import AddSuggestedProduct from "../pages/OrderManagement/AddSuggestedProduct";
 import OrderOffers from "../pages/OrderManagement/OrderOffers";
+import RearrangeAdminProducts from "../pages/OrderManagement/RearrangeAdminProducts";
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -180,4 +181,11 @@ export const adminRoutes = [
     breadcrumb: ["admin", "Edit Suggested Product"],
     showBreadcrumb: true,
   },
+  {
+    path: "rearrage-suggested-product-list",
+    component: RearrangeAdminProducts,
+    breadcrumb: ["admin", "Edit Suggested Product"],
+    showBreadcrumb: true,
+  },
+  
 ];
