@@ -17,6 +17,7 @@ import ImageGallery from "../../components/Common/ImageGallery/Index";
 import InputComponent from "../../components/Common/Inputes";
 import ToggleSwitch from "../../components/Common/Inputes/ToggleSwitch";
 import { toast, ToastContainer } from "react-toastify";
+import { skipToken } from "@reduxjs/toolkit/query"; //Added on 16-05-2025
 const AddSuggestedProduct = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -27,7 +28,8 @@ const AddSuggestedProduct = () => {
     const { data: ccData, isLoading: ccLoading } = useGetCountryCityQuery();
     const [createProduct, { isLoading: creating }] = useCreateProductMutation();
     const [updateProduct] = useUpdateProductMutation();
-    const { data: suggestedProduct, refetch: refetchGetOrder } = useGetOrderDetailsQuery(productId);
+    // const { data: suggestedProduct, refetch: refetchGetOrder } = useGetOrderDetailsQuery(productId!); //Commented on 16-05-2025
+    const { data: suggestedProduct, refetch: refetchGetOrder } = useGetOrderDetailsQuery(productId ? productId : skipToken); //Added on 16-05-2025
     const [deleteOrderMedia] = useDeleteOrderMediaMutation();
     const countryOptions = useAppSelector(selectCountryOptions);
     const fromCityOptions = useAppSelector(selectFromCityOptions);
@@ -177,12 +179,15 @@ const AddSuggestedProduct = () => {
             const updatedData = await updateProduct(formData);
             dispatch(updateProductList(updatedData.data.data));
             refetchGetOrder();
+            toast.success("Product updated successfully!");
         }
         else {
             await createProduct(formData);
             refetchGetOrder();
+            toast.success("Product created successfully!");
         }
         navigate("/admin/suggested-product-list");
+        window.location.href = "/admin/suggested-product-list";
     };
     const handleFileChange = (e) => {
         const file = e.target.files?.[0];

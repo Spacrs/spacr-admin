@@ -5,6 +5,8 @@ import { setProducts } from "../../store/slices/orderSlice/orderSlice";
 import { useNavigate } from "react-router-dom";
 import { ProductData } from "../../types/ProductData.types";
 import { Search, Table, Button } from "../../components/Common";
+import { useSelector } from 'react-redux';
+
 
 function RearrangeAdminProducts() {
   const dispatch = useAppDispatch();
@@ -12,6 +14,9 @@ function RearrangeAdminProducts() {
   const products: ProductData[] = useAppSelector(
     (state) => state.orderSlice.products
   );
+  
+  const state = useSelector((state) => state);
+  console.log("stateeee", state);
 
   const [filter, setFilter] = useState("");
 
@@ -69,10 +74,14 @@ if (isError) return <div className="p-4 bg-red-500 text-white rounded-lg">Error 
   
     // Update in DB
     try {
-      await fetch("https://api-v2.spa-cr.com/admin/reorder-suggested-products", {
+
+      let token = localStorage.getItem('access_token');
+
+      await fetch("https://api-v2.spa-cr.com/api/v2/admin/reorder-suggested-products", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(productsWithOrder.map(p => ({
           Id: p.Id,
@@ -106,11 +115,11 @@ if (isError) return <div className="p-4 bg-red-500 text-white rounded-lg">Error 
         </div>
         <div className="ml-4">
           <Button
-            text="Add Product"
+            text="Go Back"
             className="mr-2"
             variant="dark"
             type="button"
-            onClick={() => navigate("/admin/add-suggested-product")}
+            onClick={() => navigate("/admin/suggested-product-list")}
           />
         </div>
       </div>
@@ -120,11 +129,12 @@ if (isError) return <div className="p-4 bg-red-500 text-white rounded-lg">Error 
         <table className="min-w-full bg-white shadow-md rounded-lg">
           <thead>
             <tr>
-                <th className="px-4 py-2 border-b">S.No</th>
-                <th className="px-4 py-2 border-b">Image</th>
-                <th className="px-4 py-2 border-b">Product Name</th>
-                <th className="px-4 py-2 border-b">Created At</th>
-                <th className="px-4 py-2 border-b">Updated At</th>
+                <th className="px-4 py-2 border-b text-left">S.No</th>
+                <th className="px-4 py-2 border-b text-left">Image</th>
+                <th className="px-4 py-2 border-b text-left">Product Name</th>
+                <th className="px-4 py-2 border-b text-left">Is Trending</th>
+                <th className="px-4 py-2 border-b text-left">Created At</th>
+                <th className="px-4 py-2 border-b text-left">Updated At</th>
             </tr>
           </thead>
           <tbody>
@@ -146,7 +156,17 @@ if (isError) return <div className="p-4 bg-red-500 text-white rounded-lg">Error 
                   />
                 </td>
                 <td className="px-4 py-2 border-b">{product.ProductName}</td>
-                
+                <td className="px-4 py-2 border-b">
+                  {product.IsTrending === true ? (
+                    <span className="inline-block px-3 py-1 text-sm font-semibold text-white bg-green-500 rounded-full">
+                      Yes
+                    </span>
+                  ) : (
+                    <span className="inline-block px-3 py-1 text-sm font-semibold text-white bg-red-500 rounded-full">
+                      No
+                    </span>
+                  )}
+                </td>
                 <td className="px-4 py-2 border-b">{product.CreatedAt}</td>
                 <td className="px-4 py-2 border-b">{product.UpdatedAt}</td>
                 

@@ -27,6 +27,7 @@ export const ordersApi: any = createApi({
         };
       },
     }),
+    
     updateOrderTrend: builder.mutation<any, Partial<any>>({
       query: (order) => ({
         url: `/${ADMIN}/update-order-trend/${order.OrderID}`,
