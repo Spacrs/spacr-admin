@@ -32,7 +32,7 @@ const AddAndUpdateCountry = () => {
 
   const [formData, setFormData] = useState({
     name: "",
-    providers: "",
+    // providers: "",
     shortName: "",
     wallet: false,
     COD: false,
@@ -47,7 +47,7 @@ const AddAndUpdateCountry = () => {
       setFormData((prev) => ({
         ...prev,
         name: paymentConfig.data.name,
-        providers: paymentConfig.data.providers,
+        // providers: paymentConfig.data.providers,
         shortName: paymentConfig.data.shortName,
         wallet: paymentConfig.data.wallet,
         COD: paymentConfig.data.COD,
@@ -65,7 +65,7 @@ const AddAndUpdateCountry = () => {
     return () => {
       setFormData({
         name: "",
-        providers: "",
+        // providers: "",
         shortName: "",
         wallet: false,
         COD: false,
@@ -95,9 +95,64 @@ const AddAndUpdateCountry = () => {
     }));
   };
 
+  //Commented on 16-05-2025
+
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     if (isEditPaymentConfig) {
+  //       const val = {
+  //         countryId: countryId,
+  //         data: {
+  //           ...formData,
+  //         },
+  //       };
+  //       const updatedConfig = await updatePaymentConfig({
+  //         ...val,
+  //       }).unwrap();
+  //       dispatch(addPaymentConfigToList(updatedConfig.data)); // ✅ Update Redux store
+  //       toast.success("Country updated successfully");
+  //       setSuccessMessage("Country updated successfully!");
+  //       setTimeout(() => setSuccessMessage(null), 3000);
+  //     } else {
+  //       const response = await addPaymentConfig(formData).unwrap();
+  //       dispatch(addPaymentConfigToList(response));
+  //       toast.success("Country added successfully");
+  //       setSuccessMessage("Country added successfully!");
+  //       setTimeout(() => setSuccessMessage(null), 3000);
+  //     }
+
+  //     setFormData({
+  //       name: "",
+        
+  //       shortName: "",
+  //       wallet: false,
+  //       COD: false,
+  //       stripe: false,
+  //       destination: false,
+  //       departure: false,
+  //     });
+
+  //     // navigate('/admin/payment-config');
+  //   } catch (error) {
+  //     // console.error("Failed to add:", error);
+  //     toast.error("Failed to add");
+  //   }
+  // };
+
+  //Commented on 16-05-2025
+
+  //Added on 16-05-2025
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
+    // ✅ Basic validation
+    if (!formData.name.trim() || !formData.shortName.trim()) {
+      toast.error("Please fill in all required fields.");
+      return;
+    }
+  
     try {
       if (isEditPaymentConfig) {
         const val = {
@@ -106,24 +161,20 @@ const AddAndUpdateCountry = () => {
             ...formData,
           },
         };
-        const updatedConfig = await updatePaymentConfig({
-          ...val,
-        }).unwrap();
-        dispatch(addPaymentConfigToList(updatedConfig.data)); // ✅ Update Redux store
+        const updatedConfig = await updatePaymentConfig(val).unwrap();
+        dispatch(addPaymentConfigToList(updatedConfig.data));
         toast.success("Country updated successfully");
         setSuccessMessage("Country updated successfully!");
-        setTimeout(() => setSuccessMessage(null), 3000);
       } else {
         const response = await addPaymentConfig(formData).unwrap();
         dispatch(addPaymentConfigToList(response));
         toast.success("Country added successfully");
         setSuccessMessage("Country added successfully!");
-        setTimeout(() => setSuccessMessage(null), 3000);
       }
-
+  
+      // ✅ Reset form
       setFormData({
         name: "",
-        providers: "",
         shortName: "",
         wallet: false,
         COD: false,
@@ -131,13 +182,14 @@ const AddAndUpdateCountry = () => {
         destination: false,
         departure: false,
       });
-
-      // navigate('/admin/payment-config');
+  
+      setTimeout(() => setSuccessMessage(null), 3000);
     } catch (error) {
-      // console.error("Failed to add:", error);
-      toast.error("Failed to add");
+      toast.error("Failed to add country. Please try again.");
     }
   };
+  //Added on 16-05-2025
+  
 
   return (
     <div>
@@ -167,7 +219,8 @@ const AddAndUpdateCountry = () => {
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
               <div className="flex gap-4">
-                {["name", "providers", "shortName"].map((field) => (
+                {/* {["name", "providers", "shortName"].map((field) => ( */}
+                {["name", "shortName"].map((field) => (
                   <div key={field} className="w-1/3">
                     <Inputes
                       label={field.charAt(0).toUpperCase() + field.slice(1)}

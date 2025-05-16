@@ -184,7 +184,7 @@ export const adminRoutes = [
   {
     path: "rearrage-suggested-product-list",
     component: RearrangeAdminProducts,
-    breadcrumb: ["admin", "Edit Suggested Product"],
+    breadcrumb: ["admin", "Rearrange Products"],
     showBreadcrumb: true,
   },
   

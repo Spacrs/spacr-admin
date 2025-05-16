@@ -5,10 +5,13 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { setProducts } from "../../store/slices/orderSlice/orderSlice";
 import { useNavigate } from "react-router-dom";
 import { Search, Button } from "../../components/Common";
+import { useSelector } from 'react-redux';
 function RearrangeAdminProducts() {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const products = useAppSelector((state) => state.orderSlice.products);
+    const state = useSelector((state) => state);
+    console.log("stateeee", state);
     const [filter, setFilter] = useState("");
     const { data, isLoading, isFetching, isError, refetch } = useGetOrdersQuery({
         page: 1, // No pagination
@@ -53,10 +56,12 @@ function RearrangeAdminProducts() {
         dispatch(setProducts(productsWithOrder)); // Update Redux state
         // Update in DB
         try {
-            await fetch("https://api-v2.spa-cr.com/admin/reorder-suggested-products", {
+            let token = localStorage.getItem('access_token');
+            await fetch("https://api-v2.spa-cr.com/api/v2/admin/reorder-suggested-products", {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(productsWithOrder.map(p => ({
                     Id: p.Id,
@@ -73,6 +78,6 @@ function RearrangeAdminProducts() {
     };
     return (_jsxs("div", { children: [_jsxs("div", { className: "flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg", children: [_jsx("div", { className: "flex flex-1 max-w-lg", children: _jsx(Search, { search: filter, onChange: (e) => {
                                 setFilter(e.target.value);
-                            }, placeholder: "Search by name...", onReset: () => setFilter("") }) }), _jsx("div", { className: "ml-4", children: _jsx(Button, { text: "Add Product", className: "mr-2", variant: "dark", type: "button", onClick: () => navigate("/admin/add-suggested-product") }) })] }), _jsx("div", { className: "flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto", children: _jsxs("table", { className: "min-w-full bg-white shadow-md rounded-lg", children: [_jsx("thead", { children: _jsxs("tr", { children: [_jsx("th", { className: "px-4 py-2 border-b", children: "S.No" }), _jsx("th", { className: "px-4 py-2 border-b", children: "Image" }), _jsx("th", { className: "px-4 py-2 border-b", children: "Product Name" }), _jsx("th", { className: "px-4 py-2 border-b", children: "Created At" }), _jsx("th", { className: "px-4 py-2 border-b", children: "Updated At" })] }) }), _jsx("tbody", { children: products.map((product, index) => (_jsxs("tr", { draggable: true, onDragStart: (e) => handleDragStart(e, product), onDragOver: handleDragOver, onDrop: (e) => handleDrop(e, index), className: "cursor-move hover:bg-gray-100", children: [_jsx("td", { className: "px-4 py-2 border-b text-center", children: index + 1 }), _jsx("td", { className: "px-4 py-2 border-b", children: _jsx("img", { src: product.image, alt: product.ProductName, className: "w-16 h-16 object-cover" }) }), _jsx("td", { className: "px-4 py-2 border-b", children: product.ProductName }), _jsx("td", { className: "px-4 py-2 border-b", children: product.CreatedAt }), _jsx("td", { className: "px-4 py-2 border-b", children: product.UpdatedAt })] }, product.Id))) })] }) })] }));
+                            }, placeholder: "Search by name...", onReset: () => setFilter("") }) }), _jsx("div", { className: "ml-4", children: _jsx(Button, { text: "Go Back", className: "mr-2", variant: "dark", type: "button", onClick: () => navigate("/admin/suggested-product-list") }) })] }), _jsx("div", { className: "flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto", children: _jsxs("table", { className: "min-w-full bg-white shadow-md rounded-lg", children: [_jsx("thead", { children: _jsxs("tr", { children: [_jsx("th", { className: "px-4 py-2 border-b text-left", children: "S.No" }), _jsx("th", { className: "px-4 py-2 border-b text-left", children: "Image" }), _jsx("th", { className: "px-4 py-2 border-b text-left", children: "Product Name" }), _jsx("th", { className: "px-4 py-2 border-b text-left", children: "Is Trending" }), _jsx("th", { className: "px-4 py-2 border-b text-left", children: "Created At" }), _jsx("th", { className: "px-4 py-2 border-b text-left", children: "Updated At" })] }) }), _jsx("tbody", { children: products.map((product, index) => (_jsxs("tr", { draggable: true, onDragStart: (e) => handleDragStart(e, product), onDragOver: handleDragOver, onDrop: (e) => handleDrop(e, index), className: "cursor-move hover:bg-gray-100", children: [_jsx("td", { className: "px-4 py-2 border-b text-center", children: index + 1 }), _jsx("td", { className: "px-4 py-2 border-b", children: _jsx("img", { src: product.image, alt: product.ProductName, className: "w-16 h-16 object-cover" }) }), _jsx("td", { className: "px-4 py-2 border-b", children: product.ProductName }), _jsx("td", { className: "px-4 py-2 border-b", children: product.IsTrending === true ? (_jsx("span", { className: "inline-block px-3 py-1 text-sm font-semibold text-white bg-green-500 rounded-full", children: "Yes" })) : (_jsx("span", { className: "inline-block px-3 py-1 text-sm font-semibold text-white bg-red-500 rounded-full", children: "No" })) }), _jsx("td", { className: "px-4 py-2 border-b", children: product.CreatedAt }), _jsx("td", { className: "px-4 py-2 border-b", children: product.UpdatedAt })] }, product.Id))) })] }) })] }));
 }
 export default RearrangeAdminProducts;

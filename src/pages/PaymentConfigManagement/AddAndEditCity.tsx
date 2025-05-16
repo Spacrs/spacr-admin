@@ -48,6 +48,21 @@ const AddAndUpdateCity = () => {
   } = useGetCityByIdQuery(cityId!);
   const [updateCity] = useUpdateCityMutation();
 
+  //To set the default value to the dropdown
+  useEffect(() => {
+    if (
+      countryOptions.length > 0 &&
+      !formData.selectedCountry &&
+      !isEditCity
+    ) {
+      setFormData((prev) => ({
+        ...prev,
+        selectedCountry: countryOptions[0].value,
+      }));
+    }
+  }, [countryOptions, formData.selectedCountry, isEditCity]);
+  //To set the default value to the dropdown
+
   useEffect(() => {
     if (cityData?.data) {
       console.log(cityData.data.Country.Id);
@@ -119,6 +134,7 @@ const AddAndUpdateCity = () => {
         };
         const response = await updateCity(val).unwrap();
         console.log("City Updated Successfully:", response);
+        toast.success("City Updated Successfully:");
         setSuccessMessage("City updated successfully!");
         setTimeout(() => setSuccessMessage(null), 3000);
       } else {
