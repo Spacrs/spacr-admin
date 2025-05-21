@@ -167,6 +167,41 @@ const city: IColumns[] = [
   },
 ];
 
+const scrapingIcons: IColumns[] = [
+  { name: "title", Header: "title", colName: "Default", sortable: true },
+  { name: "imagepath", Header: "Image", colName: "Image" },
+  { name: "url", Header: "URL", colName: "Default" },
+  {
+    name: "CreatedAt",
+    Header: "Created At",
+    colName: "DateAndTime",
+    sortable: true,
+  },
+  // {
+  //   name: "action",
+  //   Header: "Actions",
+  //   colName: "Actions",
+  //   Actions: ["UPDATE"],
+  // },
+];
+
+const referralCode: IColumns[] = [
+  { name: "code", Header: "code", colName: "Default", sortable: true },
+  { name: "FullName", Header: "FullName", colName: "Default" },
+  {
+    name: "CreatedAt",
+    Header: "Created At",
+    colName: "DateAndTime",
+    sortable: true,
+  },
+  // {
+  //   name: "action",
+  //   Header: "Actions",
+  //   colName: "Actions",
+  //   Actions: ["UPDATE"],
+  // },
+];
+
 export const columns = {
   user: user,
   userDevices: userDevices,
@@ -174,4 +209,6 @@ export const columns = {
   city: city,
   orderColumn: orderColumn,
   productColumn: productColumn,
+  scrapingIconsColumn: scrapingIcons,
+  referralCodeColumn: referralCode
 };

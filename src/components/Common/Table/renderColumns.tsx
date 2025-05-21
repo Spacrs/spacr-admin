@@ -88,6 +88,7 @@ export const renderColumns = (
               "PURCHASED",
               "COMPLETED",
               "READY_TO_RECEIVE",
+              "DELIVERED"
             ].includes(row[column.name]) && (
               <div className="bg-green-500 text-white text-xs font-medium rounded-full p-2 ">
                 {row[column.name]?.charAt(0).toUpperCase() +
@@ -123,7 +124,8 @@ export const renderColumns = (
       );
     case "Image": {
       return (
-        <div className="flex items-center justify-center">
+        // <div className="flex items-center justify-center">
+        <div className="flex items-left">
           {row[column.name!] === "" || row[column.name!] === null ? (
             icon[column.icon ? column.icon : "default"]
           ) : (

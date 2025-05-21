@@ -45,6 +45,7 @@ export const renderColumns = (column, row, actions) => {
                             "PURCHASED",
                             "COMPLETED",
                             "READY_TO_RECEIVE",
+                            "DELIVERED"
                         ].includes(row[column.name]) && (_jsx("div", { className: "bg-green-500 text-white text-xs font-medium rounded-full p-2 ", children: row[column.name]?.charAt(0).toUpperCase() +
                             row[column.name]?.slice(1).toLowerCase() })), column.name &&
                         ["inactive", "Pending", "pending", "IN_TRANSIT"].includes(row[column.name]) && (_jsx("div", { className: " bg-orange-400 text-white text-xs font-medium rounded-full p-2", children: row[column.name]?.charAt(0).toUpperCase() +
@@ -53,7 +54,9 @@ export const renderColumns = (column, row, actions) => {
                             row[column.name]?.slice(1).toLowerCase() })), column.name && ["none"].includes(row[column.name]) && (_jsx("div", { className: " bg-orange-400 text-white text-xs font-medium rounded-full p-2", children: row[column.name]?.charAt(0).toUpperCase() +
                             row[column.name]?.slice(1).toLowerCase() }))] }));
         case "Image": {
-            return (_jsx("div", { className: "flex items-center justify-center", children: row[column.name] === "" || row[column.name] === null ? (icon[column.icon ? column.icon : "default"]) : (_jsx("img", { src: row[column.name], alt: column.name, className: "w-10 h-10 object-cover rounded-md" })) }));
+            return (
+            // <div className="flex items-center justify-center">
+            _jsx("div", { className: "flex items-left", children: row[column.name] === "" || row[column.name] === null ? (icon[column.icon ? column.icon : "default"]) : (_jsx("img", { src: row[column.name], alt: column.name, className: "w-10 h-10 object-cover rounded-md" })) }));
         }
         case "Date": {
             const formattedDate = row[column.name]

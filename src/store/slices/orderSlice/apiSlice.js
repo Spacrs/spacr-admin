@@ -65,6 +65,18 @@ export const ordersApi = createApi({
                 };
             },
         }),
+        getScrapingIcons: builder.query({
+            query: () => ({
+                url: `/order/get-scraping-icons`,
+                method: "GET",
+            }),
+        }),
+        getReferralCodes: builder.query({
+            query: () => ({
+                url: `/${ADMIN}/get-all-referral-codes`,
+                method: "GET",
+            }),
+        }),
     }),
 });
-export const { useGetOrdersQuery, useUpdateOrderTrendMutation, useGetOrderDetailsQuery, useGetOrderOffersQuery, useCreateProductMutation, useUpdateProductMutation, useDeleteOrderMediaMutation, } = ordersApi;
+export const { useGetOrdersQuery, useUpdateOrderTrendMutation, useGetOrderDetailsQuery, useGetOrderOffersQuery, useCreateProductMutation, useUpdateProductMutation, useDeleteOrderMediaMutation, useGetScrapingIconsQuery, useGetReferralCodesQuery } = ordersApi;
