@@ -194,12 +194,12 @@ const referralCode: IColumns[] = [
     colName: "DateAndTime",
     sortable: true,
   },
-  // {
-  //   name: "action",
-  //   Header: "Actions",
-  //   colName: "Actions",
-  //   Actions: ["UPDATE"],
-  // },
+  {
+    name: "action",
+    Header: "Actions",
+    colName: "Actions",
+    Actions: ["UPDATE"],
+  },
 ];
 
 export const columns = {
