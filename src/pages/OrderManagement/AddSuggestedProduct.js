@@ -174,17 +174,35 @@ const AddSuggestedProduct = () => {
                 }
             }
         });
-        if (isEditProduct) {
-            productId && formData.append("OrderID", productId);
-            const updatedData = await updateProduct(formData);
-            dispatch(updateProductList(updatedData.data.data));
+        // if (isEditProduct) {
+        //   productId && formData.append("OrderID", productId);
+        //   const updatedData = await updateProduct(formData);
+        //   dispatch(updateProductList(updatedData.data.data));
+        //   refetchGetOrder();
+        //   toast.success("Product updated successfully!");
+        // } else {
+        //   await createProduct(formData);
+        //   refetchGetOrder();
+        //   toast.success("Product created successfully!");
+        // }
+        try {
+            if (isEditProduct) {
+                productId && formData.append("OrderID", productId);
+                const updatedData = await updateProduct(formData);
+                dispatch(updateProductList(updatedData.data.data));
+                toast.success("Product updated successfully!");
+            }
+            else {
+                await createProduct(formData);
+                toast.success("Product created successfully!");
+            }
             refetchGetOrder();
-            toast.success("Product updated successfully!");
+            navigate("/admin/suggested-product-list");
+            // OR: window.location.href = "/admin/suggested-product-list";
         }
-        else {
-            await createProduct(formData);
-            refetchGetOrder();
-            toast.success("Product created successfully!");
+        catch (err) {
+            console.error("Product submission failed:", err);
+            toast.error("Something went wrong. Please try again.");
         }
         navigate("/admin/suggested-product-list");
         window.location.href = "/admin/suggested-product-list";

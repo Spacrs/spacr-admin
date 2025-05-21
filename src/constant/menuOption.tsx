@@ -61,6 +61,11 @@ const menuItems: MenuItemTypes[] = [
     icon: <GrSend style={{ fontSize: "18px", margin: "0 10px" }} />,
   },
   {
+    label: "Scrap Logos List",
+    path: "/admin/scrap-logo-list",
+    icon: <MdContactSupport style={{ fontSize: "20px", margin: "0 10px" }} />,
+  },
+  {
     label: "Contact Support List",
     path: "/admin/contact-support-list",
     icon: <MdContactSupport style={{ fontSize: "20px", margin: "0 10px" }} />,

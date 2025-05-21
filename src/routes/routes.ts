@@ -24,6 +24,8 @@ import AdminProducts from "../pages/OrderManagement/AdminProducts";
 import AddSuggestedProduct from "../pages/OrderManagement/AddSuggestedProduct";
 import OrderOffers from "../pages/OrderManagement/OrderOffers";
 import RearrangeAdminProducts from "../pages/OrderManagement/RearrangeAdminProducts";
+import ScrapLogoList from "../pages/ScrapManagement/ScrapLogoList";
+import AddScrapingIcon from "../pages/ScrapManagement/AddScrapingIcon";
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -187,5 +189,18 @@ export const adminRoutes = [
     breadcrumb: ["admin", "Rearrange Products"],
     showBreadcrumb: true,
   },
+  {
+    path: "scrap-logo-list",
+    component: ScrapLogoList,
+    breadcrumb: ["admin", "Scraping Applications Logos"],
+    showBreadcrumb: true,
+  },
+  {
+    path: "add-scraping-icon",
+    component: AddScrapingIcon,
+    breadcrumb: ["admin", "Add Scraping Icon"],
+    showBreadcrumb: true,
+  },
+  
   
 ];

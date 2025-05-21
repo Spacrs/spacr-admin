@@ -45,6 +45,7 @@ export const renderColumns = (column, row, actions) => {
                             "PURCHASED",
                             "COMPLETED",
                             "READY_TO_RECEIVE",
+                            "DELIVERED"
                         ].includes(row[column.name]) && (_jsx("div", { className: "bg-green-500 text-white text-xs font-medium rounded-full p-2 ", children: row[column.name]?.charAt(0).toUpperCase() +
                             row[column.name]?.slice(1).toLowerCase() })), column.name &&
                         ["inactive", "Pending", "pending", "IN_TRANSIT"].includes(row[column.name]) && (_jsx("div", { className: " bg-orange-400 text-white text-xs font-medium rounded-full p-2", children: row[column.name]?.charAt(0).toUpperCase() +

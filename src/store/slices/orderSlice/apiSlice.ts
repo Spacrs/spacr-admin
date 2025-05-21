@@ -81,6 +81,12 @@ export const ordersApi: any = createApi({
         };
       },
     }),
+    getScrapingIcons: builder.query<any, string>({
+      query: () => ({
+        url: `/order/get-scraping-icons`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 export const {
@@ -91,4 +97,5 @@ export const {
   useCreateProductMutation,
   useUpdateProductMutation,
   useDeleteOrderMediaMutation,
+  useGetScrapingIconsQuery
 } = ordersApi;

@@ -65,6 +65,12 @@ export const ordersApi = createApi({
                 };
             },
         }),
+        getScrapingIcons: builder.query({
+            query: () => ({
+                url: `/order/get-scraping-icons`,
+                method: "GET",
+            }),
+        }),
     }),
 });
-export const { useGetOrdersQuery, useUpdateOrderTrendMutation, useGetOrderDetailsQuery, useGetOrderOffersQuery, useCreateProductMutation, useUpdateProductMutation, useDeleteOrderMediaMutation, } = ordersApi;
+export const { useGetOrdersQuery, useUpdateOrderTrendMutation, useGetOrderDetailsQuery, useGetOrderOffersQuery, useCreateProductMutation, useUpdateProductMutation, useDeleteOrderMediaMutation, useGetScrapingIconsQuery } = ordersApi;
