@@ -25,6 +25,7 @@ import { IoReturnDownBack } from "react-icons/io5";
 import { ImMenu3 } from "react-icons/im";
 import { MdProductionQuantityLimits } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
+import { FaBarcode } from "react-icons/fa";
 export const icons = {
     CiHome: CiHome,
     RxDashboard: RxDashboard,
@@ -107,5 +108,6 @@ export const icons = {
     RiExpandLeftLine,
     RiExpandRightLine,
     MdProductionQuantityLimits,
-    FaEdit
+    FaEdit,
+    FaBarcode
 };

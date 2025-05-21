@@ -124,7 +124,8 @@ export const renderColumns = (
       );
     case "Image": {
       return (
-        <div className="flex items-center justify-center">
+        // <div className="flex items-center justify-center">
+        <div className="flex items-left">
           {row[column.name!] === "" || row[column.name!] === null ? (
             icon[column.icon ? column.icon : "default"]
           ) : (

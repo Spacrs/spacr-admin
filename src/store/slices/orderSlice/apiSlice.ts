@@ -87,6 +87,12 @@ export const ordersApi: any = createApi({
         method: "GET",
       }),
     }),
+    getReferralCodes: builder.query<any, string>({
+      query: () => ({
+        url: `/${ADMIN}/get-all-referral-codes`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 export const {
@@ -97,5 +103,6 @@ export const {
   useCreateProductMutation,
   useUpdateProductMutation,
   useDeleteOrderMediaMutation,
-  useGetScrapingIconsQuery
+  useGetScrapingIconsQuery,
+  useGetReferralCodesQuery
 } = ordersApi;

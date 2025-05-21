@@ -26,6 +26,8 @@ import OrderOffers from "../pages/OrderManagement/OrderOffers";
 import RearrangeAdminProducts from "../pages/OrderManagement/RearrangeAdminProducts";
 import ScrapLogoList from "../pages/ScrapManagement/ScrapLogoList";
 import AddScrapingIcon from "../pages/ScrapManagement/AddScrapingIcon";
+import ReferralCodeList from "../pages/ReferralCodeManagement/ReferralCodeList";
+import AddReferralCode from "../pages/ReferralCodeManagement/AddReferralCode";
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -201,6 +203,17 @@ export const adminRoutes = [
     breadcrumb: ["admin", "Add Scraping Icon"],
     showBreadcrumb: true,
   },
-  
+  {
+    path: "referral-code-list",
+    component: ReferralCodeList,
+    breadcrumb: ["admin", "Referral Code List"],
+    showBreadcrumb: true,
+  },
+  {
+    path: "add-referral-code",
+    component: AddReferralCode,
+    breadcrumb: ["admin", "Add Referral Code"],
+    showBreadcrumb: true,
+  },
   
 ];
