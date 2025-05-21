@@ -106,31 +106,40 @@ const AddScrapingIcon: React.FC = () => {
           className="max-w-4xl mx-auto bg-white p-6 shadow rounded-lg space-y-6"
         >
           {/* URL and Title */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="flex flex-col gap-6">
+            {/* Row 1: Code and Full Name */}
+            <div className="flex flex-col md:flex-row gap-4">
 
-            <InputComponent
-              type="text"
-              name="title"
-              label="Title"
-              value={payload.title}
-              onChange={handleChange}
-              required
-            />
+              <div className="w-full md:w-1/2">
 
-            <InputComponent
-              type="text"
-              name="url"
-              label="Product URL"
-              value={payload.url}
-              onChange={handleChange}
-              required
-            />
-            
+                <InputComponent
+                  type="text"
+                  name="title"
+                  label="Title"
+                  value={payload.title}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="w-full md:w-1/2">
+                <InputComponent
+                  type="text"
+                  name="url"
+                  label="URL"
+                  value={payload.url}
+                  onChange={handleChange}
+                  required
+                />
+
+              </div>
+
+            </div>
           </div>
+          
 
           {/* Image Upload */}
           <div>
-            <label className="block mb-1 font-medium">Product Image</label>
+            <label className="block mb-1 font-medium">Image</label>
             <div
               onClick={() => fileInputRef.current?.click()}
               className="h-40 border-dashed border-2 border-gray-300 rounded flex items-center justify-center cursor-pointer hover:border-blue-500"
