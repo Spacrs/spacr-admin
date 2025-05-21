@@ -54,10 +54,10 @@ function ReferralCodeList() {
   };
 
   const handleView = (data: any) => {
-    const productId = data.OrderID;
+    const referralCodeId = data.referralID;
     if (data) {
       try {
-        navigate(`/admin/product-details/${productId}`);
+        navigate(`/admin/referral-code-details/${referralCodeId}`);
       } catch (error) {
         console.log(error, "error in handleView");
       }

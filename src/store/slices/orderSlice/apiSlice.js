@@ -77,6 +77,12 @@ export const ordersApi = createApi({
                 method: "GET",
             }),
         }),
+        getReferralCodeDetails: builder.query({
+            query: (referralCodeID) => ({
+                url: `/${ADMIN}/get-users-who-redeemed-code/${referralCodeID}`,
+                method: "GET",
+            }),
+        }),
     }),
 });
-export const { useGetOrdersQuery, useUpdateOrderTrendMutation, useGetOrderDetailsQuery, useGetOrderOffersQuery, useCreateProductMutation, useUpdateProductMutation, useDeleteOrderMediaMutation, useGetScrapingIconsQuery, useGetReferralCodesQuery } = ordersApi;
+export const { useGetOrdersQuery, useUpdateOrderTrendMutation, useGetOrderDetailsQuery, useGetOrderOffersQuery, useCreateProductMutation, useUpdateProductMutation, useDeleteOrderMediaMutation, useGetScrapingIconsQuery, useGetReferralCodesQuery, useGetReferralCodeDetailsQuery } = ordersApi;

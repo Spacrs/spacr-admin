@@ -28,6 +28,7 @@ import ScrapLogoList from "../pages/ScrapManagement/ScrapLogoList";
 import AddScrapingIcon from "../pages/ScrapManagement/AddScrapingIcon";
 import ReferralCodeList from "../pages/ReferralCodeManagement/ReferralCodeList";
 import AddReferralCode from "../pages/ReferralCodeManagement/AddReferralCode";
+import ReferralCodeDetails from "../pages/ReferralCodeManagement/ReferralCodeDetails";
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -213,6 +214,12 @@ export const adminRoutes = [
     path: "add-referral-code",
     component: AddReferralCode,
     breadcrumb: ["admin", "Add Referral Code"],
+    showBreadcrumb: true,
+  },
+  {
+    path: "referral-code-details/:referralCodeID",
+    component: ReferralCodeDetails,
+    breadcrumb: ["admin", "Order Details"],
     showBreadcrumb: true,
   },
   
