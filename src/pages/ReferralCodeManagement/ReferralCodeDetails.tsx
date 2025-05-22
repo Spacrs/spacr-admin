@@ -8,15 +8,15 @@ const ReferralCodeDetails = () => {
   const navigate = useNavigate();
 
   const { referralCodeID } = useParams();
-  const { data: order, isLoading, error } = useGetReferralCodeDetailsQuery(referralCodeID!);
+  const { data: referralCodeData, isLoading, error } = useGetReferralCodeDetailsQuery(referralCodeID!);
 
   const [status, setStatus] = useState<string>("");
 
   useEffect(() => {
-    if (order) {
-      setStatus(order.Status);
+    if (referralCodeData) {
+      setStatus(referralCodeData.Status);
     }
-  }, [order]);
+  }, [referralCodeData]);
 
   const handleOnChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setStatus(event.target.value);
@@ -39,74 +39,33 @@ const ReferralCodeDetails = () => {
   return (
     <div className="p-6 max-w-7xl mx-auto bg-white shadow-xl rounded-lg">
       {/* Order Details Card */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Left Side - Product Details */}
-        <div className="flex flex-col bg-gray-50 p-6 rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold mb-2">
-            {order.data.ProductName}
-          </h2>
-          <p className="text-gray-500 text-sm mb-4">
-            {order.data.Descriptions}
-          </p>
-          <a
-            href={order.data.ProductUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-indigo-600 hover:text-indigo-800 text-sm"
-          >
-            View Product
-          </a>
-
-          <div className="mt-6 w-full">
-            <p>
-              <strong>Price:</strong> ${order.data.Price}
-            </p>
-            
-          </div>
-        </div>
-
-        
-      </div>
       
-
-
-
-
-      {/* ✅ Product Images Section with Dynamic Sizing */}
-      {order.data.medias && order.data.medias.length > 0 && (
-        <div className="mt-6 bg-gray-50 p-6 rounded-lg shadow-md">
-          <h3 className="text-xl font-semibold mb-3">Product Images</h3>
-          <div className="flex flex-wrap gap-4 justify-center">
-            {order.data.medias.map((media: any, index: number) => {
-              // Adjust size based on the number of images
-              const imageSize =
-                order.data.medias.length === 1
-                  ? "w-64 h-64" // 1 Image - Large
-                  : order.data.medias.length === 2
-                  ? "w-48 h-48" // 2 Images - Medium
-                  : "w-32 h-32"; // 3 or More Images - Small
-
-              return (
-                <img
-                  key={index}
-                  src={media.url} // ✅ Ensure correct property for image URL
-                  alt={media.description || `Product Image ${index + 1}`}
-                  className={`${imageSize} object-cover rounded-lg shadow-md border`}
-                />
-              );
-            })}
-          </div>
+      
+      {referralCodeData.data.historyRecords && referralCodeData.data.historyRecords.length > 0 && (
+        <div className="mt-8 bg-white p-6 rounded-lg shadow-xl">
+          <h3 className="text-lg font-semibold text-blue-700 mb-2">
+            Referral Code: <span className="font-mono">{referralCodeData.data.historyRecords[0].code}</span>
+          </h3>
+          <p className="text-gray-700 mb-4">These users have redeemed this code:</p>
+          
+          <ul className="list-disc pl-5 text-gray-800">
+            {referralCodeData.data.users.map((user: any, index: number) => (
+              <li key={index}>
+                <strong>{user.FullName}</strong> ({user.Email})
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 
       {/* Footer - Order Metadata */}
       <div className="mt-6 flex justify-between items-center text-sm text-gray-500">
         <p>
-          <strong>Order ID</strong>: {order.data.OrderID}
+          
         </p>
         <p>
           <strong>Created Date</strong>:{" "}
-          {new Date(order.data.CreatedAt).toLocaleDateString()}
+          {new Date(referralCodeData.data.historyRecords[0].CreatedAt).toLocaleDateString()}
         </p>
       </div>
     </div>

@@ -29,8 +29,8 @@ function ReferralCodeList() {
     //   setIsOpen(true);
     // };
     const handleUpdate = (data) => {
-        const productId = data.OrderID;
-        navigate(`/admin/edit-suggested-product/${productId}`);
+        const referralCodeId = data.referralID;
+        navigate(`/admin/edit-referral-code/${referralCodeId}`);
     };
     const handleToggleTrending = () => {
         setSelectedOrder((prevOrder) => ({

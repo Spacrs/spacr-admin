@@ -6,13 +6,13 @@ const ReferralCodeDetails = () => {
     const params = useParams();
     const navigate = useNavigate();
     const { referralCodeID } = useParams();
-    const { data: order, isLoading, error } = useGetReferralCodeDetailsQuery(referralCodeID);
+    const { data: referralCodeData, isLoading, error } = useGetReferralCodeDetailsQuery(referralCodeID);
     const [status, setStatus] = useState("");
     useEffect(() => {
-        if (order) {
-            setStatus(order.Status);
+        if (referralCodeData) {
+            setStatus(referralCodeData.Status);
         }
-    }, [order]);
+    }, [referralCodeData]);
     const handleOnChange = (event) => {
         setStatus(event.target.value);
     };
@@ -25,14 +25,6 @@ const ReferralCodeDetails = () => {
         }
         return (_jsxs("p", { className: "text-center text-red-500", children: ["Failed to load Referral Code details. Error: ", error.status] }));
     }
-    return (_jsxs("div", { className: "p-6 max-w-7xl mx-auto bg-white shadow-xl rounded-lg", children: [_jsx("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-6", children: _jsxs("div", { className: "flex flex-col bg-gray-50 p-6 rounded-lg shadow-md", children: [_jsx("h2", { className: "text-2xl font-semibold mb-2", children: order.data.ProductName }), _jsx("p", { className: "text-gray-500 text-sm mb-4", children: order.data.Descriptions }), _jsx("a", { href: order.data.ProductUrl, target: "_blank", rel: "noopener noreferrer", className: "text-indigo-600 hover:text-indigo-800 text-sm", children: "View Product" }), _jsx("div", { className: "mt-6 w-full", children: _jsxs("p", { children: [_jsx("strong", { children: "Price:" }), " $", order.data.Price] }) })] }) }), order.data.medias && order.data.medias.length > 0 && (_jsxs("div", { className: "mt-6 bg-gray-50 p-6 rounded-lg shadow-md", children: [_jsx("h3", { className: "text-xl font-semibold mb-3", children: "Product Images" }), _jsx("div", { className: "flex flex-wrap gap-4 justify-center", children: order.data.medias.map((media, index) => {
-                            // Adjust size based on the number of images
-                            const imageSize = order.data.medias.length === 1
-                                ? "w-64 h-64" // 1 Image - Large
-                                : order.data.medias.length === 2
-                                    ? "w-48 h-48" // 2 Images - Medium
-                                    : "w-32 h-32"; // 3 or More Images - Small
-                            return (_jsx("img", { src: media.url, alt: media.description || `Product Image ${index + 1}`, className: `${imageSize} object-cover rounded-lg shadow-md border` }, index));
-                        }) })] })), _jsxs("div", { className: "mt-6 flex justify-between items-center text-sm text-gray-500", children: [_jsxs("p", { children: [_jsx("strong", { children: "Order ID" }), ": ", order.data.OrderID] }), _jsxs("p", { children: [_jsx("strong", { children: "Created Date" }), ":", " ", new Date(order.data.CreatedAt).toLocaleDateString()] })] })] }));
+    return (_jsxs("div", { className: "p-6 max-w-7xl mx-auto bg-white shadow-xl rounded-lg", children: [referralCodeData.data.historyRecords && referralCodeData.data.historyRecords.length > 0 && (_jsxs("div", { className: "mt-8 bg-white p-6 rounded-lg shadow-xl", children: [_jsxs("h3", { className: "text-lg font-semibold text-blue-700 mb-2", children: ["Referral Code: ", _jsx("span", { className: "font-mono", children: referralCodeData.data.historyRecords[0].code })] }), _jsx("p", { className: "text-gray-700 mb-4", children: "These users have redeemed this code:" }), _jsx("ul", { className: "list-disc pl-5 text-gray-800", children: referralCodeData.data.users.map((user, index) => (_jsxs("li", { children: [_jsx("strong", { children: user.FullName }), " (", user.Email, ")"] }, index))) })] })), _jsxs("div", { className: "mt-6 flex justify-between items-center text-sm text-gray-500", children: [_jsx("p", {}), _jsxs("p", { children: [_jsx("strong", { children: "Created Date" }), ":", " ", new Date(referralCodeData.data.historyRecords[0].CreatedAt).toLocaleDateString()] })] })] }));
 };
 export default ReferralCodeDetails;

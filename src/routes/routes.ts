@@ -29,6 +29,8 @@ import AddScrapingIcon from "../pages/ScrapManagement/AddScrapingIcon";
 import ReferralCodeList from "../pages/ReferralCodeManagement/ReferralCodeList";
 import AddReferralCode from "../pages/ReferralCodeManagement/AddReferralCode";
 import ReferralCodeDetails from "../pages/ReferralCodeManagement/ReferralCodeDetails";
+import EditReferralCode from "../pages/ReferralCodeManagement/EditReferralCode";
+import ExternalPage from "../pages/ExternalPage/ExternalPage";
 
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
@@ -44,6 +46,11 @@ export const authRoutes = [
     path: "/",
     component: Authenticate,
   },
+  {
+    path: "/external-user-registration-with-referral-code",
+    component: ExternalPage,
+  },
+
 ];
 
 export const adminRoutes = [
@@ -219,7 +226,13 @@ export const adminRoutes = [
   {
     path: "referral-code-details/:referralCodeID",
     component: ReferralCodeDetails,
-    breadcrumb: ["admin", "Order Details"],
+    breadcrumb: ["admin", "Referral Code Details"],
+    showBreadcrumb: true,
+  },
+  {
+    path: "edit-referral-code/:referralCodeID",
+    component: EditReferralCode,
+    breadcrumb: ["admin", "Edit Referral Code"],
     showBreadcrumb: true,
   },
   
