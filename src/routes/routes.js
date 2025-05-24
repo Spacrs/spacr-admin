@@ -42,7 +42,7 @@ export const authRoutes = [
         component: Authenticate,
     },
     {
-        path: "/external-user-registration-with-referral-code",
+        path: "/assign-referral-code",
         component: ExternalPage,
     },
 ];

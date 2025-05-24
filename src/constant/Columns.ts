@@ -186,8 +186,10 @@ const scrapingIcons: IColumns[] = [
 ];
 
 const referralCode: IColumns[] = [
-  { name: "code", Header: "code", colName: "Default", sortable: true },
-  { name: "FullName", Header: "FullName", colName: "Default" },
+  { name: "code", Header: "Code", colName: "Default", sortable: true },
+  { name: "FullName", Header: "Full Name", colName: "Default", sortable: true },
+  { name: "redeemCount", Header: "Redeem Count", colName: "Number"},
+  { name: "Status", Header: "Status", colName: "Status"},
   {
     name: "CreatedAt",
     Header: "Created At",
@@ -198,7 +200,21 @@ const referralCode: IColumns[] = [
     name: "action",
     Header: "Actions",
     colName: "Actions",
-    Actions: ["UPDATE"],
+    Actions: ["UPDATE", "COPY"],
+  },
+  
+];
+
+const referralCodeDetails: IColumns[] = [
+  { name: "FullName", Header: "Full Name", colName: "Default" },
+  { name: "Email", Header: "Email", colName: "Default",
+  //  sortable: true 
+  },
+ {
+    name: "RedeemedAt",
+    Header: "Redeemed At",
+    colName: "Date",
+    // sortable: true,
   },
 ];
 
@@ -210,5 +226,6 @@ export const columns = {
   orderColumn: orderColumn,
   productColumn: productColumn,
   scrapingIconsColumn: scrapingIcons,
-  referralCodeColumn: referralCode
+  referralCodeColumn: referralCode,
+  referralCodeDetails: referralCodeDetails
 };

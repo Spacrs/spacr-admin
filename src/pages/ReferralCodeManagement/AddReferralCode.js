@@ -49,6 +49,18 @@ const AddReferralCode = () => {
             setCreating(false);
         }
     };
-    return (_jsxs("div", { className: "min-h-screen", children: [_jsx(ToastContainer, {}), _jsx("div", { className: "flex justify-end items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg", children: _jsx(Button, { text: "Back", variant: "lightBlue", onClick: () => navigate(-1) }) }), _jsx("div", { className: "p-8 bg-gray-50 shadow-md rounded-lg", children: _jsxs("form", { onSubmit: handleSubmit, className: "max-w-4xl mx-auto bg-white p-6 shadow rounded-lg space-y-6", children: [_jsxs("div", { className: "flex flex-col gap-6", children: [_jsxs("div", { className: "flex flex-col md:flex-row gap-4", children: [_jsx("div", { className: "w-full md:w-1/2", children: _jsx(InputComponent, { type: "text", name: "code", label: "Code", value: payload.code, onChange: handleChange, required: true }) }), _jsx("div", { className: "w-full md:w-1/2", children: _jsx(InputComponent, { type: "text", name: "FullName", label: "Full Name", value: payload.FullName, onChange: handleChange, required: true }) })] }), _jsx("div", { children: _jsx(InputComponent, { type: "text", name: "contactNumber", label: "Contact Number", value: payload.contactNumber, onChange: handleChange }) })] }), _jsx("div", { className: "text-right", children: _jsx(Button, { text: creating ? "Submitting…" : "Submit", variant: "primary", type: "submit", disabled: creating }) })] }) })] }));
+    const generateCode = () => {
+        const length = Math.floor(Math.random() * (12 - 8 + 1)) + 8; // random length between 8 and 12
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let generated = "";
+        for (let i = 0; i < length; i++) {
+            generated += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        setPayload((prev) => ({
+            ...prev,
+            code: generated,
+        }));
+    };
+    return (_jsxs("div", { className: "min-h-screen", children: [_jsx(ToastContainer, {}), _jsx("div", { className: "flex justify-end items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg", children: _jsx(Button, { text: "Back", variant: "lightBlue", onClick: () => navigate(-1) }) }), _jsx("div", { className: "p-8 bg-gray-50 shadow-md rounded-lg", children: _jsxs("form", { onSubmit: handleSubmit, className: "max-w-4xl mx-auto bg-white p-6 shadow rounded-lg space-y-6", children: [_jsxs("div", { className: "flex flex-col gap-6", children: [_jsxs("div", { className: "flex flex-col md:flex-row gap-4", children: [_jsxs("div", { className: "w-full md:w-1/2", children: [_jsx(InputComponent, { type: "text", name: "code", label: "Code", value: payload.code, onChange: handleChange, required: true }), _jsx(Button, { className: "mt-5", text: "Generate Code", variant: "dark", type: "button", onClick: generateCode })] }), _jsx("div", { className: "w-full md:w-1/2", children: _jsx(InputComponent, { type: "text", name: "FullName", label: "Full Name", value: payload.FullName, onChange: handleChange, required: true }) })] }), _jsx("div", { children: _jsx(InputComponent, { type: "text", name: "contactNumber", label: "Contact Number", value: payload.contactNumber, onChange: handleChange }) })] }), _jsx("div", { className: "text-right", children: _jsx(Button, { text: creating ? "Submitting…" : "Submit", variant: "primary", type: "submit", disabled: creating }) })] }) })] }));
 };
 export default AddReferralCode;

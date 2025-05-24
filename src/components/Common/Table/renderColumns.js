@@ -1,10 +1,11 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 import { icons } from "../../../Icons/constant";
 import KebabMenu from "./KebabMenu";
+import KebabMenu2 from "./KebabMenu2";
 import { TbBrandAppgallery } from "react-icons/tb";
 import { FaRegUser } from "react-icons/fa6";
 import { CiImageOn } from "react-icons/ci";
-const { MdOutlineEdit, AiOutlineDelete, BsCopy, BsEye } = icons;
+const { MdOutlineEdit, AiOutlineDelete, BsCopy, BsEye, BsToggle2Off } = icons;
 export const renderColumns = (column, row, actions) => {
     const icon = {
         user: _jsx(FaRegUser, { className: "text-gray-400 w-10 h-10" }),
@@ -34,7 +35,7 @@ export const renderColumns = (column, row, actions) => {
             return _jsx("p", { className: "font-medium", children: emoji });
         }
         case "Actions":
-            return (_jsxs("div", { className: "flex space-x-2 items-center", children: [actions.handleUpdate && (_jsx(MdOutlineEdit, { onClick: () => actions.handleUpdate?.(row), className: "cursor-pointer text-lg font-bold text-gray-500 hover:text-primary" })), actions.handleView && (_jsx(BsEye, { onClick: () => actions.handleView?.(row), className: "cursor-pointer text-lg font-bold text-gray-500 hover:text-primary" })), actions.handleDelete && (_jsx(AiOutlineDelete, { onClick: () => actions.handleDelete?.(row), className: "text-lg font-bold text-gray-500 hover:text-red-400" })), actions.handleClone && (_jsx(BsCopy, { onClick: () => actions.handleClone?.(row), className: "text-lg font-bold text-gray-500 hover:text-blue-400" }))] }));
+            return (_jsxs("div", { className: "flex space-x-2 items-center", children: [actions.handleUpdate && (_jsx(MdOutlineEdit, { onClick: () => actions.handleUpdate?.(row), className: "cursor-pointer text-lg font-bold text-gray-500 hover:text-primary" })), actions.handleView && (_jsx(BsEye, { onClick: () => actions.handleView?.(row), className: "cursor-pointer text-lg font-bold text-gray-500 hover:text-primary" })), actions.handleDelete && (_jsx(AiOutlineDelete, { onClick: () => actions.handleDelete?.(row), className: "text-lg font-bold text-gray-500 hover:text-red-400" })), actions.handleClone && (_jsx(BsCopy, { onClick: () => actions.handleClone?.(row), className: "text-lg font-bold text-gray-500 hover:text-blue-400" })), actions.handleToggleStatus && (_jsx(BsToggle2Off, { onClick: () => actions.handleToggleStatus?.(row), className: "text-lg font-bold text-gray-500 hover:text-blue-400" }))] }));
         case "Status":
             return (_jsxs("div", { className: "relative flex items-center", children: [column.name &&
                         [
@@ -89,6 +90,12 @@ export const renderColumns = (column, row, actions) => {
             return _jsx(KebabMenu, { row: row, actions: actions });
         case "Boolean":
             return (_jsxs("div", { className: "relative flex items-center", children: [column.name && row[column.name] === true && (_jsx("div", { className: "bg-green-500 text-white text-xs font-medium rounded-full px-3 py-1", children: "Yes" })), column.name && row[column.name] === false && (_jsx("div", { className: "bg-red-500 text-white text-xs font-medium rounded-full px-3 py-1", children: "No" }))] }));
+        //Added on 24-05-2025
+        case "Number":
+            return (_jsx("p", { className: "font-medium", children: column.name ? (row[column.name] !== undefined && row[column.name] !== null ? row[column.name] : "-") : "" }));
+        case "KebabMenu2":
+            return _jsx(KebabMenu2, { row: row, actions: actions });
+        //Added on 24-05-2025  
         default:
             return _jsx(_Fragment, {});
     }
