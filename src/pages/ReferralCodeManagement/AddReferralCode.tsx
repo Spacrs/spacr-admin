@@ -67,6 +67,19 @@ const AddReferralCode: React.FC = () => {
     }
   };
 
+  const generateCode = () => {
+    const length = Math.floor(Math.random() * (12 - 8 + 1)) + 8; // random length between 8 and 12
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let generated = "";
+    for (let i = 0; i < length; i++) {
+      generated += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    setPayload((prev) => ({
+      ...prev,
+      code: generated,
+    }));
+  };
+
   return (
     <div className="min-h-screen">
       <ToastContainer />
@@ -92,6 +105,20 @@ const AddReferralCode: React.FC = () => {
                   onChange={handleChange}
                   required
                 />
+                {/* <button
+                  type="button"
+                  className="btn btn-primary mt-2"
+                  onClick={generateCode}
+                >
+                  Generate Code
+                </button> */}
+                <Button
+                    className="mt-5"
+                    text={"Generate Code"}
+                    variant="dark"
+                    type="button"
+                    onClick={generateCode}
+                  />
               </div>
 
               <div className="w-full md:w-1/2">

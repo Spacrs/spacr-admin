@@ -2,11 +2,13 @@ import React from "react";
 import { IColumns, IAction } from "./index";
 import { icons } from "../../../Icons/constant";
 import KebabMenu from "./KebabMenu";
+import KebabMenu2 from "./KebabMenu2";
 import { TbBrandAppgallery } from "react-icons/tb";
 import { FaRegUser } from "react-icons/fa6";
 import { CiImageOn } from "react-icons/ci";
+import ToggleSwitch from "../../../components/Common/Inputes/ToggleSwitch";
 
-const { MdOutlineEdit, AiOutlineDelete, BsCopy, BsEye } = icons;
+const { MdOutlineEdit, AiOutlineDelete, BsCopy, BsEye, BsToggle2Off } = icons;
 
 export const renderColumns = (
   column: IColumns,
@@ -74,6 +76,13 @@ export const renderColumns = (
               className="text-lg font-bold text-gray-500 hover:text-blue-400"
             />
           )}
+          {actions.handleToggleStatus && (
+            <BsToggle2Off
+              onClick={() => actions.handleToggleStatus?.(row)}
+              className="text-lg font-bold text-gray-500 hover:text-blue-400"
+            />
+          )}
+          
         </div>
       );
     case "Status":
@@ -192,6 +201,16 @@ export const renderColumns = (
           )}
         </div>
       );
+      //Added on 24-05-2025
+      case "Number":
+        return (
+          <p className="font-medium">
+            {column.name ? (row[column.name] !== undefined && row[column.name] !== null ? row[column.name] : "-") : ""}
+          </p>
+        );
+      case "KebabMenu2":
+        return <KebabMenu2 row={row} actions={actions} />;
+      //Added on 24-05-2025  
 
     default:
       return <></>;

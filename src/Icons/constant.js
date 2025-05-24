@@ -26,6 +26,8 @@ import { ImMenu3 } from "react-icons/im";
 import { MdProductionQuantityLimits } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { FaBarcode } from "react-icons/fa";
+import { FaRegCopy } from "react-icons/fa";
+import { BsToggle2Off } from "react-icons/bs";
 export const icons = {
     CiHome: CiHome,
     RxDashboard: RxDashboard,
@@ -109,5 +111,7 @@ export const icons = {
     RiExpandRightLine,
     MdProductionQuantityLimits,
     FaEdit,
-    FaBarcode
+    FaBarcode,
+    FaRegCopy,
+    BsToggle2Off
 };
