@@ -9,7 +9,7 @@ import {
 } from "../../store/slices/orderSlice/orderSlice";
 import { useNavigate } from "react-router-dom";
 import { columns } from "../../constant/Columns";
-import { ErrorMsg, Table, Button } from "../../components/Common";
+import { Search, ErrorMsg, Table, Button } from "../../components/Common";
 import { toast, ToastContainer } from "react-toastify";
 
 type BodyPayload = {
@@ -21,7 +21,7 @@ type BodyPayload = {
 function ReferralCodeList() {
   const dispatch = useAppDispatch();
 
-  const { data, isLoading, isFetching, isError, refetch } = useGetReferralCodesQuery();
+  
 
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -30,7 +30,17 @@ function ReferralCodeList() {
   const [showModal, setShowModal] = useState(false);
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+  const [filter, setFilter] = useState(""); // Search term
+  const itemsPerPage = 10;
 
+  const { data, isLoading, isFetching, isError, refetch } = useGetReferralCodesQuery({
+    page: currentPage,
+    limit: itemsPerPage,
+    createdBy: "user",
+    sort: sortDirection,
+    sortBy: sortBy,
+    search: filter !== "" ? filter : undefined,
+  });
 
   const [payload, setPayload] = useState<BodyPayload>({
     code: "",
@@ -51,7 +61,7 @@ function ReferralCodeList() {
   }, [dispatch]);
 
   if (isError) {
-    return <ErrorMsg errorMsg="Error loading orders" />;
+    return <ErrorMsg errorMsg="Error loading referral codes" />;
   }
 
   // const handleUpdate = (data: any) => {
@@ -129,8 +139,6 @@ function ReferralCodeList() {
       });
   }
 
-
-  const itemsPerPage = 10;
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -218,6 +226,11 @@ const handleFormSubmit = async (e: React.FormEvent) => {
   setShowModal(false);
 };
 
+const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter(e.target.value);
+    setCurrentPage(1);
+  };
+
 
   return (
     <div className="">
@@ -225,7 +238,14 @@ const handleFormSubmit = async (e: React.FormEvent) => {
       <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         {/* Search Bar */}
         <div className="flex justify-between items-center w-full">
-        <div className="ml-4"></div>
+        <div className="flex flex-1 max-w-lg">
+          <Search
+            search={filter}
+            onChange={onSearch}
+            onReset={() => setFilter("")}
+            placeholder="Search by code or full name"
+          />
+        </div>
           
           <div className="ml-4">
           <Button
@@ -252,7 +272,7 @@ const handleFormSubmit = async (e: React.FormEvent) => {
           loading={isLoading || isFetching}
           totalPages={Math.ceil((data?.data?.length || 0) / itemsPerPage)}
           currentPage={currentPage}
-          onPageChange={onPageChange}
+          onPageChange={setCurrentPage}
           handleToggleStatus={handleToggleStatus}
           handleView={handleView}
           handleClone={handleClone}
