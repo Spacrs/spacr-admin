@@ -48,6 +48,12 @@ function Orders() {
           data.data.map((order: ProductData) => ({
             ...order,
             image: order.medias?.[0]?.url || "",
+            //Added on 26-05-2025
+            ProductName:
+            order.ProductName?.length > 20
+              ? `${order.ProductName.slice(0, 20)}...`
+              : order.ProductName,
+            //Added on 26-05-2025
           }))
         )
       );
