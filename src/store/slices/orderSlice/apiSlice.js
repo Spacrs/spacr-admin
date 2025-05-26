@@ -71,11 +71,20 @@ export const ordersApi = createApi({
                 method: "GET",
             }),
         }),
+        // getReferralCodes: builder.query<any, string>({
+        //   query: () => ({
+        //     url: `/${ADMIN}/get-all-referral-codes`,
+        //     method: "GET",
+        //   }),
+        // }),
         getReferralCodes: builder.query({
-            query: () => ({
-                url: `/${ADMIN}/get-all-referral-codes`,
-                method: "GET",
-            }),
+            query: (paramsObj) => {
+                const queryString = buildQueryParams(paramsObj);
+                return {
+                    url: `/${ADMIN}/get-all-referral-codes?${queryString}`,
+                    method: "GET",
+                };
+            },
         }),
         getReferralCodeDetails: builder.query({
             query: (referralCodeID) => ({

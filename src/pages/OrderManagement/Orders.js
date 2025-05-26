@@ -31,6 +31,11 @@ function Orders() {
             dispatch(setOrders(data.data.map((order) => ({
                 ...order,
                 image: order.medias?.[0]?.url || "",
+                //Added on 26-05-2025
+                ProductName: order.ProductName?.length > 40
+                    ? `${order.ProductName.slice(0, 40)}...`
+                    : order.ProductName,
+                //Added on 26-05-2025  
             }))));
         }
     }, [data, dispatch]);
