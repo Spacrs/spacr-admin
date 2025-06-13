@@ -31,6 +31,7 @@ export const notificationApi: any = createApi({
         search?: string;
         sortBy?: string;
         sort?: "asc" | "desc";
+        type?: string;
       }
     >({
       query: (paramsObj) => {

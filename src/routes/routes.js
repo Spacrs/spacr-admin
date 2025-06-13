@@ -28,6 +28,9 @@ import AddReferralCode from "../pages/ReferralCodeManagement/AddReferralCode";
 import ReferralCodeDetails from "../pages/ReferralCodeManagement/ReferralCodeDetails";
 import EditReferralCode from "../pages/ReferralCodeManagement/EditReferralCode";
 import ExternalPage from "../pages/ExternalPage/ExternalPage";
+import TravelListing from "../pages/TravelListingManagement/TravelListing";
+import NotificationView from "../pages/NotificationManagement/NotificationView";
+import EditScheduleNotification from "../pages/NotificationManagement/EditScheduleNotification";
 export const protectedRoutes = [
     // these routes are accessable with auth or layout for diffrent roles
     {
@@ -226,6 +229,25 @@ export const adminRoutes = [
         path: "edit-referral-code/:referralCodeID",
         component: EditReferralCode,
         breadcrumb: ["admin", "Edit Referral Code"],
+        showBreadcrumb: true,
+    },
+    //TravelListing
+    {
+        path: "travel-listing",
+        component: TravelListing,
+        breadcrumb: ["admin", "Travel Listing"],
+        showBreadcrumb: true,
+    },
+    {
+        path: "view-notification/:notificationId",
+        component: NotificationView,
+        breadcrumb: ["admin", "Notification Details"],
+        showBreadcrumb: true,
+    },
+    {
+        path: "edit-schedule-notification/:notificationId",
+        component: EditScheduleNotification,
+        breadcrumb: ["admin", "Edit Scheduled Notification"],
         showBreadcrumb: true,
     },
 ];

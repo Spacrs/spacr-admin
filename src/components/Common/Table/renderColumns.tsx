@@ -13,7 +13,8 @@ const { MdOutlineEdit, AiOutlineDelete, BsCopy, BsEye, BsToggle2Off } = icons;
 export const renderColumns = (
   column: IColumns,
   row: any,
-  actions: IAction
+  actions: IAction,
+  listType?: string
 ): React.ReactNode => {
   const icon = {
     user: <FaRegUser className="text-gray-400 w-10 h-10" />,
@@ -57,6 +58,15 @@ export const renderColumns = (
               onClick={() => actions.handleUpdate?.(row)}
               className="cursor-pointer text-lg font-bold text-gray-500 hover:text-primary"
             />
+          )}
+          
+          {actions.handleUpdateNotification && listType === 'notifications' &&
+            row.notificationType === 'schedule_notification' && typeof actions.handleUpdateNotification === "function" && (
+              console.log("SHOWING EDIT ICON", { listType, rowType: row.type }),
+              <MdOutlineEdit
+                onClick={() => actions.handleUpdateNotification?.(row)}
+                className="cursor-pointer text-lg font-bold text-gray-500 hover:text-primary"
+              />
           )}
           {actions.handleView && (
             <BsEye
@@ -211,6 +221,21 @@ export const renderColumns = (
       case "KebabMenu2":
         return <KebabMenu2 row={row} actions={actions} />;
       //Added on 24-05-2025  
+
+      case "DateNew": {
+      const formattedDate = row[column.name!]
+        ? new Date(row[column.name!] * 1000).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "2-digit",
+          })
+        : "N/A";
+
+      return (
+        <div className="text-gray-700 text-sm font-medium">{formattedDate}</div>
+      );
+    }
+      
 
     default:
       return <></>;

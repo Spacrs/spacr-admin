@@ -98,6 +98,7 @@ import { FaEdit } from "react-icons/fa";
 import { FaBarcode } from "react-icons/fa";
 import { FaRegCopy } from "react-icons/fa";
 import { BsToggle2Off } from "react-icons/bs";
+import { FaPlane } from "react-icons/fa";
 
 
 export const icons = {
@@ -185,6 +186,7 @@ export const icons = {
   FaEdit,
   FaBarcode,
   FaRegCopy,
-  BsToggle2Off
+  BsToggle2Off,
+  FaPlane
 
 };

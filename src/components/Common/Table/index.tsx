@@ -9,6 +9,7 @@ export interface IAction {
   handleClone?: (row: any) => void;
   handleToggleStatus?: (row: any) => void;
   handleView?: (row: any) => void;
+  handleUpdateNotification?: (row: any) => void
 }
 
 export interface IColumns {
@@ -34,6 +35,8 @@ interface ITableProps {
   handleToggleStatus?: (row: any) => void;
   handleView?: (row: any) => void;
   onSort?: (colName: string, direction: "asc" | "desc") => void;
+  listType?: string;
+  handleUpdateNotification?: (row: any) => void;
 }
 
 function Table({
@@ -47,13 +50,16 @@ function Table({
   handleClone,
   handleDelete,
   handleUpdate,
+  handleUpdateNotification,
   handleToggleStatus,
   handleView,
   onSort,
+  listType
 }: ITableProps) {
   const actions: IAction = {
     handleDelete,
     handleUpdate,
+    handleUpdateNotification,
     handleClone,
     handleToggleStatus,
     handleView,
@@ -123,26 +129,52 @@ function Table({
                   </tr>
                 )}
                 {!loading && data.length > 0
-                  ? data.map((row: any, key: number) => (
-                      <tr
-                        key={key}
-                        className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-200"
-                      >
-                        {/* Calculate and display SNo */}
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {(currentPage - 1) * itemsPerPage + key + 1}
-                        </td>
+                  // ? data.map((row: any, key: number) => (
+                    
+                  //     <tr
+                  //       key={key}
+                  //       className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-200"
+                  //     >
+                  //       {/* Calculate and display SNo */}
+                  //       <td className="px-6 py-4 whitespace-nowrap">
+                  //         {(currentPage - 1) * itemsPerPage + key + 1}
+                  //       </td>
 
-                        {columns.map((column: IColumns, colKey: number) => (
-                          <td
-                            key={colKey}
-                            className="px-6 py-4 whitespace-nowrap"
+                  //       {columns.map((column: IColumns, colKey: number) => (
+                  //         <td
+                  //           key={colKey}
+                  //           className="px-6 py-4 whitespace-nowrap"
+                  //         >
+                  //           {renderColumns(column, row, actions)}
+                  //         </td>
+                  //       ))}
+                  //     </tr>
+                  //   ))
+
+                  ? data.map((row: any, key: number) => {
+                        console.log("Debug row:", {
+                          listType,
+                          rowType: row.notificationType,
+                          hasUpdate: typeof actions.handleUpdateNotification === "function",
+                        });
+
+                        return (
+                          <tr
+                            key={key}
+                            className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-200"
                           >
-                            {renderColumns(column, row, actions)}
-                          </td>
-                        ))}
-                      </tr>
-                    ))
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              {(currentPage - 1) * itemsPerPage + key + 1}
+                            </td>
+                            {columns.map((column: IColumns, colKey: number) => (
+                              <td key={colKey} className="px-6 py-4 whitespace-nowrap">
+                                {renderColumns(column, row, actions, listType)}
+                              </td>
+                            ))}
+                          </tr>
+                        );
+                    })
+
                   : !loading && (
                       <tr>
                         <td
@@ -158,11 +190,18 @@ function Table({
           </div>
         </div>
       </div>
-      <Pagination
+      {/* <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={onPageChange}
-      />
+      /> */}
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+        />
+      )}
     </>
   );
 }

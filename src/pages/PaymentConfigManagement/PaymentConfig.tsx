@@ -12,6 +12,9 @@ import { useNavigate } from "react-router-dom";
 import { Tooltip } from "@material-tailwind/react";
 import { columns } from "../../constant/Columns";
 import { Search, Table, Button } from "../../components/Common";
+import { toast, ToastContainer } from "react-toastify";
+import ConfirmationModal from "../../components/Common/Modal/ConfirmationModal";
+
 
 function PaymentConfig() {
   const dispatch = useAppDispatch();
@@ -24,7 +27,7 @@ function PaymentConfig() {
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [filter, setFilter] = useState(""); // Search term
 
-  const { data, isLoading, isFetching, isError } = useGetPaymentConfigsQuery({
+  const { data, isLoading, isFetching, isError, refetch } = useGetPaymentConfigsQuery({
     page: currentPage,
     limit: itemsPerPage,
     sort: sortDirection,
@@ -38,6 +41,10 @@ function PaymentConfig() {
 
   const [updatePaymentConfig] = useUpdatePaymentConfigMutation(); // ✅ Call the hook at the top level
   const navigate = useNavigate();
+
+  const [isDeleteModalOpen, setIsOpenDeleteModal] = useState(false);
+  const [configToDelete, setConfigToDelete] = useState<any>(null);
+
 
   useEffect(() => {
     if (data?.data) {
@@ -96,9 +103,61 @@ function PaymentConfig() {
     setFilter(e.target.value);
     setCurrentPage(1);
   };
-  
+
+  //  const handleDelete = async (row: any) => {
+  //     try {
+  //       const Id  = row.Id;
+  //       const access_token = localStorage.getItem('access_token');
+  //       const response = await fetch(`https://api-v2.spa-cr.com/api/v2/country/delete/${Id}`, {
+  //         method: "DELETE",
+  //         headers:{
+  //           "Content-Type": "application/json",
+  //           'Authorization': `Bearer ${access_token}`
+  //         }
+  //       });
+  //       toast.success("Country and its cities deleted successfully");
+  //       setTimeout(() => {
+  //         refetch();
+  //       }, 3000);
+  //     } catch (error) {
+  //       toast.error("Country and its cities could not be deleted");
+  //       return error;
+        
+  //     }
+  //   }
+ 
+    const handleDelete = (row: any) => {
+      setConfigToDelete(row);
+      setIsOpenDeleteModal(true);
+    };
+
+    const confirmDelete = async () => {
+      if (!configToDelete) return;
+      try {
+        const { Id } = configToDelete;
+        const access_token = localStorage.getItem('access_token');
+        await fetch(`https://api-v2.spa-cr.com/api/v2/country/delete/${Id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${access_token}`
+          }
+        });
+        toast.success("Country and its cities deleted successfully");
+        refetch();
+      } catch (error) {
+        toast.error("Country and its cities could not be deleted");
+      } finally {
+        setIsOpenDeleteModal(false);
+        setConfigToDelete(null);
+      }
+    };
+
+
+
   return (
     <div className="">
+      <ToastContainer />
       <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         {/* Search Bar */}
         <div className="flex flex-1 max-w-lg">
@@ -106,6 +165,7 @@ function PaymentConfig() {
             search={filter}
             onChange={onSearch}
             onReset={() => setFilter("")}
+            placeholder="Search by name or shortname"
           />
         </div>
 
@@ -130,6 +190,7 @@ function PaymentConfig() {
           currentPage={currentPage}
           onPageChange={setCurrentPage}
           handleUpdate={handleUpdate}
+          handleDelete = {handleDelete}
           itemsPerPage={itemsPerPage}
           onSort={onSort}
         />
@@ -187,9 +248,21 @@ function PaymentConfig() {
                 variant="primary"
               />
             </div>
+
+            
+
           </div>
         </div>
       )}
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => {
+          setIsOpenDeleteModal(false);
+          setConfigToDelete(null);
+        }}
+        onConfirm={confirmDelete}
+        message={`Are you sure you want to delete ${configToDelete?.name}? All the associated cities will get deleted as well.`}
+      />
     </div>
   );
 }

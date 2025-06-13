@@ -10,7 +10,8 @@ const {
   FaCity,
   CiSettings,
   MdProductionQuantityLimits,
-  FaBarcode
+  FaBarcode,
+  FaPlane
 
 } = icons;
 
@@ -71,6 +72,11 @@ const menuItems: MenuItemTypes[] = [
     label: "Referral Code List",
     path: "/admin/referral-code-list",
     icon: <FaBarcode style={{ fontSize: "20px", margin: "0 10px" }} />,
+  },
+  {
+    label: "Travel Listing",
+    path: "/admin/travel-listing",
+    icon: <FaPlane style={{ fontSize: "20px", margin: "0 10px" }} />,
   },
   {
     label: "Contact Support List",

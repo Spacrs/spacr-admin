@@ -9,6 +9,9 @@ import {
 import { Tooltip } from "@material-tailwind/react";
 import { columns } from "../../constant/Columns";
 import { Search, Table, Button } from "../../components/Common";
+import { useLocation } from "react-router-dom"; //Added on 04-06-2025
+import { toast, ToastContainer } from "react-toastify";
+import ConfirmationModal from "../../components/Common/Modal/ConfirmationModal";
 
 const CityList = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -22,14 +25,26 @@ const CityList = () => {
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [filter, setFilter] = useState(""); // Search term
+  const [isDeleteModalOpen, setIsOpenDeleteModal] = useState(false);
+  const [configToDelete, setConfigToDelete] = useState<any>(null);
 
-  const { data, isLoading, isFetching, isError } = useGetCitiesQuery({
+  const { data, isLoading, isFetching, isError, refetch } = useGetCitiesQuery({
     page: currentPage,
     limit: itemsPerPage,
     sort: sortDirection,
     sortBy: sortBy,
     search: filter !== "" ? filter : undefined,
   });
+
+  //Added on 04-06-2025
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.triggerRefetch) {
+      refetch();
+    }
+  }, [location.state, refetch]);
+  //Added on 04-06-2025
 
   useEffect(() => {
     if (data?.data) {
@@ -63,8 +78,60 @@ const CityList = () => {
     navigate(`/admin/edit-city/${config.Id}`);
   };
 
+  // const handleDelete = async (row: any) => {
+  //   try {
+  //     const Id  = row.Id;
+  //     const access_token = localStorage.getItem('access_token');
+  //     const response = await fetch(`https://api-v2.spa-cr.com/api/v2/city/${Id}`, {
+  //       method: "DELETE",
+  //       headers:{
+  //         "Content-Type": "application/json",
+  //         'Authorization': `Bearer ${access_token}`
+  //       }
+  //     });
+  //     toast.success("City deleted successfully");
+  //     setTimeout(() => {
+  //       refetch();
+  //     }, 3000);
+  //   } catch (error) {
+  //     toast.error("City could not be deleted");
+  //     return error;
+      
+  //   }
+  // }
+
+  const handleDelete = (row: any) => {
+    setConfigToDelete(row);
+    setIsOpenDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+      if (!configToDelete) return;
+      try {
+        const { Id } = configToDelete;
+        const access_token = localStorage.getItem('access_token');
+        const response = await fetch(`https://api-v2.spa-cr.com/api/v2/city/${Id}`, {
+          method: "DELETE",
+          headers:{
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${access_token}`
+          }
+        });
+        toast.success("City deleted successfully");
+        setTimeout(() => {
+          refetch();
+        }, 3000);
+      } catch (error) {
+        toast.error("City could not be deleted");
+      } finally {
+        setIsOpenDeleteModal(false);
+        setConfigToDelete(null);
+      }
+    };
+
   return (
     <div className="">
+      <ToastContainer />
       <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         {/* Search Bar */}
         <div className="flex flex-1 max-w-lg">
@@ -72,6 +139,7 @@ const CityList = () => {
             search={filter}
             onChange={onSearch}
             onReset={() => setFilter("")}
+            placeholder="Search by name"
           />
         </div>
 
@@ -97,9 +165,19 @@ const CityList = () => {
           onPageChange={setCurrentPage}
           itemsPerPage={itemsPerPage}
           handleUpdate={handleUpdate}
+          handleDelete = {handleDelete}
           onSort={onSort}
         />
       </div>
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => {
+          setIsOpenDeleteModal(false);
+          setConfigToDelete(null);
+        }}
+        onConfirm={confirmDelete}
+        message={`Are you sure you want to delete ${configToDelete?.name}?`}
+      />
     </div>
   );
 };

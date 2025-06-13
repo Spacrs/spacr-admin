@@ -135,12 +135,18 @@ const AddAndUpdateCountry = () => {
                 dispatch(addPaymentConfigToList(updatedConfig.data));
                 toast.success("Country updated successfully");
                 setSuccessMessage("Country updated successfully!");
+                setTimeout(() => {
+                    navigate('/admin/payment-config');
+                }, 3000);
             }
             else {
                 const response = await addPaymentConfig(formData).unwrap();
                 dispatch(addPaymentConfigToList(response));
                 toast.success("Country added successfully");
                 setSuccessMessage("Country added successfully!");
+                setTimeout(() => {
+                    navigate('/admin/payment-config');
+                }, 3000);
             }
             // ✅ Reset form
             setFormData({

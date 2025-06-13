@@ -6,7 +6,7 @@ import { TbBrandAppgallery } from "react-icons/tb";
 import { FaRegUser } from "react-icons/fa6";
 import { CiImageOn } from "react-icons/ci";
 const { MdOutlineEdit, AiOutlineDelete, BsCopy, BsEye, BsToggle2Off } = icons;
-export const renderColumns = (column, row, actions) => {
+export const renderColumns = (column, row, actions, listType) => {
     const icon = {
         user: _jsx(FaRegUser, { className: "text-gray-400 w-10 h-10" }),
         order: _jsx(TbBrandAppgallery, { className: "text-gray-400 w-10 h-10" }),
@@ -35,7 +35,9 @@ export const renderColumns = (column, row, actions) => {
             return _jsx("p", { className: "font-medium", children: emoji });
         }
         case "Actions":
-            return (_jsxs("div", { className: "flex space-x-2 items-center", children: [actions.handleUpdate && (_jsx(MdOutlineEdit, { onClick: () => actions.handleUpdate?.(row), className: "cursor-pointer text-lg font-bold text-gray-500 hover:text-primary" })), actions.handleView && (_jsx(BsEye, { onClick: () => actions.handleView?.(row), className: "cursor-pointer text-lg font-bold text-gray-500 hover:text-primary" })), actions.handleDelete && (_jsx(AiOutlineDelete, { onClick: () => actions.handleDelete?.(row), className: "text-lg font-bold text-gray-500 hover:text-red-400" })), actions.handleClone && (_jsx(BsCopy, { onClick: () => actions.handleClone?.(row), className: "text-lg font-bold text-gray-500 hover:text-blue-400" })), actions.handleToggleStatus && (_jsx(BsToggle2Off, { onClick: () => actions.handleToggleStatus?.(row), className: "text-lg font-bold text-gray-500 hover:text-blue-400" }))] }));
+            return (_jsxs("div", { className: "flex space-x-2 items-center", children: [actions.handleUpdate && (_jsx(MdOutlineEdit, { onClick: () => actions.handleUpdate?.(row), className: "cursor-pointer text-lg font-bold text-gray-500 hover:text-primary" })), actions.handleUpdateNotification && listType === 'notifications' &&
+                        row.notificationType === 'schedule_notification' && typeof actions.handleUpdateNotification === "function" && (console.log("SHOWING EDIT ICON", { listType, rowType: row.type }),
+                        _jsx(MdOutlineEdit, { onClick: () => actions.handleUpdateNotification?.(row), className: "cursor-pointer text-lg font-bold text-gray-500 hover:text-primary" })), actions.handleView && (_jsx(BsEye, { onClick: () => actions.handleView?.(row), className: "cursor-pointer text-lg font-bold text-gray-500 hover:text-primary" })), actions.handleDelete && (_jsx(AiOutlineDelete, { onClick: () => actions.handleDelete?.(row), className: "text-lg font-bold text-gray-500 hover:text-red-400" })), actions.handleClone && (_jsx(BsCopy, { onClick: () => actions.handleClone?.(row), className: "text-lg font-bold text-gray-500 hover:text-blue-400" })), actions.handleToggleStatus && (_jsx(BsToggle2Off, { onClick: () => actions.handleToggleStatus?.(row), className: "text-lg font-bold text-gray-500 hover:text-blue-400" }))] }));
         case "Status":
             return (_jsxs("div", { className: "relative flex items-center", children: [column.name &&
                         [
@@ -96,6 +98,16 @@ export const renderColumns = (column, row, actions) => {
         case "KebabMenu2":
             return _jsx(KebabMenu2, { row: row, actions: actions });
         //Added on 24-05-2025  
+        case "DateNew": {
+            const formattedDate = row[column.name]
+                ? new Date(row[column.name] * 1000).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "2-digit",
+                })
+                : "N/A";
+            return (_jsx("div", { className: "text-gray-700 text-sm font-medium", children: formattedDate }));
+        }
         default:
             return _jsx(_Fragment, {});
     }
