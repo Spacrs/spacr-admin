@@ -126,18 +126,18 @@ const paymentConfig = [
         name: "action",
         Header: "Actions",
         colName: "Actions",
-        Actions: ["UPDATE"],
+        Actions: ["UPDATE", "DELETE"],
     },
 ];
 const city = [
     { name: "name", Header: "Name", colName: "Default", sortable: true },
-    { name: "latitude", Header: "Latitude", colName: "Default", sortable: true },
-    {
-        name: "longitude",
-        Header: "Longitude",
-        colName: "Default",
-        sortable: true,
-    },
+    // { name: "latitude", Header: "Latitude", colName: "Default", sortable: true },
+    // {
+    //   name: "longitude",
+    //   Header: "Longitude",
+    //   colName: "Default",
+    //   sortable: true,
+    // },
     { name: "countryName", Header: "Country", colName: "Default" },
     {
         name: "CreatedAt",
@@ -155,11 +155,11 @@ const city = [
         name: "action",
         Header: "Actions",
         colName: "Actions",
-        Actions: ["UPDATE"],
+        Actions: ["UPDATE", "DELETE"],
     },
 ];
 const scrapingIcons = [
-    { name: "title", Header: "title", colName: "Default", sortable: true },
+    { name: "title", Header: "title", colName: "Default" },
     { name: "imagepath", Header: "Image", colName: "Image" },
     { name: "url", Header: "URL", colName: "Default" },
     {
@@ -178,6 +178,7 @@ const scrapingIcons = [
 const referralCode = [
     { name: "code", Header: "Code", colName: "Default", sortable: true },
     { name: "FullName", Header: "Full Name", colName: "Default", sortable: true },
+    { name: "contactNumber", Header: "Phone", colName: "Default" },
     { name: "redeemCount", Header: "Redeem Count", colName: "Number" },
     { name: "Status", Header: "Status", colName: "Status" },
     {
@@ -198,11 +199,80 @@ const referralCodeDetails = [
     { name: "Email", Header: "Email", colName: "Default",
         //  sortable: true 
     },
+    { name: "Phone", Header: "Phone", colName: "Default",
+        //  sortable: true 
+    },
     {
         name: "RedeemedAt",
         Header: "Redeemed At",
         colName: "Date",
         // sortable: true,
+    },
+];
+// travelListingColumn
+const travelListingColumn = [
+    { name: "FromCity", Header: "From City", colName: "Default" },
+    { name: "ToCity", Header: "To City", colName: "Default",
+        //  sortable: true 
+    },
+    { name: "FromCountry", Header: "From Country", colName: "Default",
+        //  sortable: true 
+    },
+    { name: "ToCountry", Header: "To Country", colName: "Default",
+        //  sortable: true 
+    },
+    { name: "UserName", Header: "Created By", colName: "Default",
+        //  sortable: true 
+    },
+    { name: "AvailableOrderCount", Header: "Order Count", colName: "Number",
+        //  sortable: true 
+    },
+    { name: "DateTimeOfTravel", Header: "Travel Date", colName: "DateNew",
+        //  sortable: true 
+    },
+    { name: "CreatedAt", Header: "Created Date", colName: "Date",
+        //  sortable: true 
+    },
+];
+const notificationListColumn = [
+    { name: "title", Header: "Title", colName: "Default", sortable: true },
+    { name: "message", Header: "Message", colName: "Default", sortable: true },
+    {
+        name: "scheduleDate",
+        Header: "Schedule Date",
+        colName: "Date",
+        sortable: true,
+    },
+    {
+        name: "scheduleTime",
+        Header: "Schedule Time",
+        colName: "Default",
+        sortable: true,
+    },
+    {
+        name: "notificationType",
+        Header: "Type",
+        colName: "Default",
+        sortable: true,
+    },
+    { name: "status", Header: "Status", colName: "Default", sortable: true },
+    {
+        name: "CreatedAt",
+        Header: "Created At",
+        colName: "DateAndTime",
+        sortable: true,
+    },
+    {
+        name: "UpdatedAt",
+        Header: "Updated At",
+        colName: "DateAndTime",
+        sortable: true,
+    },
+    {
+        name: "action",
+        Header: "Actions",
+        colName: "Actions",
+        Actions: ["UPDATE", "VIEW"],
     },
 ];
 export const columns = {
@@ -214,5 +284,7 @@ export const columns = {
     productColumn: productColumn,
     scrapingIconsColumn: scrapingIcons,
     referralCodeColumn: referralCode,
-    referralCodeDetails: referralCodeDetails
+    referralCodeDetails: referralCodeDetails,
+    travelListingColumn: travelListingColumn,
+    notificationListColumn: notificationListColumn
 };

@@ -119,6 +119,25 @@ export const ordersApi: any = createApi({
         method: "GET",
       }),
     }),
+    getTravelListing: builder.query<
+      { data: ProductData[] },
+      {
+        page?: number;
+        limit?: number;
+        createdBy?: string;
+        sortBy?: string;
+        sort?: "asc" | "desc";
+        search?: string;
+      }
+    >({
+      query: (paramsObj) => {
+        const queryString = buildQueryParams(paramsObj);
+        return {
+          url: `/${ADMIN}/get-all-travel-listing?${queryString}`,
+          method: "GET",
+        };
+      },
+    }),
   }),
 });
 export const {
@@ -131,5 +150,6 @@ export const {
   useDeleteOrderMediaMutation,
   useGetScrapingIconsQuery,
   useGetReferralCodesQuery,
-  useGetReferralCodeDetailsQuery
+  useGetReferralCodeDetailsQuery,
+  useGetTravelListingQuery
 } = ordersApi;

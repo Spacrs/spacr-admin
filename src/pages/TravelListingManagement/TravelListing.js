@@ -1,13 +1,13 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
-import { useGetReferralCodesQuery } from "../../store/slices/orderSlice/apiSlice";
+import { useGetTravelListingQuery } from "../../store/slices/orderSlice/apiSlice";
 import { useAppDispatch } from "../../store/hooks";
 import { setProducts, } from "../../store/slices/orderSlice/orderSlice";
 import { useNavigate } from "react-router-dom";
 import { columns } from "../../constant/Columns";
-import { Search, ErrorMsg, Table, Button } from "../../components/Common";
+import { Search, ErrorMsg, Table } from "../../components/Common";
 import { toast, ToastContainer } from "react-toastify";
-function ReferralCodeList() {
+function TravelListing() {
     const dispatch = useAppDispatch();
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
@@ -18,7 +18,7 @@ function ReferralCodeList() {
     const [sortDirection, setSortDirection] = useState("desc");
     const [filter, setFilter] = useState(""); // Search term
     const itemsPerPage = 10;
-    const { data, isLoading, isFetching, isError, refetch } = useGetReferralCodesQuery({
+    const { data, isLoading, isFetching, isError, refetch } = useGetTravelListingQuery({
         page: currentPage,
         limit: itemsPerPage,
         createdBy: "user",
@@ -182,13 +182,6 @@ function ReferralCodeList() {
         setFilter(e.target.value);
         setCurrentPage(1);
     };
-    return (_jsxs("div", { className: "", children: [_jsx(ToastContainer, {}), _jsx("div", { className: "flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg", children: _jsxs("div", { className: "flex justify-between items-center w-full", children: [_jsx("div", { className: "flex flex-1 max-w-lg", children: _jsx(Search, { search: filter, onChange: onSearch, onReset: () => setFilter(""), placeholder: "Search by code or full name" }) }), _jsx("div", { className: "ml-4", children: _jsx(Button, { text: "Add Referral Code", className: "mr-2", variant: "dark", type: "button", onClick: () => {
-                                    setPayload({
-                                        code: "",
-                                        FullName: "",
-                                        contactNumber: "",
-                                    });
-                                    setShowModal(true);
-                                } }) })] }) }), _jsx("div", { className: "flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto", children: _jsx(Table, { data: paginatedData, columns: columns.referralCodeColumn, loading: isLoading || isFetching, totalPages: Math.ceil((data?.data?.length || 0) / itemsPerPage), currentPage: currentPage, onPageChange: setCurrentPage, handleToggleStatus: handleToggleStatus, handleView: handleView, handleClone: handleClone, itemsPerPage: itemsPerPage, onSort: onSort }) }), showModal && (_jsx("div", { className: "fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50", children: _jsxs("div", { className: "bg-white p-6 rounded-lg shadow-lg w-full max-w-lg", children: [_jsx("h2", { className: "text-xl font-semibold mb-4", children: "Add Referral Code" }), _jsxs("form", { onSubmit: handleFormSubmit, className: "space-y-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block font-medium mb-1", children: "Code" }), _jsx("input", { type: "text", name: "code", value: payload.code, onChange: handleInputChange, className: "w-full border border-gray-300 rounded p-2", maxLength: 12, minLength: 8, pattern: "[A-Z0-9]{8,12}", title: "Code must be 8-12 characters long and contain only uppercase letters and numbers.", required: true }), _jsx("button", { type: "button", onClick: generateCode, className: "mt-2 bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700", children: "Generate Code" })] }), _jsxs("div", { children: [_jsx("label", { className: "block font-medium mb-1", children: "Full Name" }), _jsx("input", { type: "text", name: "FullName", value: payload.FullName, onChange: handleInputChange, className: "w-full border border-gray-300 rounded p-2", required: true })] }), _jsxs("div", { children: [_jsx("label", { className: "block font-medium mb-1", children: "Contact Number" }), _jsx("input", { type: "text", name: "contactNumber", value: payload.contactNumber, onChange: handleInputChange, className: "w-full border border-gray-300 rounded p-2" })] }), _jsxs("div", { className: "flex justify-end gap-2", children: [_jsx("button", { type: "button", onClick: () => setShowModal(false), className: "px-4 py-2 bg-gray-300 rounded hover:bg-gray-400", children: "Cancel" }), _jsx("button", { type: "submit", className: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500", children: "Submit" })] })] })] }) }))] }));
+    return (_jsxs("div", { className: "", children: [_jsx(ToastContainer, {}), _jsx("div", { className: "flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg", children: _jsxs("div", { className: "flex justify-between items-center w-full", children: [_jsx("div", { className: "flex flex-1 max-w-lg", children: _jsx(Search, { search: filter, onChange: onSearch, onReset: () => setFilter(""), placeholder: "Search by cities, countries, or users" }) }), _jsx("div", { className: "ml-4" })] }) }), _jsx("div", { className: "flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto", children: _jsx(Table, { data: data?.data || [], columns: columns.travelListingColumn, loading: isLoading || isFetching, totalPages: data?.totalPages || 1, currentPage: currentPage, onPageChange: setCurrentPage, handleView: handleView, itemsPerPage: itemsPerPage, onSort: onSort }) }), showModal && (_jsx("div", { className: "fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50", children: _jsxs("div", { className: "bg-white p-6 rounded-lg shadow-lg w-full max-w-lg", children: [_jsx("h2", { className: "text-xl font-semibold mb-4", children: "Add Referral Code" }), _jsxs("form", { onSubmit: handleFormSubmit, className: "space-y-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block font-medium mb-1", children: "Code" }), _jsx("input", { type: "text", name: "code", value: payload.code, onChange: handleInputChange, className: "w-full border border-gray-300 rounded p-2", maxLength: 12, minLength: 8, pattern: "[A-Z0-9]{8,12}", title: "Code must be 8-12 characters long and contain only uppercase letters and numbers.", required: true }), _jsx("button", { type: "button", onClick: generateCode, className: "mt-2 bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700", children: "Generate Code" })] }), _jsxs("div", { children: [_jsx("label", { className: "block font-medium mb-1", children: "Full Name" }), _jsx("input", { type: "text", name: "FullName", value: payload.FullName, onChange: handleInputChange, className: "w-full border border-gray-300 rounded p-2", required: true })] }), _jsxs("div", { children: [_jsx("label", { className: "block font-medium mb-1", children: "Contact Number" }), _jsx("input", { type: "text", name: "contactNumber", value: payload.contactNumber, onChange: handleInputChange, className: "w-full border border-gray-300 rounded p-2" })] }), _jsxs("div", { className: "flex justify-end gap-2", children: [_jsx("button", { type: "button", onClick: () => setShowModal(false), className: "px-4 py-2 bg-gray-300 rounded hover:bg-gray-400", children: "Cancel" }), _jsx("button", { type: "submit", className: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500", children: "Submit" })] })] })] }) }))] }));
 }
-export default ReferralCodeList;
+export default TravelListing;

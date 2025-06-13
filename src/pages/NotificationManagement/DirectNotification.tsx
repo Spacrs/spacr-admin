@@ -24,8 +24,11 @@ const DirectNotification = () => {
   const [filter, setFilter] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [sendToAll, setSendToAll] = useState(false); //Added on 03-06-2025
+  const [allUsers, setAllUsers] = useState<User[]>([]);
 
   const navigate = useNavigate();
 
@@ -47,6 +50,18 @@ const DirectNotification = () => {
     refetch();
   }, [filter, currentPage, refetch]);
 
+  //Added on 03-06-2025
+  useEffect(() => {
+    if (userData?.data) {
+      setAllUsers((prev) => {
+        const existingIds = new Set(prev.map((u) => u.UserID));
+        const newOnes = userData.data.filter(u => !existingIds.has(u.UserID));
+        return [...prev, ...newOnes];
+      });
+    }
+  }, [userData]);
+  //Added on 03-06-2025
+
   const [sendNotification, { data, isLoading: isSending }] =
     useSendNotificationMutation();
 
@@ -63,15 +78,19 @@ const DirectNotification = () => {
       title: formData.title,
       body: formData.message,
       notificationType: "send_notification",
-      sendToAllUsers: selectedUsers.length === users.length,
-      ...(selectedUsers.length < users.length
-        ? { userIds: selectedUsers }
-        : {}),
+      // sendToAllUsers: selectedUsers.length === users.length, //Commented on 03-06-2025
+      sendToAllUsers: sendToAll,
+      // ...(selectedUsers.length < users.length ? { userIds: selectedUsers } : {}), //Commented on 03-06-2025
+      ...(!sendToAll && selectedUsers.length > 0 ? { userIds: selectedUsers } : {}),
     };
 
     await sendNotification(notificationPayload).unwrap();
     toast.success("Notifications sent!");
     setFormData({ title: "", message: "" });
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 3000);
      
   };
 
@@ -105,12 +124,33 @@ const DirectNotification = () => {
           </h2>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            <Button
-              text="Select Users"
-              className="w-40"
-              variant="transparent"
-              onClick={() => setShowModal(true)}
-            />
+
+            <div className="mb-4">
+              <label className="inline-flex items-center">
+                <input
+                  type="checkbox"
+                  className="form-checkbox h-5 w-5 text-primary"
+                  checked={sendToAll}
+                  onChange={(e) => {
+                    setSendToAll(e.target.checked);
+                    // Optionally clear selected users if "send to all" is checked
+                    if (e.target.checked) {
+                      setSelectedUsers([]);
+                    }
+                  }}
+                />
+                <span className="ml-2 text-gray-700 font-medium">Send to all users</span>
+              </label>
+            </div>
+
+            {!sendToAll && (
+              <Button
+                text="Select Users"
+                className="w-40"
+                variant="transparent"
+                onClick={() => setShowModal(true)}
+              />
+            )}
             <div>
               <InputComponent
                 type="text"
@@ -134,7 +174,7 @@ const DirectNotification = () => {
               />
             </div>
 
-            {selectedUsers.length > 0 &&
+            {/* {selectedUsers.length > 0 &&
               selectedUsers.length !== users.length && (
                 <div className="mt-4">
                   <label className="block text-gray-700 font-medium mb-2">
@@ -160,7 +200,37 @@ const DirectNotification = () => {
                       ))}
                   </div>
                 </div>
+              )} */}
+
+              {selectedUsers.length > 0 && (
+                <div className="mt-4">
+                  <label className="block text-gray-700 font-medium mb-2">Selected Users</label>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                    {selectedUsers.map((userId: string) => {
+                      const fullUser = allUsers.find((user) => user.UserID === userId);
+
+                      const displayUser = fullUser || {
+                        UserID: userId,
+                        Email: "User from another page",
+                        FullName: userId,
+                      };
+
+                      return (
+                        <div
+                          key={userId}
+                          className="flex items-center p-3 border border-gray-300 rounded-lg shadow-sm bg-gray-50 hover:bg-gray-100 transition"
+                        >
+                          <div className="flex-grow">
+                            <p className="text-sm font-medium text-gray-800">{displayUser.FullName}</p>
+                            <p className="text-sm text-gray-600">{displayUser.Email}</p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               )}
+
 
             <div className="flex gap-4 mt-4 w-full">
               <Button

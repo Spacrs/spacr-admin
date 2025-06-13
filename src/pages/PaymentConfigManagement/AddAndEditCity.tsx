@@ -26,8 +26,8 @@ const AddAndUpdateCity = () => {
   const [formData, setFormData] = useState({
     selectedCountry: "",
     cityName: "",
-    latitude: "",
-    longitude: "",
+    // latitude: "",
+    // longitude: "",
   });
   const isEditCity = useSelector(selectIsEditCity);
 
@@ -70,8 +70,8 @@ const AddAndUpdateCity = () => {
         ...prev,
         selectedCountry: cityData.data.Country.Id,
         cityName: cityData.data.name,
-        latitude: cityData.data.latitude,
-        longitude: cityData.data.longitude,
+        // latitude: cityData.data.latitude,
+        // longitude: cityData.data.longitude,
       }));
     }
   }, [cityData]);
@@ -84,8 +84,8 @@ const AddAndUpdateCity = () => {
       setFormData({
         selectedCountry: "",
         cityName: "",
-        latitude: "",
-        longitude: "",
+        // latitude: "",
+        // longitude: "",
       });
     };
   }, [cityId]);
@@ -113,9 +113,15 @@ const AddAndUpdateCity = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { selectedCountry, cityName, latitude, longitude } = formData;
+    const { 
+      selectedCountry, 
+      cityName, 
+      // latitude, 
+      // longitude 
+    } = formData;
 
-    if (!selectedCountry || !cityName || !latitude || !longitude) {
+    // if (!selectedCountry || !cityName || !latitude || !longitude) {
+    if (!selectedCountry || !cityName ) {
       // alert("Please fill in all fields.");
       toast.error("Please fill in all fields.");
       return;
@@ -127,8 +133,8 @@ const AddAndUpdateCity = () => {
           cityId: cityId,
           data: {
             name: cityName,
-            latitude,
-            longitude,
+            // latitude,
+            // longitude,
             countryId: Number(selectedCountry),
           },
         };
@@ -137,11 +143,16 @@ const AddAndUpdateCity = () => {
         toast.success("City Updated Successfully:");
         setSuccessMessage("City updated successfully!");
         setTimeout(() => setSuccessMessage(null), 3000);
+
+        setTimeout(() => {
+          navigate('/admin/city-list', { state: { triggerRefetch: true } });
+        }, 3000);
+
       } else {
         const response = await addCity({
           name: cityName,
-          latitude,
-          longitude,
+          // latitude,
+          // longitude,
           countryId: Number(selectedCountry),
         }).unwrap();
 
@@ -150,12 +161,15 @@ const AddAndUpdateCity = () => {
         setSuccessMessage("City added successfully!");
 
         setTimeout(() => setSuccessMessage(null), 3000);
+        setTimeout(() => {
+          navigate('/admin/city-list', { state: { triggerRefetch: true } });
+        }, 3000);
       }
       setFormData({
         selectedCountry: "",
         cityName: "",
-        latitude: "",
-        longitude: "",
+        // latitude: "",
+        // longitude: "",
       });
     } catch (error) {
       // console.error("Failed to add city:", error);
@@ -208,7 +222,7 @@ const AddAndUpdateCity = () => {
               </div>
 
               <div className="flex gap-4">
-                <div className="w-1/2">
+                {/* <div className="w-1/2">
                   <Inputes
                     label="Latitude"
                     name="latitude"
@@ -226,7 +240,7 @@ const AddAndUpdateCity = () => {
                     value={formData.longitude}
                     onChange={handleChange}
                   />
-                </div>
+                </div> */}
               </div>
 
               <div className="flex gap-4 mt-4 w-full">

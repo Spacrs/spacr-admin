@@ -1,6 +1,6 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { icons } from "../Icons/constant";
-const { HiOutlineUsers, BsCreditCard2Front, TbTruckDelivery, GrSend, MdContactSupport, IoIosFlag, FaCity, CiSettings, MdProductionQuantityLimits, FaBarcode } = icons;
+const { HiOutlineUsers, BsCreditCard2Front, TbTruckDelivery, GrSend, MdContactSupport, IoIosFlag, FaCity, CiSettings, MdProductionQuantityLimits, FaBarcode, FaPlane } = icons;
 const menuItems = [
     {
         label: "Users",
@@ -54,6 +54,11 @@ const menuItems = [
         label: "Referral Code List",
         path: "/admin/referral-code-list",
         icon: _jsx(FaBarcode, { style: { fontSize: "20px", margin: "0 10px" } }),
+    },
+    {
+        label: "Travel Listing",
+        path: "/admin/travel-listing",
+        icon: _jsx(FaPlane, { style: { fontSize: "20px", margin: "0 10px" } }),
     },
     {
         label: "Contact Support List",

@@ -46,22 +46,22 @@ const UserSelectModal = ({
     );
   };
 
-  const handleSelectAll = () => {
-    const visibleUserIDs = users.map((u) => u.UserID);
-    const areAllVisibleSelected = visibleUserIDs.every((id) =>
-      selectedUsers.includes(id)
-    );
+  // const handleSelectAll = () => {
+  //   const visibleUserIDs = users.map((u) => u.UserID);
+  //   const areAllVisibleSelected = visibleUserIDs.every((id) =>
+  //     selectedUsers.includes(id)
+  //   );
 
-    if (areAllVisibleSelected) {
-      setSelectedUsers((prev) =>
-        prev.filter((id) => !visibleUserIDs.includes(id))
-      );
-    } else {
-      setSelectedUsers((prev) =>
-        Array.from(new Set([...prev, ...visibleUserIDs]))
-      );
-    }
-  };
+  //   if (areAllVisibleSelected) {
+  //     setSelectedUsers((prev) =>
+  //       prev.filter((id) => !visibleUserIDs.includes(id))
+  //     );
+  //   } else {
+  //     setSelectedUsers((prev) =>
+  //       Array.from(new Set([...prev, ...visibleUserIDs]))
+  //     );
+  //   }
+  // };
 
   if (!show) return null;
 
@@ -70,7 +70,7 @@ const UserSelectModal = ({
       <div className="bg-white w-full max-w-2xl p-6 rounded shadow-lg">
         <h3 className="text-lg font-semibold mb-4">Select Users</h3>
 
-        <button
+        {/* <button
           type="button"
           className="mb-4 px-4 py-2 bg-red-500 text-white rounded"
           onClick={handleSelectAll}
@@ -78,12 +78,24 @@ const UserSelectModal = ({
           {selectedUsers.length === users.length
             ? "Unselect All"
             : "Select All"}
-        </button>
+        </button> */}
 
-        <Search
+        {/* <Search
           search={filter}
           onChange={(e) => setFilter(e.target.value)}
           onReset={() => setFilter("")}
+        /> */}
+
+        <Search
+          search={filter}
+          onChange={(e) => {
+            setFilter(e.target.value);
+            setCurrentPage(1); // ✅ Reset page to 1 when filter changes
+          }}
+          onReset={() => {
+            setFilter("");
+            setCurrentPage(1); // ✅ Also reset page on clear
+          }}
         />
 
         <div className="overflow-auto max-h-64 border rounded mt-3">

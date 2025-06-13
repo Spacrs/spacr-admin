@@ -92,6 +92,15 @@ export const ordersApi = createApi({
                 method: "GET",
             }),
         }),
+        getTravelListing: builder.query({
+            query: (paramsObj) => {
+                const queryString = buildQueryParams(paramsObj);
+                return {
+                    url: `/${ADMIN}/get-all-travel-listing?${queryString}`,
+                    method: "GET",
+                };
+            },
+        }),
     }),
 });
-export const { useGetOrdersQuery, useUpdateOrderTrendMutation, useGetOrderDetailsQuery, useGetOrderOffersQuery, useCreateProductMutation, useUpdateProductMutation, useDeleteOrderMediaMutation, useGetScrapingIconsQuery, useGetReferralCodesQuery, useGetReferralCodeDetailsQuery } = ordersApi;
+export const { useGetOrdersQuery, useUpdateOrderTrendMutation, useGetOrderDetailsQuery, useGetOrderOffersQuery, useCreateProductMutation, useUpdateProductMutation, useDeleteOrderMediaMutation, useGetScrapingIconsQuery, useGetReferralCodesQuery, useGetReferralCodeDetailsQuery, useGetTravelListingQuery } = ordersApi;

@@ -38,6 +38,20 @@ export const adminAuthApi = createApi({
                 body: credentials,
             }),
         }),
+        UpdateProfileVideoVerification: builder.mutation({
+            query: (credentials) => ({
+                url: `/admin/update-profile-video-verification/${credentials.userId}`,
+                method: "PATCH",
+                body: credentials,
+            }),
+        }),
+        UpdateUserDocumentVerification: builder.mutation({
+            query: (credentials) => ({
+                url: `/admin/update-document-verification/${credentials.userId}`,
+                method: "PATCH",
+                body: credentials,
+            }),
+        }),
         getUsers: builder.query({
             query: (paramsObj) => {
                 const queryString = buildQueryParams(paramsObj);
@@ -55,4 +69,4 @@ export const adminAuthApi = createApi({
         }),
     }),
 });
-export const { useLoginMutation, useGetUserQuery, useGetUserInfoQuery, useUpdateUserInfoMutation, useUpdateUserVerificationMutation, useGetUsersQuery, useGetUserDevicesQuery, } = adminAuthApi;
+export const { useLoginMutation, useGetUserQuery, useGetUserInfoQuery, useUpdateUserInfoMutation, useUpdateUserVerificationMutation, useGetUsersQuery, useGetUserDevicesQuery, useUpdateProfileVideoVerificationMutation, useUpdateUserDocumentVerificationMutation, } = adminAuthApi;

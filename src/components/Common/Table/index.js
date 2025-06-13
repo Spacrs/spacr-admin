@@ -3,10 +3,11 @@ import { useState } from "react";
 import Loading from "../Loader/index";
 import Pagination from "./Pagination";
 import { renderColumns } from "./renderColumns"; // Adjust the path as necessary
-function Table({ data, columns, loading, totalPages, currentPage, itemsPerPage = 10, onPageChange, handleClone, handleDelete, handleUpdate, handleToggleStatus, handleView, onSort, }) {
+function Table({ data, columns, loading, totalPages, currentPage, itemsPerPage = 10, onPageChange, handleClone, handleDelete, handleUpdate, handleUpdateNotification, handleToggleStatus, handleView, onSort, listType }) {
     const actions = {
         handleDelete,
         handleUpdate,
+        handleUpdateNotification,
         handleClone,
         handleToggleStatus,
         handleView,
@@ -27,7 +28,33 @@ function Table({ data, columns, loading, totalPages, currentPage, itemsPerPage =
                                                                     ? "▲"
                                                                     : "▼"
                                                                 : "↕" }))] }) }, key)))] }) }), _jsxs("tbody", { className: "text-gray-700", children: [loading && (_jsx("tr", { children: _jsx("td", { colSpan: columns.length + 1, className: "px-6 py-4", children: _jsx(Loading, {}) }) })), !loading && data.length > 0
-                                            ? data.map((row, key) => (_jsxs("tr", { className: "bg-white border-b transition duration-300 ease-in-out hover:bg-gray-200", children: [_jsx("td", { className: "px-6 py-4 whitespace-nowrap", children: (currentPage - 1) * itemsPerPage + key + 1 }), columns.map((column, colKey) => (_jsx("td", { className: "px-6 py-4 whitespace-nowrap", children: renderColumns(column, row, actions) }, colKey)))] }, key)))
-                                            : !loading && (_jsx("tr", { children: _jsx("td", { colSpan: columns.length + 1, className: "px-6 py-4 text-center", children: "No data available" }) }))] })] }) }) }) }), _jsx(Pagination, { currentPage: currentPage, totalPages: totalPages, onPageChange: onPageChange })] }));
+                                            // ? data.map((row: any, key: number) => (
+                                            //     <tr
+                                            //       key={key}
+                                            //       className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-200"
+                                            //     >
+                                            //       {/* Calculate and display SNo */}
+                                            //       <td className="px-6 py-4 whitespace-nowrap">
+                                            //         {(currentPage - 1) * itemsPerPage + key + 1}
+                                            //       </td>
+                                            //       {columns.map((column: IColumns, colKey: number) => (
+                                            //         <td
+                                            //           key={colKey}
+                                            //           className="px-6 py-4 whitespace-nowrap"
+                                            //         >
+                                            //           {renderColumns(column, row, actions)}
+                                            //         </td>
+                                            //       ))}
+                                            //     </tr>
+                                            //   ))
+                                            ? data.map((row, key) => {
+                                                console.log("Debug row:", {
+                                                    listType,
+                                                    rowType: row.notificationType,
+                                                    hasUpdate: typeof actions.handleUpdateNotification === "function",
+                                                });
+                                                return (_jsxs("tr", { className: "bg-white border-b transition duration-300 ease-in-out hover:bg-gray-200", children: [_jsx("td", { className: "px-6 py-4 whitespace-nowrap", children: (currentPage - 1) * itemsPerPage + key + 1 }), columns.map((column, colKey) => (_jsx("td", { className: "px-6 py-4 whitespace-nowrap", children: renderColumns(column, row, actions, listType) }, colKey)))] }, key));
+                                            })
+                                            : !loading && (_jsx("tr", { children: _jsx("td", { colSpan: columns.length + 1, className: "px-6 py-4 text-center", children: "No data available" }) }))] })] }) }) }) }), totalPages > 1 && (_jsx(Pagination, { currentPage: currentPage, totalPages: totalPages, onPageChange: onPageChange }))] }));
 }
 export default Table;
