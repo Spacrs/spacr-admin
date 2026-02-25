@@ -13,6 +13,7 @@ interface IState {
   countries: {};
   isEditPaymentConfig: boolean;
   isEditCity: boolean,
+  userCountryOptions: any[];
 }
 
 const initialState: IState = {
@@ -26,6 +27,7 @@ const initialState: IState = {
   countryOptions: [],
   isEditPaymentConfig: false,
   isEditCity: false,
+  userCountryOptions: [], // For /get-users-countries API
 };
 
 export const paymentConfigSlice = createSlice({
@@ -80,6 +82,15 @@ export const paymentConfigSlice = createSlice({
         state.isEditCity = action.payload.isEditCity;
       }
     },
+    setUserCountryOptions: (state: IState, action: PayloadAction<any[]>) => {
+      state.userCountryOptions =
+        action.payload && action.payload.length
+          ? action.payload.map((country) => ({
+              label: country.name,
+              value: country.id, // or `country.Id` based on API response
+            }))
+          : [];
+    },
   },
 });
 
@@ -92,6 +103,7 @@ export const {
   setCountryOptions,
   setIsEditCountry,
   setIsEditCity,
+  setUserCountryOptions,
 } = paymentConfigSlice.actions;
 export const selectPaymentConfig = (state: RootState) =>
   state.paymentConfigSlice.paymentConfigs;
@@ -107,4 +119,7 @@ export const selectIsEditPaymentConfig = (state: RootState) =>
   state.paymentConfigSlice.isEditPaymentConfig;
 export const selectIsEditCity = (state: RootState) =>
   state.paymentConfigSlice.isEditCity;
+export const selectUserCountryOptions = (state: RootState) =>
+  state.paymentConfigSlice.userCountryOptions;
+
 export default paymentConfigSlice.reducer;

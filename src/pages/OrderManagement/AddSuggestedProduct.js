@@ -18,6 +18,7 @@ import InputComponent from "../../components/Common/Inputes";
 import ToggleSwitch from "../../components/Common/Inputes/ToggleSwitch";
 import { toast, ToastContainer } from "react-toastify";
 import { skipToken } from "@reduxjs/toolkit/query"; //Added on 16-05-2025
+import Inputes from "../../components/Common/Inputes"; //Added on 02-07-2025
 const AddSuggestedProduct = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -34,6 +35,7 @@ const AddSuggestedProduct = () => {
     const countryOptions = useAppSelector(selectCountryOptions);
     const fromCityOptions = useAppSelector(selectFromCityOptions);
     const toCityOptions = useAppSelector(selectToCityOptions);
+    const [allCountryOptions, setAllCountryOptions] = useState([]);
     useEffect(() => {
         if (ccData?.data && Array.isArray(ccData?.data)) {
             dispatch(setCountryCityData(ccData?.data));
@@ -62,6 +64,8 @@ const AddSuggestedProduct = () => {
                 IsTrending: suggestedProduct?.data?.IsTrending,
                 images: [],
                 Price: suggestedProduct?.data?.Price,
+                // suggestedCountry: suggestedProduct?.data?.suggestedCountry,
+                selectedCountry: suggestedProduct?.data?.countryIdToIgnore,
             }));
             if (suggestedProduct?.data?.medias?.length > 0) {
                 // Set pre-filled image URLs
@@ -71,6 +75,7 @@ const AddSuggestedProduct = () => {
             dispatch(setSelectedCountry({
                 selectedFromCountryId: suggestedProduct.data.From_CountryId,
                 selectedToCountryId: suggestedProduct.data.To_CountryId,
+                selectedCountry: suggestedProduct.data.selectedCountry
             }));
         }
     }, [suggestedProduct]);
@@ -91,6 +96,7 @@ const AddSuggestedProduct = () => {
                 images: [],
                 IsTrending: false,
                 Price: 0.0,
+                selectedCountry: payload.selectedCountry,
             });
         };
     }, [productId]);
@@ -107,6 +113,7 @@ const AddSuggestedProduct = () => {
         images: [],
         IsTrending: false,
         Price: 0.0,
+        selectedCountry: 0,
     });
     // uniform change handler for both selects and text inputs
     const handleChange = (e) => {
@@ -133,6 +140,9 @@ const AddSuggestedProduct = () => {
         }
         if (name === "To_CountryId") {
             dispatch(setSelectedCountry({ selectedToCountryId: numericValue }));
+        }
+        if (name === "selectedCountry") {
+            dispatch(setSelectedCountry({ selectedCountry: numericValue }));
         }
     };
     const handleSubmit = async (e) => {
@@ -253,7 +263,39 @@ const AddSuggestedProduct = () => {
             }));
         }
     };
-    return (_jsxs("div", { className: "min-h-screen", children: [_jsxs("div", { className: "flex justify-end items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg", children: [_jsx(ToastContainer, {}), _jsx("div", { className: "ml-4 flex justify-end items-center ", children: _jsx(Button, { text: "Back", variant: "lightBlue", onClick: () => navigate(-1) }) })] }), _jsxs("div", { className: "p-8 bg-gray-50 shadow-md rounded-lg", children: [ccLoading && _jsx(Loading, {}), !ccLoading && (_jsxs("form", { onSubmit: handleSubmit, className: "max-w-4xl mx-auto bg-white p-6 shadow rounded-lg space-y-6", children: [_jsx(InputComponent, { type: "text", name: "ProductName", label: "Product Name", value: payload.ProductName, onChange: handleChange, required: true }), _jsx("div", { children: _jsx(InputComponent, { label: "Description", name: "Descriptions", value: payload.Descriptions, onChange: handleChange, type: "textarea", required: true }) }), _jsxs("div", { className: "grid grid-cols-2 gap-4", children: [_jsx("div", { children: _jsx(InputComponent, { type: "text", name: "ProductUrl", label: "Product URL", value: payload.ProductUrl, onChange: handleChange, required: true }) }), _jsx("div", { children: _jsx(InputComponent, { label: "Price", name: "Price", type: "number", value: payload.Price, onChange: handleChange, required: true }) })] }), _jsxs("div", { className: "grid grid-cols-2 gap-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block mb-1 font-medium", children: "From Country" }), _jsx(SelectComponent, { name: "From_CountryId", options: [
+    useEffect(() => {
+        const fetchCountries = async () => {
+            try {
+                const res = await fetch("https://api-v2.spa-cr.com/api/v2/country");
+                const result = await res.json();
+                console.log("Fetched countries:", result.data);
+                if (res.ok && Array.isArray(result.data)) {
+                    const validCountries = result.data.filter(c => c?.id != null && c?.name);
+                    const allCountryOptions = validCountries.map((c) => ({
+                        label: c.name,
+                        // value: c.id.toString(),
+                        value: c.id,
+                    }));
+                    // dispatch(setCountryOptions(countryOptions));
+                    setAllCountryOptions(allCountryOptions);
+                    setPayload((prev) => ({
+                        ...prev,
+                        selectedCountry: prev.selectedCountry ?? allCountryOptions[0]?.value ?? 0,
+                    }));
+                }
+                else {
+                    toast.error(result.message || "Failed to load countries.");
+                }
+            }
+            catch (error) {
+                toast.error(error.message || "Failed to load countries.");
+            }
+        };
+        fetchCountries();
+    }, [dispatch]);
+    console.log("selectedCountry:", payload.selectedCountry, typeof payload.selectedCountry);
+    console.log("Options:", allCountryOptions);
+    return (_jsxs("div", { className: "min-h-screen", children: [_jsxs("div", { className: "flex justify-end items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg", children: [_jsx(ToastContainer, {}), _jsx("div", { className: "ml-4 flex justify-end items-center ", children: _jsx(Button, { text: "Back", variant: "lightBlue", onClick: () => navigate(-1) }) })] }), _jsxs("div", { className: "p-8 bg-gray-50 shadow-md rounded-lg", children: [ccLoading && _jsx(Loading, {}), !ccLoading && (_jsxs("form", { onSubmit: handleSubmit, className: "max-w-4xl mx-auto bg-white p-6 shadow rounded-lg space-y-6", children: [_jsx(InputComponent, { type: "text", name: "ProductName", label: "Product Name", value: payload.ProductName, onChange: handleChange, required: true }), _jsx("div", { children: _jsx(InputComponent, { label: "Description", name: "Descriptions", value: payload.Descriptions, onChange: handleChange, type: "textarea", required: true }) }), _jsx("div", { children: allCountryOptions.length > 0 && (_jsx(Inputes, { label: "Country To exclude", options: allCountryOptions, type: "select", name: "selectedCountry", value: payload.selectedCountry, onChange: handleChange, required: true })) }), _jsxs("div", { className: "grid grid-cols-2 gap-4", children: [_jsx("div", { children: _jsx(InputComponent, { type: "text", name: "ProductUrl", label: "Product URL", value: payload.ProductUrl, onChange: handleChange, required: true }) }), _jsx("div", { children: _jsx(InputComponent, { label: "Price", name: "Price", type: "number", value: payload.Price, onChange: handleChange, required: true }) })] }), _jsxs("div", { className: "grid grid-cols-2 gap-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block mb-1 font-medium", children: "From Country" }), _jsx(SelectComponent, { name: "From_CountryId", options: [
                                                     { label: "Select from country", value: 0 },
                                                     ...countryOptions,
                                                 ], value: payload.From_CountryId, onChange: handleChange, required: true })] }), _jsxs("div", { children: [_jsx("label", { className: "block mb-1 font-medium", children: "From City" }), _jsx(SelectComponent, { name: "From_CityId", options: [

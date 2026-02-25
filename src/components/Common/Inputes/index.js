@@ -7,7 +7,7 @@ import SwitchButton from "./SwitchButton";
 import DatePickerComponent from "./DatePickerComponent";
 import TextArea from "./TextArea";
 import TimePicker from "./TimePicker"; // Import the TimePicker component
-function InputComponent({ type, name, value, onChange, label, defaultValue, min, max, options = [], required = false, placeholder = "", }) {
+function InputComponent({ type, name, value, onChange, label, defaultValue, min, max, options = [], required = false, placeholder = "", disabled = false }) {
     const renderInput = () => {
         switch (type) {
             case "color":
@@ -19,7 +19,7 @@ function InputComponent({ type, name, value, onChange, label, defaultValue, min,
             case "number":
                 return (_jsx(NumberInpute, { name: name, value: value, onChange: onChange, defaultValue: defaultValue, min: min, max: max, required: required }));
             case "select":
-                return (_jsx(SelectComponent, { name: name, value: value, onChange: onChange, options: options, required: required }));
+                return (_jsx(SelectComponent, { name: name, value: value, onChange: onChange, options: options, required: required, isDisabled: disabled }));
             case "switchButton":
                 return (_jsx(SwitchButton, { options: [
                         { label: "Option 1", value: "option1" },

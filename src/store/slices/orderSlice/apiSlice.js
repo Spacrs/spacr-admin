@@ -65,11 +65,20 @@ export const ordersApi = createApi({
                 };
             },
         }),
+        // getScrapingIcons: builder.query<any, string>({
+        //   query: () => ({
+        //     url: `/order/get-scraping-icons`,
+        //     method: "GET",
+        //   }),
+        // }),
         getScrapingIcons: builder.query({
-            query: () => ({
-                url: `/order/get-scraping-icons`,
-                method: "GET",
-            }),
+            query: (paramsObj) => {
+                const queryString = buildQueryParams(paramsObj);
+                return {
+                    url: `/order/get-scraping-icons?${queryString}`,
+                    method: "GET",
+                };
+            },
         }),
         // getReferralCodes: builder.query<any, string>({
         //   query: () => ({
@@ -101,6 +110,71 @@ export const ordersApi = createApi({
                 };
             },
         }),
+        getTransactionList: builder.query({
+            query: (paramsObj) => {
+                const queryString = buildQueryParams(paramsObj);
+                const token = localStorage.getItem("access_token") || undefined;
+                return {
+                    url: `/transaction/transactions?${queryString}`,
+                    method: "GET",
+                    headers: {
+                        "x-admin-secret": token,
+                    },
+                };
+            },
+        }),
+        getTransactionDetails: builder.query({
+            query: (transactionId) => {
+                const queryString = buildQueryParams(transactionId);
+                const token = localStorage.getItem("access_token") || undefined;
+                return {
+                    url: `/transaction/admin_transactions/${transactionId}`,
+                    method: "GET",
+                    headers: {
+                        "x-admin-secret": token,
+                    },
+                };
+            },
+        }),
+        getWithdrawalList: builder.query({
+            query: (paramsObj) => {
+                const queryString = buildQueryParams(paramsObj);
+                const token = localStorage.getItem("access_token") || undefined;
+                return {
+                    url: `/admin-wallet/withdrawals?${queryString}`,
+                    method: "GET",
+                    headers: {
+                        "x-admin-secret": token,
+                    },
+                };
+            },
+        }),
+        getWithdrawalDetails: builder.query({
+            query: (withdrawalId) => {
+                const queryString = buildQueryParams(withdrawalId);
+                const token = localStorage.getItem("access_token") || undefined;
+                return {
+                    url: `/admin-wallet/withdrawals/${withdrawalId}`,
+                    method: "GET",
+                    headers: {
+                        "x-admin-secret": token,
+                    },
+                };
+            },
+        }),
+        updateWithdrawalStatus: builder.mutation({
+            query: ({ withdrawalId, status, reason }) => {
+                const token = localStorage.getItem("access_token") || undefined;
+                return {
+                    url: `/admin-wallet/withdrawals/${withdrawalId}/update-status`,
+                    method: "PUT",
+                    headers: {
+                        "x-admin-secret": token,
+                    },
+                    body: reason ? { status, reason } : { status },
+                };
+            },
+        }),
     }),
 });
-export const { useGetOrdersQuery, useUpdateOrderTrendMutation, useGetOrderDetailsQuery, useGetOrderOffersQuery, useCreateProductMutation, useUpdateProductMutation, useDeleteOrderMediaMutation, useGetScrapingIconsQuery, useGetReferralCodesQuery, useGetReferralCodeDetailsQuery, useGetTravelListingQuery } = ordersApi;
+export const { useGetOrdersQuery, useUpdateOrderTrendMutation, useGetOrderDetailsQuery, useGetOrderOffersQuery, useCreateProductMutation, useUpdateProductMutation, useDeleteOrderMediaMutation, useGetScrapingIconsQuery, useGetReferralCodesQuery, useGetReferralCodeDetailsQuery, useGetTravelListingQuery, useGetTransactionListQuery, useGetTransactionDetailsQuery, useGetWithdrawalListQuery, useGetWithdrawalDetailsQuery, useUpdateWithdrawalStatusMutation } = ordersApi;

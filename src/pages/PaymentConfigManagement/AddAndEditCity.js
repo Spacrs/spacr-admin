@@ -1,7 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useAddCityMutation, useGetPaymentConfigsQuery, useGetCityByIdQuery, useUpdateCityMutation, } from "../../store/slices/paymentConfigSlice/apiSlice";
+import { useAddCityMutation, useGetPaymentConfigsQuery, useGetCityByIdQuery, useUpdateCityMutation, useGetCitiesQuery } from "../../store/slices/paymentConfigSlice/apiSlice";
 import Inputes from "../../components/Common/Inputes";
 import { setCountryOptions, selectCounyOptions, selectIsEditCity, setIsEditCity, } from "../../store/slices/paymentConfigSlice/paymentConfigSlice";
 import { useAppSelector } from "../../store/hooks";
@@ -28,6 +28,20 @@ const AddAndUpdateCity = () => {
     });
     const { data: cityData, isLoading: isLoadingCitydata, refetch: refetchCityData, } = useGetCityByIdQuery(cityId);
     const [updateCity] = useUpdateCityMutation();
+    const { data: citiesData } = useGetCitiesQuery({
+        isPagination: false,
+    });
+    const isDuplicateCity = () => {
+        if (!citiesData?.data)
+            return false;
+        return citiesData.data.some((city) => {
+            const sameName = city.name.trim().toLowerCase() ===
+                formData.cityName.trim().toLowerCase();
+            // EDIT case → ignore same city
+            const notSameCity = !isEditCity || String(city.Id) !== String(cityId);
+            return sameName && notSameCity;
+        });
+    };
     //To set the default value to the dropdown
     useEffect(() => {
         if (countryOptions.length > 0 &&
@@ -94,8 +108,13 @@ const AddAndUpdateCity = () => {
             toast.error("Please fill in all fields.");
             return;
         }
+        if (isDuplicateCity()) {
+            toast.error("City name already exists");
+            return;
+        }
         try {
-            if (isEditCity) {
+            const isEdit = Boolean(cityId);
+            if (isEdit) {
                 const val = {
                     cityId: cityId,
                     data: {
@@ -138,7 +157,15 @@ const AddAndUpdateCity = () => {
         }
         catch (error) {
             // console.error("Failed to add city:", error);
-            toast.error("Failed to add city:");
+            // toast.error("Failed to add city:");
+            let message = "Failed to add city";
+            if (typeof error === "object" &&
+                error !== null &&
+                "data" in error) {
+                const err = error;
+                message = err.data?.message || message;
+            }
+            toast.error(message);
         }
     };
     return (_jsxs("div", { children: [_jsxs("div", { className: "flex justify-end items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg", children: [_jsx(ToastContainer, {}), _jsx("div", { className: "ml-4 flex justify-end items-center ", children: _jsx(Button, { text: "Back", variant: "lightBlue", onClick: () => navigate(-1) }) })] }), _jsxs("div", { className: "flex flex-col justify-center items-center p-20 bg-gray-100 rounded-lg", children: [isEditCity && isLoadingCitydata ? _jsx(Loader, {}) : null, !isLoadingCitydata && (_jsxs("div", { className: "w-full max-w-7xl bg-white p-6 shadow-lg rounded-lg", children: [_jsx("h2", { className: "text-2xl font-semibold text-gray-800 mb-6 text-center", children: "City Information" }), _jsxs("form", { onSubmit: handleSubmit, className: "flex flex-col gap-5", children: [_jsxs("div", { className: "flex gap-4", children: [_jsx("div", { className: "w-1/2", children: _jsx(Inputes, { label: "Country Name", options: countryOptions, type: "select", name: "selectedCountry", value: formData.selectedCountry, onChange: handleChange }) }), _jsx("div", { className: "w-1/2", children: _jsx(Inputes, { label: "City Name", type: "text", name: "cityName", value: formData.cityName, onChange: handleChange }) })] }), _jsx("div", { className: "flex gap-4" }), _jsx("div", { className: "flex gap-4 mt-4 w-full", children: _jsxs("button", { type: "submit", className: "w-1/5 px-4 py-3 bg-blue-900 text-white rounded-md hover:bg-blue-800", children: [!isEditCity ? "Add" : "Edit", " City"] }) })] })] }))] })] }));

@@ -5,6 +5,7 @@ import {
   useAddPaymentConfigMutation,
   useGetPaymentConfigByIdQuery,
   useUpdatePaymentConfigMutation,
+  useGetPaymentConfigsQuery
 } from "../../store/slices/paymentConfigSlice/apiSlice";
 import {
   addPaymentConfigToList,
@@ -40,6 +41,27 @@ const AddAndUpdateCountry = () => {
     destination: false,
     departure: false,
   });
+
+  const { data: paymentConfigs } = useGetPaymentConfigsQuery({
+    isPagination: false,
+  });
+
+  const isDuplicateCountryName = () => {
+    if (!paymentConfigs?.data) return false;
+
+    return paymentConfigs.data.some((country: any) => {
+      const existingName = country.name?.trim().toLowerCase();
+      const newName = formData.name.trim().toLowerCase();
+
+      if (!existingName || !newName) return false;
+
+      if (isEditPaymentConfig) {
+        return existingName === newName && country._id !== countryId;
+      }
+
+      return existingName === newName;
+    });
+  };
 
   // Populate payload from fetched data
   useEffect(() => {
@@ -150,6 +172,11 @@ const AddAndUpdateCountry = () => {
     // ✅ Basic validation
     if (!formData.name.trim() || !formData.shortName.trim()) {
       toast.error("Please fill in all required fields.");
+      return;
+    }
+
+    if (isDuplicateCountryName()) {
+      toast.error("Country with this name already exists.");
       return;
     }
   

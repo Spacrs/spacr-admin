@@ -136,7 +136,7 @@ function PaymentConfig() {
       try {
         const { Id } = configToDelete;
         const access_token = localStorage.getItem('access_token');
-        await fetch(`https://api-v2.spa-cr.com/api/v2/country/delete/${Id}`, {
+        await fetch(`https:/api-v2.spa-cr.com/api/v2/country/delete/${Id}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",

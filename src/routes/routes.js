@@ -31,6 +31,18 @@ import ExternalPage from "../pages/ExternalPage/ExternalPage";
 import TravelListing from "../pages/TravelListingManagement/TravelListing";
 import NotificationView from "../pages/NotificationManagement/NotificationView";
 import EditScheduleNotification from "../pages/NotificationManagement/EditScheduleNotification";
+import EditScrapingIcon from "../pages/ScrapManagement/EditScrapingIcon";
+import AddBanner from "../pages/BannerManagement/AddBanner";
+import BannerList from "../pages/BannerManagement/BannerList";
+import BannerDetails from "../pages/BannerManagement/BannerDetails";
+import EditBanner from "../pages/BannerManagement/EditBanner";
+import SystemFeesList from "../pages/FeesManagement/SystemFeesList";
+import AddSystemFees from "../pages/FeesManagement/AddSystemFees";
+import EditSystemFees from "../pages/FeesManagement/EditSystemFees";
+import TransactionList from "../pages/TransactionManagement/TransactionList";
+import TransactionDetails from "../pages/TransactionManagement/TransactionDetails";
+import WithdrawalList from "../pages/WithdrawalManagement/WithdrawalList";
+import WithdrawalDetails from "../pages/WithdrawalManagement/WithdrawalDetails";
 export const protectedRoutes = [
     // these routes are accessable with auth or layout for diffrent roles
     {
@@ -198,13 +210,13 @@ export const adminRoutes = [
     {
         path: "scrap-logo-list",
         component: ScrapLogoList,
-        breadcrumb: ["admin", "Scraping Applications Logos"],
+        breadcrumb: ["admin", "Marketplace list"],
         showBreadcrumb: true,
     },
     {
         path: "add-scraping-icon",
         component: AddScrapingIcon,
-        breadcrumb: ["admin", "Add Scraping Icon"],
+        breadcrumb: ["admin", "Add Marketplace"],
         showBreadcrumb: true,
     },
     {
@@ -248,6 +260,78 @@ export const adminRoutes = [
         path: "edit-schedule-notification/:notificationId",
         component: EditScheduleNotification,
         breadcrumb: ["admin", "Edit Scheduled Notification"],
+        showBreadcrumb: true,
+    },
+    {
+        path: "edit-scraping-icon/:Id",
+        component: EditScrapingIcon,
+        breadcrumb: ["admin", "Edit Marketplace"],
+        showBreadcrumb: true,
+    },
+    {
+        path: "add-banner",
+        component: AddBanner,
+        breadcrumb: ["admin", "Add Banner"],
+        showBreadcrumb: true,
+    },
+    {
+        path: "banner-list",
+        component: BannerList,
+        breadcrumb: ["admin", "Banner List"],
+        showBreadcrumb: true,
+    },
+    {
+        path: "banner-details/:bannerID",
+        component: BannerDetails,
+        breadcrumb: ["admin", "Banner Details"],
+        showBreadcrumb: true,
+    },
+    {
+        path: "edit-banner/:bannerID",
+        component: EditBanner,
+        breadcrumb: ["admin", "Edit Banner"],
+        showBreadcrumb: true,
+    },
+    {
+        path: "get-system-fees",
+        component: SystemFeesList,
+        breadcrumb: ["admin", "System Fees List"],
+        showBreadcrumb: true,
+    },
+    {
+        path: "add-system-fees",
+        component: AddSystemFees,
+        breadcrumb: ["admin", "Add System Fees"],
+        showBreadcrumb: true,
+    },
+    {
+        path: "edit-system-fees",
+        component: EditSystemFees,
+        breadcrumb: ["admin", "Edit System Fees"],
+        showBreadcrumb: true,
+    },
+    {
+        path: "transaction-list",
+        component: TransactionList,
+        breadcrumb: ["admin", "Transaction List"],
+        showBreadcrumb: true,
+    },
+    {
+        path: "transaction-details/:transactionId",
+        component: TransactionDetails,
+        breadcrumb: ["admin", "Transaction Details"],
+        showBreadcrumb: true,
+    },
+    {
+        path: "withdrawal-list",
+        component: WithdrawalList,
+        breadcrumb: ["admin", "Withdrawal List"],
+        showBreadcrumb: true,
+    },
+    {
+        path: "withdrawal-details/:withdrawalId",
+        component: WithdrawalDetails,
+        breadcrumb: ["admin", "Withdrawal Details"],
         showBreadcrumb: true,
     },
 ];

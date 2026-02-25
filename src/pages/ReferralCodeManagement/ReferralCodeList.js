@@ -99,7 +99,7 @@ function ReferralCodeList() {
             toast.error("Referral code is missing!");
             return;
         }
-        const cloneLink = `https://dashboard.spa-cr.com/assign-referral-code?referralCode=${referralCode}`;
+        const cloneLink = `https://staging.dashboard.spa-cr.com/assign-referral-code?referralCode=${referralCode}`;
         navigator.clipboard.writeText(cloneLink)
             .then(() => {
             toast.success("Link copied to clipboard!");

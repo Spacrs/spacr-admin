@@ -1,28 +1,50 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { LuPlus } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Common/Button";
 import InputComponent from "../../components/Common/Inputes";
 import { toast, ToastContainer } from "react-toastify";
 import ImageGallery from "../../components/Common/ImageGallery/Index";
+import Inputes from "../../components/Common/Inputes";
+import {
+  setCountryOptions,
+  selectCounyOptions,
+  selectIsEditCity,
+  setIsEditCity,
+} from "../../store/slices/paymentConfigSlice/paymentConfigSlice";
+import { useAppSelector } from "../../store/hooks";
+import { useDispatch } from "react-redux";
+import {
+  useGetPaymentConfigsQuery,
+} from "../../store/slices/paymentConfigSlice/apiSlice";
+import ImageCropper from "../../components/Common/Cropper/ImageCropper"; //Added on 09-07-2025
+
 
 type BodyPayload = {
   title: string;
   url: string;
   image: File | null;
+  selectedCountry: string;
 };
 
 const AddScrapingIcon: React.FC = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
+  const dispatch = useDispatch();
   const [creating, setCreating] = useState(false);
+  // const countryOptions = useAppSelector(selectCounyOptions);
+  const [countryOptions, setCountryOptions] = useState<{ label: string; value: string }[]>([]);
+
   const [previewImage, setPreviewImage] = useState<string>("");
   const [payload, setPayload] = useState<BodyPayload>({
     title: "",
     url: "",
     image: null,
+    selectedCountry: ""
   });
+
+  const [showCropper, setShowCropper] = useState(false); //Added on 09-07-2025
+  const [imageToCrop, setImageToCrop] = useState<string | null>(null); //Added on 09-07-2025
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -34,16 +56,37 @@ const AddScrapingIcon: React.FC = () => {
     }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setPreviewImage(URL.createObjectURL(file));
-      setPayload((prev) => ({
-        ...prev,
-        image: file,
-      }));
-    }
-  };
+  const { data, isLoading } = useGetPaymentConfigsQuery({
+      isPagination: false,
+    });
+
+  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (file) {
+  //     setPreviewImage(URL.createObjectURL(file));
+  //     setPayload((prev) => ({
+  //       ...prev,
+  //       image: file,
+  //     }));
+  //   }
+  // };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageToCrop(reader.result as string);
+        setShowCropper(true);
+      };
+      reader.readAsDataURL(file);
+
+      e.target.value = "";
+    };
+
+
+
 
   const handleRemoveImage = () => {
     setPayload((prev) => ({ ...prev, image: null }));
@@ -58,6 +101,7 @@ const AddScrapingIcon: React.FC = () => {
       const formData = new FormData();
       formData.append("title", payload.title);
       formData.append("url", payload.url);
+      formData.append("country", payload.selectedCountry);
       if (payload.image) {
         formData.append("image", payload.image);
       }
@@ -78,7 +122,7 @@ const AddScrapingIcon: React.FC = () => {
         throw new Error(result.message || "Failed to create icon.");
       }
 
-      toast.success("Scraping icon created successfully.");
+      toast.success("Marketplace created successfully.");
       setTimeout(() => {
         navigate("/admin/scrap-logo-list");
       }, 1000);
@@ -88,6 +132,46 @@ const AddScrapingIcon: React.FC = () => {
       setCreating(false);
     }
   };
+
+  // useEffect(() => {
+  //     if (data?.data) {
+  //       dispatch(setCountryOptions(data.data));
+  //     }
+  //   }, [data, dispatch]);
+
+  useEffect(() => {
+  const fetchCountries = async () => {
+    try {
+      const res = await fetch("https://api-v2.spa-cr.com/api/v2/country");
+      const result = await res.json();
+      console.log("Fetched countries:", result.data);
+      if (res.ok && Array.isArray(result.data)) {
+        const validCountries = result.data.filter(c => c?.id != null && c?.name);
+
+        const countryOptions = validCountries.map((c: any) => ({
+          label: c.name,
+          value: c.id.toString(),
+        }));
+
+        // dispatch(setCountryOptions(countryOptions));
+        setCountryOptions(countryOptions);
+      } else {
+        toast.error(result.message || "Failed to load countries.");
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Failed to load countries.");
+    }
+  };
+
+  fetchCountries();
+}, [dispatch]);
+
+const handleCropDone = (blob: Blob) => {
+  const croppedFile = new File([blob], "cropped.jpg", { type: "image/jpeg" });
+  setPayload((prev) => ({ ...prev, image: croppedFile }));
+  setPreviewImage(URL.createObjectURL(croppedFile));
+  setShowCropper(false);
+};
 
   return (
     <div className="min-h-screen">
@@ -135,7 +219,23 @@ const AddScrapingIcon: React.FC = () => {
 
             </div>
           </div>
-          
+
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="w-full">
+                <Inputes
+                    label="Country Name"
+                    options={countryOptions}
+                    type="select"
+                    name="selectedCountry"
+                    value={payload.selectedCountry}
+                    onChange={handleChange}
+                    required={true}
+                  />
+              </div>
+
+            </div>
+          </div>
 
           {/* Image Upload */}
           <div>
@@ -179,6 +279,13 @@ const AddScrapingIcon: React.FC = () => {
           </div>
         </form>
       </div>
+      {showCropper && imageToCrop && (
+        <ImageCropper
+          imageSrc={imageToCrop}
+          onCropDone={handleCropDone}
+          onClose={() => setShowCropper(false)}
+        />
+      )}
     </div>
   );
 };

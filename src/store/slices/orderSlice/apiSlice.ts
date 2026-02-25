@@ -81,12 +81,39 @@ export const ordersApi: any = createApi({
         };
       },
     }),
-    getScrapingIcons: builder.query<any, string>({
-      query: () => ({
-        url: `/order/get-scraping-icons`,
+    // getScrapingIcons: builder.query<any, string>({
+    //   query: () => ({
+    //     url: `/order/get-scraping-icons`,
+    //     method: "GET",
+    //   }),
+    // }),
+    getScrapingIcons: builder.query<
+    {
+      data: ProductData[]; // adjust type if needed
+      pagination: {
+        totalItems: number;
+        totalPages: number;
+        currentPage: number;
+      };
+      success: boolean;
+    },
+    {
+      page?: number;
+      limit?: number;
+      search?: string;
+      sortBy?: string;
+      sort?: "asc" | "desc";
+    }
+  >({
+    query: (paramsObj) => {
+      const queryString = buildQueryParams(paramsObj);
+      return {
+        url: `/order/get-scraping-icons?${queryString}`,
         method: "GET",
-      }),
-    }),
+      };
+    },
+  }),
+
     // getReferralCodes: builder.query<any, string>({
     //   query: () => ({
     //     url: `/${ADMIN}/get-all-referral-codes`,
@@ -138,6 +165,118 @@ export const ordersApi: any = createApi({
         };
       },
     }),
+    getTransactionList: builder.query<
+      { data: ProductData[] },
+      {
+        page?: number;
+        limit?: number;
+        createdBy?: string;
+        sortBy?: string;
+        sort?: "asc" | "desc";
+        search?: string;
+      }
+    >({
+      query: (paramsObj) => {
+        const queryString = buildQueryParams(paramsObj);
+        const token = localStorage.getItem("access_token") || undefined;
+        return {
+          url: `/transaction/transactions?${queryString}`,
+          method: "GET",
+          headers: {
+            "x-admin-secret": token,
+          },
+        };
+      },
+    }),
+    getTransactionDetails: builder.query<
+      { data: ProductData[] },
+      {
+        page?: number;
+        limit?: number;
+        createdBy?: string;
+        sortBy?: string;
+        sort?: "asc" | "desc";
+        search?: string;
+      }
+    >({
+      query: (transactionId) => {
+        const queryString = buildQueryParams(transactionId);
+        const token = localStorage.getItem("access_token") || undefined;
+        return {
+          url: `/transaction/admin_transactions/${transactionId}`,
+          method: "GET",
+          headers: {
+            "x-admin-secret": token,
+          },
+        };
+      },
+    }),
+
+    getWithdrawalList: builder.query<
+      { data: ProductData[] },
+      {
+        page?: number;
+        limit?: number;
+        createdBy?: string;
+        sortBy?: string;
+        sort?: "asc" | "desc";
+        search?: string;
+      }
+    >({
+      query: (paramsObj) => {
+        const queryString = buildQueryParams(paramsObj);
+        const token = localStorage.getItem("access_token") || undefined;
+        return {
+          url: `/admin-wallet/withdrawals?${queryString}`,
+          method: "GET",
+          headers: {
+            "x-admin-secret": token,
+          },
+        };
+      },
+    }),
+
+    getWithdrawalDetails: builder.query<
+      { data: ProductData[] },
+      {
+        page?: number;
+        limit?: number;
+        createdBy?: string;
+        sortBy?: string;
+        sort?: "asc" | "desc";
+        search?: string;
+      }
+    >({
+      query: (withdrawalId) => {
+        const queryString = buildQueryParams(withdrawalId);
+        const token = localStorage.getItem("access_token") || undefined;
+        return {
+          url: `/admin-wallet/withdrawals/${withdrawalId}`,
+          method: "GET",
+          headers: {
+            "x-admin-secret": token,
+          },
+        };
+      },
+    }),
+
+    updateWithdrawalStatus: builder.mutation<
+        { data: ProductData[] },
+        { withdrawalId: string; status: string; reason?: string }
+      >({
+        query: ({ withdrawalId, status, reason }) => {
+          const token = localStorage.getItem("access_token") || undefined;
+          return {
+            url: `/admin-wallet/withdrawals/${withdrawalId}/update-status`,
+            method: "PUT",
+            headers: {
+              "x-admin-secret": token,
+            },
+            body: reason ? { status, reason } : { status },
+          };
+        },
+      }),
+
   }),
 });
 export const {
@@ -151,5 +290,10 @@ export const {
   useGetScrapingIconsQuery,
   useGetReferralCodesQuery,
   useGetReferralCodeDetailsQuery,
-  useGetTravelListingQuery
+  useGetTravelListingQuery,
+  useGetTransactionListQuery,
+  useGetTransactionDetailsQuery,
+  useGetWithdrawalListQuery,
+  useGetWithdrawalDetailsQuery,
+  useUpdateWithdrawalStatusMutation
 } = ordersApi;

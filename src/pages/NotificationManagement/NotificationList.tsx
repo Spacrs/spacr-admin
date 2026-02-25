@@ -9,52 +9,11 @@ import {
 } from "../../components/Common";
 import { columns } from "../../constant/Columns";
 
-// const columns = [
-//   { name: "title", Header: "Title", colName: "Default", sortable: true },
-//   { name: "message", Header: "Message", colName: "Default", sortable: true },
-//   {
-//     name: "scheduleDate",
-//     Header: "Schedule Date",
-//     colName: "Date",
-//     sortable: true,
-//   },
-//   {
-//     name: "scheduleTime",
-//     Header: "Schedule Time",
-//     colName: "Default",
-//     sortable: true,
-//   },
-//   {
-//     name: "notificationType",
-//     Header: "Type",
-//     colName: "Default",
-//     sortable: true,
-//   },
-//   { name: "status", Header: "Status", colName: "Default", sortable: true },
-//   {
-//     name: "CreatedAt",
-//     Header: "Created At",
-//     colName: "DateAndTime",
-//     sortable: true,
-//   },
-//   {
-//     name: "UpdatedAt",
-//     Header: "Updated At",
-//     colName: "DateAndTime",
-//     sortable: true,
-//   },
-//   {
-//     name: "action",
-//     Header: "Actions",
-//     colName: "Actions",
-//     Actions: ["UPDATE", "VIEW"],
-//   },
-// ];
-
 interface Notification {
   notificationId: string;
   title: string;
   message: string;
+  CreatedAt: string;
 }
 
 const options = [
@@ -75,6 +34,11 @@ function NotificationList() {
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [notificationType, setNotificationType] = useState("");
+
+  const [showModal, setShowModal] = useState(false);
+  const [selectedNotification, setSelectedNotification] = useState<Notification | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
 
   const {
@@ -115,17 +79,50 @@ function NotificationList() {
     }
   };
   
-  const handleView = (data: any) => {
-    const notificationId = data.notificationId;
-    if (data) {
-      try {
-        navigate(`/admin/view-notification/${notificationId}`);
-      } catch (error) {
-        console.log(error, "error in handleView");
+  const handleView = async (data: any) => {
+    // const notificationId = data.notificationId;
+    // if (data) {
+    //   try {
+    //     navigate(`/admin/view-notification/${notificationId}`);
+    //   } catch (error) {
+    //     console.log(error, "error in handleView");
+    //   }
+    // } else {
+    //   console.log("No selected notification to view.");
+    // }
+    setLoading(true);
+    setError(null);
+
+    try {
+        const access_token = localStorage.getItem("access_token");
+        const res = await fetch(
+          `https://api-v2.spa-cr.com/api/v2/notification/get-a-notification/${data.notificationId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${access_token}`,
+            },
+          }
+        );
+        if (!res.ok) throw new Error(`Error: ${res.statusText}`);
+
+        const responseData = await res.json();
+        setSelectedNotification({
+          notificationId: responseData.data.notificationId,
+          title: responseData.data.title,
+          message: responseData.data.message,
+          CreatedAt: responseData.data.CreatedAt,
+        });
+
+      } catch (err: any) {
+        setError(err.message || "Failed to fetch notification.");
+      } finally {
+        setLoading(false);
       }
-    } else {
-      console.log("No selected notification to view.");
-    }
+
+    // setSelectedNotification(data);
+    setShowModal(true);
   };
 
   const onSort = (colName: string, direction: "asc" | "desc") => {
@@ -202,7 +199,27 @@ function NotificationList() {
           listType="notifications"
         />
       </div>
+      {showModal && selectedNotification && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+            <button
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+              onClick={() => setShowModal(false)}
+            >
+              ✕
+            </button>
+            <h2 className="text-xl font-semibold mb-4">Notification Details</h2>
+            <div className="space-y-2">
+              <p><strong>Title: </strong> {selectedNotification.title}</p>
+              <p><strong>Message: </strong> {selectedNotification.message}</p>
+              <p><strong>Created Date: </strong>{selectedNotification.CreatedAt}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
+    
   );
 }
 

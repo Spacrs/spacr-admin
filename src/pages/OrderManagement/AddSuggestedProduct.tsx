@@ -33,6 +33,7 @@ import ToggleSwitch from "../../components/Common/Inputes/ToggleSwitch";
 import { toast, ToastContainer } from "react-toastify";
 
 import { skipToken } from "@reduxjs/toolkit/query"; //Added on 16-05-2025
+import Inputes from "../../components/Common/Inputes"; //Added on 02-07-2025
 
 type BodyPayload = {
   ProductName: string;
@@ -47,6 +48,7 @@ type BodyPayload = {
   images: any[];
   IsTrending: boolean;
   Price: number | string;
+  selectedCountry: number;
 };
 
 const AddSuggestedProduct: React.FC = () => {
@@ -69,6 +71,7 @@ const AddSuggestedProduct: React.FC = () => {
   const countryOptions = useAppSelector(selectCountryOptions);
   const fromCityOptions = useAppSelector(selectFromCityOptions);
   const toCityOptions = useAppSelector(selectToCityOptions);
+  const [allCountryOptions, setAllCountryOptions] = useState<{ label: string; value: string }[]>([]);
 
   useEffect(() => {
     if (ccData?.data && Array.isArray(ccData?.data)) {
@@ -100,6 +103,9 @@ const AddSuggestedProduct: React.FC = () => {
         IsTrending: suggestedProduct?.data?.IsTrending,
         images: [],
         Price: suggestedProduct?.data?.Price,
+        // suggestedCountry: suggestedProduct?.data?.suggestedCountry,
+        selectedCountry: suggestedProduct?.data?.countryIdToIgnore,
+
       }));
 
       if (suggestedProduct?.data?.medias?.length > 0) {
@@ -114,6 +120,7 @@ const AddSuggestedProduct: React.FC = () => {
         setSelectedCountry({
           selectedFromCountryId: suggestedProduct.data.From_CountryId,
           selectedToCountryId: suggestedProduct.data.To_CountryId,
+          selectedCountry: suggestedProduct.data.selectedCountry
         })
       );
     }
@@ -136,6 +143,7 @@ const AddSuggestedProduct: React.FC = () => {
         images: [],
         IsTrending: false,
         Price: 0.0,
+        selectedCountry: payload.selectedCountry,
       });
     };
   }, [productId]);
@@ -154,6 +162,7 @@ const AddSuggestedProduct: React.FC = () => {
     images: [],
     IsTrending: false,
     Price: 0.0,
+    selectedCountry: 0,
   });
 
   // uniform change handler for both selects and text inputs
@@ -187,6 +196,10 @@ const AddSuggestedProduct: React.FC = () => {
     if (name === "To_CountryId") {
       dispatch(setSelectedCountry({ selectedToCountryId: numericValue }));
     }
+    if (name === "selectedCountry") {
+      dispatch(setSelectedCountry({ selectedCountry: numericValue }));
+    }
+    
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -319,6 +332,41 @@ const AddSuggestedProduct: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const res = await fetch("https://api-v2.spa-cr.com/api/v2/country");
+        const result = await res.json();
+        console.log("Fetched countries:", result.data);
+        if (res.ok && Array.isArray(result.data)) {
+          const validCountries = result.data.filter(c => c?.id != null && c?.name);
+  
+          const allCountryOptions = validCountries.map((c: any) => ({
+            label: c.name,
+            // value: c.id.toString(),
+            value: c.id,
+          }));
+  
+          // dispatch(setCountryOptions(countryOptions));
+          setAllCountryOptions(allCountryOptions);
+          setPayload((prev) => ({
+            ...prev,
+            selectedCountry: prev.selectedCountry ?? allCountryOptions[0]?.value ?? 0,
+          }));
+        } else {
+          toast.error(result.message || "Failed to load countries.");
+        }
+      } catch (error: any) {
+        toast.error(error.message || "Failed to load countries.");
+      }
+    };
+  
+    fetchCountries();
+  }, [dispatch]);
+
+  console.log("selectedCountry:", payload.selectedCountry, typeof payload.selectedCountry);
+  console.log("Options:", allCountryOptions);
+
   return (
     <div className="min-h-screen">
       <div className="flex justify-end items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
@@ -359,6 +407,21 @@ const AddSuggestedProduct: React.FC = () => {
                 required={true}
               />
             </div>
+
+            <div>
+              {allCountryOptions.length > 0 && (
+              <Inputes
+                label="Country To exclude"
+                options={allCountryOptions}
+                type="select"
+                name="selectedCountry"
+                value={payload.selectedCountry}
+                onChange={handleChange}
+                required={true}
+              />
+              )}
+            </div>
+            
 
             {/* ProductUrl  */}
             <div className="grid grid-cols-2 gap-4">

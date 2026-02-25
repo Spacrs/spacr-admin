@@ -62,6 +62,7 @@ export const locationSlice = createSlice({
       action: PayloadAction<{
         selectedFromCountryId?: number;
         selectedToCountryId?: number;
+        selectedCountry?: number;
       }>
     ) {
       if (action.payload.selectedFromCountryId !== undefined) {

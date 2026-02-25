@@ -31,8 +31,40 @@ const OrderDetails = () => {
     const goToOffers = () => {
         navigate("/admin/order-offers/" + orderId);
     };
-    return (_jsxs("div", { className: "p-6 max-w-7xl mx-auto bg-white shadow-xl rounded-lg", children: [_jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-6", children: [_jsxs("div", { className: "flex flex-col bg-gray-50 p-6 rounded-lg shadow-md", children: [_jsx("h2", { className: "text-2xl font-semibold mb-2", children: order.data.ProductName }), _jsx("p", { className: "text-gray-500 text-sm mb-4", children: order.data.Descriptions }), _jsx("a", { href: order.data.ProductUrl, target: "_blank", rel: "noopener noreferrer", className: "text-indigo-600 hover:text-indigo-800 text-sm", children: "View Product" }), _jsxs("div", { className: "mt-6 w-full", children: [_jsxs("p", { children: [_jsx("strong", { children: "Price:" }), " $", order.data.Price] }), _jsxs("p", { children: [_jsx("strong", { children: "Quantity:" }), " ", order.data.Quantity] }), _jsxs("p", { children: [_jsx("strong", { children: "Delivery Reward:" }), " $", order.data.DeliveryReward] }), _jsxs("p", { children: [_jsx("strong", { children: "Is With Box:" }), " ", order.data.IsWithBox === 1 ? "Yes" : "No"] }), _jsxs("p", { children: [_jsx("strong", { children: "Estimated Delivery Date:" }), " ", new Date(order.data.EstimatedDeliveryDate).toLocaleDateString()] }), order.data.CreatedBy === "user" && (_jsx("p", { className: "text-green-500 text-2xl font-medium mt-6", children: _jsxs("strong", { onClick: goToOffers, className: "px-4 py-2 text-md font-medium bg-green-100 border border-green-600 shadow-lg hover:bg-transparent hover:shadow-xl transition duration-200 ease-in-out cursor-pointer rounded-lg", children: ["Offers:", " ", _jsx("span", { className: "text-black font-medium px-2", children: order.data.totalOfferCount })] }) }))] })] }), _jsxs("div", { className: "flex flex-col bg-gray-50 p-6 rounded-lg shadow-md", children: [_jsx("h3", { className: "text-xl font-semibold mb-3", children: "Shipping Details" }), _jsxs("p", { children: [_jsx("strong", { children: "From Address:" }), " ", order.data.From_address] }), _jsxs("p", { children: [_jsx("strong", { children: "To Address:" }), " ", order.data.To_address] }), _jsx("div", { className: "mt-6", children: _jsxs("p", { children: [_jsx("strong", { children: "Status:" }), _jsx("span", { className: `ml-2 px-3 py-1 rounded-full text-sm font-medium 
-                ${order.data?.Status === "Pending"
+    const createdAtTs = new Date(order.CreatedAt).getTime();
+    const waitTimeTs = order.WaitTime ? order.WaitTime * 1000 : null;
+    const getWaitDays = (createdAt, waitTime) => {
+        if (!waitTime)
+            return "N.A.";
+        const createdTs = new Date(createdAt).getTime();
+        const waitTs = waitTime * 1000; // unix → ms
+        const diffMs = waitTs - createdTs;
+        if (diffMs <= 0)
+            return "Expired";
+        const days = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+        return `${days} days`;
+    };
+    const getRemainingDays = (waitTime) => {
+        if (!waitTime)
+            return "N.A.";
+        const now = Date.now();
+        const target = waitTime * 1000;
+        const diff = target - now;
+        if (diff <= 0)
+            return "Expired";
+        return `${Math.ceil(diff / (1000 * 60 * 60 * 24))} days left`;
+    };
+    return (_jsxs("div", { className: "p-6 max-w-7xl mx-auto bg-white shadow-xl rounded-lg", children: [_jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-6", children: [_jsxs("div", { className: "flex flex-col bg-gray-50 p-6 rounded-lg shadow-md", children: [_jsx("h2", { className: "text-2xl font-semibold mb-2", children: order.data.ProductName }), _jsx("p", { className: "text-gray-500 text-sm mb-4", children: order.data.Descriptions }), _jsx("a", { href: order.data.ProductUrl, target: "_blank", rel: "noopener noreferrer", className: "text-indigo-600 hover:text-indigo-800 text-sm", children: "View Product" }), _jsxs("div", { className: "mt-6 w-full", children: [_jsxs("p", { children: [_jsx("strong", { children: "Price:" }), " AED ", order.data.Price] }), _jsxs("p", { children: [_jsx("strong", { children: "Quantity:" }), " ", order.data.Quantity] }), _jsxs("p", { children: [_jsx("strong", { children: "Delivery Reward:" }), " AED ", order.data.DeliveryReward] }), _jsxs("p", { children: [_jsx("strong", { children: "Is With Box:" }), " ", order.data.IsWithBox === 1 ? "Yes" : "No"] }), _jsxs("p", { children: [_jsx("strong", { children: "Pay Up Front:" }), " ", (() => {
+                                                const validStatuses = ["Accepted", "ReadyToDeliver", "Purchased", "ReceiptUpload", "InTransit", "Delivered"];
+                                                const offer = order.data.OrderOffer?.find((offer) => validStatuses.includes(offer.Status));
+                                                if (!offer || !("payUpFront" in offer)) {
+                                                    return "NA";
+                                                }
+                                                return offer.payUpFront ? "Yes" : "No";
+                                            })()] }), _jsxs("p", { children: [_jsx("strong", { children: "Wait time:" }), " ", order.data.WaitTime
+                                                ? `${getWaitDays(order.data.CreatedAt, order.data.WaitTime)} (${getRemainingDays(order.data.WaitTime)})`
+                                                : "N.A."] }), order.data.CreatedBy === "user" && (_jsx("p", { className: "text-green-500 text-2xl font-medium mt-6", children: _jsxs("strong", { onClick: goToOffers, className: "px-4 py-2 text-md font-medium bg-green-100 border border-green-600 shadow-lg hover:bg-transparent hover:shadow-xl transition duration-200 ease-in-out cursor-pointer rounded-lg", children: ["Offers:", " ", _jsx("span", { className: "text-black font-medium px-2", children: order.data.totalOfferCount })] }) }))] })] }), _jsxs("div", { className: "flex flex-col bg-gray-50 p-6 rounded-lg shadow-md", children: [_jsx("h3", { className: "text-xl font-semibold mb-3", children: "Shipping Details" }), _jsxs("p", { children: [_jsx("strong", { children: "From Address:" }), " ", order.data.From_address] }), _jsxs("p", { children: [_jsx("strong", { children: "To Address:" }), " ", order.data.To_address] }), _jsx("div", { className: "mt-6", children: _jsxs("p", { children: [_jsx("strong", { children: "Status:" }), _jsx("span", { className: `ml-2 px-3 py-1 rounded-full text-sm font-medium 
+                  ${order.data?.Status === "Pending"
                                                 ? "bg-yellow-300 text-gray-800"
                                                 : order.data?.Status === "Shipped"
                                                     ? "bg-blue-300 text-gray-800"

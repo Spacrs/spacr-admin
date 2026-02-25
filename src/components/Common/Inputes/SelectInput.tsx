@@ -8,6 +8,7 @@ interface SelectComponentProps {
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   className?: string;
   required?: boolean;
+  isDisabled?: boolean;
 }
 
 const SelectComponent: React.FC<SelectComponentProps> = ({
@@ -17,6 +18,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
   onChange,
   className = "",
   required = false,
+  isDisabled = false
 }) => {
   return (
     <select
@@ -25,7 +27,9 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
       value={value}
       onChange={onChange}
       required={required}
+      disabled={isDisabled}
     >
+      <option value="">Select</option>
       {options.map((option) => (
         <option key={option.value} value={option.value}>
           {option.label}

@@ -99,7 +99,10 @@ import { FaBarcode } from "react-icons/fa";
 import { FaRegCopy } from "react-icons/fa";
 import { BsToggle2Off } from "react-icons/bs";
 import { FaPlane } from "react-icons/fa";
-
+import { GiKnightBanner } from "react-icons/gi";
+import { GiTakeMyMoney } from "react-icons/gi";
+import { AiOutlineTransaction } from "react-icons/ai";
+import { BsCurrencyExchange } from "react-icons/bs";
 
 export const icons = {
   CiHome: CiHome,
@@ -187,6 +190,10 @@ export const icons = {
   FaBarcode,
   FaRegCopy,
   BsToggle2Off,
-  FaPlane
+  FaPlane,
+  GiKnightBanner,
+  GiTakeMyMoney,
+  AiOutlineTransaction,
+  BsCurrencyExchange
 
 };

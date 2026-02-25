@@ -5,6 +5,7 @@ import {
   useGetPaymentConfigsQuery,
   useGetCityByIdQuery,
   useUpdateCityMutation,
+  useGetCitiesQuery
 } from "../../store/slices/paymentConfigSlice/apiSlice";
 import Inputes from "../../components/Common/Inputes";
 import {
@@ -17,6 +18,7 @@ import { useAppSelector } from "../../store/hooks";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Loader } from "../../components/Common";
 import { toast, ToastContainer } from "react-toastify";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 const AddAndUpdateCity = () => {
   const dispatch = useDispatch();
@@ -47,6 +49,26 @@ const AddAndUpdateCity = () => {
     refetch: refetchCityData,
   } = useGetCityByIdQuery(cityId!);
   const [updateCity] = useUpdateCityMutation();
+
+  const { data: citiesData } = useGetCitiesQuery({
+    isPagination: false,
+  });
+
+  const isDuplicateCity = () => {
+    if (!citiesData?.data) return false;
+
+    return citiesData.data.some((city: any) => {
+      const sameName =
+        city.name.trim().toLowerCase() ===
+        formData.cityName.trim().toLowerCase();
+
+      // EDIT case → ignore same city
+      const notSameCity =
+        !isEditCity || String(city.Id) !== String(cityId);
+
+      return sameName && notSameCity;
+    });
+  };
 
   //To set the default value to the dropdown
   useEffect(() => {
@@ -127,8 +149,15 @@ const AddAndUpdateCity = () => {
       return;
     }
 
+    if (isDuplicateCity()) {
+      toast.error("City name already exists");
+      return;
+    }
+
     try {
-      if (isEditCity) {
+      const isEdit = Boolean(cityId);
+      
+      if (isEdit) {
         const val = {
           cityId: cityId,
           data: {
@@ -173,7 +202,19 @@ const AddAndUpdateCity = () => {
       });
     } catch (error) {
       // console.error("Failed to add city:", error);
-      toast.error("Failed to add city:");
+      // toast.error("Failed to add city:");
+      let message = "Failed to add city";
+
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "data" in error
+  ) {
+    const err = error as FetchBaseQueryError;
+    message = (err.data as any)?.message || message;
+  }
+
+  toast.error(message);
     }
   };
   return (

@@ -68,7 +68,7 @@ const orderColumn: IColumns[] = [
     name: "action",
     Header: "Actions",
     colName: "Actions",
-    Actions: ["UPDATE", "VIEW"],
+    Actions: ["UPDATE", "VIEW", "DELETE"],
   },
 ];
 
@@ -168,14 +168,21 @@ const city: IColumns[] = [
 ];
 
 const scrapingIcons: IColumns[] = [
-  { name: "title", Header: "title", colName: "Default"},
+  { name: "title", Header: "Title", colName: "Default"},
   { name: "imagepath", Header: "Image", colName: "Image" },
   { name: "url", Header: "URL", colName: "Default" },
+  { name: "countryName", Header: "Country", colName: "Default" },
   {
     name: "CreatedAt",
     Header: "Created At",
     colName: "DateAndTime",
-    sortable: true,
+    sortable: false,
+  },
+  {
+    name: "action",
+    Header: "Actions",
+    colName: "Actions",
+    Actions: ["UPDATE", "DELETE"],
   },
   // {
   //   name: "action",
@@ -244,6 +251,12 @@ const travelListingColumn: IColumns[] = [
   { name: "DateTimeOfTravel", Header: "Travel Date", colName: "DateNew",
   //  sortable: true 
   },
+  { name: "Status", Header: "Status", colName: "Default",
+  //  sortable: true 
+  },
+  { name: "IsCancelled", Header: "Cancelled?", colName: "Boolean",
+  //  sortable: true 
+  },
   { name: "CreatedAt", Header: "Created Date", colName: "Date",
   //  sortable: true 
   },
@@ -291,6 +304,101 @@ const notificationListColumn: IColumns[] = [
   },
 ];
 
+const bannerListColumn: IColumns[] = [
+  { name: "url", Header: "URL", colName: "Default"},
+  { name: "imagepath", Header: "Banner", colName: "Image"},
+  {
+    name: "countries",
+    Header: "Countries",
+    colName: "Array",
+  },
+  { name: "IsActive", Header: "Is Active?", colName: "Boolean"},
+  { name: "IsGlobal", Header: "Is Global?", colName: "Boolean"},
+  {
+    name: "CreatedAt",
+    Header: "Created At",
+    colName: "DateAndTime",
+  },
+  {
+    name: "UpdatedAt",
+    Header: "Updated At",
+    colName: "DateAndTime",
+  },
+  {
+    name: "action",
+    Header: "Actions",
+    colName: "Actions",
+    Actions: ["VIEW", "UPDATE"],
+  },
+];
+
+const systemFeesColumn: IColumns[] = [
+  { name: "BuyerProtectionFees", Header: "Buyer Protection Fees", colName: "Default"},
+  // { name: "PaymentFees", Header: "Payment Fees", colName: "Default"},
+  { name: "PlatformFees", Header: "Platform Fees", colName: "Default"},
+  // { name: "PayoutFees", Header: "Payout Fees", colName: "Default"},
+  {
+    name: "CreatedAt",
+    Header: "Created At",
+    colName: "DateAndTime",
+  },
+  {
+    name: "UpdatedAt",
+    Header: "Updated At",
+    colName: "DateAndTime",
+  },
+  {
+    name: "action",
+    Header: "Actions",
+    colName: "Actions",
+    Actions: ["VIEW", "UPDATE"],
+  },
+];
+
+const TranssactionListColumn: IColumns[] = [
+  { name: "TransactionType", Header: "Transaction Type", colName: "Default"},
+  // { name: "PaymentFees", Header: "Payment Fees", colName: "Default"},
+  { name: "TransactionStatus", Header: "Transaction Status", colName: "Default"},
+  // { name: "PayoutFees", Header: "Payout Fees", colName: "Default"},
+  {
+    name: "CreatedAt",
+    Header: "Created At",
+    colName: "DateAndTime",
+  },
+  {
+    name: "UpdatedAt",
+    Header: "Updated At",
+    colName: "DateAndTime",
+  },
+  {
+    name: "action",
+    Header: "Actions",
+    colName: "Actions",
+    Actions: ["VIEW", "UPDATE"],
+  },
+];
+
+const WithdrawalListColumn: IColumns[] = [
+  { name: "User.FullName", Header: "User", colName: "Default"},
+  { name: "User.Phone", Header: "Phone", colName: "Default"},
+  { name: "User.Email", Header: "Email", colName: "Default"},
+  // { name: "PaymentFees", Header: "Payment Fees", colName: "Default"},
+  { name: "Amount", Header: "Amount", colName: "Default"},
+  { name: "Status", Header: "Status", colName: "PaymentStatus"},
+  {
+    name: "CreatedAt",
+    Header: "Created At",
+    colName: "DateAndTime",
+  },
+  
+  {
+    name: "action",
+    Header: "Actions",
+    colName: "Actions",
+    Actions: ["VIEW", "UPDATE"],
+  },
+];
+
 export const columns = {
   user: user,
   userDevices: userDevices,
@@ -302,5 +410,9 @@ export const columns = {
   referralCodeColumn: referralCode,
   referralCodeDetails: referralCodeDetails,
   travelListingColumn: travelListingColumn,
-  notificationListColumn: notificationListColumn
+  notificationListColumn: notificationListColumn,
+  bannerListColumn: bannerListColumn,
+  systemFees: systemFeesColumn,
+  transaction: TranssactionListColumn,
+  withdrawal: WithdrawalListColumn
 };

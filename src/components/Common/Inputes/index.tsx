@@ -30,6 +30,7 @@ interface InputComponentProps {
   required?: boolean;
   placeholder?: string;
   options?: { value: string | number; label: string }[]; // For select type
+  disabled?: boolean;
 }
 
 function InputComponent({
@@ -44,6 +45,7 @@ function InputComponent({
   options = [],
   required = false,
   placeholder = "",
+  disabled = false
 }: InputComponentProps) {
   const renderInput = () => {
     switch (type) {
@@ -88,6 +90,7 @@ function InputComponent({
             onChange={onChange}
             options={options}
             required={required}
+            isDisabled={disabled}
           />
         );
       case "switchButton":

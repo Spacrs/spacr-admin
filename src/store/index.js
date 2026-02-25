@@ -11,6 +11,10 @@ import orderSlice from "./slices/orderSlice/orderSlice";
 import { ordersApi } from "./slices/orderSlice/apiSlice";
 import { countriesConfigApi } from "./slices/countries/apiSlice";
 import { notificationApi } from "./slices/notificationSlice/apiSlice";
+import bannerReducer from "./slices/bannerSlice/bannerSlice";
+import { bannersApi } from "./slices/bannerSlice/apiSlice";
+// import { feesApi } from "./slices/feesSlice/feesSlice";
+import { feesApi } from "./slices/feesSlice/apiSlice"; // correct path to feesApi
 export const store = configureStore({
     reducer: {
         [adminAuthApi.reducerPath]: adminAuthApi.reducer,
@@ -25,6 +29,9 @@ export const store = configureStore({
         adminLayoutSlice,
         orderSlice,
         locationSlice,
+        bannerSlice: bannerReducer,
+        [bannersApi.reducerPath]: bannersApi.reducer,
+        [feesApi.reducerPath]: feesApi.reducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware()
         .concat(adminAuthApi.middleware)
@@ -32,5 +39,7 @@ export const store = configureStore({
         .concat(spacrConfigAPi.middleware)
         .concat(ordersApi.middleware)
         .concat(countriesConfigApi.middleware)
-        .concat(notificationApi.middleware),
+        .concat(notificationApi.middleware)
+        .concat(bannersApi.middleware)
+        .concat(feesApi.middleware),
 });

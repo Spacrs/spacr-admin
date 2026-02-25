@@ -1,6 +1,6 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { icons } from "../Icons/constant";
-const { HiOutlineUsers, BsCreditCard2Front, TbTruckDelivery, GrSend, MdContactSupport, IoIosFlag, FaCity, CiSettings, MdProductionQuantityLimits, FaBarcode, FaPlane } = icons;
+const { HiOutlineUsers, BsCreditCard2Front, TbTruckDelivery, GrSend, MdContactSupport, IoIosFlag, FaCity, CiSettings, MdProductionQuantityLimits, FaBarcode, FaPlane, GiKnightBanner, GiTakeMyMoney, AiOutlineTransaction, BsCurrencyExchange } = icons;
 const menuItems = [
     {
         label: "Users",
@@ -46,7 +46,7 @@ const menuItems = [
         icon: _jsx(GrSend, { style: { fontSize: "18px", margin: "0 10px" } }),
     },
     {
-        label: "Scrap Logos List",
+        label: "Marketplace List",
         path: "/admin/scrap-logo-list",
         icon: _jsx(MdContactSupport, { style: { fontSize: "20px", margin: "0 10px" } }),
     },
@@ -59,6 +59,26 @@ const menuItems = [
         label: "Travel Listing",
         path: "/admin/travel-listing",
         icon: _jsx(FaPlane, { style: { fontSize: "20px", margin: "0 10px" } }),
+    },
+    {
+        label: "Banner List",
+        path: "/admin/banner-list",
+        icon: _jsx(GiKnightBanner, { style: { fontSize: "20px", margin: "0 10px" } }),
+    },
+    {
+        label: "System Fees List",
+        path: "/admin/get-system-fees",
+        icon: _jsx(GiTakeMyMoney, { style: { fontSize: "20px", margin: "0 10px" } }),
+    },
+    {
+        label: "Transactions",
+        path: "/admin/transaction-list",
+        icon: _jsx(AiOutlineTransaction, { style: { fontSize: "20px", margin: "0 10px" } }),
+    },
+    {
+        label: "Withdrawals",
+        path: "/admin/withdrawal-list",
+        icon: _jsx(BsCurrencyExchange, { style: { fontSize: "20px", margin: "0 10px" } }),
     },
     {
         label: "Contact Support List",

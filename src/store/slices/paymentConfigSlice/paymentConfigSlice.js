@@ -10,6 +10,7 @@ const initialState = {
     countryOptions: [],
     isEditPaymentConfig: false,
     isEditCity: false,
+    userCountryOptions: [], // For /get-users-countries API
 };
 export const paymentConfigSlice = createSlice({
     name: "PAYMENT_CONFIG_ACTIONS",
@@ -53,9 +54,18 @@ export const paymentConfigSlice = createSlice({
                 state.isEditCity = action.payload.isEditCity;
             }
         },
+        setUserCountryOptions: (state, action) => {
+            state.userCountryOptions =
+                action.payload && action.payload.length
+                    ? action.payload.map((country) => ({
+                        label: country.name,
+                        value: country.id, // or `country.Id` based on API response
+                    }))
+                    : [];
+        },
     },
 });
-export const { setPaymentConfigs, updatePaymentConfigInList, addPaymentConfigToList, setCities, setCountries, setCountryOptions, setIsEditCountry, setIsEditCity, } = paymentConfigSlice.actions;
+export const { setPaymentConfigs, updatePaymentConfigInList, addPaymentConfigToList, setCities, setCountries, setCountryOptions, setIsEditCountry, setIsEditCity, setUserCountryOptions, } = paymentConfigSlice.actions;
 export const selectPaymentConfig = (state) => state.paymentConfigSlice.paymentConfigs;
 export const selectCities = (state) => state.paymentConfigSlice.cities;
 export const selectCountries = (state) => state.paymentConfigSlice.countries;
@@ -63,4 +73,5 @@ export const selectCounyOptions = (state) => state.paymentConfigSlice.countryOpt
 export const selectCityOptions = (state) => state.paymentConfigSlice.cityOptions;
 export const selectIsEditPaymentConfig = (state) => state.paymentConfigSlice.isEditPaymentConfig;
 export const selectIsEditCity = (state) => state.paymentConfigSlice.isEditCity;
+export const selectUserCountryOptions = (state) => state.paymentConfigSlice.userCountryOptions;
 export default paymentConfigSlice.reducer;

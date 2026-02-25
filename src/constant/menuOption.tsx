@@ -11,7 +11,11 @@ const {
   CiSettings,
   MdProductionQuantityLimits,
   FaBarcode,
-  FaPlane
+  FaPlane,
+  GiKnightBanner,
+  GiTakeMyMoney,
+  AiOutlineTransaction,
+  BsCurrencyExchange
 
 } = icons;
 
@@ -64,7 +68,7 @@ const menuItems: MenuItemTypes[] = [
     icon: <GrSend style={{ fontSize: "18px", margin: "0 10px" }} />,
   },
   {
-    label: "Scrap Logos List",
+    label: "Marketplace List",
     path: "/admin/scrap-logo-list",
     icon: <MdContactSupport style={{ fontSize: "20px", margin: "0 10px" }} />,
   },
@@ -78,6 +82,28 @@ const menuItems: MenuItemTypes[] = [
     path: "/admin/travel-listing",
     icon: <FaPlane style={{ fontSize: "20px", margin: "0 10px" }} />,
   },
+  {
+    label: "Banner List",
+    path: "/admin/banner-list",
+    icon: <GiKnightBanner style={{ fontSize: "20px", margin: "0 10px" }} />,
+  },
+  {
+    label: "System Fees List",
+    path: "/admin/get-system-fees",
+    icon: <GiTakeMyMoney style={{ fontSize: "20px", margin: "0 10px" }} />,
+  },
+  {
+    label: "Transactions",
+    path: "/admin/transaction-list",
+    icon: <AiOutlineTransaction style={{ fontSize: "20px", margin: "0 10px" }} />,
+  },
+
+  {
+    label: "Withdrawals",
+    path: "/admin/withdrawal-list",
+    icon: <BsCurrencyExchange style={{ fontSize: "20px", margin: "0 10px" }} />,
+  },
+
   {
     label: "Contact Support List",
     path: "/admin/contact-support-list",

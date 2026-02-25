@@ -1,0 +1,102 @@
+import { ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { columns } from "../../constant/Columns";
+import { Search, ErrorMsg, Table, Button } from "../../components/Common";
+import {
+  useGetFeesQuery,
+  useDeleteFeeMutation,
+} from "../../store/slices/feesSlice/apiSlice";
+
+export default function FeesListPage() {
+  const navigate = useNavigate();
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
+
+  const { data, isLoading, isFetching, refetch } = useGetFeesQuery({
+    page: 1,
+    limit: 10,
+  });
+
+  const [deleteFee] = useDeleteFeeMutation();
+
+  useEffect(() => {
+    refetch();
+  }, []);
+
+  const handleUpdate = (row: any) => {
+    navigate(`/admin/edit-system-fees`);
+  };
+
+  const handleDelete = (id: number) => {
+    setDeleteId(id);
+    setShowConfirm(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (deleteId) {
+      await deleteFee(deleteId);
+      setDeleteId(null);
+      setShowConfirm(false);
+    }
+  };
+
+  return (
+    <div className="">
+      <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
+        <ToastContainer />
+        <div className="flex justify-between items-center w-full">
+          <div className="flex flex-1 max-w-lg"></div>
+          <div className="ml-4">
+            <Button
+              text="Add Fee"
+              className="mr-2"
+              variant="dark"
+              type="button"
+              onClick={() => navigate("/admin/add-system-fees")}
+              disabled={!!(data?.data && data.data.length > 0)}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">
+        <Table
+          data={data?.data || []}
+          columns={columns.systemFees}
+          loading={isLoading || isFetching}
+          totalPages={data?.pagination?.totalPages || 1}
+          currentPage={1}
+          onPageChange={() => {}}
+          handleUpdate={handleUpdate}
+          itemsPerPage={10}
+        />
+      </div>
+
+      {showConfirm && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-sm text-center">
+            <p className="mb-4 font-semibold text-lg">
+              Are you sure you want to delete this fee?
+            </p>
+            <div className="flex justify-center gap-4">
+              <Button
+                text="Cancel"
+                variant="lightBlue"
+                onClick={() => {
+                  setShowConfirm(false);
+                  setDeleteId(null);
+                }}
+              />
+              <Button
+                text="Yes, Delete"
+                variant="danger"
+                onClick={handleConfirmDelete}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

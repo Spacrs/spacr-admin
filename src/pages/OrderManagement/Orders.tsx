@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { ProductData } from "../../types/ProductData.types";
 import { columns } from "../../constant/Columns";
 import { Search, ErrorMsg, Table, Button } from "../../components/Common";
+import { toast, ToastContainer } from "react-toastify";
 
 function Orders() {
   const dispatch = useAppDispatch();
@@ -25,7 +26,7 @@ function Orders() {
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [filter, setFilter] = useState(""); // Search term
 
-  const { data, isLoading, isFetching, isError } = useGetOrdersQuery({
+  const { data, isLoading, isFetching, isError, refetch } = useGetOrdersQuery({
     page: currentPage,
     limit: itemsPerPage,
     createdBy: "user",
@@ -38,6 +39,9 @@ function Orders() {
   const [isOpen, setIsOpen] = useState(false);
 
   const [updateOrderTrend] = useUpdateOrderTrendMutation();
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [orderToDelete, setOrderToDelete] = useState<ProductData | null>(null);
+
 
   const navigate = useNavigate();
 
@@ -116,17 +120,59 @@ function Orders() {
     setCurrentPage(1);
   };
 
+  const handleDelete = (order: ProductData) => {
+    setOrderToDelete(order);
+    setDeleteConfirmOpen(true);
+  };
+
+
   console.log(orders, "orders from redux");
+
+  const handleConfirmDelete = async () => {
+  if (!orderToDelete) return;
+
+  try {
+    const access_token = localStorage.getItem('access_token');
+    console.log('tokken', access_token);
+    const res = await fetch(`https://api-v2.spa-cr.com/api/v2/admin/delete-order-from-admin/${orderToDelete.OrderID}`, {
+      method: 'PATCH',
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${access_token}`,
+      }  
+    });
+
+    const result = await res.json();
+
+    if (res.ok) {
+      toast.success("Order deleted successfully!");
+      await refetch();
+      setDeleteConfirmOpen(false);
+      setOrderToDelete(null);
+    } else {
+      toast.error(result.message || "This order could not be deleted!");
+    }
+    await refetch();
+
+    setDeleteConfirmOpen(false);
+    setOrderToDelete(null);
+  } catch (err) {
+    console.error("Failed to delete:", err);
+  }
+};
+
 
   return (
     <div className="">
       <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
+        <ToastContainer />
         {/* Search Bar */}
         <div className="flex flex-1 max-w-lg">
           <Search
             search={filter}
             onChange={onSearch}
             onReset={() => setFilter("")}
+            placeholder="Search by name...."
           />
         </div>
       </div>
@@ -141,6 +187,7 @@ function Orders() {
           onPageChange={setCurrentPage}
           handleUpdate={handleUpdate}
           handleView={handleView}
+          handleDelete={handleDelete}
           itemsPerPage={itemsPerPage}
           onSort={onSort}
         />
@@ -187,6 +234,36 @@ function Orders() {
           </div>
         </div>
       )}
+
+      {deleteConfirmOpen && orderToDelete && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-xl font-bold text-center mb-4">
+              Are you sure you want to delete this order?
+            </h2>
+
+            <div className="flex justify-center gap-4 mt-5">
+              <Button
+                className="px-4 py-2 bg-gray-300 rounded-md"
+                onClick={() => {
+                  setDeleteConfirmOpen(false);
+                  setOrderToDelete(null);
+                }}
+                text="Cancel"
+                variant="lightBlue"
+              />
+
+              <Button
+                className="px-4 py-2 bg-red-500 text-white rounded-md"
+                onClick={handleConfirmDelete}
+                text="Confirm Delete"
+                variant="danger"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

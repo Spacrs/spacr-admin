@@ -2,7 +2,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAddPaymentConfigMutation, useGetPaymentConfigByIdQuery, useUpdatePaymentConfigMutation, } from "../../store/slices/paymentConfigSlice/apiSlice";
+import { useAddPaymentConfigMutation, useGetPaymentConfigByIdQuery, useUpdatePaymentConfigMutation, useGetPaymentConfigsQuery } from "../../store/slices/paymentConfigSlice/apiSlice";
 import { addPaymentConfigToList, selectIsEditPaymentConfig, setIsEditCountry, } from "../../store/slices/paymentConfigSlice/paymentConfigSlice";
 import Inputes from "../../components/Common/Inputes";
 import { Button, Loader } from "../../components/Common";
@@ -25,6 +25,23 @@ const AddAndUpdateCountry = () => {
         destination: false,
         departure: false,
     });
+    const { data: paymentConfigs } = useGetPaymentConfigsQuery({
+        isPagination: false,
+    });
+    const isDuplicateCountryName = () => {
+        if (!paymentConfigs?.data)
+            return false;
+        return paymentConfigs.data.some((country) => {
+            const existingName = country.name?.trim().toLowerCase();
+            const newName = formData.name.trim().toLowerCase();
+            if (!existingName || !newName)
+                return false;
+            if (isEditPaymentConfig) {
+                return existingName === newName && country._id !== countryId;
+            }
+            return existingName === newName;
+        });
+    };
     // Populate payload from fetched data
     useEffect(() => {
         if (paymentConfig?.data) {
@@ -121,6 +138,10 @@ const AddAndUpdateCountry = () => {
         // ✅ Basic validation
         if (!formData.name.trim() || !formData.shortName.trim()) {
             toast.error("Please fill in all required fields.");
+            return;
+        }
+        if (isDuplicateCountryName()) {
+            toast.error("Country with this name already exists.");
             return;
         }
         try {

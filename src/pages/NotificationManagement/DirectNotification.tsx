@@ -9,17 +9,29 @@ import {
 } from "../../components/Common";
 
 import { toast, ToastContainer } from "react-toastify";
+import Inputes from "../../components/Common/Inputes";
+import {
+  setCountryOptions,
+  selectCounyOptions,
+  selectIsEditCity,
+  setIsEditCity,
+  setUserCountryOptions
+} from "../../store/slices/paymentConfigSlice/paymentConfigSlice";
+import Select from "react-select";
+
 
 type User = {
   UserID: string;
   Email: string;
   FullName: string;
+  selectedCountry: string;
 };
 
 const DirectNotification = () => {
   const [formData, setFormData] = useState({
     title: "",
     message: "",
+    selectedCountries: [] as string[],
   });
   const [filter, setFilter] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -29,6 +41,9 @@ const DirectNotification = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [sendToAll, setSendToAll] = useState(false); //Added on 03-06-2025
   const [allUsers, setAllUsers] = useState<User[]>([]);
+  // const [countryOptions, setCountryOptions] = useState<{ label: string; value: string }[]>([]); //Added on 22-07-2025
+  const [excludedCountries, setExcludedCountries] = useState<string[]>([]);
+  const [countryOptions, setUserCountryOptions] = useState<{ label: string; value: string }[]>([]); //Added on 22-07-2025
 
   const navigate = useNavigate();
 
@@ -44,11 +59,12 @@ const DirectNotification = () => {
     search: filter !== "" ? filter : undefined,
     page: currentPage,
     limit: itemsPerPage,
+    countryToExclude: formData.selectedCountries,
   });
 
   useEffect(() => {
     refetch();
-  }, [filter, currentPage, refetch]);
+  }, [filter, currentPage, refetch, formData.selectedCountries]);
 
   //Added on 03-06-2025
   useEffect(() => {
@@ -62,15 +78,43 @@ const DirectNotification = () => {
   }, [userData]);
   //Added on 03-06-2025
 
+  //Added on 22-07-2025
+    useEffect(() => {
+      const fetchCountries = async () => {
+        try {
+          const res = await fetch("https://api-v2.spa-cr.com/api/v2/country/get-users-countries");
+          const data = await res.json();
+          const validCountries = data?.data || [];
+          const mapped = validCountries.map((c: any) => ({
+            label: c.name,
+            value: c.id.toString(),
+          }));
+          setUserCountryOptions(mapped);
+        } catch (error) {
+          console.error("Failed to fetch country list", error);
+        }
+      };
+
+      fetchCountries();
+    }, []);
+//Added on 22-07-2025
+
   const [sendNotification, { data, isLoading: isSending }] =
     useSendNotificationMutation();
 
+  // const users: User[] =
+  //   userData?.data?.map(({ UserID, Email, FullName }: User) => ({
+  //     UserID,
+  //     Email,
+  //     FullName,
+  //   })) || [];
   const users: User[] =
-    userData?.data?.map(({ UserID, Email, FullName }: User) => ({
-      UserID,
-      Email,
-      FullName,
-    })) || [];
+  userData?.data?.map(({ UserID, Email, FullName, MainCountryId }: any) => ({
+    UserID,
+    Email,
+    FullName,
+    selectedCountry: MainCountryId?.toString() || "", // 👈 Include this
+  })) || [];
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -82,11 +126,14 @@ const DirectNotification = () => {
       sendToAllUsers: sendToAll,
       // ...(selectedUsers.length < users.length ? { userIds: selectedUsers } : {}), //Commented on 03-06-2025
       ...(!sendToAll && selectedUsers.length > 0 ? { userIds: selectedUsers } : {}),
+      ...(formData.selectedCountries.length > 0 ? { excludedCountries: formData.selectedCountries } : {}),
     };
+
+    console.log("Notification payload 1", notificationPayload);
 
     await sendNotification(notificationPayload).unwrap();
     toast.success("Notifications sent!");
-    setFormData({ title: "", message: "" });
+    setFormData({ title: "", message: "", selectedCountries: [] });
 
     setTimeout(() => {
       window.location.reload();
@@ -103,6 +150,18 @@ const DirectNotification = () => {
       [name]: value,
     }));
   };
+
+  console.log("Filtering out countries:", formData.selectedCountries);
+  console.log("All users:", users);
+  console.log("Selected country IDs to filter out:", formData.selectedCountries);
+
+  const selectedCountryIDs = formData.selectedCountries;
+  const filteredUsers = allUsers.filter(
+    (user) =>
+      !selectedCountryIDs.includes(user.selectedCountry) || user.selectedCountry === ""
+  );
+  
+  const isCountrySelected = formData.selectedCountries.length > 0;
 
   return (
     <div className="">
@@ -131,6 +190,7 @@ const DirectNotification = () => {
                   type="checkbox"
                   className="form-checkbox h-5 w-5 text-primary"
                   checked={sendToAll}
+                  disabled={isCountrySelected}
                   onChange={(e) => {
                     setSendToAll(e.target.checked);
                     // Optionally clear selected users if "send to all" is checked
@@ -143,11 +203,34 @@ const DirectNotification = () => {
               </label>
             </div>
 
+            <div className="w-full">
+            <label className="block text-gray-700 font-medium mb-1">Select Country (For all users)</label>
+            <Select
+              isMulti
+              name="selectedCountries"
+              options={countryOptions}
+              className="basic-multi-select"
+              classNamePrefix="select"
+              placeholder="Select countries to include users"
+              value={countryOptions.filter(option => formData.selectedCountries.includes(option.value))}
+              onChange={(selectedOptions) => {
+                const values = selectedOptions.map((option) => option.value);
+                setFormData((prev) => ({
+                  ...prev,
+                  selectedCountries: values,
+                }));
+              }}
+            />
+          </div>
+
+
+
             {!sendToAll && (
               <Button
                 text="Select Users"
                 className="w-40"
                 variant="transparent"
+                disabled={isCountrySelected}
                 onClick={() => setShowModal(true)}
               />
             )}
@@ -244,8 +327,14 @@ const DirectNotification = () => {
           </form>
         </div>
       </div>
+      
       <UserSelectModal
-        users={users}
+        // users={users}
+        users={
+          users
+        }
+
+
         selectedUsers={selectedUsers}
         setSelectedUsers={setSelectedUsers}
         setCurrentPage={setCurrentPage}

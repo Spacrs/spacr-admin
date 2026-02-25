@@ -216,10 +216,7 @@ const UserDetails = () => {
               <strong>Phone number:</strong> {user?.Phone}
             </p>
             <p>
-              <strong>Location:</strong> {user?.Location || "N/A"}
-            </p>
-            <p>
-              <strong>Birthday:</strong> {user?.DOB}
+              <strong>Location:</strong> {user?.MainCountry.name || "N/A"}
             </p>
             <p>
               <strong>Status:</strong>
