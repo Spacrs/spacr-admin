@@ -82,7 +82,7 @@ const CityList = () => {
   //   try {
   //     const Id  = row.Id;
   //     const access_token = localStorage.getItem('access_token');
-  //     const response = await fetch(`https://api-v2.spa-cr.com/api/v2/city/${Id}`, {
+  //     const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/city/${Id}`, {
   //       method: "DELETE",
   //       headers:{
   //         "Content-Type": "application/json",
@@ -110,7 +110,7 @@ const CityList = () => {
       try {
         const { Id } = configToDelete;
         const access_token = localStorage.getItem('access_token');
-        const response = await fetch(`https://api-v2.spa-cr.com/api/v2/city/${Id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/city/${Id}`, {
           method: "DELETE",
           headers:{
             "Content-Type": "application/json",

@@ -1,5 +1,5 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithInterceptor } from "../../baseQuery";
+import { baseQueryWithInterceptor } from "../../baseQueryV5";
 import { ADMIN } from "../../../constant/ApiConstant";
 import { buildQueryParams } from "../../../utills/buildQueryParams";
 export const ordersApi = createApi({

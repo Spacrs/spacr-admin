@@ -34,7 +34,7 @@ const EditBanner = () => {
   // const fetchStores = async () => {
   //   setLoadingStores(true);
   //   try {
-  //     const res = await fetch("https://api-v2.spa-cr.com/api/v2/order/get-scraping-icons", {
+  //     const res = await fetch("${import.meta.env.VITE_API_BASE_URL}/api/v2/order/get-scraping-icons", {
   //       headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
   //     });
   //     const result = await res.json();
@@ -63,7 +63,7 @@ const EditBanner = () => {
   const fetchStores = async () => {
   setLoadingStores(true);
   try {
-    const res = await fetch("https://api-v2.spa-cr.com/api/v2/order/get-scraping-icons", {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/order/get-scraping-icons`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
     });
     const result = await res.json();
@@ -93,7 +93,7 @@ const EditBanner = () => {
     try {
         setPayload((prev) => ({ ...prev, isActive: checked }));
         const access_token = localStorage.getItem("access_token");
-        const res = await fetch(`https://api-v2.spa-cr.com/api/v2/admin/toggle-banner-status/${bannerID}`,
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/toggle-banner-status/${bannerID}`,
         {
             method: "PUT",
             headers: {
@@ -126,7 +126,7 @@ const EditBanner = () => {
     const fetchBanner = async () => {
       try {
         const token = localStorage.getItem("access_token");
-        const res = await fetch(`https://api-v2.spa-cr.com/api/v2/admin/get-banner/${bannerID}`, {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/get-banner/${bannerID}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const result = await res.json();
@@ -172,7 +172,7 @@ const EditBanner = () => {
     const fetchCountries = async () => {
       try {
         const res = await fetch(
-          "https://api-v2.spa-cr.com/api/v2/country/get-countries-for-banner-in-edit",
+          `${import.meta.env.VITE_API_BASE_URL}/api/v2/country/get-countries-for-banner-in-edit`,
           {
             method: "POST",
             headers: {
@@ -210,7 +210,7 @@ const EditBanner = () => {
     const checkGlobalBanner = async () => {
       try {
         const token = localStorage.getItem("access_token");
-        const res = await fetch("https://api-v2.spa-cr.com/api/v2/admin/check-global-banner", {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/check-global-banner`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const result = await res.json();
@@ -273,7 +273,7 @@ const EditBanner = () => {
       }
 
       const token = localStorage.getItem("access_token");
-      const res = await fetch(`https://api-v2.spa-cr.com/api/v2/admin/update-banner/${bannerID}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/update-banner/${bannerID}`, {
         method: "PUT",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,

@@ -36,6 +36,7 @@ const AddSuggestedProduct = () => {
     const fromCityOptions = useAppSelector(selectFromCityOptions);
     const toCityOptions = useAppSelector(selectToCityOptions);
     const [allCountryOptions, setAllCountryOptions] = useState([]);
+    const [allMarketPlaceOptions, setAllMarketPlaceOptions] = useState([]);
     useEffect(() => {
         if (ccData?.data && Array.isArray(ccData?.data)) {
             dispatch(setCountryCityData(ccData?.data));
@@ -66,6 +67,7 @@ const AddSuggestedProduct = () => {
                 Price: suggestedProduct?.data?.Price,
                 // suggestedCountry: suggestedProduct?.data?.suggestedCountry,
                 selectedCountry: suggestedProduct?.data?.countryIdToIgnore,
+                MarketPlaceId: suggestedProduct?.data?.MarketPlaceId
             }));
             if (suggestedProduct?.data?.medias?.length > 0) {
                 // Set pre-filled image URLs
@@ -97,6 +99,7 @@ const AddSuggestedProduct = () => {
                 IsTrending: false,
                 Price: 0.0,
                 selectedCountry: payload.selectedCountry,
+                MarketPlaceId: "",
             });
         };
     }, [productId]);
@@ -114,6 +117,7 @@ const AddSuggestedProduct = () => {
         IsTrending: false,
         Price: 0.0,
         selectedCountry: 0,
+        MarketPlaceId: "",
     });
     // uniform change handler for both selects and text inputs
     const handleChange = (e) => {
@@ -128,6 +132,12 @@ const AddSuggestedProduct = () => {
                 }));
             }
             return;
+        }
+        else if (name === "MarketPlaceId") {
+            setPayload((p) => ({
+                ...p,
+                MarketPlaceId: value,
+            }));
         }
         else {
             setPayload((p) => ({
@@ -266,7 +276,7 @@ const AddSuggestedProduct = () => {
     useEffect(() => {
         const fetchCountries = async () => {
             try {
-                const res = await fetch("https://api-v2.spa-cr.com/api/v2/country");
+                const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/country`);
                 const result = await res.json();
                 console.log("Fetched countries:", result.data);
                 if (res.ok && Array.isArray(result.data)) {
@@ -293,9 +303,32 @@ const AddSuggestedProduct = () => {
         };
         fetchCountries();
     }, [dispatch]);
+    useEffect(() => {
+        const fetchMarketPlaces = async () => {
+            try {
+                const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v5/order/get-all-marketplace-list`);
+                const result = await res.json();
+                if (res.ok && Array.isArray(result.data)) {
+                    const validMarketPlaces = result.data.filter((c) => c?.iconID && c?.title);
+                    const allMarketPlaceOptions = validMarketPlaces.map((c) => ({
+                        label: c.title,
+                        value: c.iconID,
+                    }));
+                    setAllMarketPlaceOptions(allMarketPlaceOptions);
+                }
+                else {
+                    toast.error(result.message || "Failed to load market places.");
+                }
+            }
+            catch (error) {
+                toast.error(error.message || "Failed to load market places.");
+            }
+        };
+        fetchMarketPlaces();
+    }, []);
     console.log("selectedCountry:", payload.selectedCountry, typeof payload.selectedCountry);
     console.log("Options:", allCountryOptions);
-    return (_jsxs("div", { className: "min-h-screen", children: [_jsxs("div", { className: "flex justify-end items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg", children: [_jsx(ToastContainer, {}), _jsx("div", { className: "ml-4 flex justify-end items-center ", children: _jsx(Button, { text: "Back", variant: "lightBlue", onClick: () => navigate(-1) }) })] }), _jsxs("div", { className: "p-8 bg-gray-50 shadow-md rounded-lg", children: [ccLoading && _jsx(Loading, {}), !ccLoading && (_jsxs("form", { onSubmit: handleSubmit, className: "max-w-4xl mx-auto bg-white p-6 shadow rounded-lg space-y-6", children: [_jsx(InputComponent, { type: "text", name: "ProductName", label: "Product Name", value: payload.ProductName, onChange: handleChange, required: true }), _jsx("div", { children: _jsx(InputComponent, { label: "Description", name: "Descriptions", value: payload.Descriptions, onChange: handleChange, type: "textarea", required: true }) }), _jsx("div", { children: allCountryOptions.length > 0 && (_jsx(Inputes, { label: "Country To exclude", options: allCountryOptions, type: "select", name: "selectedCountry", value: payload.selectedCountry, onChange: handleChange, required: true })) }), _jsxs("div", { className: "grid grid-cols-2 gap-4", children: [_jsx("div", { children: _jsx(InputComponent, { type: "text", name: "ProductUrl", label: "Product URL", value: payload.ProductUrl, onChange: handleChange, required: true }) }), _jsx("div", { children: _jsx(InputComponent, { label: "Price", name: "Price", type: "number", value: payload.Price, onChange: handleChange, required: true }) })] }), _jsxs("div", { className: "grid grid-cols-2 gap-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block mb-1 font-medium", children: "From Country" }), _jsx(SelectComponent, { name: "From_CountryId", options: [
+    return (_jsxs("div", { className: "min-h-screen", children: [_jsxs("div", { className: "flex justify-end items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg", children: [_jsx(ToastContainer, {}), _jsx("div", { className: "ml-4 flex justify-end items-center ", children: _jsx(Button, { text: "Back", variant: "lightBlue", onClick: () => navigate(-1) }) })] }), _jsxs("div", { className: "p-8 bg-gray-50 shadow-md rounded-lg", children: [ccLoading && _jsx(Loading, {}), !ccLoading && (_jsxs("form", { onSubmit: handleSubmit, className: "max-w-4xl mx-auto bg-white p-6 shadow rounded-lg space-y-6", children: [_jsx(InputComponent, { type: "text", name: "ProductName", label: "Product Name", value: payload.ProductName, onChange: handleChange, required: true }), _jsx("div", { children: _jsx(InputComponent, { label: "Description", name: "Descriptions", value: payload.Descriptions, onChange: handleChange, type: "textarea", required: true }) }), _jsx("div", { children: allCountryOptions.length > 0 && (_jsx(Inputes, { label: "Country To exclude", options: allCountryOptions, type: "select", name: "selectedCountry", value: payload.selectedCountry, onChange: handleChange, required: true })) }), _jsx("div", { children: _jsx(InputComponent, { label: "Select MarketPlace", name: "MarketPlaceId", value: payload.MarketPlaceId, onChange: handleChange, type: "select", options: allMarketPlaceOptions, required: true }) }), _jsxs("div", { className: "grid grid-cols-2 gap-4", children: [_jsx("div", { children: _jsx(InputComponent, { type: "text", name: "ProductUrl", label: "Product URL", value: payload.ProductUrl, onChange: handleChange, required: true }) }), _jsx("div", { children: _jsx(InputComponent, { label: "Price", name: "Price", type: "number", value: payload.Price, onChange: handleChange, required: true }) })] }), _jsxs("div", { className: "grid grid-cols-2 gap-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block mb-1 font-medium", children: "From Country" }), _jsx(SelectComponent, { name: "From_CountryId", options: [
                                                     { label: "Select from country", value: 0 },
                                                     ...countryOptions,
                                                 ], value: payload.From_CountryId, onChange: handleChange, required: true })] }), _jsxs("div", { children: [_jsx("label", { className: "block mb-1 font-medium", children: "From City" }), _jsx(SelectComponent, { name: "From_CityId", options: [

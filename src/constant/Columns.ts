@@ -87,6 +87,12 @@ const productColumn: IColumns[] = [
     sortable: true,
   },
   {
+    name: "MarketPlace.title",
+    Header: "Store Name",
+    colName: "Default",
+    sortable: false,
+  },
+  {
     name: "CreatedAt",
     Header: "Created At",
     colName: "DateAndTime",

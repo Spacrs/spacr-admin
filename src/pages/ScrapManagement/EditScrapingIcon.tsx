@@ -52,7 +52,7 @@ const EditScrapingIcon: React.FC = () => {
   useEffect(() => {
     if (!Id) return;
 
-    fetch(`https://api-v2.spa-cr.com/api/v2/admin/get-scraping-icon/${Id}`, {
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/get-scraping-icon/${Id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
@@ -90,7 +90,7 @@ const EditScrapingIcon: React.FC = () => {
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const res = await fetch("https://api-v2.spa-cr.com/api/v2/country");
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/country`);
         const result = await res.json();
         console.log("Fetched countries:", result.data);
         if (res.ok && Array.isArray(result.data)) {
@@ -169,7 +169,7 @@ const EditScrapingIcon: React.FC = () => {
 
       const access_token = localStorage.getItem('access_token');
 
-      const response = await fetch(`https://api-v2.spa-cr.com/api/v2/admin/edit-scraping-icon/${Id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/edit-scraping-icon/${Id}`, {
         method: "PUT",
         body: formData,
         headers: {
