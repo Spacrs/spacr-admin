@@ -25,13 +25,13 @@ const AddBanner = () => {
     const fetchStores = async () => {
         setLoadingStores(true);
         try {
-            const res = await fetch("https://api-v2.spa-cr.com/api/v2/order/get-scraping-icons", {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/order/get-scraping-icons`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("access_token")}`,
                 },
             });
             const result = await res.json();
-            console.log("Raw API Result:", result);
+            console.log(`Raw API Result:`, result);
             if (Array.isArray(result.data)) {
                 const mapped = result.data.map((store) => ({
                     label: store.title,
@@ -96,7 +96,7 @@ const AddBanner = () => {
                 formData.append("country", payload.selectedCountry.join(","));
             }
             const access_token = localStorage.getItem('access_token');
-            const res = await fetch("https://api-v2.spa-cr.com/api/v2/admin/add-banner", {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/add-banner`, {
                 method: "POST",
                 body: formData,
                 headers: {
@@ -124,7 +124,7 @@ const AddBanner = () => {
         const checkGlobalBanner = async () => {
             try {
                 const access_token = localStorage.getItem('access_token');
-                const res = await fetch("https://api-v2.spa-cr.com/api/v2/admin/check-global-banner", {
+                const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/check-global-banner`, {
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${access_token}`
@@ -176,7 +176,7 @@ const AddBanner = () => {
     useEffect(() => {
         const fetchCountries = async () => {
             try {
-                const res = await fetch("https://api-v2.spa-cr.com/api/v2/country/get-countries-for-banner");
+                const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/country/get-countries-for-banner`);
                 const result = await res.json();
                 console.log("Fetched countries:", result.data);
                 if (res.ok && Array.isArray(result.data)) {

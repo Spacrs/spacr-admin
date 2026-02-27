@@ -76,7 +76,7 @@ function ScrapLogoList() {
             return;
         try {
             const access_token = localStorage.getItem("access_token");
-            const res = await fetch(`https://api-v2.spa-cr.com/api/v2/admin/delete-marketplace/${iconID}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/delete-marketplace/${iconID}`, {
                 method: "PATCH",
                 headers: {
                     "Authorization": `Bearer ${access_token}`,

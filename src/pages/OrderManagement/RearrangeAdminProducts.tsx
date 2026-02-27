@@ -77,7 +77,7 @@ if (isError) return <div className="p-4 bg-red-500 text-white rounded-lg">Error 
 
       let token = localStorage.getItem('access_token');
 
-      await fetch("https://api-v2.spa-cr.com/api/v2/admin/reorder-suggested-products", {
+      await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/reorder-suggested-products`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
