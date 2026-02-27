@@ -49,6 +49,7 @@ type BodyPayload = {
   IsTrending: boolean;
   Price: number | string;
   selectedCountry: number;
+  MarketPlaceId: string;
 };
 
 const AddSuggestedProduct: React.FC = () => {
@@ -72,6 +73,7 @@ const AddSuggestedProduct: React.FC = () => {
   const fromCityOptions = useAppSelector(selectFromCityOptions);
   const toCityOptions = useAppSelector(selectToCityOptions);
   const [allCountryOptions, setAllCountryOptions] = useState<{ label: string; value: string }[]>([]);
+  const [allMarketPlaceOptions, setAllMarketPlaceOptions] = useState<{ label: string; value: string }[]>([]);
 
   useEffect(() => {
     if (ccData?.data && Array.isArray(ccData?.data)) {
@@ -105,6 +107,7 @@ const AddSuggestedProduct: React.FC = () => {
         Price: suggestedProduct?.data?.Price,
         // suggestedCountry: suggestedProduct?.data?.suggestedCountry,
         selectedCountry: suggestedProduct?.data?.countryIdToIgnore,
+        MarketPlaceId: suggestedProduct?.data?.MarketPlaceId
 
       }));
 
@@ -144,6 +147,7 @@ const AddSuggestedProduct: React.FC = () => {
         IsTrending: false,
         Price: 0.0,
         selectedCountry: payload.selectedCountry,
+        MarketPlaceId: "",
       });
     };
   }, [productId]);
@@ -163,6 +167,7 @@ const AddSuggestedProduct: React.FC = () => {
     IsTrending: false,
     Price: 0.0,
     selectedCountry: 0,
+    MarketPlaceId: "",
   });
 
   // uniform change handler for both selects and text inputs
@@ -183,7 +188,14 @@ const AddSuggestedProduct: React.FC = () => {
         }));
       }
       return;
-    } else {
+    }
+    else if (name === "MarketPlaceId") {
+      setPayload((p) => ({
+        ...p,
+        MarketPlaceId: value,
+      }));
+    } 
+    else {
       setPayload((p) => ({
         ...p,
         [name]: name.endsWith("Id") ? numericValue : value,
@@ -204,14 +216,14 @@ const AddSuggestedProduct: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     if (payload.Price === 0) {
       // Check if price is 0 and not empty
       // alert("Price cannot be 0.");
       toast.error("Price cannot be 0.");
       return;
     }
-
+  
     if (
       payload.To_CityId === 0 ||
       payload.From_CityId === 0 ||
@@ -223,15 +235,15 @@ const AddSuggestedProduct: React.FC = () => {
       toast.error("Please select valid countries and cities.");
       return;
     }
-
+  
     if (!isEditProduct && payload.images.length === 0) {
       // alert("Please upload at least one image.");
       toast.error("Please upload at least one image.");
       return;
     }
-
+  
     const formData = new FormData();
-
+  
     Object.keys(payload).forEach((key) => {
       if (key === "images") {
         (payload.images as File[]).forEach((file) => {
@@ -246,7 +258,7 @@ const AddSuggestedProduct: React.FC = () => {
         }
       }
     });
-
+  
     // if (isEditProduct) {
     //   productId && formData.append("OrderID", productId);
     //   const updatedData = await updateProduct(formData);
@@ -258,7 +270,7 @@ const AddSuggestedProduct: React.FC = () => {
     //   refetchGetOrder();
     //   toast.success("Product created successfully!");
     // }
-
+  
     try {
       if (isEditProduct) {
         productId && formData.append("OrderID", productId);
@@ -335,7 +347,7 @@ const AddSuggestedProduct: React.FC = () => {
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const res = await fetch("https://api-v2.spa-cr.com/api/v2/country");
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/country`);
         const result = await res.json();
         console.log("Fetched countries:", result.data);
         if (res.ok && Array.isArray(result.data)) {
@@ -363,6 +375,35 @@ const AddSuggestedProduct: React.FC = () => {
   
     fetchCountries();
   }, [dispatch]);
+
+  useEffect(() => {
+    const fetchMarketPlaces = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v5/order/get-all-marketplace-list`);
+        const result = await res.json();
+        if (res.ok && Array.isArray(result.data)) {
+
+          const validMarketPlaces = result.data.filter(
+            (c: any) => c?.iconID && c?.title
+          );
+
+          const allMarketPlaceOptions = validMarketPlaces.map((c: any) => ({
+            label: c.title,
+            value: c.iconID,
+          }));
+
+          setAllMarketPlaceOptions(allMarketPlaceOptions);
+
+        } else {
+          toast.error(result.message || "Failed to load market places.");
+        }
+      } catch (error: any) {
+        toast.error(error.message || "Failed to load market places.");
+      }
+    }; 
+
+    fetchMarketPlaces();
+  }, []);
 
   console.log("selectedCountry:", payload.selectedCountry, typeof payload.selectedCountry);
   console.log("Options:", allCountryOptions);
@@ -420,6 +461,18 @@ const AddSuggestedProduct: React.FC = () => {
                 required={true}
               />
               )}
+            </div>
+
+            <div>
+              <InputComponent
+                label="Select MarketPlace"
+                name="MarketPlaceId"
+                value={payload.MarketPlaceId}
+                onChange={handleChange}
+                type="select"
+                options={allMarketPlaceOptions}
+                required={true}
+              />
             </div>
             
 

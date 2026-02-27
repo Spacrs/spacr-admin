@@ -39,7 +39,7 @@ const AddReferralCode: React.FC = () => {
       const access_token = localStorage.getItem("access_token");
 
       const response = await fetch(
-        "https://api-v2.spa-cr.com/api/v2/admin/create-referral-code",
+        `${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/create-referral-code`,
         {
           method: "POST",
           headers: {

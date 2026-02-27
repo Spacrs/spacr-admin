@@ -96,7 +96,7 @@ function ReferralCodeList() {
     
     const access_token = localStorage.getItem('access_token');
     try {
-      const response = await fetch('https://api-v2.spa-cr.com/api/v2/admin/toggle-referral-code-status', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/toggle-referral-code-status`, {
         method: "PATCH",
         headers: {
           "Authorization": `Bearer ${access_token}`,
@@ -128,7 +128,7 @@ function ReferralCodeList() {
       return;
     }
 
-    const cloneLink = `https://staging.dashboard.spa-cr.com/assign-referral-code?referralCode=${referralCode}`;
+    const cloneLink = `${import.meta.env.VITE_FRONTEND_BASE_URL}/admin/assign-referral-code?referralCode=${referralCode}`;
 
     navigator.clipboard.writeText(cloneLink)
       .then(() => {
@@ -197,7 +197,7 @@ const handleFormSubmit = async (e: React.FormEvent) => {
       const access_token = localStorage.getItem("access_token");
 
       const response = await fetch(
-        "https://api-v2.spa-cr.com/api/v2/admin/create-referral-code",
+        `${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/create-referral-code`,
         {
           method: "POST",
           headers: {
