@@ -92,42 +92,43 @@ const AddSuggestedProduct: React.FC = () => {
 
   // Populate payload from fetched data
   useEffect(() => {
-    if (suggestedProduct?.data) {
-      setPayload((prev) => ({
-        ...prev,
-        ProductName: suggestedProduct?.data?.ProductName,
-        Descriptions: suggestedProduct?.data?.Descriptions,
-        ProductUrl: suggestedProduct?.data?.ProductUrl,
-        From_CountryId: suggestedProduct?.data?.From_CountryId,
-        From_CityId: suggestedProduct?.data?.From_CityId,
-        To_CountryId: suggestedProduct?.data?.To_CountryId,
-        To_CityId: suggestedProduct?.data?.To_CityId,
-        IsTrending: suggestedProduct?.data?.IsTrending,
-        images: [],
-        Price: suggestedProduct?.data?.Price,
-        // suggestedCountry: suggestedProduct?.data?.suggestedCountry,
-        selectedCountry: suggestedProduct?.data?.countryIdToIgnore,
-        MarketPlaceId: suggestedProduct?.data?.MarketPlaceId
-
-      }));
+    if (!suggestedProduct?.data) return;
   
-      if (suggestedProduct?.data?.medias?.length > 0) {
-        // Set pre-filled image URLs
-        const urls = suggestedProduct?.data?.medias.map(
-          (img: Media) => img.url
-        ); // or whatever the image field is
-        setPreviewImages(urls);
-      }
+    const data = suggestedProduct.data;
   
-      dispatch(
-        setSelectedCountry({
-          selectedFromCountryId: suggestedProduct.data.From_CountryId,
-          selectedToCountryId: suggestedProduct.data.To_CountryId,
-          selectedCountry: suggestedProduct.data.selectedCountry
-        })
-      );
+    dispatch(
+      setSelectedCountry({
+        selectedFromCountryId: Number(data.From_CountryId),
+        selectedToCountryId: Number(data.To_CountryId),
+        selectedCountry: Number(data.selectedCountry),
+      })
+    );
+  
+    setPayload({
+      ProductName: data.ProductName ?? "",
+      Descriptions: data.Descriptions ?? "",
+      ProductUrl: data.ProductUrl ?? "",
+      CreatedBy: "admin",
+  
+      From_CountryId: Number(data.From_CountryId) || 0,
+      From_CityId: Number(data.From_CityId) || 0,
+      To_CountryId: Number(data.To_CountryId) || 0,
+      To_CityId: Number(data.To_CityId) || 0,
+  
+      images: [],
+      IsTrending: Boolean(data.IsTrending),
+      Price: Number(data.Price) || 0,
+  
+      selectedCountry: Number(data.countryIdToIgnore) || 0,
+      MarketPlaceId: data.MarketPlaceId ?? "",
+    });
+  
+    if (data.medias?.length > 0) {
+      const urls = data.medias.map((img: Media) => img.url);
+      setPreviewImages(urls);
     }
-  }, [suggestedProduct]);
+  
+  }, [suggestedProduct, dispatch]);
 
   useEffect(() => {
     if (productId) {
@@ -292,7 +293,7 @@ const AddSuggestedProduct: React.FC = () => {
     }
 
     navigate("/admin/suggested-product-list");
-    window.location.href = "/admin/suggested-product-list";
+    // window.location.href = "/admin/suggested-product-list";
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
