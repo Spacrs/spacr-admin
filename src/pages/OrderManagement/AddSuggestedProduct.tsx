@@ -110,7 +110,7 @@ const AddSuggestedProduct: React.FC = () => {
         MarketPlaceId: suggestedProduct?.data?.MarketPlaceId
 
       }));
-
+  
       if (suggestedProduct?.data?.medias?.length > 0) {
         // Set pre-filled image URLs
         const urls = suggestedProduct?.data?.medias.map(
@@ -118,7 +118,7 @@ const AddSuggestedProduct: React.FC = () => {
         ); // or whatever the image field is
         setPreviewImages(urls);
       }
-
+  
       dispatch(
         setSelectedCountry({
           selectedFromCountryId: suggestedProduct.data.From_CountryId,
@@ -270,7 +270,7 @@ const AddSuggestedProduct: React.FC = () => {
     //   refetchGetOrder();
     //   toast.success("Product created successfully!");
     // }
-  
+
     try {
       if (isEditProduct) {
         productId && formData.append("OrderID", productId);
@@ -508,7 +508,6 @@ const AddSuggestedProduct: React.FC = () => {
                 <SelectComponent
                   name="From_CountryId"
                   options={[
-                    { label: "Select from country", value: 0 },
                     ...countryOptions,
                   ]}
                   value={payload.From_CountryId}
@@ -521,7 +520,6 @@ const AddSuggestedProduct: React.FC = () => {
                 <SelectComponent
                   name="From_CityId"
                   options={[
-                    { label: "Select from city", value: 0 },
                     ...fromCityOptions,
                   ]}
                   value={payload.From_CityId}
@@ -538,7 +536,6 @@ const AddSuggestedProduct: React.FC = () => {
                 <SelectComponent
                   name="To_CountryId"
                   options={[
-                    { label: "Select to country", value: 0 },
                     ...countryOptions,
                   ]}
                   value={payload.To_CountryId}
@@ -551,7 +548,6 @@ const AddSuggestedProduct: React.FC = () => {
                 <SelectComponent
                   name="To_CityId"
                   options={[
-                    { label: "Select to city", value: 0 },
                     ...toCityOptions,
                   ]}
                   value={payload.To_CityId}
