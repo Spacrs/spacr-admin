@@ -24,18 +24,21 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
     <select
       name={name}
       className={`block w-full px-3 py-3 border rounded-md focus:outline-none focus:ring focus:ring-blue-200 ${className}`}
-      value={value}
+      value={value?.toString() || ""}
       onChange={onChange}
       required={required}
       disabled={isDisabled}
     >
       <option value="">Select</option>
       {options.map((option) => (
-        <option key={option.value} value={option.value}>
+        <option
+          key={option.value}
+          value={option.value.toString()}
+        >
           {option.label}
-          </option>
-        ))}
-      </select>
+        </option>
+      ))}
+    </select>
   );
 };
 
