@@ -32,7 +32,7 @@ function NotificationView() {
       try {
         const access_token = localStorage.getItem("access_token");
         const res = await fetch(
-          `https://api-v2.spa-cr.com/api/v2/notification/get-a-notification/${notificationId}`,
+          `${import.meta.env.VITE_API_BASE_URL}/api/v2/notification/get-a-notification/${notificationId}`,
           {
             method: "GET",
             headers: {

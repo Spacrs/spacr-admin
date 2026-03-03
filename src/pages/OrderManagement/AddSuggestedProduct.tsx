@@ -49,6 +49,7 @@ type BodyPayload = {
   IsTrending: boolean;
   Price: number | string;
   selectedCountry: number;
+  MarketPlaceId: string;
 };
 
 const AddSuggestedProduct: React.FC = () => {
@@ -72,6 +73,7 @@ const AddSuggestedProduct: React.FC = () => {
   const fromCityOptions = useAppSelector(selectFromCityOptions);
   const toCityOptions = useAppSelector(selectToCityOptions);
   const [allCountryOptions, setAllCountryOptions] = useState<{ label: string; value: string }[]>([]);
+  const [allMarketPlaceOptions, setAllMarketPlaceOptions] = useState<{ label: string; value: string }[]>([]);
 
   useEffect(() => {
     if (ccData?.data && Array.isArray(ccData?.data)) {
@@ -90,41 +92,43 @@ const AddSuggestedProduct: React.FC = () => {
 
   // Populate payload from fetched data
   useEffect(() => {
-    if (suggestedProduct?.data) {
-      setPayload((prev) => ({
-        ...prev,
-        ProductName: suggestedProduct?.data?.ProductName,
-        Descriptions: suggestedProduct?.data?.Descriptions,
-        ProductUrl: suggestedProduct?.data?.ProductUrl,
-        From_CountryId: suggestedProduct?.data?.From_CountryId,
-        From_CityId: suggestedProduct?.data?.From_CityId,
-        To_CountryId: suggestedProduct?.data?.To_CountryId,
-        To_CityId: suggestedProduct?.data?.To_CityId,
-        IsTrending: suggestedProduct?.data?.IsTrending,
-        images: [],
-        Price: suggestedProduct?.data?.Price,
-        // suggestedCountry: suggestedProduct?.data?.suggestedCountry,
-        selectedCountry: suggestedProduct?.data?.countryIdToIgnore,
-
-      }));
-
-      if (suggestedProduct?.data?.medias?.length > 0) {
-        // Set pre-filled image URLs
-        const urls = suggestedProduct?.data?.medias.map(
-          (img: Media) => img.url
-        ); // or whatever the image field is
-        setPreviewImages(urls);
-      }
-
-      dispatch(
-        setSelectedCountry({
-          selectedFromCountryId: suggestedProduct.data.From_CountryId,
-          selectedToCountryId: suggestedProduct.data.To_CountryId,
-          selectedCountry: suggestedProduct.data.selectedCountry
-        })
-      );
+    if (!suggestedProduct?.data) return;
+  
+    const data = suggestedProduct.data;
+  
+    dispatch(
+      setSelectedCountry({
+        selectedFromCountryId: Number(data.From_CountryId),
+        selectedToCountryId: Number(data.To_CountryId),
+        selectedCountry: Number(data.selectedCountry),
+      })
+    );
+  
+    setPayload({
+      ProductName: data.ProductName ?? "",
+      Descriptions: data.Descriptions ?? "",
+      ProductUrl: data.ProductUrl ?? "",
+      CreatedBy: "admin",
+  
+      From_CountryId: Number(data.From_CountryId) || 0,
+      From_CityId: Number(data.From_CityId) || 0,
+      To_CountryId: Number(data.To_CountryId) || 0,
+      To_CityId: Number(data.To_CityId) || 0,
+  
+      images: [],
+      IsTrending: Boolean(data.IsTrending),
+      Price: Number(data.Price) || 0,
+  
+      selectedCountry: Number(data.countryIdToIgnore) || 0,
+      MarketPlaceId: data.MarketPlaceId ?? "",
+    });
+  
+    if (data.medias?.length > 0) {
+      const urls = data.medias.map((img: Media) => img.url);
+      setPreviewImages(urls);
     }
-  }, [suggestedProduct]);
+  
+  }, [suggestedProduct, dispatch]);
 
   useEffect(() => {
     if (productId) {
@@ -144,6 +148,7 @@ const AddSuggestedProduct: React.FC = () => {
         IsTrending: false,
         Price: 0.0,
         selectedCountry: payload.selectedCountry,
+        MarketPlaceId: "",
       });
     };
   }, [productId]);
@@ -163,6 +168,7 @@ const AddSuggestedProduct: React.FC = () => {
     IsTrending: false,
     Price: 0.0,
     selectedCountry: 0,
+    MarketPlaceId: "",
   });
 
   // uniform change handler for both selects and text inputs
@@ -183,7 +189,14 @@ const AddSuggestedProduct: React.FC = () => {
         }));
       }
       return;
-    } else {
+    }
+    else if (name === "MarketPlaceId") {
+      setPayload((p) => ({
+        ...p,
+        MarketPlaceId: value,
+      }));
+    } 
+    else {
       setPayload((p) => ({
         ...p,
         [name]: name.endsWith("Id") ? numericValue : value,
@@ -204,14 +217,14 @@ const AddSuggestedProduct: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     if (payload.Price === 0) {
       // Check if price is 0 and not empty
       // alert("Price cannot be 0.");
       toast.error("Price cannot be 0.");
       return;
     }
-
+  
     if (
       payload.To_CityId === 0 ||
       payload.From_CityId === 0 ||
@@ -223,15 +236,15 @@ const AddSuggestedProduct: React.FC = () => {
       toast.error("Please select valid countries and cities.");
       return;
     }
-
+  
     if (!isEditProduct && payload.images.length === 0) {
       // alert("Please upload at least one image.");
       toast.error("Please upload at least one image.");
       return;
     }
-
+  
     const formData = new FormData();
-
+  
     Object.keys(payload).forEach((key) => {
       if (key === "images") {
         (payload.images as File[]).forEach((file) => {
@@ -246,7 +259,7 @@ const AddSuggestedProduct: React.FC = () => {
         }
       }
     });
-
+  
     // if (isEditProduct) {
     //   productId && formData.append("OrderID", productId);
     //   const updatedData = await updateProduct(formData);
@@ -280,7 +293,7 @@ const AddSuggestedProduct: React.FC = () => {
     }
 
     navigate("/admin/suggested-product-list");
-    window.location.href = "/admin/suggested-product-list";
+    // window.location.href = "/admin/suggested-product-list";
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -335,7 +348,7 @@ const AddSuggestedProduct: React.FC = () => {
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const res = await fetch("https://api-v2.spa-cr.com/api/v2/country");
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/country`);
         const result = await res.json();
         console.log("Fetched countries:", result.data);
         if (res.ok && Array.isArray(result.data)) {
@@ -363,6 +376,35 @@ const AddSuggestedProduct: React.FC = () => {
   
     fetchCountries();
   }, [dispatch]);
+
+  useEffect(() => {
+    const fetchMarketPlaces = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v5/order/get-all-marketplace-list`);
+        const result = await res.json();
+        if (res.ok && Array.isArray(result.data)) {
+
+          const validMarketPlaces = result.data.filter(
+            (c: any) => c?.iconID && c?.title
+          );
+
+          const allMarketPlaceOptions = validMarketPlaces.map((c: any) => ({
+            label: c.title,
+            value: c.iconID,
+          }));
+
+          setAllMarketPlaceOptions(allMarketPlaceOptions);
+
+        } else {
+          toast.error(result.message || "Failed to load market places.");
+        }
+      } catch (error: any) {
+        toast.error(error.message || "Failed to load market places.");
+      }
+    }; 
+
+    fetchMarketPlaces();
+  }, []);
 
   console.log("selectedCountry:", payload.selectedCountry, typeof payload.selectedCountry);
   console.log("Options:", allCountryOptions);
@@ -421,6 +463,18 @@ const AddSuggestedProduct: React.FC = () => {
               />
               )}
             </div>
+
+            <div>
+              <InputComponent
+                label="Select MarketPlace"
+                name="MarketPlaceId"
+                value={payload.MarketPlaceId}
+                onChange={handleChange}
+                type="select"
+                options={allMarketPlaceOptions}
+                required={true}
+              />
+            </div>
             
 
             {/* ProductUrl  */}
@@ -455,7 +509,6 @@ const AddSuggestedProduct: React.FC = () => {
                 <SelectComponent
                   name="From_CountryId"
                   options={[
-                    { label: "Select from country", value: 0 },
                     ...countryOptions,
                   ]}
                   value={payload.From_CountryId}
@@ -468,7 +521,6 @@ const AddSuggestedProduct: React.FC = () => {
                 <SelectComponent
                   name="From_CityId"
                   options={[
-                    { label: "Select from city", value: 0 },
                     ...fromCityOptions,
                   ]}
                   value={payload.From_CityId}
@@ -485,7 +537,6 @@ const AddSuggestedProduct: React.FC = () => {
                 <SelectComponent
                   name="To_CountryId"
                   options={[
-                    { label: "Select to country", value: 0 },
                     ...countryOptions,
                   ]}
                   value={payload.To_CountryId}
@@ -498,7 +549,6 @@ const AddSuggestedProduct: React.FC = () => {
                 <SelectComponent
                   name="To_CityId"
                   options={[
-                    { label: "Select to city", value: 0 },
                     ...toCityOptions,
                   ]}
                   value={payload.To_CityId}

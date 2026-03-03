@@ -25,7 +25,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 //   const fetchBanner = async () => {
 //     try {
 //       const token = localStorage.getItem("access_token");
-//       const res = await fetch(`https://api-v2.spa-cr.com/api/v2/admin/get-banner/${bannerID}`, {
+//       const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/get-banner/${bannerID}`, {
 //         headers: { Authorization: `Bearer ${token}` },
 //       });
 //       const result = await res.json();
@@ -73,7 +73,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 //   useEffect(() => {
 //     const fetchCountries = async () => {
 //       try {
-//         const res = await fetch("https://api-v2.spa-cr.com/api/v2/country");
+//         const res = await fetch("${import.meta.env.VITE_API_BASE_URL}/api/v2/country");
 //         const result = await res.json();
 //         if (res.ok && Array.isArray(result.data)) {
 //           const validCountries = result.data
@@ -97,7 +97,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 //     const checkGlobalBanner = async () => {
 //       try {
 //         const token = localStorage.getItem("access_token");
-//         const res = await fetch("https://api-v2.spa-cr.com/api/v2/admin/check-global-banner", {
+//         const res = await fetch("${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/check-global-banner", {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         const result = await res.json();
@@ -143,7 +143,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 //         formData.append("image", payload.image);
 //       }
 //       const token = localStorage.getItem("access_token");
-//       const res = await fetch(`https://api-v2.spa-cr.com/api/v2/admin/update-banner/${bannerID}`, {
+//       const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/update-banner/${bannerID}`, {
 //         method: "PUT",
 //         headers: { Authorization: `Bearer ${token}` },
 //         body: formData,
@@ -172,7 +172,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 //     try {
 //         setPayload((prev) => ({ ...prev, isActive: checked }));
 //         const access_token = localStorage.getItem("access_token");
-//         const res = await fetch(`https://api-v2.spa-cr.com/api/v2/admin/toggle-banner-status/${bannerID}`,
+//         const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/toggle-banner-status/${bannerID}`,
 //         {
 //             method: "PUT",
 //             headers: {
@@ -351,7 +351,7 @@ const EditBanner = () => {
     const fetchStores = async () => {
         setLoadingStores(true);
         try {
-            const res = await fetch("https://api-v2.spa-cr.com/api/v2/order/get-scraping-icons", {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/order/get-scraping-icons`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
             });
             const result = await res.json();
@@ -387,7 +387,7 @@ const EditBanner = () => {
         const fetchBanner = async () => {
             try {
                 const token = localStorage.getItem("access_token");
-                const res = await fetch(`https://api-v2.spa-cr.com/api/v2/admin/get-banner/${bannerID}`, {
+                const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/get-banner/${bannerID}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 const result = await res.json();
@@ -438,7 +438,7 @@ const EditBanner = () => {
     // useEffect(() => {
     //   const fetchCountries = async () => {
     //     try {
-    //       const res = await fetch("https://api-v2.spa-cr.com/api/v2/country");
+    //       const res = await fetch("${import.meta.env.VITE_API_BASE_URL}/api/v2/country");
     //       const result = await res.json();
     //       if (res.ok && Array.isArray(result.data)) {
     //         setCountryOptions(
@@ -456,7 +456,7 @@ const EditBanner = () => {
     // useEffect(() => {
     //     const fetchCountries = async () => {
     //       try {
-    //         const res = await fetch("https://api-v2.spa-cr.com/api/v2/country/get-countries-for-banner-in-edit",
+    //         const res = await fetch("${import.meta.env.VITE_API_BASE_URL}/api/v2/country/get-countries-for-banner-in-edit",
     //           {
     //             method: "POST", // or GET with query param if API requires
     //             headers: {
@@ -496,7 +496,7 @@ const EditBanner = () => {
     useEffect(() => {
         const fetchCountries = async () => {
             try {
-                const res = await fetch("https://api-v2.spa-cr.com/api/v2/country/get-countries-for-banner-in-edit", {
+                const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/country/get-countries-for-banner-in-edit`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -530,7 +530,7 @@ const EditBanner = () => {
         const checkGlobalBanner = async () => {
             try {
                 const token = localStorage.getItem("access_token");
-                const res = await fetch("https://api-v2.spa-cr.com/api/v2/admin/check-global-banner", {
+                const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/check-global-banner`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 const result = await res.json();
@@ -586,7 +586,7 @@ const EditBanner = () => {
                 formData.append("image", payload.image);
             }
             const token = localStorage.getItem("access_token");
-            const res = await fetch(`https://api-v2.spa-cr.com/api/v2/admin/update-banner/${bannerID}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/update-banner/${bannerID}`, {
                 method: "PUT",
                 headers: { Authorization: `Bearer ${token}` },
                 body: formData,

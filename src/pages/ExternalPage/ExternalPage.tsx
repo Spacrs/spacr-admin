@@ -49,7 +49,7 @@ const ExternalPage = () => {
   useEffect(() => {
     setLoadingCountries(true);
     setCountriesError(null);
-    fetch("https://api-v2.spa-cr.com/api/v2/country-city")
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/country-city`)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to load countries");
         return res.json();
@@ -74,7 +74,7 @@ const ExternalPage = () => {
     referralAbortController.current = new AbortController();
 
     try {
-      const res = await fetch(`https://api-v2.spa-cr.com/api/v2/admin/get-referral-code-details/${code}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/get-referral-code-details/${code}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -156,7 +156,7 @@ const ExternalPage = () => {
 
     try {
       const response = await fetch(
-        "https://api-v2.spa-cr.com/api/v2/user/add-external-user-with-referral-code",
+        `${import.meta.env.VITE_API_BASE_URL}/api/v2/user/add-external-user-with-referral-code`,
         {
           method: "POST",
           headers: {

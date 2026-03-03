@@ -108,7 +108,7 @@ function PaymentConfig() {
   //     try {
   //       const Id  = row.Id;
   //       const access_token = localStorage.getItem('access_token');
-  //       const response = await fetch(`https://api-v2.spa-cr.com/api/v2/country/delete/${Id}`, {
+  //       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/country/delete/${Id}`, {
   //         method: "DELETE",
   //         headers:{
   //           "Content-Type": "application/json",
@@ -136,7 +136,7 @@ function PaymentConfig() {
       try {
         const { Id } = configToDelete;
         const access_token = localStorage.getItem('access_token');
-        await fetch(`https:/api-v2.spa-cr.com/api/v2/country/delete/${Id}`, {
+        await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/country/delete/${Id}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",

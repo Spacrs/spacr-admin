@@ -57,7 +57,7 @@ function RearrangeAdminProducts() {
         // Update in DB
         try {
             let token = localStorage.getItem('access_token');
-            await fetch("https://api-v2.spa-cr.com/api/v2/admin/reorder-suggested-products", {
+            await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/reorder-suggested-products`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",

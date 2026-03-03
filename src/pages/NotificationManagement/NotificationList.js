@@ -69,7 +69,7 @@ function NotificationList() {
         setError(null);
         try {
             const access_token = localStorage.getItem("access_token");
-            const res = await fetch(`https://api-v2.spa-cr.com/api/v2/notification/get-a-notification/${data.notificationId}`, {
+            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/notification/get-a-notification/${data.notificationId}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

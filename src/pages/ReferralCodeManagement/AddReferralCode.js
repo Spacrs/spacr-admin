@@ -25,7 +25,7 @@ const AddReferralCode = () => {
         setCreating(true);
         try {
             const access_token = localStorage.getItem("access_token");
-            const response = await fetch("https://api-v2.spa-cr.com/api/v2/admin/create-referral-code", {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/create-referral-code`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${access_token}`,

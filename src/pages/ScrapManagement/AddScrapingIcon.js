@@ -73,7 +73,7 @@ const AddScrapingIcon = () => {
                 formData.append("image", payload.image);
             }
             const access_token = localStorage.getItem('access_token');
-            const response = await fetch("https://api-v2.spa-cr.com/api/v2/admin/add-scraping-icon", {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/add-scraping-icon`, {
                 method: "POST",
                 body: formData,
                 headers: {
@@ -104,7 +104,7 @@ const AddScrapingIcon = () => {
     useEffect(() => {
         const fetchCountries = async () => {
             try {
-                const res = await fetch("https://api-v2.spa-cr.com/api/v2/country");
+                const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/country`);
                 const result = await res.json();
                 console.log("Fetched countries:", result.data);
                 if (res.ok && Array.isArray(result.data)) {
