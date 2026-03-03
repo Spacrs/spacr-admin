@@ -171,7 +171,7 @@ const AddSuggestedProduct: React.FC = () => {
     MarketPlaceId: "",
   });
 
-  // uniform change handler for both selects and text inputs
+  // uniform change handler for both selects and text inputs //
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
