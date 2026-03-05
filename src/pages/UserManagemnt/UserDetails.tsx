@@ -19,6 +19,7 @@ import { toast, ToastContainer } from "react-toastify";
 import {
   ConfirmationModal
 } from "../../components/Common";
+import defaultProfile from '../../assets/images/default-profile.png';
 
 
 const UserDetails = () => {
@@ -33,6 +34,7 @@ const UserDetails = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -42,6 +44,10 @@ const UserDetails = () => {
       setProfileVideoVerificationStatus(data.data.ProfileVideoVerified);
     }
   }, [data]);
+
+  useEffect(() => {
+    setImageError(false);
+  }, [data?.data?.ProfilePictureURL]);
 
   // If loading or error states
   if (isLoading)
@@ -58,6 +64,7 @@ const UserDetails = () => {
     );
 
   const user = data?.data;
+  if (!user) return null;
   const IdentificationDocuments = user?.IdentificationDocuments || [];
 
   // Handle status change
@@ -162,10 +169,12 @@ const UserDetails = () => {
     }
   }
 
-
-
-  let isDropdownDisabled = user.Verified === 'verified' ? true : false;
-  let ButtonText = user.Verified === 'verified' ? 'Verified' : 'Verify';
+  let isDropdownDisabled = user?.Verified === 'verified';
+  let ButtonText = user?.Verified === 'verified' ? 'Verified' : 'Verify';
+  const profileImage =
+  !imageError && user?.ProfilePictureURL
+    ? user.ProfilePictureURL
+    : defaultProfile; 
   return (
     <div className="">
       <ToastContainer />
@@ -178,28 +187,29 @@ const UserDetails = () => {
               alt="Profile"
               className="w-28 h-28 rounded-full border-4 border-gray shadow-lg"
             /> */}
-            {user?.ProfilePictureURL ? (
+
               <img
-                src={user.ProfilePictureURL}
+                src={profileImage}
                 alt="Profile"
                 className="w-28 h-28 rounded-full border-4 border-gray shadow-lg object-cover"
-                onError={(e) => {
-                  e.currentTarget.onerror = null; // Prevent infinite loop
-                  e.currentTarget.src = ""; // Set src to empty to trigger fallback
-                  e.currentTarget.style.display = "none"; // Hide broken image
-                  const fallback = document.getElementById("profile-fallback");
-                  if (fallback) fallback.style.display = "flex";
-                }}
+                onError={() => setImageError(true)}
+                // onError={(e) => {
+                //   e.currentTarget.onerror = null; // Prevent infinite loop
+                //   e.currentTarget.src = defaultProfile; // Set src to empty to trigger fallback
+                //   e.currentTarget.style.display = "none"; // Hide broken image
+                //   const fallback = document.getElementById("profile-fallback");
+                //   if (fallback) fallback.style.display = "flex";
+                // }}
               />
-            ) : null}
 
-            <div
+
+            {/* <div
               id="profile-fallback"
               style={{ display: !user?.ProfilePictureURL ? "flex" : "none" }}
               className="w-28 h-28 rounded-full border-4 border-gray bg-gray-100 text-gray-500 shadow-lg flex items-center justify-center text-sm text-center px-2"
             >
               No profile image
-            </div>
+            </div> */}
 
             <h3 className="text-2xl font-semibold mt-3">{user?.FullName}</h3>
             <p className="text-gray-500">{user?.Email}</p>
@@ -216,7 +226,7 @@ const UserDetails = () => {
               <strong>Phone number:</strong> {user?.Phone}
             </p>
             <p>
-              <strong>Location:</strong> {user?.MainCountry.name || "N/A"}
+              <strong>Location:</strong> {user?.MainCountry?.name || "N/A"}
             </p>
             <p>
               <strong>Status:</strong>
