@@ -191,7 +191,7 @@ const UserDetails = () => {
               <img
                 src={profileImage}
                 alt="Profile"
-                className="w-28 h-28 rounded-full border-4 border-gray shadow-lg object-cover"
+                className="w-28 h-28 rounded-full  object-cover"
                 onError={() => setImageError(true)}
                 // onError={(e) => {
                 //   e.currentTarget.onerror = null; // Prevent infinite loop
