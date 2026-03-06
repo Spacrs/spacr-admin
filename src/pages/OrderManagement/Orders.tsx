@@ -185,7 +185,7 @@ function Orders() {
           totalPages={data?.pagination?.totalPages || 1}
           currentPage={currentPage}
           onPageChange={setCurrentPage}
-          handleUpdate={handleUpdate}
+          // handleUpdate={handleUpdate} // 06-03-2026
           handleView={handleView}
           handleDelete={handleDelete}
           itemsPerPage={itemsPerPage}
