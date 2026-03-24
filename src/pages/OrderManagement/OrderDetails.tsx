@@ -106,6 +106,7 @@
               </p>
               <p>
                 <strong>Quantity:</strong> {order.data.Quantity}
+              </p>  
               <p>
                 <strong>Delivery Reward:</strong> AED {order.data.DeliveryReward}
               </p>
