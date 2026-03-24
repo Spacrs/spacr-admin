@@ -10,6 +10,7 @@ import UserDevices from "./UserDevices";
 import Button from '../../components/Common/Button';
 import { toast, ToastContainer } from "react-toastify";
 import { ConfirmationModal } from "../../components/Common";
+import defaultProfile from '../../assets/images/default-profile.png';
 const UserDetails = () => {
     const params = useParams();
     const { data, isLoading, isError, refetch } = useGetUserInfoQuery(params.id);
@@ -21,6 +22,7 @@ const UserDetails = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [imageError, setImageError] = useState(false);
     const dispatch = useDispatch();
     useEffect(() => {
         if (data?.data) {
@@ -29,12 +31,17 @@ const UserDetails = () => {
             setProfileVideoVerificationStatus(data.data.ProfileVideoVerified);
         }
     }, [data]);
+    useEffect(() => {
+        setImageError(false);
+    }, [data?.data?.ProfilePictureURL]);
     // If loading or error states
     if (isLoading)
         return (_jsx("div", { className: "text-center text-gray-500", children: _jsx(Loading, {}) }));
     if (isError)
         return (_jsx("div", { className: "text-red-500 text-center mt-4", children: "Error loading user data" }));
     const user = data?.data;
+    if (!user)
+        return null;
     const IdentificationDocuments = user?.IdentificationDocuments || [];
     // Handle status change
     const handleOnChange = async (event) => {
@@ -118,16 +125,12 @@ const UserDetails = () => {
             console.error("Error updating status:", error);
         }
     };
-    let isDropdownDisabled = user.Verified === 'verified' ? true : false;
-    let ButtonText = user.Verified === 'verified' ? 'Verified' : 'Verify';
-    return (_jsxs("div", { className: "", children: [_jsx(ToastContainer, {}), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-6", children: [_jsxs("div", { className: "col-span-1 bg-white text-gray-700 shadow-lg rounded-lg p-6", children: [_jsxs("div", { className: "flex flex-col items-center", children: [user?.ProfilePictureURL ? (_jsx("img", { src: user.ProfilePictureURL, alt: "Profile", className: "w-28 h-28 rounded-full border-4 border-gray shadow-lg object-cover", onError: (e) => {
-                                            e.currentTarget.onerror = null; // Prevent infinite loop
-                                            e.currentTarget.src = ""; // Set src to empty to trigger fallback
-                                            e.currentTarget.style.display = "none"; // Hide broken image
-                                            const fallback = document.getElementById("profile-fallback");
-                                            if (fallback)
-                                                fallback.style.display = "flex";
-                                        } })) : null, _jsx("div", { id: "profile-fallback", style: { display: !user?.ProfilePictureURL ? "flex" : "none" }, className: "w-28 h-28 rounded-full border-4 border-gray bg-gray-100 text-gray-500 shadow-lg flex items-center justify-center text-sm text-center px-2", children: "No profile image" }), _jsx("h3", { className: "text-2xl font-semibold mt-3", children: user?.FullName }), _jsx("p", { className: "text-gray-500", children: user?.Email })] }), _jsxs("div", { className: "mt-4 space-y-2 text-gray-700", children: [_jsxs("p", { children: [_jsx("strong", { children: "Login type:" }), " ", user?.Type] }), _jsxs("p", { children: [_jsx("strong", { children: "Date of creation:" }), " ", new Date(user?.CreatedAt).toLocaleDateString()] }), _jsxs("p", { children: [_jsx("strong", { children: "Phone number:" }), " ", user?.Phone] }), _jsxs("p", { children: [_jsx("strong", { children: "Location:" }), " ", user?.MainCountry.name || "N/A"] }), _jsxs("p", { children: [_jsx("strong", { children: "Status:" }), _jsx("span", { className: `ml-2 px-3 py-1 rounded-full text-sm font-medium transition-all 
+    let isDropdownDisabled = user?.Verified === 'verified';
+    let ButtonText = user?.Verified === 'verified' ? 'Verified' : 'Verify';
+    const profileImage = !imageError && user?.ProfilePictureURL
+        ? user.ProfilePictureURL
+        : defaultProfile;
+    return (_jsxs("div", { className: "", children: [_jsx(ToastContainer, {}), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-6", children: [_jsxs("div", { className: "col-span-1 bg-white text-gray-700 shadow-lg rounded-lg p-6", children: [_jsxs("div", { className: "flex flex-col items-center", children: [_jsx("img", { src: profileImage, alt: "Profile", className: "w-28 h-28 rounded-full border-4 border-gray shadow-lg object-cover", onError: () => setImageError(true) }), _jsx("h3", { className: "text-2xl font-semibold mt-3", children: user?.FullName }), _jsx("p", { className: "text-gray-500", children: user?.Email })] }), _jsxs("div", { className: "mt-4 space-y-2 text-gray-700", children: [_jsxs("p", { children: [_jsx("strong", { children: "Login type:" }), " ", user?.Type] }), _jsxs("p", { children: [_jsx("strong", { children: "Date of creation:" }), " ", new Date(user?.CreatedAt).toLocaleDateString()] }), _jsxs("p", { children: [_jsx("strong", { children: "Phone number:" }), " ", user?.Phone] }), _jsxs("p", { children: [_jsx("strong", { children: "Location:" }), " ", user?.MainCountry?.name || "N/A"] }), _jsxs("p", { children: [_jsx("strong", { children: "Status:" }), _jsx("span", { className: `ml-2 px-3 py-1 rounded-full text-sm font-medium transition-all 
                 ${user?.Status === "active"
                                                     ? "bg-green-400 text-white"
                                                     : "bg-red-400 text-white"}`, children: user?.Status })] })] })] }), _jsxs("div", { className: "col-span-2 flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto", children: [_jsx("h3", { className: "text-lg font-semibold mb-3", children: "Device List" }), _jsx(UserDevices, {})] })] }), _jsxs("div", { className: "mt-6 bg-white shadow-md rounded-lg p-6", children: [_jsx("h3", { className: "text-lg font-semibold mb-4", children: "Identification Documents" }), _jsxs("div", { className: "max-w-sm mb-4", children: [_jsx("label", { htmlFor: "status", className: "block text-sm font-medium text-gray-700", children: _jsx("strong", { children: "Change Document Verification Status" }) }), _jsxs("select", { id: "status", value: status, onChange: handleOnChange, className: "mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", disabled: isDropdownDisabled, children: [isDropdownDisabled && _jsx("option", { value: "", children: "Select" }), _jsx("option", { value: "pending", children: "Pending" }), _jsx("option", { value: "verified", children: "Verified" }), _jsx("option", { value: "rejected", children: "Rejected" })] })] }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-6", children: [_jsxs("div", { className: "border p-4 rounded-lg text-center shadow-md hover:shadow-lg transition", children: [_jsx("p", { className: "font-semibold mb-2", children: "Emirates ID (Front)" }), IdentificationDocuments[0]?.EmiratesIDFrontImageURL ? (_jsx("img", { src: IdentificationDocuments[0]?.EmiratesIDFrontImageURL, alt: "Emirates ID Front", className: "w-full h-40 object-cover rounded-md", onClick: () => {

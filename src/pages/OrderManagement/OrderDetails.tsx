@@ -96,11 +96,17 @@
 
             <div className="mt-6 w-full">
               <p>
+                <strong>Created By:</strong>  {order.data.User.FullName}
+              </p>
+              <p>
+                <strong>Phone:</strong>  {order.data.User.Phone}
+              </p>
+              <p>
                 <strong>Price:</strong> AED {order.data.Price}
               </p>
               <p>
                 <strong>Quantity:</strong> {order.data.Quantity}
-              </p>
+              </p>  
               <p>
                 <strong>Delivery Reward:</strong> AED {order.data.DeliveryReward}
               </p>

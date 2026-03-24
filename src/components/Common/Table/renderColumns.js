@@ -5,6 +5,7 @@ import KebabMenu2 from "./KebabMenu2";
 import { TbBrandAppgallery } from "react-icons/tb";
 import { FaRegUser } from "react-icons/fa6";
 import { CiImageOn } from "react-icons/ci";
+import defaultProfile from '../../../assets/images/default-profile.png';
 const { MdOutlineEdit, AiOutlineDelete, BsCopy, BsEye, BsToggle2Off } = icons;
 /**
  * Safely resolve nested paths like "User.Email" from an object.
@@ -74,9 +75,12 @@ export const renderColumns = (column, row, actions, listType) => {
         }
         case "Image": {
             const src = column.name ? getNestedValue(row, column.name) : undefined;
-            return (_jsx("div", { className: "flex items-left", children: src === "" || src === null || src === undefined ? (icon[column.icon ? column.icon : "default"]) : (
-                // if src is an object (e.g. { url: ... }) we attempt to handle that too
-                _jsx("img", { src: typeof src === "string" ? src : (src?.url ?? ""), alt: column.name, className: "w-10 h-10 object-cover rounded-md" })) }));
+            const imageUrl = typeof src === "string"
+                ? src
+                : src?.url;
+            return (_jsx("div", { className: "flex items-center", children: _jsx("img", { src: imageUrl && imageUrl !== "" ? imageUrl : defaultProfile, alt: "profile", className: "w-10 h-10 object-cover rounded-full", onError: (e) => {
+                        e.target.src = defaultProfile;
+                    } }) }));
         }
         case "Date": {
             const raw = column.name ? getNestedValue(row, column.name) : undefined;
