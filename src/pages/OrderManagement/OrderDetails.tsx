@@ -96,6 +96,9 @@
 
             <div className="mt-6 w-full">
               <p>
+                <strong>Created By:</strong>  {order.data.User.FullName}
+              </p>
+              <p>
                 <strong>Price:</strong> AED {order.data.Price}
               </p>
               <p>
