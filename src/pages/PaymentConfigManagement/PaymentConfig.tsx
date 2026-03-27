@@ -14,6 +14,7 @@ import { columns } from "../../constant/Columns";
 import { Search, Table, Button } from "../../components/Common";
 import { toast, ToastContainer } from "react-toastify";
 import ConfirmationModal from "../../components/Common/Modal/ConfirmationModal";
+import API from "../.././constants/apiEndpoints";
 
 
 function PaymentConfig() {
@@ -136,7 +137,7 @@ function PaymentConfig() {
       try {
         const { Id } = configToDelete;
         const access_token = localStorage.getItem('access_token');
-        await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/country/delete/${Id}`, {
+        await fetch(`${API.COUNTRY.DELETE_COUNTRY}/${Id}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",

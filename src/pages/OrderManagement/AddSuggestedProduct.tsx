@@ -34,6 +34,7 @@ import { toast, ToastContainer } from "react-toastify";
 
 import { skipToken } from "@reduxjs/toolkit/query"; //Added on 16-05-2025
 import Inputes from "../../components/Common/Inputes"; //Added on 02-07-2025
+import API from "../.././constants/apiEndpoints";
 
 type BodyPayload = {
   ProductName: string;
@@ -348,7 +349,7 @@ const AddSuggestedProduct: React.FC = () => {
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/country`);
+        const res = await fetch(API.COUNTRY.GET_ALL_COUNTRIES);
         const result = await res.json();
         console.log("Fetched countries:", result.data);
         if (res.ok && Array.isArray(result.data)) {
@@ -380,7 +381,7 @@ const AddSuggestedProduct: React.FC = () => {
   useEffect(() => {
     const fetchMarketPlaces = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v5/order/get-all-marketplace-list`);
+        const res = await fetch(API.ORDER.GET_ALL_MARKETPLACE_LIST);
         const result = await res.json();
         if (res.ok && Array.isArray(result.data)) {
 

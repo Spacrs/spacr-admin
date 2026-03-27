@@ -9,6 +9,7 @@ import Inputes from "../../components/Common/Inputes";
 import { useDispatch } from "react-redux";
 import { useGetPaymentConfigsQuery, } from "../../store/slices/paymentConfigSlice/apiSlice";
 import ImageCropper from "../../components/Common/Cropper/ImageCropper"; //Added on 09-07-2025
+import API from "../.././constants/apiEndpoints";
 const AddScrapingIcon = () => {
     const navigate = useNavigate();
     const fileInputRef = useRef(null);
@@ -73,7 +74,7 @@ const AddScrapingIcon = () => {
                 formData.append("image", payload.image);
             }
             const access_token = localStorage.getItem('access_token');
-            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/add-scraping-icon`, {
+            const response = await fetch(API.ADMIN.ADD_SCRAPING_ICON, {
                 method: "POST",
                 body: formData,
                 headers: {
@@ -104,7 +105,7 @@ const AddScrapingIcon = () => {
     useEffect(() => {
         const fetchCountries = async () => {
             try {
-                const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/country`);
+                const res = await fetch(API.COUNTRY.GET_ALL_COUNTRIES);
                 const result = await res.json();
                 console.log("Fetched countries:", result.data);
                 if (res.ok && Array.isArray(result.data)) {

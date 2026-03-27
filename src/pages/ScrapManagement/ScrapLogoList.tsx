@@ -12,6 +12,7 @@ import { ProductData } from "../../types/ProductData.types";
 import { columns } from "../../constant/Columns";
 import { Search, ErrorMsg, Table, Button } from "../../components/Common";
 import { toast, ToastContainer } from "react-toastify";
+import API from "../.././constants/apiEndpoints";
 
 function ScrapLogoList() {
   const dispatch = useAppDispatch();
@@ -98,7 +99,7 @@ function ScrapLogoList() {
     try {
       const access_token = localStorage.getItem("access_token");
 
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/delete-marketplace/${iconID}`, {
+      const res = await fetch(`${API.ADMIN.DELETE_MARKETPLACE}/${iconID}`, {
         method: "PATCH",
         headers: {
           "Authorization": `Bearer ${access_token}`,

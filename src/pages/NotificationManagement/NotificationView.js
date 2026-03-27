@@ -2,6 +2,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { BellIcon } from "@heroicons/react/24/outline"; // Optional: Tailwind Hero Icons
+import API from "../.././constants/apiEndpoints";
 function NotificationView() {
     const { notificationId } = useParams();
     const navigate = useNavigate();
@@ -19,7 +20,7 @@ function NotificationView() {
             setError(null);
             try {
                 const access_token = localStorage.getItem("access_token");
-                const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/notification/get-a-notification/${notificationId}`, {
+                const res = await fetch(`${API.NOTIFICATION.GET_NOTIFICATION}/${notificationId}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",

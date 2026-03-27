@@ -6,6 +6,7 @@ import { setProducts } from "../../store/slices/orderSlice/orderSlice";
 import { useNavigate } from "react-router-dom";
 import { Search, Button } from "../../components/Common";
 import { useSelector } from 'react-redux';
+import API from "../.././constants/apiEndpoints";
 function RearrangeAdminProducts() {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -57,7 +58,7 @@ function RearrangeAdminProducts() {
         // Update in DB
         try {
             let token = localStorage.getItem('access_token');
-            await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/reorder-suggested-products`, {
+            await fetch(API.ADMIN.REORDER_SUGGESTED_PRODUCTS, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",

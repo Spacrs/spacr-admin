@@ -7,6 +7,7 @@ import { ProductData } from "../../types/ProductData.types";
 import { Search, Table, Button } from "../../components/Common";
 import { useSelector } from 'react-redux';
 
+import API from "../.././constants/apiEndpoints";
 
 function RearrangeAdminProducts() {
   const dispatch = useAppDispatch();
@@ -77,7 +78,7 @@ if (isError) return <div className="p-4 bg-red-500 text-white rounded-lg">Error 
 
       let token = localStorage.getItem('access_token');
 
-      await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/reorder-suggested-products`, {
+      await fetch(API.ADMIN.REORDER_SUGGESTED_PRODUCTS, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

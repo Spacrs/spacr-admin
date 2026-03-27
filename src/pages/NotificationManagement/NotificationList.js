@@ -5,6 +5,7 @@ import { useGetNotificationsQuery } from "../../store/slices/notificationSlice/a
 import { useEffect, useState } from "react";
 import { Search, Table, Button, } from "../../components/Common";
 import { columns } from "../../constant/Columns";
+import API from "../../constants/apiEndpoints";
 const options = [
     { value: "", label: "Select Notification Type" },
     { value: "schedule_notification", label: "Upcoming Notifications" },
@@ -69,7 +70,7 @@ function NotificationList() {
         setError(null);
         try {
             const access_token = localStorage.getItem("access_token");
-            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/notification/get-a-notification/${data.notificationId}`, {
+            const res = await fetch(`${API.NOTIFICATION.GET_NOTIFICATION}/${data.notificationId}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

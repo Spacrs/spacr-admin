@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Inputes as InputComponent, Button } from "../../components/Common";
 import { toast, ToastContainer } from "react-toastify";
+import API from "../.././constants/apiEndpoints";
 
 const EditScheduleNotification = () => {
   const [formData, setFormData] = useState({
@@ -53,7 +54,7 @@ const EditScheduleNotification = () => {
         try {
           // Replace URL with your actual API endpoint
           let access_token = localStorage.getItem('access_token');
-          const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/notification/get-a-notification/${notificationId}`, {
+          const res = await fetch(`${API.NOTIFICATION.GET_NOTIFICATION}/${notificationId}`, {
             method: "GET",
             headers: {
               "Content-Type": 'application/json',
@@ -107,7 +108,7 @@ const EditScheduleNotification = () => {
         let access_token = localStorage.getItem('access_token');
 
         const res = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/v2/notification/update-scheduled-notification/${notificationId}`,
+        `${API.NOTIFICATION.UPDATE_SCHEDULED_NOTIFICATION}/${notificationId}`,
         {
             method: "PUT",  // or POST if your API expects
             headers: {
