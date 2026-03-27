@@ -96,10 +96,10 @@ import { useEffect, useState } from "react";
 
             <div className="mt-6 w-full">
               <p>
-                <strong>Created By:</strong>  {order.data.User.FullName || "Admin"}
+                <strong>Created By:</strong>  {order?.data?.User?.FullName || "Admin"}
               </p>
               <p>
-                <strong>Phone:</strong>  {order.data.User.Phone || "N.A"}
+                <strong>Phone:</strong>  {order?.data?.User?.Phone || "N.A"}
               </p>
               <p>
                 <strong>Price:</strong> AED {order.data.Price}
