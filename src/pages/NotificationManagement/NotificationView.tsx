@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { BellIcon } from "@heroicons/react/24/outline"; // Optional: Tailwind Hero Icons
+import API from "../.././constants/apiEndpoints";
 
 interface Notification {
   notificationId: string;
@@ -32,7 +33,7 @@ function NotificationView() {
       try {
         const access_token = localStorage.getItem("access_token");
         const res = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/api/v2/notification/get-a-notification/${notificationId}`,
+          `${API.NOTIFICATION.GET_NOTIFICATION}/${notificationId}`,
           {
             method: "GET",
             headers: {

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { columns } from "../../constant/Columns";
 import { Search, ErrorMsg, Table } from "../../components/Common";
 import { toast, ToastContainer } from "react-toastify";
+import API from "../.././constants/apiEndpoints";
 function TravelListing() {
     const dispatch = useAppDispatch();
     const [selectedOrder, setSelectedOrder] = useState(null);
@@ -71,7 +72,7 @@ function TravelListing() {
     const handleToggleStatus = async (row) => {
         const access_token = localStorage.getItem('access_token');
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/toggle-referral-code-status`, {
+            const response = await fetch(API.ADMIN.TOGGLE_REFERRAL_CODE_STATUS, {
                 method: "PATCH",
                 headers: {
                     "Authorization": `Bearer ${access_token}`,
@@ -153,7 +154,7 @@ function TravelListing() {
         }
         try {
             const access_token = localStorage.getItem("access_token");
-            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/create-referral-code`, {
+            const response = await fetch(API.ADMIN.CREATE_REFERRAL_CODE, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${access_token}`,
