@@ -102,6 +102,7 @@ function Orders() {
     const handleConfirmDelete = async () => {
         if (!orderToDelete)
             return;
+        console.log(orderToDelete, "orderToDelete");
         try {
             const access_token = localStorage.getItem('access_token');
             console.log('tokken', access_token);
