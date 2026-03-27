@@ -6,6 +6,7 @@ import { useSendNotificationMutation } from "../../store/slices/notificationSlic
 import { Inputes as InputComponent, Button, UserSelectModal, } from "../../components/Common";
 import { toast, ToastContainer } from "react-toastify";
 import Select from "react-select";
+import API from "../.././constants/apiEndpoints";
 const DirectNotification = () => {
     const [formData, setFormData] = useState({
         title: "",
@@ -49,7 +50,7 @@ const DirectNotification = () => {
     useEffect(() => {
         const fetchCountries = async () => {
             try {
-                const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/country/get-users-countries`);
+                const res = await fetch(API.COUNTRY.GET_USERS_COUNTRIES);
                 const data = await res.json();
                 const validCountries = data?.data || [];
                 const mapped = validCountries.map((c) => ({

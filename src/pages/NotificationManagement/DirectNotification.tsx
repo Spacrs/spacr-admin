@@ -18,6 +18,7 @@ import {
   setUserCountryOptions
 } from "../../store/slices/paymentConfigSlice/paymentConfigSlice";
 import Select from "react-select";
+import API from "../.././constants/apiEndpoints";
 
 
 type User = {
@@ -82,7 +83,7 @@ const DirectNotification = () => {
     useEffect(() => {
       const fetchCountries = async () => {
         try {
-          const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/country/get-users-countries`);
+          const res = await fetch(API.COUNTRY.GET_USERS_COUNTRIES);
           const data = await res.json();
           const validCountries = data?.data || [];
           const mapped = validCountries.map((c: any) => ({

@@ -13,6 +13,7 @@ import { ProductData } from "../../types/ProductData.types";
 import { columns } from "../../constant/Columns";
 import { Search, ErrorMsg, Table, Button } from "../../components/Common";
 import { toast, ToastContainer } from "react-toastify";
+import API from "../.././constants/apiEndpoints";
 
 function Orders() {
   const dispatch = useAppDispatch();
@@ -134,7 +135,7 @@ function Orders() {
   try {
     const access_token = localStorage.getItem('access_token');
     console.log('tokken', access_token);
-    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/delete-order-from-admin/${orderToDelete.OrderID}`, {
+    const res = await fetch(`${API.ADMIN.DELETE_ORDER_FROM_ADMIN}/${orderToDelete.OrderID}`, {
       method: 'PATCH',
       headers: {
         "Content-Type": "application/json",
