@@ -13,6 +13,8 @@ const OrderDetails = () => {
     const [status, setStatus] = useState("");
     useEffect(() => {
         if (order) {
+            console.log("Order___________:", order);
+            console.log("Order Status:", order.Status);
             setStatus(order.Status);
         }
     }, [order]);

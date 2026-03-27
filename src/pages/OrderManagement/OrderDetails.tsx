@@ -1,4 +1,4 @@
-  import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
   import React from "react";
   import { useParams, useNavigate } from "react-router-dom";
   import { useGetOrderDetailsQuery } from "../../store/slices/orderSlice/apiSlice";
@@ -96,11 +96,17 @@
 
             <div className="mt-6 w-full">
               <p>
+                <strong>Created By:</strong>  {order.data.User.FullName || "Admin"}
+              </p>
+              <p>
+                <strong>Phone:</strong>  {order.data.User.Phone || "N.A"}
+              </p>
+              <p>
                 <strong>Price:</strong> AED {order.data.Price}
               </p>
               <p>
                 <strong>Quantity:</strong> {order.data.Quantity}
-              </p>
+              </p>  
               <p>
                 <strong>Delivery Reward:</strong> AED {order.data.DeliveryReward}
               </p>
