@@ -53,7 +53,7 @@ const EditScrapingIcon: React.FC = () => {
   useEffect(() => {
     if (!Id) return;
 
-    fetch(`${API.ORDER.GET_SCRAPING_ICONS}/${Id}`, {
+    fetch(`${API.ADMIN.GET_SCRAPING_ICON}/${Id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
