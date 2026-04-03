@@ -54,6 +54,7 @@ export const adminAuthApi = createApi({
         }),
         getUsers: builder.query({
             query: (paramsObj) => {
+                console.log("Params for getUsers query:", paramsObj);
                 const queryString = buildQueryParams(paramsObj);
                 return {
                     url: `/admin/get-all-users?${queryString}`,

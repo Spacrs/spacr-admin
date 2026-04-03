@@ -5,7 +5,7 @@ import { logout } from "./slices/userSlice/userSlice";
 
 const baseQuery = fetchBaseQuery({
   // baseUrl: `${import.meta.env.VITE_API_BASE_URL}/api/v2`,
-  baseUrl: `${import.meta.env.VITE_API_BASE_URL}/api/v2`,
+  baseUrl: `http://localhost:8000/api/v5`,
   prepareHeaders: (headers) => {
     const token = localStorage.getItem("access_token");
     if (token) {
