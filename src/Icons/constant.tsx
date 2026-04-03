@@ -103,6 +103,8 @@ import { GiKnightBanner } from "react-icons/gi";
 import { GiTakeMyMoney } from "react-icons/gi";
 import { AiOutlineTransaction } from "react-icons/ai";
 import { BsCurrencyExchange } from "react-icons/bs";
+import { TbReportSearch } from "react-icons/tb";
+
 
 export const icons = {
   CiHome: CiHome,
@@ -194,6 +196,7 @@ export const icons = {
   GiKnightBanner,
   GiTakeMyMoney,
   AiOutlineTransaction,
-  BsCurrencyExchange
+  BsCurrencyExchange,
+  TbReportSearch
 
 };

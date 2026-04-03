@@ -35,6 +35,10 @@ const API = {
     CREATE_REFERRAL_CODE: `${BASE_URL}/api/${VERSION}/admin/create-referral-code`,
     TOGGLE_REFERRAL_CODE_STATUS: `${BASE_URL}/api/${VERSION}/admin/toggle-referral-code-status`,
     GET_REFERRAL_CODE_DETAILS: `${BASE_URL}/api/${VERSION}/admin/get-referral-code-details`, // + /{code}
+
+    // added on 03-04-2026(RP)
+    REPORTS: `${BASE_URL}/api/v5/admin/reports`,
+    EXPORT_USERS: `${BASE_URL}/api/v5/admin/export-users`,
   },
 
   COUNTRY: {

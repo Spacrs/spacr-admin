@@ -15,7 +15,8 @@ const {
   GiKnightBanner,
   GiTakeMyMoney,
   AiOutlineTransaction,
-  BsCurrencyExchange
+  BsCurrencyExchange,
+  TbReportSearch
 
 } = icons;
 
@@ -102,6 +103,12 @@ const menuItems: MenuItemTypes[] = [
     label: "Withdrawals",
     path: "/admin/withdrawal-list",
     icon: <BsCurrencyExchange style={{ fontSize: "20px", margin: "0 10px" }} />,
+  },
+  // added on 02-04-2026(RP)
+  {
+    label: "Reports",
+    path: "/admin/reports",
+    icon: <TbReportSearch style={{ fontSize: "20px", margin: "0 10px" }} />,
   },
 
   {

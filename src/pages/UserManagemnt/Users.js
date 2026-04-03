@@ -6,9 +6,12 @@ import { setUsers, resetUsers } from "../../store/slices/userSlice/userSlice";
 import { useNavigate } from "react-router-dom";
 import { columns } from "../../constant/Columns";
 import { Search, ErrorMsg, ConfirmationModal, Table, } from "../../components/Common";
+import { useLocation } from "react-router-dom";
+import API from "../../constants/apiEndpoints";
 const Users = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
     const { users, isloading } = useAppSelector((state) => state.userSlice);
     const itemsPerPage = 10;
     const [currentPage, setCurrentPage] = useState(1);
@@ -18,6 +21,11 @@ const Users = () => {
     const [userToUpdate, setUserToUpdate] = useState(null); // Store the user whose status is being changed
     const [sortBy, setSortBy] = useState("createdAt");
     const [sortDirection, setSortDirection] = useState("desc");
+    const [fromDate, setFromDate] = useState("");
+    const [toDate, setToDate] = useState("");
+    // applied states (used in API)
+    const [appliedFromDate, setAppliedFromDate] = useState("");
+    const [appliedToDate, setAppliedToDate] = useState("");
     // Pass both filters (search and verified) to the API call
     const { data, isLoading, isFetching, isError, refetch } = useGetUsersQuery({
         page: currentPage,
@@ -26,6 +34,8 @@ const Users = () => {
         search: filter !== "" ? filter : undefined,
         sort: sortDirection,
         sortBy: sortBy,
+        fromDate: appliedFromDate || undefined,
+        toDate: appliedToDate || undefined,
     });
     const [updateUserStatus] = useUpdateUserInfoMutation();
     useEffect(() => {
@@ -42,6 +52,20 @@ const Users = () => {
     if (isError) {
         return _jsx(ErrorMsg, { errorMsg: "Error loading user data" });
     }
+    // added on 03-04-2026 (RP)
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const from = params.get("fromDate");
+        const to = params.get("toDate");
+        if (from && to) {
+            setFromDate(from);
+            setToDate(to);
+            console.log("Applying date filters from URL:", { from, to });
+            // Apply directly
+            setAppliedFromDate(from);
+            setAppliedToDate(to);
+        }
+    }, [location.search]);
     const handleToggleStatus = (val) => {
         setUserToUpdate(val); // Set the user to update
         setIsModalOpen(true); // Open the modal
@@ -73,6 +97,62 @@ const Users = () => {
         setFilter(e.target.value);
         setCurrentPage(1);
     };
-    return (_jsxs("div", { className: "flex flex-col", children: [_jsxs("div", { className: "flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg", children: [_jsx("div", { className: "flex flex-1 max-w-lg", children: _jsx(Search, { search: filter, onChange: onSearch, onReset: () => setFilter("") }) }), _jsx("div", { className: "ml-4", children: _jsxs("select", { className: "px-4 py-2 border border-gray-300 rounded-md", value: verificationStatus, onChange: (e) => setVerificationStatus(e.target.value), children: [_jsx("option", { value: "", children: "All Users" }), _jsx("option", { value: "verified", children: "Verified" }), _jsx("option", { value: "pending", children: "Pending" }), _jsx("option", { value: "rejected", children: "Rejected" }), _jsx("option", { value: "none", children: "None" })] }) })] }), _jsx("div", { className: "flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto", children: _jsx(Table, { data: users, columns: columns.user, loading: isLoading || isFetching, totalPages: data?.pagination?.totalPages || 1, currentPage: currentPage, onPageChange: setCurrentPage, handleToggleStatus: handleToggleStatus, handleView: handleView, itemsPerPage: itemsPerPage, onSort: onSort }) }), _jsx(ConfirmationModal, { isOpen: isModalOpen, onClose: () => setIsModalOpen(false), onConfirm: handleConfirmToggleStatus, message: `Are you sure you want to ${userToUpdate?.Status === "active" ? "deactivate" : "activate"} this user?` })] }));
+    // added on 03-04-2026 (RP)
+    const handleFromDateChange = (e) => {
+        setFromDate(e.target.value);
+        setCurrentPage(1);
+    };
+    const handleToDateChange = (e) => {
+        setToDate(e.target.value);
+        setCurrentPage(1);
+    };
+    const handleResetFilters = () => {
+        setFilter("");
+        setVerificationStatus("");
+        setFromDate("");
+        setToDate("");
+        setAppliedFromDate("");
+        setAppliedToDate("");
+        setCurrentPage(1);
+    };
+    const handleApplyFilters = () => {
+        setAppliedFromDate(fromDate);
+        setAppliedToDate(toDate);
+        setCurrentPage(1);
+    };
+    const handleExport = async () => {
+        try {
+            const params = new URLSearchParams();
+            if (appliedFromDate)
+                params.append("fromDate", appliedFromDate);
+            if (appliedToDate)
+                params.append("toDate", appliedToDate);
+            if (verificationStatus)
+                params.append("verified", verificationStatus);
+            if (filter)
+                params.append("search", filter);
+            const response = await fetch(`${API.ADMIN.EXPORT_USERS}?${params.toString()}`, 
+            // "http://localhost:8000/api/v5/admin/export-users?" + params.toString(),
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                },
+            });
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "users.xlsx";
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        catch (error) {
+            console.error("Export failed", error);
+        }
+    };
+    return (_jsxs("div", { className: "flex flex-col", children: [_jsxs("div", { className: "flex flex-wrap justify-between items-center gap-4 mb-4 p-4 bg-gray-100 shadow-md rounded-lg", children: [_jsx("div", { className: "flex flex-1 max-w-lg", children: _jsx(Search, { search: filter, onChange: onSearch, onReset: () => setFilter("") }) }), _jsx("input", { type: "date", value: fromDate, onChange: handleFromDateChange, className: "px-3 py-2 border border-gray-300 rounded-md" }), _jsx("input", { type: "date", value: toDate, onChange: handleToDateChange, className: "px-3 py-2 border border-gray-300 rounded-md" }), _jsxs("select", { className: "px-4 py-2 border border-gray-300 rounded-md", value: verificationStatus, onChange: (e) => {
+                            setVerificationStatus(e.target.value);
+                            setCurrentPage(1);
+                        }, children: [_jsx("option", { value: "", children: "All Users" }), _jsx("option", { value: "verified", children: "Verified" }), _jsx("option", { value: "pending", children: "Pending" }), _jsx("option", { value: "rejected", children: "Rejected" }), _jsx("option", { value: "none", children: "None" })] }), _jsx("button", { onClick: handleApplyFilters, className: "px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600", children: "Apply Filter" }), _jsx("button", { onClick: handleResetFilters, className: "px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600", children: "Reset Filters" }), _jsx("button", { onClick: handleExport, className: "px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600", children: "Export Excel" })] }), _jsx("div", { className: "flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto", children: _jsx(Table, { data: users, columns: columns.user, loading: isLoading || isFetching, totalPages: data?.pagination?.totalPages || 1, currentPage: currentPage, onPageChange: setCurrentPage, handleToggleStatus: handleToggleStatus, handleView: handleView, itemsPerPage: itemsPerPage, onSort: onSort }) }), _jsx(ConfirmationModal, { isOpen: isModalOpen, onClose: () => setIsModalOpen(false), onConfirm: handleConfirmToggleStatus, message: `Are you sure you want to ${userToUpdate?.Status === "active" ? "deactivate" : "activate"} this user?` })] }));
 };
 export default Users;
