@@ -71,36 +71,42 @@ function ReportDetails() {
       key: "liveOrders",
       count: reportsData?.liveOrderCount || 0,
       route: "/admin/order-list",
+      order_status: "LIVE",
     },
     {
       label: "Today's Cancelled Orders",
       key: "cancelledOrders",
       count: reportsData?.cancelledOrderCount || 0,
       route: "/admin/order-list?status=cancelled",
+      order_status: "CANCELLED",
     },
     {
       label: "Today's Accepted Orders",
       key: "acceptedOrders",
       count: reportsData?.acceptedOrderCount || 0,
       route: "/admin/order-list?status=accepted",
+      order_status: "ACCEPTED",
     },
     {
       label: "Today's Delivered Orders",
       key: "deliveredOrders",
       count: reportsData?.deliveredOrderCount || 0,
       route: "/admin/order-list?status=delivered",
+      order_status: "DELIVERED",
     },
     {
       label: "Today's Purchase Orders",
       key: "purchaseOrders",
       count: reportsData?.purchasedOrderCount || 0,
       route: "/admin/order-list?type=purchase",
+      order_status: "PURCHASED",
     },
     {
       label: "Today's Ready To Receive Orders",
       key: "readyOrders",
       count: reportsData?.readyToReceiveOrderCount || 0,
       route: "/admin/order-list?status=ready",
+      order_status: "READY_TO_RECEIVE",
     },
   ];
 
@@ -117,6 +123,8 @@ function ReportDetails() {
       navigate(`/admin/users?fromDate=${today}&toDate=${today}`);
     } else if(tab.key === "trips") {
       navigate(`${tab.route}?fromDate=${today}&toDate=${today}`);
+    }else if (tab.key === "liveOrders" || tab.key === "cancelledOrders" || tab.key === "acceptedOrders" || tab.key === "deliveredOrders" || tab.key === "purchaseOrders" || tab.key === "readyOrders") {
+      navigate(`${tab.route}?fromDate=${today}&toDate=${today}&status=${tab.order_status}`);
     }else {
       navigate(tab.route);
     }

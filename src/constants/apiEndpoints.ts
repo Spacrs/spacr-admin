@@ -40,6 +40,7 @@ const API = {
     REPORTS: `${BASE_URL}/api/v5/admin/reports`,
     EXPORT_USERS: `${BASE_URL}/api/v5/admin/export-users`,
     EXPORT_TRIPS: `${BASE_URL}/api/v5/admin/export-trips`,
+    EXPORT_ORDERS: `${BASE_URL}/api/v5/admin/export-orders`,
   },
 
   COUNTRY: {

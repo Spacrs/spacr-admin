@@ -26,6 +26,13 @@ function Orders() {
   const [sortBy, setSortBy] = useState("CreatedAt");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [filter, setFilter] = useState(""); // Search term
+  // added on 07-04-2026 (RP)
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  // applied states (API call ke liye)
+  const [appliedFromDate, setAppliedFromDate] = useState("");
+  const [appliedToDate, setAppliedToDate] = useState("");
+  const [orderStatus, setOrderStatus] = useState(""); // Order status filter
 
   const { data, isLoading, isFetching, isError, refetch } = useGetOrdersQuery({
     page: currentPage,
@@ -34,6 +41,10 @@ function Orders() {
     sort: sortDirection,
     sortBy: sortBy,
     search: filter !== "" ? filter : undefined,
+    // added on 07-04-2026 (RP)
+    fromDate: appliedFromDate || undefined,
+    toDate: appliedToDate || undefined,
+    status: orderStatus || undefined,
   });
 
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
@@ -64,6 +75,29 @@ function Orders() {
       );
     }
   }, [data, dispatch]);
+
+  // added on 07-04-2026 (RP)
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+
+    const from = params.get("fromDate");
+    const to = params.get("toDate");
+
+    if (from && to) {
+      setFromDate(from);
+      setToDate(to);
+
+      // Apply directly
+      setAppliedFromDate(from);
+      setAppliedToDate(to);
+    }
+
+    const status = params.get("status");
+    if (status) {
+      setOrderStatus(status);
+      console.log("Applying order status filter from URL:", status);
+    }
+  }, [location.search]);
 
   if (isError) {
     return <ErrorMsg errorMsg="Error loading orders" />;
@@ -161,22 +195,140 @@ function Orders() {
   } catch (err) {
     console.error("Failed to delete:", err);
   }
-};
+  };
+
+  // added on 07-04-2026 (RP)
+  const handleFromDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFromDate(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleToDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setToDate(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleApplyFilters = () => {
+    setAppliedFromDate(fromDate);
+    setAppliedToDate(toDate);
+    setCurrentPage(1);
+  };
+
+  const handleResetFilters = () => {
+    setFilter("");
+    setFromDate("");
+    setToDate("");
+    setAppliedFromDate("");
+    setAppliedToDate("");
+    setCurrentPage(1);
+    setOrderStatus("");
+  };
+
+  const handleExport = async () => {
+    try {
+      const params = new URLSearchParams();
+
+      if (appliedFromDate) params.append("fromDate", appliedFromDate);
+      if (appliedToDate) params.append("toDate", appliedToDate);
+      if (orderStatus) params.append("status", orderStatus);
+      if (filter) params.append("search", filter);
+
+      const response = await fetch(
+        `${API.ADMIN.EXPORT_ORDERS}?${params.toString()}`,
+        // "http://localhost:8000/api/v5/admin/export-orders?" + params.toString(),
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+
+      const blob = await response.blob();
+
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "orders.xlsx";
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Export failed", error);
+    }
+  };
 
 
   return (
-    <div className="">
-      <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
-        <ToastContainer />
-        {/* Search Bar */}
+    <div className="flex flex-col">
+      <ToastContainer />
+
+      <div className="flex flex-wrap justify-between items-center gap-4 mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
+        
+        {/* Search */}
         <div className="flex flex-1 max-w-lg">
           <Search
             search={filter}
             onChange={onSearch}
             onReset={() => setFilter("")}
-            placeholder="Search by name...."
+            placeholder="Search by name..."
           />
         </div>
+
+        {/* added 07-04-2026 (RP) */}
+        {/* From Date */}
+        <input
+          type="date"
+          value={fromDate}
+          onChange={handleFromDateChange}
+          className="px-3 py-2 border border-gray-300 rounded-md"
+        />
+
+        {/* To Date */}
+        <input
+          type="date"
+          value={toDate}
+          onChange={handleToDateChange}
+          className="px-3 py-2 border border-gray-300 rounded-md"
+        />
+
+        {/* Order status filter */}
+        { <select
+          value={orderStatus}
+          onChange={(e) => setOrderStatus(e.target.value)} 
+          className="px-4 py-2 border border-gray-300 rounded-md"
+        >
+          <option value="">All Statuses</option>
+          <option value="LIVE">Live</option>
+          <option value="ACCEPTED">Accepted</option>
+          <option value="PURCHASED">Purchased</option>
+          <option value="READY_TO_RECEIVE">Ready to Receive</option>
+          <option value="CANCELLED">Cancelled</option>
+          <option value="DELIVERED">Delivered</option>
+        </select> } 
+
+        {/* Apply */}
+        <button
+          onClick={handleApplyFilters}
+          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+        >
+          Apply Filter
+        </button>
+
+        {/* Reset */}
+        <button
+          onClick={handleResetFilters}
+          className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+        >
+          Reset Filters
+        </button>
+
+        {/* Export */}
+        <button
+          onClick={handleExport}
+          className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+        >
+          Export Excel
+        </button>
+
       </div>
 
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">

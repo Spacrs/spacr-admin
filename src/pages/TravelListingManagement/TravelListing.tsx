@@ -344,7 +344,7 @@ const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
             type="date"
             value={fromDate}
             onChange={handleFromDateChange}
-            className="px-3 py-2 border border-gray-300 rounded-md w-[150px]"
+            className="px-3 py-2 border border-gray-300 rounded-md"
           />
 
           {/* To Date */}
@@ -352,7 +352,7 @@ const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
             type="date"
             value={toDate}
             onChange={handleToDateChange}
-            className="px-3 py-2 border border-gray-300 rounded-md w-[150px]"
+            className="px-3 py-2 border border-gray-300 rounded-md"
           />
 
         </div>
