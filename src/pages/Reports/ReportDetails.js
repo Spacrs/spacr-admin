@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import API from "../../constants/apiEndpoints";
 import { useEffect } from "react";
 import { FiArrowRight } from "react-icons/fi";
+import { toast, ToastContainer } from "react-toastify";
 function ReportDetails() {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState("users");
@@ -89,10 +90,16 @@ function ReportDetails() {
     ];
     const handleTabClick = (tab) => {
         setActiveTab(tab.key);
-        // navigate(tab.route);
+        if (tab.count === 0) {
+            toast.error(`No ${tab.label.replace("Today's ", "")} found today`);
+            return;
+        }
+        const today = new Date().toISOString().split("T")[0];
         if (tab.key === "users") {
-            const today = new Date().toISOString().split("T")[0];
             navigate(`/admin/users?fromDate=${today}&toDate=${today}`);
+        }
+        else if (tab.key === "trips") {
+            navigate(`${tab.route}?fromDate=${today}&toDate=${today}`);
         }
         else {
             navigate(tab.route);
@@ -122,13 +129,13 @@ function ReportDetails() {
     //     ))}
     //   </div>
     // </div>
-    _jsx("div", { className: "p-4", children: _jsx("div", { className: "grid grid-cols-2 md:grid-cols-4 gap-4", children: reportTabs.map((tab) => (_jsxs("div", { onClick: () => !loading && handleTabClick(tab), className: `group cursor-pointer p-4 rounded-xl shadow-md transition-all
+    _jsxs("div", { className: "p-4", children: [_jsx(ToastContainer, {}), _jsx("div", { className: "grid grid-cols-2 md:grid-cols-4 gap-4", children: reportTabs.map((tab) => (_jsxs("div", { onClick: () => !loading && handleTabClick(tab), className: `group cursor-pointer p-4 rounded-xl shadow-md transition-all
               flex flex-col justify-between
               ${activeTab === tab.key
-                    ? "bg-primary text-white"
-                    : "bg-white hover:bg-gray-100"} ${loading ? "pointer-events-none opacity-70" : ""}`, children: [_jsxs("div", { children: [_jsx("h2", { className: "text-sm font-medium", children: tab.label }), loading ? (_jsx("div", { className: "mt-2 h-6 w-12 bg-gray-300 rounded animate-pulse" })) : (_jsx("p", { className: "text-2xl font-bold mt-2", children: tab.count }))] }), _jsx("div", { className: "flex justify-end mt-2", children: _jsx(FiArrowRight, { className: `text-lg transition-transform duration-200
+                        ? "bg-primary text-white"
+                        : "bg-white hover:bg-gray-100"} ${loading ? "pointer-events-none opacity-70" : ""}`, children: [_jsxs("div", { children: [_jsx("h2", { className: "text-sm font-medium", children: tab.label }), loading ? (_jsx("div", { className: "mt-2 h-6 w-12 bg-gray-300 rounded animate-pulse" })) : (_jsx("p", { className: "text-2xl font-bold mt-2", children: tab.count }))] }), _jsx("div", { className: "flex justify-end mt-2", children: _jsx(FiArrowRight, { className: `text-lg transition-transform duration-200
                   ${activeTab === tab.key
-                                ? "text-white"
-                                : "text-gray-500 group-hover:translate-x-1"}` }) })] }, tab.key))) }) }));
+                                    ? "text-white"
+                                    : "text-gray-500 group-hover:translate-x-1"}` }) })] }, tab.key))) })] }));
 }
 export default ReportDetails;

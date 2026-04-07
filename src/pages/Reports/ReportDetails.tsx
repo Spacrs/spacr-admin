@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import API from "../../constants/apiEndpoints";
 import { useEffect } from "react";
 import { FiArrowRight } from "react-icons/fi";
+import { toast, ToastContainer } from "react-toastify";
 
 type ReportsType = {
   userRegistrationCount: number;
@@ -105,13 +106,18 @@ function ReportDetails() {
 
   const handleTabClick = (tab: any) => {
     setActiveTab(tab.key);
-    // navigate(tab.route);
 
+  if (tab.count === 0) {
+    toast.error(`No ${tab.label.replace("Today's ", "")} found today`);
+    return;
+  }
+
+  const today = new Date().toISOString().split("T")[0];
     if (tab.key === "users") {
-    const today = new Date().toISOString().split("T")[0];
-
-    navigate(`/admin/users?fromDate=${today}&toDate=${today}`);
-    } else {
+      navigate(`/admin/users?fromDate=${today}&toDate=${today}`);
+    } else if(tab.key === "trips") {
+      navigate(`${tab.route}?fromDate=${today}&toDate=${today}`);
+    }else {
       navigate(tab.route);
     }
   };
@@ -144,7 +150,8 @@ function ReportDetails() {
     // </div>
 
     <div className="p-4">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <ToastContainer />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">   
         {reportTabs.map((tab) => (
           <div
             key={tab.key}

@@ -39,6 +39,7 @@ const API = {
     // added on 03-04-2026(RP)
     REPORTS: `${BASE_URL}/api/v5/admin/reports`,
     EXPORT_USERS: `${BASE_URL}/api/v5/admin/export-users`,
+    EXPORT_TRIPS: `${BASE_URL}/api/v5/admin/export-trips`,
   },
 
   COUNTRY: {
