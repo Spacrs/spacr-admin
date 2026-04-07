@@ -33,6 +33,13 @@ function TravelListing() {
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [filter, setFilter] = useState(""); // Search term
   const itemsPerPage = 10;
+  // added on 06-04-2026 (RP)
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [appliedFromDate, setAppliedFromDate] = useState("");
+  const [appliedToDate, setAppliedToDate] = useState("");
+  //const [verificationStatus, setVerificationStatus] = useState(""); // Verification filter
+
 
   const { data, isLoading, isFetching, isError, refetch } = useGetTravelListingQuery({
     page: currentPage,
@@ -41,6 +48,9 @@ function TravelListing() {
     sort: sortDirection,
     sortBy: sortBy,
     search: filter !== "" ? filter : undefined,
+    fromDate: appliedFromDate || undefined,
+    toDate: appliedToDate || undefined,
+    // verified: verificationStatus !== "" ? verificationStatus : undefined,
   });
 
   const [payload, setPayload] = useState<BodyPayload>({
@@ -232,27 +242,148 @@ const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentPage(1);
   };
 
+  // added on 04-06-2026 (RP)
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+
+    const from = params.get("fromDate");
+    const to = params.get("toDate");
+
+    if (from && to) {
+      setFromDate(from);
+      setToDate(to);
+      console.log("Applying date filters from URL:", { from, to });
+
+      // Apply directly
+      setAppliedFromDate(from);
+      setAppliedToDate(to);
+    }
+  }, [location.search]);
+
+    // added on 03-04-2026 (RP)
+  const handleFromDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFromDate(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleToDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setToDate(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleResetFilters = () => {
+    setFilter("");
+    // setVerificationStatus("");
+    setFromDate("");
+    setToDate("");
+    setAppliedFromDate("");
+    setAppliedToDate("");
+    setCurrentPage(1);
+  };
+
+  const handleApplyFilters = () => {
+    setAppliedFromDate(fromDate);
+    setAppliedToDate(toDate);
+    setCurrentPage(1);
+  };
+
+  const handleExport = async () => {
+  try {
+    const params = new URLSearchParams();
+
+    if (appliedFromDate) params.append("fromDate", appliedFromDate);
+    if (appliedToDate) params.append("toDate", appliedToDate);
+    // if (verificationStatus) params.append("verified", verificationStatus);
+    if (filter) params.append("search", filter);
+
+    const response = await fetch(
+      `${API.ADMIN.EXPORT_TRIPS}?${params.toString()}`,
+      // "http://localhost:8000/api/v5/admin/export-trips?" + params.toString(),
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      }
+    );
+
+    const blob = await response.blob();
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "trips.xlsx";
+    a.click();
+    window.URL.revokeObjectURL(url);
+
+  } catch (error) {
+    console.error("Export failed", error);
+  }
+  };
+
 
   return (
-    <div className="">
+    <div className="flex flex-col">
       <ToastContainer />
-      <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
-        {/* Search Bar */}
-        <div className="flex justify-between items-center w-full">
-        <div className="flex flex-1 max-w-lg">
-          <Search
-            search={filter}
-            onChange={onSearch}
-            onReset={() => setFilter("")}
-            placeholder="Search by cities, countries, or users"
-          />
-        </div>
-          
-          <div className="ml-4">
-          
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
+
+        {/* Left Section (Search + Dates) */}
+        <div className="flex flex-wrap items-center gap-3">
+
+          {/* Search Bar */}
+          <div className="w-full sm:w-[260px] md:w-[320px]">
+            <Search
+              search={filter}
+              onChange={onSearch}
+              onReset={() => setFilter("")}
+              placeholder="Search by cities, countries, or users"
+            />
           </div>
+
+          {/* From Date */}
+          <input
+            type="date"
+            value={fromDate}
+            onChange={handleFromDateChange}
+            className="px-3 py-2 border border-gray-300 rounded-md w-[150px]"
+          />
+
+          {/* To Date */}
+          <input
+            type="date"
+            value={toDate}
+            onChange={handleToDateChange}
+            className="px-3 py-2 border border-gray-300 rounded-md w-[150px]"
+          />
+
+        </div>
+
+        {/* Right Section (Buttons) */}
+        <div className="flex flex-wrap items-center gap-2">
+
+          <button
+            onClick={handleApplyFilters}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          >
+            Apply Filter
+          </button>
+
+          <button
+            onClick={handleResetFilters}
+            className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+          >
+            Reset Filters
+          </button>
+
+          <button
+            onClick={handleExport}
+            className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+          >
+            Export Excel
+          </button>
+
         </div>
       </div>
+
       <div className="flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto">
         <Table
   data={data?.data || []}
