@@ -19,6 +19,12 @@ function TravelListing() {
     const [sortDirection, setSortDirection] = useState("desc");
     const [filter, setFilter] = useState(""); // Search term
     const itemsPerPage = 10;
+    // added on 06-04-2026 (RP)
+    const [fromDate, setFromDate] = useState("");
+    const [toDate, setToDate] = useState("");
+    const [appliedFromDate, setAppliedFromDate] = useState("");
+    const [appliedToDate, setAppliedToDate] = useState("");
+    //const [verificationStatus, setVerificationStatus] = useState(""); // Verification filter
     const { data, isLoading, isFetching, isError, refetch } = useGetTravelListingQuery({
         page: currentPage,
         limit: itemsPerPage,
@@ -26,6 +32,9 @@ function TravelListing() {
         sort: sortDirection,
         sortBy: sortBy,
         search: filter !== "" ? filter : undefined,
+        fromDate: appliedFromDate || undefined,
+        toDate: appliedToDate || undefined,
+        // verified: verificationStatus !== "" ? verificationStatus : undefined,
     });
     const [payload, setPayload] = useState({
         code: "",
@@ -183,6 +192,72 @@ function TravelListing() {
         setFilter(e.target.value);
         setCurrentPage(1);
     };
-    return (_jsxs("div", { className: "", children: [_jsx(ToastContainer, {}), _jsx("div", { className: "flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg", children: _jsxs("div", { className: "flex justify-between items-center w-full", children: [_jsx("div", { className: "flex flex-1 max-w-lg", children: _jsx(Search, { search: filter, onChange: onSearch, onReset: () => setFilter(""), placeholder: "Search by cities, countries, or users" }) }), _jsx("div", { className: "ml-4" })] }) }), _jsx("div", { className: "flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto", children: _jsx(Table, { data: data?.data || [], columns: columns.travelListingColumn, loading: isLoading || isFetching, totalPages: data?.totalPages || 1, currentPage: currentPage, onPageChange: setCurrentPage, handleView: handleView, itemsPerPage: itemsPerPage, onSort: onSort }) }), showModal && (_jsx("div", { className: "fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50", children: _jsxs("div", { className: "bg-white p-6 rounded-lg shadow-lg w-full max-w-lg", children: [_jsx("h2", { className: "text-xl font-semibold mb-4", children: "Add Referral Code" }), _jsxs("form", { onSubmit: handleFormSubmit, className: "space-y-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block font-medium mb-1", children: "Code" }), _jsx("input", { type: "text", name: "code", value: payload.code, onChange: handleInputChange, className: "w-full border border-gray-300 rounded p-2", maxLength: 12, minLength: 8, pattern: "[A-Z0-9]{8,12}", title: "Code must be 8-12 characters long and contain only uppercase letters and numbers.", required: true }), _jsx("button", { type: "button", onClick: generateCode, className: "mt-2 bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700", children: "Generate Code" })] }), _jsxs("div", { children: [_jsx("label", { className: "block font-medium mb-1", children: "Full Name" }), _jsx("input", { type: "text", name: "FullName", value: payload.FullName, onChange: handleInputChange, className: "w-full border border-gray-300 rounded p-2", required: true })] }), _jsxs("div", { children: [_jsx("label", { className: "block font-medium mb-1", children: "Contact Number" }), _jsx("input", { type: "text", name: "contactNumber", value: payload.contactNumber, onChange: handleInputChange, className: "w-full border border-gray-300 rounded p-2" })] }), _jsxs("div", { className: "flex justify-end gap-2", children: [_jsx("button", { type: "button", onClick: () => setShowModal(false), className: "px-4 py-2 bg-gray-300 rounded hover:bg-gray-400", children: "Cancel" }), _jsx("button", { type: "submit", className: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500", children: "Submit" })] })] })] }) }))] }));
+    // added on 04-06-2026 (RP)
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const from = params.get("fromDate");
+        const to = params.get("toDate");
+        if (from && to) {
+            setFromDate(from);
+            setToDate(to);
+            console.log("Applying date filters from URL:", { from, to });
+            // Apply directly
+            setAppliedFromDate(from);
+            setAppliedToDate(to);
+        }
+    }, [location.search]);
+    // added on 03-04-2026 (RP)
+    const handleFromDateChange = (e) => {
+        setFromDate(e.target.value);
+        setCurrentPage(1);
+    };
+    const handleToDateChange = (e) => {
+        setToDate(e.target.value);
+        setCurrentPage(1);
+    };
+    const handleResetFilters = () => {
+        setFilter("");
+        // setVerificationStatus("");
+        setFromDate("");
+        setToDate("");
+        setAppliedFromDate("");
+        setAppliedToDate("");
+        setCurrentPage(1);
+    };
+    const handleApplyFilters = () => {
+        setAppliedFromDate(fromDate);
+        setAppliedToDate(toDate);
+        setCurrentPage(1);
+    };
+    const handleExport = async () => {
+        try {
+            const params = new URLSearchParams();
+            if (appliedFromDate)
+                params.append("fromDate", appliedFromDate);
+            if (appliedToDate)
+                params.append("toDate", appliedToDate);
+            // if (verificationStatus) params.append("verified", verificationStatus);
+            if (filter)
+                params.append("search", filter);
+            const response = await fetch(`${API.ADMIN.EXPORT_TRIPS}?${params.toString()}`, 
+            // "http://localhost:8000/api/v5/admin/export-trips?" + params.toString(),
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                },
+            });
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "trips.xlsx";
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        catch (error) {
+            console.error("Export failed", error);
+        }
+    };
+    return (_jsxs("div", { className: "flex flex-col", children: [_jsx(ToastContainer, {}), _jsxs("div", { className: "flex flex-wrap items-center justify-between gap-3 mb-4 p-4 bg-gray-100 shadow-md rounded-lg", children: [_jsxs("div", { className: "flex flex-wrap items-center gap-3", children: [_jsx("div", { className: "w-full sm:w-[260px] md:w-[320px]", children: _jsx(Search, { search: filter, onChange: onSearch, onReset: () => setFilter(""), placeholder: "Search by cities, countries, or users" }) }), _jsx("input", { type: "date", value: fromDate, onChange: handleFromDateChange, className: "px-3 py-2 border border-gray-300 rounded-md w-[150px]" }), _jsx("input", { type: "date", value: toDate, onChange: handleToDateChange, className: "px-3 py-2 border border-gray-300 rounded-md w-[150px]" })] }), _jsxs("div", { className: "flex flex-wrap items-center gap-2", children: [_jsx("button", { onClick: handleApplyFilters, className: "px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600", children: "Apply Filter" }), _jsx("button", { onClick: handleResetFilters, className: "px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600", children: "Reset Filters" }), _jsx("button", { onClick: handleExport, className: "px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600", children: "Export Excel" })] })] }), _jsx("div", { className: "flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto", children: _jsx(Table, { data: data?.data || [], columns: columns.travelListingColumn, loading: isLoading || isFetching, totalPages: data?.totalPages || 1, currentPage: currentPage, onPageChange: setCurrentPage, handleView: handleView, itemsPerPage: itemsPerPage, onSort: onSort }) }), showModal && (_jsx("div", { className: "fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50", children: _jsxs("div", { className: "bg-white p-6 rounded-lg shadow-lg w-full max-w-lg", children: [_jsx("h2", { className: "text-xl font-semibold mb-4", children: "Add Referral Code" }), _jsxs("form", { onSubmit: handleFormSubmit, className: "space-y-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block font-medium mb-1", children: "Code" }), _jsx("input", { type: "text", name: "code", value: payload.code, onChange: handleInputChange, className: "w-full border border-gray-300 rounded p-2", maxLength: 12, minLength: 8, pattern: "[A-Z0-9]{8,12}", title: "Code must be 8-12 characters long and contain only uppercase letters and numbers.", required: true }), _jsx("button", { type: "button", onClick: generateCode, className: "mt-2 bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700", children: "Generate Code" })] }), _jsxs("div", { children: [_jsx("label", { className: "block font-medium mb-1", children: "Full Name" }), _jsx("input", { type: "text", name: "FullName", value: payload.FullName, onChange: handleInputChange, className: "w-full border border-gray-300 rounded p-2", required: true })] }), _jsxs("div", { children: [_jsx("label", { className: "block font-medium mb-1", children: "Contact Number" }), _jsx("input", { type: "text", name: "contactNumber", value: payload.contactNumber, onChange: handleInputChange, className: "w-full border border-gray-300 rounded p-2" })] }), _jsxs("div", { className: "flex justify-end gap-2", children: [_jsx("button", { type: "button", onClick: () => setShowModal(false), className: "px-4 py-2 bg-gray-300 rounded hover:bg-gray-400", children: "Cancel" }), _jsx("button", { type: "submit", className: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500", children: "Submit" })] })] })] }) }))] }));
 }
 export default TravelListing;
