@@ -16,6 +16,7 @@ function Orders() {
     const [sortBy, setSortBy] = useState("CreatedAt");
     const [sortDirection, setSortDirection] = useState("desc");
     const [filter, setFilter] = useState(""); // Search term
+    // added on 07-04-2026 (RP)
     const [fromDate, setFromDate] = useState("");
     const [toDate, setToDate] = useState("");
     // applied states (API call ke liye)
@@ -29,6 +30,7 @@ function Orders() {
         sort: sortDirection,
         sortBy: sortBy,
         search: filter !== "" ? filter : undefined,
+        // added on 07-04-2026 (RP)
         fromDate: appliedFromDate || undefined,
         toDate: appliedToDate || undefined,
         status: orderStatus || undefined,
@@ -52,16 +54,14 @@ function Orders() {
             }))));
         }
     }, [data, dispatch]);
-    // added on 03-04-2026 (RP)
+    // added on 07-04-2026 (RP)
     useEffect(() => {
         const params = new URLSearchParams(location.search);
-        console.log("URL Search Params:", params);
         const from = params.get("fromDate");
         const to = params.get("toDate");
         if (from && to) {
             setFromDate(from);
             setToDate(to);
-            console.log("Applying date filters from URL:", { from, to });
             // Apply directly
             setAppliedFromDate(from);
             setAppliedToDate(to);
@@ -160,6 +160,7 @@ function Orders() {
             console.error("Failed to delete:", err);
         }
     };
+    // added on 07-04-2026 (RP)
     const handleFromDateChange = (e) => {
         setFromDate(e.target.value);
         setCurrentPage(1);
@@ -193,9 +194,9 @@ function Orders() {
                 params.append("status", orderStatus);
             if (filter)
                 params.append("search", filter);
-            const response = await fetch(
-            // `${API.ADMIN.EXPORT_ORDERS}?${params.toString()}`,
-            "http://localhost:8000/api/v5/admin/export-orders?" + params.toString(), {
+            const response = await fetch(`${API.ADMIN.EXPORT_ORDERS}?${params.toString()}`, 
+            // "http://localhost:8000/api/v5/admin/export-orders?" + params.toString(),
+            {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("access_token")}`,
                 },
@@ -212,7 +213,7 @@ function Orders() {
             console.error("Export failed", error);
         }
     };
-    return (_jsxs("div", { className: "flex flex-col", children: [_jsx(ToastContainer, {}), _jsxs("div", { className: "flex flex-wrap justify-between items-center gap-4 mb-4 p-4 bg-gray-100 shadow-md rounded-lg", children: [_jsx("div", { className: "flex flex-1 max-w-lg", children: _jsx(Search, { search: filter, onChange: onSearch, onReset: () => setFilter(""), placeholder: "Search by name..." }) }), _jsx("input", { type: "date", value: fromDate, onChange: handleFromDateChange, className: "px-3 py-2 border border-gray-300 rounded-md" }), _jsx("input", { type: "date", value: toDate, onChange: handleToDateChange, className: "px-3 py-2 border border-gray-300 rounded-md" }), _jsxs("select", { value: orderStatus, onChange: (e) => setOrderStatus(e.target.value), className: "px-4 py-2 border border-gray-300 rounded-md", children: [_jsx("option", { value: "", children: "All Statuses" }), _jsx("option", { value: "LIVE", children: "Live" }), _jsx("option", { value: "ACCEPTED", children: "Accepted" }), _jsx("option", { value: "PURCHASED", children: "Purchased" }), _jsx("option", { value: "READY_TO_RECEIVE", children: "Ready to Receive" }), _jsx("option", { value: "CANCELLED", children: "Cancelled" }), _jsx("option", { value: "DELIVERED", children: "Delivered" })] }), _jsx("button", { onClick: handleApplyFilters, className: "px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600", children: "Apply Filter" }), _jsx("button", { onClick: handleResetFilters, className: "px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600", children: "Reset Filters" }), _jsx("button", { onClick: handleExport, className: "px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600", children: "Export Excel" })] }), _jsx("div", { className: "flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto", children: _jsx(Table, { data: orders, columns: columns.orderColumn, loading: isLoading || isFetching, totalPages: data?.pagination?.totalPages || 1, currentPage: currentPage, onPageChange: setCurrentPage, 
+    return (_jsxs("div", { className: "flex flex-col", children: [_jsx(ToastContainer, {}), _jsxs("div", { className: "flex flex-wrap justify-between items-center gap-4 mb-4 p-4 bg-gray-100 shadow-md rounded-lg", children: [_jsx("div", { className: "flex flex-1 max-w-lg", children: _jsx(Search, { search: filter, onChange: onSearch, onReset: () => setFilter(""), placeholder: "Search by name..." }) }), _jsx("input", { type: "date", value: fromDate, onChange: handleFromDateChange, className: "px-3 py-2 border border-gray-300 rounded-md" }), _jsx("input", { type: "date", value: toDate, onChange: handleToDateChange, className: "px-3 py-2 border border-gray-300 rounded-md" }), _jsxs("select", { value: orderStatus, onChange: (e) => setOrderStatus(e.target.value), className: "px-4 py-2 border border-gray-300 rounded-md", children: [_jsx("option", { value: "", children: "All Orders" }), _jsx("option", { value: "LIVE", children: "Live" }), _jsx("option", { value: "ACCEPTED", children: "Accepted" }), _jsx("option", { value: "PURCHASED", children: "Purchased" }), _jsx("option", { value: "READY_TO_RECEIVE", children: "Ready to Receive" }), _jsx("option", { value: "CANCELLED", children: "Cancelled" }), _jsx("option", { value: "DELIVERED", children: "Delivered" })] }), _jsx("button", { onClick: handleApplyFilters, className: "px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600", children: "Apply Filter" }), _jsx("button", { onClick: handleResetFilters, className: "px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600", children: "Reset Filters" }), _jsx("button", { onClick: handleExport, className: "px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600", children: "Export Excel" })] }), _jsx("div", { className: "flex flex-col p-4 bg-gray-100 rounded-lg shadow-md sm:overflow-x-auto xs:overflow-x-auto", children: _jsx(Table, { data: orders, columns: columns.orderColumn, loading: isLoading || isFetching, totalPages: data?.pagination?.totalPages || 1, currentPage: currentPage, onPageChange: setCurrentPage, 
                     // handleUpdate={handleUpdate} // 06-03-2026
                     handleView: handleView, handleDelete: handleDelete, itemsPerPage: itemsPerPage, onSort: onSort }) }), isOpen && selectedOrder && (_jsx("div", { className: "fixed inset-0 flex items-center justify-center bg-black bg-opacity-50", children: _jsxs("div", { className: "bg-white p-6 rounded-lg shadow-lg w-96", children: [_jsxs("h2", { className: "text-xl font-bold text-center mb-4", children: ["Order ID: ", selectedOrder.orderId] }), _jsxs("div", { className: "flex items-center justify-between mt-4", children: [_jsx("span", { className: "font-medium", children: "Is Trending" }), _jsx("button", { className: `w-16 h-8 flex items-center rounded-full p-1 transition ${selectedOrder.IsTrending ? "bg-green-500" : "bg-gray-300"}`, onClick: handleToggleTrending, children: _jsx("div", { className: `w-6 h-6 bg-white rounded-full shadow-md transform transition ${selectedOrder.IsTrending ? "translate-x-6" : "translate-x-0"}` }) })] }), _jsxs("div", { className: "flex justify-center gap-4 mt-5", children: [_jsx(Button, { className: "px-4 py-2 bg-gray-300 rounded-md", onClick: closeModal, text: "Cancel", variant: "lightBlue" }), _jsx(Button, { className: "px-4 py-2 bg-primary text-white rounded-md", onClick: handleUpdateOrder, text: "Update", variant: "primary" })] })] }) })), deleteConfirmOpen && orderToDelete && (_jsx("div", { className: "fixed inset-0 flex items-center justify-center bg-black bg-opacity-50", children: _jsxs("div", { className: "bg-white p-6 rounded-lg shadow-lg w-96", children: [_jsx("h2", { className: "text-xl font-bold text-center mb-4", children: "Are you sure you want to delete this order?" }), _jsxs("div", { className: "flex justify-center gap-4 mt-5", children: [_jsx(Button, { className: "px-4 py-2 bg-gray-300 rounded-md", onClick: () => {
                                         setDeleteConfirmOpen(false);
