@@ -295,8 +295,8 @@ function Orders() {
           value={orderStatus}
           onChange={(e) => setOrderStatus(e.target.value)} 
           className="px-4 py-2 border border-gray-300 rounded-md"
-        >
-          <option value="">All Statuses</option>
+        >    
+          <option value="">All Orders</option>
           <option value="LIVE">Live</option>
           <option value="ACCEPTED">Accepted</option>
           <option value="PURCHASED">Purchased</option>
