@@ -10,6 +10,7 @@ import { Search, Table, Button } from "../../components/Common";
 import { useLocation } from "react-router-dom"; //Added on 04-06-2025
 import { toast, ToastContainer } from "react-toastify";
 import ConfirmationModal from "../../components/Common/Modal/ConfirmationModal";
+import API from "../.././constants/apiEndpoints";
 const CityList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const cities = useAppSelector(selectCities);
@@ -89,7 +90,7 @@ const CityList = () => {
         try {
             const { Id } = configToDelete;
             const access_token = localStorage.getItem('access_token');
-            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/city/${Id}`, {
+            const response = await fetch(`${API.CITY.GET_CITY}/${Id}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",

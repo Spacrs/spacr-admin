@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../../components/Common/Button";
 import InputComponent from "../../components/Common/Inputes";
 import { toast, ToastContainer } from "react-toastify";
+import API from "../.././constants/apiEndpoints";
 const AddReferralCode = () => {
     const navigate = useNavigate();
     const fileInputRef = useRef(null);
@@ -25,7 +26,7 @@ const AddReferralCode = () => {
         setCreating(true);
         try {
             const access_token = localStorage.getItem("access_token");
-            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/create-referral-code`, {
+            const response = await fetch(API.ADMIN.CREATE_REFERRAL_CODE, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${access_token}`,

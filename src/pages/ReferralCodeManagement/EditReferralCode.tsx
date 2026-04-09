@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../../components/Common/Button";
 import InputComponent from "../../components/Common/Inputes";
 import { toast, ToastContainer } from "react-toastify";
+import API from "../.././constants/apiEndpoints";
 
 type BodyPayload = {
   code: string;
@@ -39,7 +40,7 @@ const AddReferralCode: React.FC = () => {
       const access_token = localStorage.getItem("access_token");
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/create-referral-code`,
+        API.ADMIN.CREATE_REFERRAL_CODE,
         {
           method: "POST",
           headers: {

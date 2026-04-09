@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { columns } from "../../constant/Columns";
 import { ErrorMsg, Table, Button } from "../../components/Common";
 import { toast, ToastContainer } from "react-toastify";
+import API from "../.././constants/apiEndpoints";
 function BannerList() {
     const dispatch = useAppDispatch();
     // const { data, isLoading, isFetching, isError, refetch } = useGetScrapingIconsQuery();
@@ -84,7 +85,7 @@ function BannerList() {
             return;
         try {
             const access_token = localStorage.getItem("access_token");
-            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/delete-marketplace/${iconID}`, {
+            const res = await fetch(`${API.ADMIN.DELETE_MARKETPLACE}/${iconID}`, {
                 method: "PATCH",
                 headers: {
                     "Authorization": `Bearer ${access_token}`,

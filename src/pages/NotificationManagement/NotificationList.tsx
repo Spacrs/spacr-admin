@@ -8,6 +8,7 @@ import {
   Button,
 } from "../../components/Common";
 import { columns } from "../../constant/Columns";
+import  API  from "../../constants/apiEndpoints";
 
 interface Notification {
   notificationId: string;
@@ -96,7 +97,7 @@ function NotificationList() {
     try {
         const access_token = localStorage.getItem("access_token");
         const res = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/api/v2/notification/get-a-notification/${data.notificationId}`,
+          `${API.NOTIFICATION.GET_NOTIFICATION}/${data.notificationId}`,
           {
             method: "GET",
             headers: {

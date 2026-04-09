@@ -6,6 +6,7 @@ import Button from "../../components/Common/Button";
 import { toast, ToastContainer } from "react-toastify";
 import Select from "react-select";
 import { useDispatch } from "react-redux";
+import API from "../.././constants/apiEndpoints";
 const EditBanner = () => {
     const { bannerID } = useParams();
     const navigate = useNavigate();
@@ -56,7 +57,7 @@ const EditBanner = () => {
     const fetchStores = async () => {
         setLoadingStores(true);
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/order/get-scraping-icons`, {
+            const res = await fetch(API.ORDER.GET_SCRAPING_ICONS, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
             });
             const result = await res.json();
@@ -86,7 +87,7 @@ const EditBanner = () => {
         try {
             setPayload((prev) => ({ ...prev, isActive: checked }));
             const access_token = localStorage.getItem("access_token");
-            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/toggle-banner-status/${bannerID}`, {
+            const res = await fetch(`${API.ADMIN.TOGGLE_BANNER_STATUS}/${bannerID}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -117,7 +118,7 @@ const EditBanner = () => {
         const fetchBanner = async () => {
             try {
                 const token = localStorage.getItem("access_token");
-                const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/get-banner/${bannerID}`, {
+                const res = await fetch(`${API.ADMIN.GET_BANNER}/${bannerID}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 const result = await res.json();
@@ -159,7 +160,7 @@ const EditBanner = () => {
     useEffect(() => {
         const fetchCountries = async () => {
             try {
-                const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/country/get-countries-for-banner-in-edit`, {
+                const res = await fetch(API.COUNTRY.GET_COUNTRIES_FOR_BANNER_IN_EDIT, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -193,7 +194,7 @@ const EditBanner = () => {
         const checkGlobalBanner = async () => {
             try {
                 const token = localStorage.getItem("access_token");
-                const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/check-global-banner`, {
+                const res = await fetch(API.ADMIN.CHECK_GLOBAL_BANNER, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 const result = await res.json();
@@ -249,7 +250,7 @@ const EditBanner = () => {
                 formData.append("image", payload.image);
             }
             const token = localStorage.getItem("access_token");
-            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/update-banner/${bannerID}`, {
+            const res = await fetch(`${API.ADMIN.UPDATE_BANNER}/${bannerID}`, {
                 method: "PUT",
                 headers: { Authorization: `Bearer ${token}` },
                 body: formData,

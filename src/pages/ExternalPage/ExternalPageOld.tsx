@@ -364,6 +364,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
+import API from "../.././constants/apiEndpoints";
 
 interface City {
   Id: number;
@@ -409,7 +410,7 @@ const ExternalPage = () => {
   useEffect(() => {
     setLoadingCountries(true);
     setCountriesError(null);
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/country-city`)
+    fetch(API.CITY.GET_COUNTRY_CITY)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to load countries");
         return res.json();
@@ -434,7 +435,7 @@ const ExternalPage = () => {
     referralAbortController.current = new AbortController();
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/get-referral-code-details/${code}`, {
+      const res = await fetch(`${API.ADMIN.GET_REFERRAL_CODE_DETAILS}/${code}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -498,7 +499,7 @@ const ExternalPage = () => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/v2/user/add-external-user-with-referral-code`,
+        API.USER.ADD_EXTERNAL_USER_WITH_REFERRAL_CODE,
         {
           method: "POST",
           headers: {

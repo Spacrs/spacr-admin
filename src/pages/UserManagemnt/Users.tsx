@@ -13,10 +13,13 @@ import {
   ConfirmationModal,
   Table,
 } from "../../components/Common";
+import { useLocation } from "react-router-dom";
+import API from "../../constants/apiEndpoints";
 
 const Users = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { users, isloading } = useAppSelector((state) => state.userSlice);
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,6 +30,11 @@ const Users = () => {
 
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  // applied states (used in API)
+  const [appliedFromDate, setAppliedFromDate] = useState("");
+  const [appliedToDate, setAppliedToDate] = useState("");
 
   // Pass both filters (search and verified) to the API call
   const { data, isLoading, isFetching, isError, refetch } = useGetUsersQuery({
@@ -36,6 +44,8 @@ const Users = () => {
     search: filter !== "" ? filter : undefined,
     sort: sortDirection,
     sortBy: sortBy,
+    fromDate: appliedFromDate || undefined,
+    toDate: appliedToDate || undefined,
   });
 
   const [updateUserStatus] = useUpdateUserInfoMutation();
@@ -56,6 +66,24 @@ const Users = () => {
   if (isError) {
     return <ErrorMsg errorMsg="Error loading user data" />;
   }
+
+  // added on 03-04-2026 (RP)
+  useEffect(() => {
+  const params = new URLSearchParams(location.search);
+
+  const from = params.get("fromDate");
+  const to = params.get("toDate");
+
+  if (from && to) {
+    setFromDate(from);
+    setToDate(to);
+    console.log("Applying date filters from URL:", { from, to });
+
+    // Apply directly
+    setAppliedFromDate(from);
+    setAppliedToDate(to);
+  }
+  }, [location.search]);
 
   const handleToggleStatus = (val: any) => {
     setUserToUpdate(val); // Set the user to update
@@ -94,10 +122,70 @@ const Users = () => {
     setCurrentPage(1);
   };
 
+  // added on 03-04-2026 (RP)
+  const handleFromDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFromDate(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleToDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setToDate(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleResetFilters = () => {
+    setFilter("");
+    setVerificationStatus("");
+    setFromDate("");
+    setToDate("");
+    setAppliedFromDate("");
+    setAppliedToDate("");
+    setCurrentPage(1);
+  };
+
+  const handleApplyFilters = () => {
+    setAppliedFromDate(fromDate);
+    setAppliedToDate(toDate);
+    setCurrentPage(1);
+  };
+
+  const handleExport = async () => {
+  try {
+    const params = new URLSearchParams();
+
+    if (appliedFromDate) params.append("fromDate", appliedFromDate);
+    if (appliedToDate) params.append("toDate", appliedToDate);
+    if (verificationStatus) params.append("verified", verificationStatus);
+    if (filter) params.append("search", filter);
+
+    const response = await fetch(
+      `${API.ADMIN.EXPORT_USERS}?${params.toString()}`,
+      // "http://localhost:8000/api/v5/admin/export-users?" + params.toString(),
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      }
+    );
+
+    const blob = await response.blob();
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "users.xlsx";
+    a.click();
+    window.URL.revokeObjectURL(url);
+
+  } catch (error) {
+    console.error("Export failed", error);
+  }
+  };
+
   return (
     <div className="flex flex-col">
       {/* Filters Section */}
-      <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
+      <div className="flex flex-wrap justify-between items-center gap-4 mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         {/* Search Bar */}
         <div className="flex flex-1 max-w-lg">
           <Search
@@ -107,20 +195,63 @@ const Users = () => {
           />
         </div>
 
+        {/* added on 03-04-2026 (RP) */}
+        {/* From Date */}
+        <input
+          type="date"
+          value={fromDate}
+          onChange={handleFromDateChange}
+          className="px-3 py-2 border border-gray-300 rounded-md"
+        />
+
+        {/* To Date */}
+        <input
+          type="date"
+          value={toDate}
+          onChange={handleToDateChange}
+          className="px-3 py-2 border border-gray-300 rounded-md"
+        />
+
         {/* Verification Status Filter */}
-        <div className="ml-4">
-          <select
-            className="px-4 py-2 border border-gray-300 rounded-md"
-            value={verificationStatus}
-            onChange={(e) => setVerificationStatus(e.target.value)} // Update verification status filter
-          >
-            <option value="">All Users</option>
-            <option value="verified">Verified</option>
-            <option value="pending">Pending</option>
-            <option value="rejected">Rejected</option>
-            <option value="none">None</option>
-          </select>
-        </div>
+        <select
+          className="px-4 py-2 border border-gray-300 rounded-md"
+          value={verificationStatus}
+          onChange={(e) => {
+            setVerificationStatus(e.target.value);
+            setCurrentPage(1);
+          }}
+        >
+          <option value="">All Users</option>
+          <option value="verified">Verified</option>
+          <option value="pending">Pending</option>
+          <option value="rejected">Rejected</option>
+          <option value="none">None</option>
+        </select>
+        {/* added on 03-04-2026 (RP) */}
+        {/* Apply Button */}
+        <button
+          onClick={handleApplyFilters}
+          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+        >
+          Apply Filter
+        </button>
+
+        {/* Reset Button */}
+        <button
+          onClick={handleResetFilters}
+          className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+        >
+          Reset Filters
+        </button>
+
+        {/* Export Button */}
+        <button
+          onClick={handleExport}
+          className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+        >
+          Export Excel
+        </button>
+
       </div>
 
       {/* Table Section */}

@@ -251,6 +251,37 @@ const WithdrawalDetails = () => {
         </div>
       </div>
 
+      {/* Address Details */}
+      <div className="bg-gray-50 p-6 rounded-lg shadow-md">
+        <h3 className="text-xl font-semibold mb-4">Address Details</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <p>
+            <strong>Address Line 1:</strong> {t.bankAccount.addrLine1 || "-"}
+          </p>
+          <p>
+            <strong>Address Line 2:</strong> {t.bankAccount.addrLine2 || "-"}
+          </p>
+          <p>
+            <strong>Address Line 3:</strong> {t.bankAccount.addrLine3 || "-"}
+          </p>
+          <p>
+            <strong>City:</strong> {t.bankAccount.addrCity || "-"}
+          </p>
+          <p>
+            <strong>Postal Code:</strong> {t.bankAccount.addrPostalCode || "-"}
+          </p>
+          {/* <p>
+            <strong>Country Code:</strong> {t.bankAccount.countryCode || "-"}
+          </p> */}
+          <p>
+            <strong>Phone:</strong> {t.bankAccount.addrPhone || "-"}
+          </p>
+          <p>
+            <strong>Email:</strong> {t.bankAccount.addrEmail || "-"}
+          </p>
+        </div>
+      </div>
+
       <div className="bg-gray-50 p-6 rounded-lg shadow-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
         <p>
           <strong>Created At:</strong>{" "}

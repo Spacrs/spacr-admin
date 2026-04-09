@@ -77,9 +77,12 @@ export const adminAuthApi: any = createApi({
         search?: string;
         sortBy?: string;
         sort?: "asc" | "desc";
+        fromDate?: string;
+        toDate?: string;
       }
     >({
       query: (paramsObj) => {
+        console.log("Params for getUsers query:", paramsObj);
         const queryString = buildQueryParams(paramsObj);
         return {
           url: `/admin/get-all-users?${queryString}`,

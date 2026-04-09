@@ -17,6 +17,9 @@ export const ordersApi: any = createApi({
         sortBy?: string;
         sort?: "asc" | "desc";
         search?: string;
+        fromDate?: string; // [added on 07-04-2026(RP)]
+        toDate?: string;   // [added on 07-04-2026(RP)]
+        status?: string; // [added on 07-04-2026(RP)]
       }
     >({
       query: (paramsObj) => {
@@ -155,6 +158,9 @@ export const ordersApi: any = createApi({
         sortBy?: string;
         sort?: "asc" | "desc";
         search?: string;
+        fromDate?: string; // [added on 06-04-2026(RP)]
+        toDate?: string;
+        // verified?: string;d
       }
     >({
       query: (paramsObj) => {

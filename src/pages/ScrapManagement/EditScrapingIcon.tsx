@@ -15,6 +15,7 @@ import {
   useGetPaymentConfigsQuery,
 } from "../../store/slices/paymentConfigSlice/apiSlice";
 import ImageCropper from "../../components/Common/Cropper/ImageCropper"; //Added on 09-07-2025
+import API from "../.././constants/apiEndpoints";
 
 type BodyPayload = {
   title: string;
@@ -52,7 +53,7 @@ const EditScrapingIcon: React.FC = () => {
   useEffect(() => {
     if (!Id) return;
 
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/get-scraping-icon/${Id}`, {
+    fetch(`${API.ADMIN.GET_SCRAPING_ICON}/${Id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
@@ -90,7 +91,7 @@ const EditScrapingIcon: React.FC = () => {
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/country`);
+        const res = await fetch(API.COUNTRY.GET_ALL_COUNTRIES);
         const result = await res.json();
         console.log("Fetched countries:", result.data);
         if (res.ok && Array.isArray(result.data)) {
@@ -169,7 +170,7 @@ const EditScrapingIcon: React.FC = () => {
 
       const access_token = localStorage.getItem('access_token');
 
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/edit-scraping-icon/${Id}`, {
+      const response = await fetch(`${API.ADMIN.EDIT_SCRAPING_ICON}/${Id}`, {
         method: "PUT",
         body: formData,
         headers: {

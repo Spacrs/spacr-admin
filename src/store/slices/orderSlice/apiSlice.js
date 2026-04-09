@@ -9,6 +9,7 @@ export const ordersApi = createApi({
         getOrders: builder.query({
             query: (paramsObj) => {
                 const queryString = buildQueryParams(paramsObj);
+                console.log("Query Params for getOrders:", queryString);
                 return {
                     url: `/${ADMIN}/all-orders?${queryString}`,
                     method: "GET",

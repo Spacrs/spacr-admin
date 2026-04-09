@@ -7,6 +7,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useDispatch } from "react-redux";
 import ImageCropper from "../../components/Common/Cropper/ImageCropper"; //Added on 09-07-2025
 import Select from "react-select";
+import API from "../.././constants/apiEndpoints";
 const AddBanner = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const AddBanner = () => {
     const fetchStores = async () => {
         setLoadingStores(true);
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/order/get-scraping-icons`, {
+            const res = await fetch(API.ORDER.GET_SCRAPING_ICONS, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("access_token")}`,
                 },
@@ -96,7 +97,7 @@ const AddBanner = () => {
                 formData.append("country", payload.selectedCountry.join(","));
             }
             const access_token = localStorage.getItem('access_token');
-            const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/add-banner`, {
+            const res = await fetch(API.ADMIN.ADD_BANNER, {
                 method: "POST",
                 body: formData,
                 headers: {
@@ -124,7 +125,7 @@ const AddBanner = () => {
         const checkGlobalBanner = async () => {
             try {
                 const access_token = localStorage.getItem('access_token');
-                const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/admin/check-global-banner`, {
+                const res = await fetch(API.ADMIN.CHECK_GLOBAL_BANNER, {
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${access_token}`
@@ -176,7 +177,7 @@ const AddBanner = () => {
     useEffect(() => {
         const fetchCountries = async () => {
             try {
-                const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/v2/country/get-countries-for-banner`);
+                const res = await fetch(API.COUNTRY.GET_COUNTRIES_FOR_BANNER);
                 const result = await res.json();
                 console.log("Fetched countries:", result.data);
                 if (res.ok && Array.isArray(result.data)) {
