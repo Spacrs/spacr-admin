@@ -262,6 +262,9 @@ const WithdrawalDetails = () => {
             <strong>Address Line 2:</strong> {t.bankAccount.addrLine2 || "-"}
           </p>
           <p>
+            <strong>Address Line 3:</strong> {t.bankAccount.addrLine3 || "-"}
+          </p>
+          <p>
             <strong>City:</strong> {t.bankAccount.addrCity || "-"}
           </p>
           <p>
