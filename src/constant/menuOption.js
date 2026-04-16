@@ -1,7 +1,13 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { icons } from "../Icons/constant";
-const { HiOutlineUsers, BsCreditCard2Front, TbTruckDelivery, GrSend, MdContactSupport, IoIosFlag, FaCity, CiSettings, MdProductionQuantityLimits, FaBarcode, FaPlane, GiKnightBanner, GiTakeMyMoney, AiOutlineTransaction, BsCurrencyExchange, TbReportSearch } = icons;
+const { HiOutlineUsers, BsCreditCard2Front, TbTruckDelivery, GrSend, MdContactSupport, IoIosFlag, FaCity, CiSettings, MdProductionQuantityLimits, FaBarcode, FaPlane, GiKnightBanner, GiTakeMyMoney, AiOutlineTransaction, BsCurrencyExchange, TbReportSearch, RxDashboard } = icons;
 const menuItems = [
+    // added on 14-04-2026(RP)
+    {
+        label: "Dashboard",
+        path: "/admin/dashboard-overview",
+        icon: _jsx(RxDashboard, { style: { fontSize: "20px", margin: "0 10px" } }),
+    },
     {
         label: "Users",
         path: "/admin/users",

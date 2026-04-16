@@ -16,11 +16,18 @@ const {
   GiTakeMyMoney,
   AiOutlineTransaction,
   BsCurrencyExchange,
-  TbReportSearch
+  TbReportSearch,
+  RxDashboard
 
 } = icons;
 
 const menuItems: MenuItemTypes[] = [
+  // added on 14-04-2026(RP)
+  {
+    label: "Dashboard",
+    path: "/admin/dashboard-overview",
+    icon: <RxDashboard style={{ fontSize: "20px", margin: "0 10px" }} />,
+  },
   {
     label: "Users",
     path: "/admin/users",

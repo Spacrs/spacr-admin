@@ -44,6 +44,7 @@ import TransactionDetails from "../pages/TransactionManagement/TransactionDetail
 import WithdrawalList from "../pages/WithdrawalManagement/WithdrawalList";
 import WithdrawalDetails from "../pages/WithdrawalManagement/WithdrawalDetails";
 import ReportDetails from "../pages/Reports/ReportDetails";
+import Overview from "../pages/Dashboard/Overview";
 export const protectedRoutes = [
     // these routes are accessable with auth or layout for diffrent roles
     {
@@ -64,6 +65,13 @@ export const authRoutes = [
 ];
 export const adminRoutes = [
     // these routes are accessable with auth or child routes of admin/*  routes
+    // added on 14-04-2026(RP)
+    {
+        path: "dashboard-overview",
+        component: Overview,
+        breadcrumb: ["admin", "dashboard"],
+        // showBreadcrumb: true,
+    },
     {
         path: "dashboard",
         component: Dashboard,
