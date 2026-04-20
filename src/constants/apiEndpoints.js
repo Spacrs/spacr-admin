@@ -32,6 +32,12 @@ const API = {
         EXPORT_USERS: `${BASE_URL}/api/v5/admin/export-users`,
         EXPORT_TRIPS: `${BASE_URL}/api/v5/admin/export-trips`,
         EXPORT_ORDERS: `${BASE_URL}/api/v5/admin/export-orders`,
+        // added on 16-04-2026(RP)
+        GET_DASHBOARD_METRICS: `${BASE_URL}/api/v5/admin/dashboard/metrics`,
+        GROWTH_TRENDS: `${BASE_URL}/api/v5/admin/dashboard/growth-trends`,
+        SUPPLY_METRICS: `${BASE_URL}/api/v5/admin/dashboard/supply-metrics`,
+        TOP_CORRIDORS: `${BASE_URL}/api/v5/admin/dashboard/top-corridors`,
+        UNIT_ECONOMIC: `${BASE_URL}/api/v5/admin/dashboard/unit-economics`
     },
     COUNTRY: {
         GET_COUNTRIES_FOR_BANNER: `${BASE_URL}/api/${VERSION}/country/get-countries-for-banner`,

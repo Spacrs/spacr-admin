@@ -15,6 +15,7 @@ export function useTopCorridors(fromDate, toDate) {
         //         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         //     },
         // })
+        // ${API.ADMIN.TOP_CORRIDORS}?fromDate=${fromDate}&toDate=${toDate}
         fetch(`http://localhost:8000/api/v5/admin/dashboard/top-corridors${params}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("access_token")}`,

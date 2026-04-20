@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import API from "../constants/apiEndpoints"
 
 interface DashboardMetrics {
   GMV: number;
@@ -28,21 +29,28 @@ export function useDashboardMetrics(fromDate: string, toDate: string) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!fromDate || !toDate) return;
-
     setLoading(true);
     setError(null);
 
-    fetch(`http://localhost:8000/api/v5/admin/dashboard/metrics?fromDate=${fromDate}&toDate=${toDate}`, 
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-    )
+    let url = `http://localhost:8000/api/v5/admin/dashboard/metrics`;
+
+    const params = new URLSearchParams();
+
+    if (fromDate) params.append("fromDate", fromDate);
+    if (toDate) params.append("toDate", toDate);
+
+    if ([...params].length) {
+      url += `?${params.toString()}`;
+    }
+
+    fetch(url, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    })
       .then((res) => {
-        if (!res.ok) throw new Error('Failed to fetch metrics');
-        return res.json() as Promise<ApiResponse>;
+        if (!res.ok) throw new Error("Failed to fetch metrics");
+        return res.json();
       })
       .then((json) => {
         if (json.success) setData(json.data);

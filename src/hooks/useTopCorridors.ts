@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import API from "../constants/apiEndpoints"
+
 
 export interface Corridor {
   corridor: string;
@@ -32,6 +34,9 @@ export function useTopCorridors(fromDate: string, toDate: string) {
     //         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
     //     },
     // })
+
+    // ${API.ADMIN.TOP_CORRIDORS}?fromDate=${fromDate}&toDate=${toDate}
+    
     fetch(`http://localhost:8000/api/v5/admin/dashboard/top-corridors${params}`,{
         headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,

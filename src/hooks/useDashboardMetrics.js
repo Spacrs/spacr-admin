@@ -4,18 +4,25 @@ export function useDashboardMetrics(fromDate, toDate) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     useEffect(() => {
-        if (!fromDate || !toDate)
-            return;
         setLoading(true);
         setError(null);
-        fetch(`http://localhost:8000/api/v5/admin/dashboard/metrics?fromDate=${fromDate}&toDate=${toDate}`, {
+        let url = `http://localhost:8000/api/v5/admin/dashboard/metrics`;
+        const params = new URLSearchParams();
+        if (fromDate)
+            params.append("fromDate", fromDate);
+        if (toDate)
+            params.append("toDate", toDate);
+        if ([...params].length) {
+            url += `?${params.toString()}`;
+        }
+        fetch(url, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             },
         })
             .then((res) => {
             if (!res.ok)
-                throw new Error('Failed to fetch metrics');
+                throw new Error("Failed to fetch metrics");
             return res.json();
         })
             .then((json) => {

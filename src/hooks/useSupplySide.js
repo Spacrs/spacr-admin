@@ -8,6 +8,7 @@ export function useSupplySide(fromDate, toDate) {
             return;
         setLoading(true);
         setError(null);
+        // ${API.ADMIN.SUPPLY_METRICS}?fromDate=${fromDate}&toDate=${toDate}
         fetch(`http://localhost:8000/api/v5/admin/dashboard/supply-metrics?fromDate=${fromDate}&toDate=${toDate}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("access_token")}`,

@@ -11,12 +11,20 @@ function fmt(value: number): string {
 }
 
 export default function TopMetrics() {
-  const [startDate, setStartDate] = useState<Date>(subDays(new Date(), 30));
-  const [endDate, setEndDate] = useState<Date>(new Date());
+  // const [startDate, setStartDate] = useState<Date>(subDays(new Date(), 30));
+  // const [endDate, setEndDate] = useState<Date>(new Date());
+
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+
+  // const { data, loading, error } = useDashboardMetrics(
+  //   format(startDate, "yyyy-MM-dd"),
+  //   format(endDate, "yyyy-MM-dd"),
+  // );
 
   const { data, loading, error } = useDashboardMetrics(
-    format(startDate, "yyyy-MM-dd"),
-    format(endDate, "yyyy-MM-dd"),
+    startDate ? format(startDate, "yyyy-MM-dd") : "",
+    endDate ? format(endDate, "yyyy-MM-dd") : ""
   );
 
   const metrics = [

@@ -1,6 +1,6 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState } from "react";
-import { format, subDays } from "date-fns";
+import { format } from "date-fns";
 import MetricCard from "./MetricCard";
 import DateFilter from "./DateFilter";
 import { useDashboardMetrics } from "../hooks/useDashboardMetrics";
@@ -12,9 +12,15 @@ function fmt(value) {
     return `$${value.toFixed(0)}`;
 }
 export default function TopMetrics() {
-    const [startDate, setStartDate] = useState(subDays(new Date(), 30));
-    const [endDate, setEndDate] = useState(new Date());
-    const { data, loading, error } = useDashboardMetrics(format(startDate, "yyyy-MM-dd"), format(endDate, "yyyy-MM-dd"));
+    // const [startDate, setStartDate] = useState<Date>(subDays(new Date(), 30));
+    // const [endDate, setEndDate] = useState<Date>(new Date());
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    // const { data, loading, error } = useDashboardMetrics(
+    //   format(startDate, "yyyy-MM-dd"),
+    //   format(endDate, "yyyy-MM-dd"),
+    // );
+    const { data, loading, error } = useDashboardMetrics(startDate ? format(startDate, "yyyy-MM-dd") : "", endDate ? format(endDate, "yyyy-MM-dd") : "");
     const metrics = [
         { label: "GMV", value: data ? fmt(data.GMV) : "—" },
         { label: "Revenue", value: data ? fmt(data.revenue) : "—" },

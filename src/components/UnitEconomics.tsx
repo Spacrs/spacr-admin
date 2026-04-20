@@ -80,12 +80,12 @@ function RatioGauge({ ratio }: { ratio: number }) {
 }
 
 export default function UnitEconomics() {
-  const [startDate, setStartDate] = useState<Date>(subDays(new Date(), 30));
-  const [endDate, setEndDate]     = useState<Date>(new Date());
+  const [startDate, setStartDate] = useState<Date | null>(subDays(new Date(), 30));
+  const [endDate, setEndDate]     = useState<Date | null>(new Date());
 
   const { data, loading, error } = useUnitEconomics(
-    format(startDate, 'yyyy-MM-dd'),
-    format(endDate,   'yyyy-MM-dd')
+    startDate ? format(startDate, 'yyyy-MM-dd') : '',
+    endDate ? format(endDate, 'yyyy-MM-dd') : ''
   );
 
   const ue = data?.unitEconomic;

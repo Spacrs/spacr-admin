@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import API from "../constants/apiEndpoints"
 
 export interface SupplyKPIs {
   totalTravelers: number;
@@ -42,6 +43,7 @@ export function useSupplySide(fromDate: string, toDate: string) {
     setLoading(true);
     setError(null);
 
+    // ${API.ADMIN.SUPPLY_METRICS}?fromDate=${fromDate}&toDate=${toDate}
     fetch(
       `http://localhost:8000/api/v5/admin/dashboard/supply-metrics?fromDate=${fromDate}&toDate=${toDate}`,
       {

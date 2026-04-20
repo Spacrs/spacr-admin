@@ -15,7 +15,7 @@ function fmt(value) {
 export default function SupplySide() {
     const [startDate, setStartDate] = useState(subDays(new Date(), 30));
     const [endDate, setEndDate] = useState(new Date());
-    const { data, loading, error } = useSupplySide(format(startDate, "yyyy-MM-dd"), format(endDate, "yyyy-MM-dd"));
+    const { data, loading, error } = useSupplySide(startDate ? format(startDate, 'yyyy-MM-dd') : '', endDate ? format(endDate, 'yyyy-MM-dd') : '');
     console.log("data_____", data);
     const supplyGrowth = data?.charts?.supplyGrowth || [];
     const ordersTrend = data?.charts?.ordersTrend || [];

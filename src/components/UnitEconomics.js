@@ -47,7 +47,7 @@ function RatioGauge({ ratio }) {
 export default function UnitEconomics() {
     const [startDate, setStartDate] = useState(subDays(new Date(), 30));
     const [endDate, setEndDate] = useState(new Date());
-    const { data, loading, error } = useUnitEconomics(format(startDate, 'yyyy-MM-dd'), format(endDate, 'yyyy-MM-dd'));
+    const { data, loading, error } = useUnitEconomics(startDate ? format(startDate, 'yyyy-MM-dd') : '', endDate ? format(endDate, 'yyyy-MM-dd') : '');
     const ue = data?.unitEconomic;
     const ce = data?.customerEconomic;
     const waterfallData = ue

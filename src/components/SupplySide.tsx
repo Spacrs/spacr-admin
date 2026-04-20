@@ -22,12 +22,12 @@ function fmt(value: number): string {
 }
 
 export default function SupplySide() {
-  const [startDate, setStartDate] = useState<Date>(subDays(new Date(), 30));
-  const [endDate, setEndDate] = useState<Date>(new Date());
+  const [startDate, setStartDate] = useState<Date | null>(subDays(new Date(), 30));
+  const [endDate, setEndDate] = useState<Date | null>(new Date());
 
   const { data, loading, error } = useSupplySide(
-    format(startDate, "yyyy-MM-dd"),
-    format(endDate, "yyyy-MM-dd"),
+    startDate ? format(startDate, 'yyyy-MM-dd') : '',
+    endDate ? format(endDate, 'yyyy-MM-dd') : ''
   );
   console.log("data_____", data);
 

@@ -21,12 +21,12 @@ function formatMonth(dateStr: string): string {
 }
 
 export default function GrowthTrendChart() {
-  const [startDate, setStartDate] = useState<Date>(subDays(new Date(), 365));
-  const [endDate, setEndDate]     = useState<Date>(new Date());
+  const [startDate, setStartDate] = useState<Date | null>(subDays(new Date(), 365));
+  const [endDate, setEndDate]     = useState<Date | null>(new Date());
 
   const { data: trends, loading } = useGrowthTrends(
-    format(startDate, 'yyyy-MM-dd'),
-    format(endDate,   'yyyy-MM-dd')
+    startDate ? format(startDate, 'yyyy-MM-dd') : '',
+    endDate ? format(endDate, 'yyyy-MM-dd') : ''
   );
 
   const chartData = trends.map(d => ({
@@ -43,7 +43,7 @@ export default function GrowthTrendChart() {
         <DateFilter
           startDate={startDate}
           endDate={endDate}
-          onRangeChange={(s, e) => { setStartDate(s); setEndDate(e); }}
+          onRangeChange={(s, e) => { setStartDate(s ); setEndDate(e); }}
         />
       </div>
 

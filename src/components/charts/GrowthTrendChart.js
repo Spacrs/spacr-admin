@@ -19,7 +19,7 @@ function formatMonth(dateStr) {
 export default function GrowthTrendChart() {
     const [startDate, setStartDate] = useState(subDays(new Date(), 365));
     const [endDate, setEndDate] = useState(new Date());
-    const { data: trends, loading } = useGrowthTrends(format(startDate, 'yyyy-MM-dd'), format(endDate, 'yyyy-MM-dd'));
+    const { data: trends, loading } = useGrowthTrends(startDate ? format(startDate, 'yyyy-MM-dd') : '', endDate ? format(endDate, 'yyyy-MM-dd') : '');
     const chartData = trends.map(d => ({
         ...d,
         month: formatMonth(d.date),
