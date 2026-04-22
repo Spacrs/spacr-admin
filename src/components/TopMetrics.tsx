@@ -3,6 +3,9 @@ import { format, subDays } from "date-fns";
 import MetricCard from "./MetricCard";
 import DateFilter from "./DateFilter";
 import { useDashboardMetrics } from "../hooks/useDashboardMetrics";
+import { DateRangePicker } from "../components/date-range-picker"
+import { Button } from './ui/button'
+import { Calendar } from './ui/calendar'
 
 function fmt(value: number): string {
   if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
@@ -26,6 +29,11 @@ export default function TopMetrics() {
     startDate ? format(startDate, "yyyy-MM-dd") : "",
     endDate ? format(endDate, "yyyy-MM-dd") : ""
   );
+
+  const [date, setDate] = useState<any>({
+    from: new Date(2026, 3, 14),
+    to: new Date(2026, 3, 20),
+  })
 
   const metrics = [
     { label: "GMV", value: data ? fmt(data.GMV) : "—" },
@@ -61,13 +69,27 @@ export default function TopMetrics() {
       {/* Header + Date Filter */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <h2 className="text-base font-semibold text-gray-800">Top Metrics</h2>
-        <DateFilter
+        {/* <DateFilter
           startDate={startDate}
           endDate={endDate}
           onRangeChange={(s, e) => {
             setStartDate(s);
             setEndDate(e);
           }}
+        /> */}
+        <DateRangePicker
+          onUpdate={(values) => {
+            // Step 2 — API call hoga yahan (next mein)
+            if (values.range.from && values.range.to) {
+              setStartDate(values.range.from);
+              setEndDate(values.range.to);
+            }
+          }}
+          initialDateFrom={startDate || new Date(2026, 3, 14)}
+          initialDateTo={endDate || new Date(2026, 3, 20)}
+          align="end"
+          locale="en-US"
+          showCompare={false}
         />
       </div>
 
