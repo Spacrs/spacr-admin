@@ -45,7 +45,7 @@ export function useSupplySide(fromDate: string, toDate: string) {
 
     // ${API.ADMIN.SUPPLY_METRICS}?fromDate=${fromDate}&toDate=${toDate}
     fetch(
-      `http://localhost:8000/api/v5/admin/dashboard/supply-metrics?fromDate=${fromDate}&toDate=${toDate}`,
+      `http://localhost:9000/api/v5/admin/dashboard/supply-metrics?fromDate=${fromDate}&toDate=${toDate}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,

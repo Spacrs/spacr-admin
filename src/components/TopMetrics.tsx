@@ -3,9 +3,10 @@ import { format, subDays } from "date-fns";
 import MetricCard from "./MetricCard";
 import DateFilter from "./DateFilter";
 import { useDashboardMetrics } from "../hooks/useDashboardMetrics";
-import { DateRangePicker } from "../components/date-range-picker"
+// import { DateRangePicker } from "../components/date-range-picker"
 import { Button } from './ui/button'
 import { Calendar } from './ui/calendar'
+import DateRangePicker from "./DateRangePicker";
 
 function fmt(value: number): string {
   if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
@@ -17,13 +18,13 @@ export default function TopMetrics() {
   // const [startDate, setStartDate] = useState<Date>(subDays(new Date(), 30));
   // const [endDate, setEndDate] = useState<Date>(new Date());
 
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+  const to = new Date();
+  const from = new Date(); 
+  from.setDate(to.getDate() - 6);
 
-  // const { data, loading, error } = useDashboardMetrics(
-  //   format(startDate, "yyyy-MM-dd"),
-  //   format(endDate, "yyyy-MM-dd"),
-  // );
+  const [startDate, setStartDate] = useState<Date | null>(from);
+  const [endDate, setEndDate] = useState<Date | null>(to);
+
 
   const { data, loading, error } = useDashboardMetrics(
     startDate ? format(startDate, "yyyy-MM-dd") : "",
@@ -77,7 +78,7 @@ export default function TopMetrics() {
             setEndDate(e);
           }}
         /> */}
-        <DateRangePicker
+        {/* <DateRangePicker
           onUpdate={(values) => {
             // Step 2 — API call hoga yahan (next mein)
             if (values.range.from && values.range.to) {
@@ -90,7 +91,15 @@ export default function TopMetrics() {
           align="end"
           locale="en-US"
           showCompare={false}
-        />
+        /> */}
+
+        <DateRangePicker onChange={(range) => {
+          console.log('range', range.from, range.to)
+          if (range.from && range.to) {
+            setStartDate(range.from);
+            setEndDate(range.to);
+          }
+        }} /> 
       </div>
 
       {/* Error */}

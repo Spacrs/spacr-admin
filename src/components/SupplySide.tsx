@@ -14,6 +14,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import DateRangePicker from "./DateRangePicker";
 
 function fmt(value: number): string {
   if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
@@ -22,8 +23,12 @@ function fmt(value: number): string {
 }
 
 export default function SupplySide() {
-  const [startDate, setStartDate] = useState<Date | null>(subDays(new Date(), 30));
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
+  const to = new Date();
+  const from = new Date(); 
+  from.setDate(to.getDate() - 6);
+  
+  const [startDate, setStartDate] = useState<Date | null>(from); // subDays(new Date(), 30)
+  const [endDate, setEndDate] = useState<Date | null>(to);  // new Date()
 
   const { data, loading, error } = useSupplySide(
     startDate ? format(startDate, 'yyyy-MM-dd') : '',
@@ -84,14 +89,23 @@ export default function SupplySide() {
             Showcasing supply strength
           </p>
         </div>
-        <DateFilter
+        {/* <DateFilter
           startDate={startDate}
           endDate={endDate}
           onRangeChange={(s, e) => {
             setStartDate(s);
             setEndDate(e);
           }}
-        />
+        /> */}
+
+        <DateRangePicker onChange={(range) => {
+          console.log('range', range.from, range.to)
+          if (range.from && range.to) {
+            setStartDate(range.from);
+            setEndDate(range.to);
+          }
+        }} 
+        /> 
       </div>
 
       {/* Error */}
@@ -120,9 +134,9 @@ export default function SupplySide() {
       </div>
 
       {/* Charts placeholder — ready for when API adds chart data */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4"> */}
         {/* <div className="border border-dashed border-gray-200 rounded-lg p-4 flex items-center justify-center h-48 text-gray-400 text-sm"> */}
-        <div className="bg-white border border-gray-100 rounded-lg p-4">
+        {/* <div className="bg-white border border-gray-100 rounded-lg p-4">
           <h3 className="text-sm font-semibold text-gray-700 mb-2">
             Supply Growth Over Time
           </h3>
@@ -141,10 +155,10 @@ export default function SupplySide() {
               />
             </AreaChart>
           </ResponsiveContainer>
-        </div>
+        </div> */}
         {/* </div> */}
         {/* <div className="border border-dashed border-gray-200 rounded-lg p-4 flex items-center justify-center h-48 text-gray-400 text-sm"> */}
-        <div className="bg-white border border-gray-100 rounded-lg p-4">
+        {/* <div className="bg-white border border-gray-100 rounded-lg p-4">
           <h3 className="text-sm font-semibold text-gray-700 mb-2">
             Orders Per Traveler Trend
           </h3>
@@ -164,9 +178,9 @@ export default function SupplySide() {
               />
             </LineChart>
           </ResponsiveContainer>
-        </div>
+        </div> */}
         {/* </div> */}
-      </div>
+      {/* </div> */}
     </div>
   );
 }

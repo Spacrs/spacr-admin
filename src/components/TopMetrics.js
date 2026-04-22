@@ -3,7 +3,7 @@ import { useState } from "react";
 import { format } from "date-fns";
 import MetricCard from "./MetricCard";
 import { useDashboardMetrics } from "../hooks/useDashboardMetrics";
-import { DateRangePicker } from "../components/date-range-picker";
+import DateRangePicker from "./DateRangePicker";
 function fmt(value) {
     if (value >= 1_000_000)
         return `$${(value / 1_000_000).toFixed(2)}M`;
@@ -14,12 +14,11 @@ function fmt(value) {
 export default function TopMetrics() {
     // const [startDate, setStartDate] = useState<Date>(subDays(new Date(), 30));
     // const [endDate, setEndDate] = useState<Date>(new Date());
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-    // const { data, loading, error } = useDashboardMetrics(
-    //   format(startDate, "yyyy-MM-dd"),
-    //   format(endDate, "yyyy-MM-dd"),
-    // );
+    const to = new Date();
+    const from = new Date();
+    from.setDate(to.getDate() - 6);
+    const [startDate, setStartDate] = useState(from);
+    const [endDate, setEndDate] = useState(to);
     const { data, loading, error } = useDashboardMetrics(startDate ? format(startDate, "yyyy-MM-dd") : "", endDate ? format(endDate, "yyyy-MM-dd") : "");
     const [date, setDate] = useState({
         from: new Date(2026, 3, 14),
@@ -53,11 +52,11 @@ export default function TopMetrics() {
             positive: data ? data.orderSuccessRate > 50 : true,
         },
     ];
-    return (_jsxs("div", { className: "bg-white rounded-xl p-5 shadow-sm border border-gray-100 space-y-4", children: [_jsxs("div", { className: "flex items-center justify-between flex-wrap gap-3", children: [_jsx("h2", { className: "text-base font-semibold text-gray-800", children: "Top Metrics" }), _jsx(DateRangePicker, { onUpdate: (values) => {
-                            // Step 2 — API call hoga yahan (next mein)
-                            if (values.range.from && values.range.to) {
-                                setStartDate(values.range.from);
-                                setEndDate(values.range.to);
+    return (_jsxs("div", { className: "bg-white rounded-xl p-5 shadow-sm border border-gray-100 space-y-4", children: [_jsxs("div", { className: "flex items-center justify-between flex-wrap gap-3", children: [_jsx("h2", { className: "text-base font-semibold text-gray-800", children: "Top Metrics" }), _jsx(DateRangePicker, { onChange: (range) => {
+                            console.log('range', range.from, range.to);
+                            if (range.from && range.to) {
+                                setStartDate(range.from);
+                                setEndDate(range.to);
                             }
-                        }, initialDateFrom: startDate || new Date(2026, 3, 14), initialDateTo: endDate || new Date(2026, 3, 20), align: "end", locale: "en-US", showCompare: false })] }), error && (_jsxs("div", { className: "bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3", children: ["Failed to load metrics: ", error] })), _jsx("div", { className: "grid grid-cols-3 md:grid-cols-5 xl:grid-cols-9 gap-3", children: metrics.map((m) => (_jsx(MetricCard, { label: m.label, value: m.value, positive: m.positive, loading: loading }, m.label))) })] }));
+                        } })] }), error && (_jsxs("div", { className: "bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3", children: ["Failed to load metrics: ", error] })), _jsx("div", { className: "grid grid-cols-3 md:grid-cols-5 xl:grid-cols-9 gap-3", children: metrics.map((m) => (_jsx(MetricCard, { label: m.label, value: m.value, positive: m.positive, loading: loading }, m.label))) })] }));
 }

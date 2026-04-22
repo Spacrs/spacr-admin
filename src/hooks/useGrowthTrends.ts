@@ -1,46 +1,76 @@
 import { useState, useEffect } from 'react';
-import API from "../constants/apiEndpoints"
 
 export interface GrowthTrendPoint {
   date: string;
+  label: string;
   GMV: number;
   revenue: number;
-  activeUsers: number;
+  totalUsers: number;
 }
+
+type GroupingType = "day" | "week" | "month" | "year";
 
 interface ApiResponse {
   success: boolean;
-  data: { growthTrends: GrowthTrendPoint[] };
+  grouping: GroupingType;
+  data: {
+    growthTrends: GrowthTrendPoint[];
+  };
+}
+
+interface GrowthTrendState {
+  growthTrends: GrowthTrendPoint[];
+  grouping: GroupingType;
 }
 
 export function useGrowthTrends(fromDate: string, toDate: string) {
-  const [data, setData] = useState<GrowthTrendPoint[]>([]);
+  const [data, setData] = useState<GrowthTrendState | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!fromDate || !toDate) return;
-    setLoading(true);
-    setError(null);
 
-    // ${API.ADMIN.GROWTH_TRENDS}?fromDate=${fromDate}&toDate=${toDate}
-    fetch(`http://localhost:8000/api/v5/admin/dashboard/growth-trends?fromDate=${fromDate}&toDate=${toDate}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
+    const controller = new AbortController();
+
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const res = await fetch(
+          `http://localhost:9000/api/v5/admin/dashboard/growth-trends?fromDate=${fromDate}&toDate=${toDate}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            },
+            signal: controller.signal,
+          }
+        );
+
+        if (!res.ok) throw new Error("Failed to fetch growth trends");
+
+        const json: ApiResponse = await res.json();
+
+        if (!json.success) throw new Error("API error");
+
+        setData({
+          growthTrends: json.data.growthTrends,
+          grouping: json.grouping,
+        });
+
+      } catch (err: any) {
+        if (err.name !== "AbortError") {
+          setError(err.message);
         }
-    )
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch growth trends');
-        return res.json() as Promise<ApiResponse>;
-      })
-      .then(json => {
-        if (json.success) setData(json.data.growthTrends);
-        else throw new Error('API error');
-      })
-      .catch(err => setError(err.message))
-      .finally(() => setLoading(false));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+
+    return () => controller.abort();
   }, [fromDate, toDate]);
 
   return { data, loading, error };

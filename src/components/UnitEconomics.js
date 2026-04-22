@@ -2,8 +2,8 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState } from 'react';
 import { format, subDays } from 'date-fns';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Cell, ResponsiveContainer, ReferenceLine, } from 'recharts';
-import DateFilter from './DateFilter';
 import { useUnitEconomics } from '../hooks/useUnitEconomics';
+import DateRangePicker from "./DateRangePicker";
 function fmt(value) {
     if (value >= 1_000_000)
         return `$${(value / 1_000_000).toFixed(2)}M`;
@@ -60,7 +60,13 @@ export default function UnitEconomics() {
         'Other Costs': '#ef4444',
         Contribution: '#22c55e',
     };
-    return (_jsxs("div", { className: "bg-white rounded-xl p-5 shadow-sm border border-gray-100 space-y-5", children: [_jsxs("div", { className: "flex items-center justify-between flex-wrap gap-3", children: [_jsx("h2", { className: "text-base font-semibold text-gray-800", children: "Unit Economics" }), _jsx(DateFilter, { startDate: startDate, endDate: endDate, onRangeChange: (s, e) => { setStartDate(s); setEndDate(e); } })] }), error && (_jsxs("div", { className: "bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3", children: ["Failed to load unit economics: ", error] })), loading ? (_jsx("div", { className: "h-64 bg-gray-100 rounded animate-pulse" })) : (_jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-6", children: [_jsxs("div", { className: "space-y-4", children: [_jsxs("div", { children: [_jsx("p", { className: "text-xs font-semibold text-gray-400 uppercase mb-3", children: "Per Order Economics" }), _jsx("div", { className: "grid grid-cols-4 gap-3", children: [
+    return (_jsxs("div", { className: "bg-white rounded-xl p-5 shadow-sm border border-gray-100 space-y-5", children: [_jsxs("div", { className: "flex items-center justify-between flex-wrap gap-3", children: [_jsx("h2", { className: "text-base font-semibold text-gray-800", children: "Unit Economics" }), _jsx(DateRangePicker, { onChange: (range) => {
+                            console.log('range', range.from, range.to);
+                            if (range.from && range.to) {
+                                setStartDate(range.from);
+                                setEndDate(range.to);
+                            }
+                        } })] }), error && (_jsxs("div", { className: "bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3", children: ["Failed to load unit economics: ", error] })), loading ? (_jsx("div", { className: "h-64 bg-gray-100 rounded animate-pulse" })) : (_jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-6", children: [_jsxs("div", { className: "space-y-4", children: [_jsxs("div", { children: [_jsx("p", { className: "text-xs font-semibold text-gray-400 uppercase mb-3", children: "Per Order Economics" }), _jsx("div", { className: "grid grid-cols-4 gap-3", children: [
                                             { label: 'AOV', value: fmt(ue?.AOV ?? 0) },
                                             { label: 'Take Rate', value: `${ue?.takeRate ?? 0}%` },
                                             { label: 'Revenue per Order', value: fmt(ue?.revenuePerOrder ?? 0) },

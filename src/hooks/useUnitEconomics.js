@@ -8,7 +8,7 @@ export function useUnitEconomics(fromDate, toDate) {
             return;
         setLoading(true);
         setError(null);
-        fetch(`http://localhost:8000/api/v5/admin/dashboard/unit-economics?fromDate=${fromDate}&toDate=${toDate}`, {
+        fetch(`http://localhost:9000/api/v5/admin/dashboard/unit-economics?fromDate=${fromDate}&toDate=${toDate}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             },

@@ -9,10 +9,10 @@ export default function Overview() {
     <div className="">
       <div className="bg-gray-100 p-6 space-y-6">
         <TopMetrics />
-        <UnitEconomics />
-        <GrowthTrendChart />
         <SupplySide />
+        <GrowthTrendChart />
         <TopCorridors />
+        <UnitEconomics />
       </div>
     </div>
   );

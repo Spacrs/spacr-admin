@@ -6,6 +6,7 @@ import {
 } from 'recharts';
 import DateFilter from './DateFilter';
 import { useUnitEconomics } from '../hooks/useUnitEconomics';
+import DateRangePicker from "./DateRangePicker";
 
 function fmt(value: number): string {
   if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
@@ -109,11 +110,19 @@ export default function UnitEconomics() {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <h2 className="text-base font-semibold text-gray-800">Unit Economics</h2>
-        <DateFilter
+        {/* <DateFilter
           startDate={startDate}
           endDate={endDate}
           onRangeChange={(s, e) => { setStartDate(s); setEndDate(e); }}
-        />
+        /> */}
+
+        <DateRangePicker onChange={(range) => {
+          console.log('range', range.from, range.to)
+          if (range.from && range.to) {
+            setStartDate(range.from);
+            setEndDate(range.to);
+          }
+        }} /> 
       </div>
 
       {error && (
