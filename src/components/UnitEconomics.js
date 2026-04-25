@@ -65,12 +65,12 @@ export default function UnitEconomics() {
                                 setStartDate(range.from);
                                 setEndDate(range.to);
                             }
-                        } })] }), error && (_jsxs("div", { className: "bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3", children: ["Failed to load unit economics: ", error] })), loading ? (_jsx("div", { className: "h-64 bg-gray-100 rounded animate-pulse" })) : (_jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-6", children: [_jsx("div", { className: "space-y-4", children: _jsxs("div", { children: [_jsx("p", { className: "text-xs font-semibold text-gray-400 uppercase mb-3", children: "Per Order Economics" }), _jsx("div", { className: "grid grid-cols-4 gap-3", children: [
-                                        { label: 'AOV', value: fmt(ue?.AOV ?? 0) },
-                                        { label: 'Take Rate', value: `${ue?.takeRate ?? 0}%` },
-                                        { label: 'Revenue per Order', value: fmt(ue?.revenuePerOrder ?? 0) },
-                                        { label: 'Cost per Order', value: fmt(ue?.costPerOrder ?? 0) },
-                                    ].map(item => (_jsxs("div", { className: "bg-gray-50 rounded-lg p-3 text-center", children: [_jsx("p", { className: "text-xs text-gray-400 mb-1", children: item.label }), _jsx("p", { className: "text-base font-bold text-gray-800", children: item.value })] }, item.label))) })] }) }), _jsxs("div", { className: "space-y-4", children: [_jsx("p", { className: "text-xs font-semibold text-gray-400 uppercase mb-3", children: "Customer Economics" }), _jsx("div", { className: "space-y-3", children: [
+                        } })] }), error && (_jsxs("div", { className: "bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3", children: ["Failed to load unit economics: ", error] })), loading ? (_jsx("div", { className: "h-64 bg-gray-100 rounded animate-pulse" })) : (_jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-6", children: [_jsxs("div", { className: "space-y-4", children: [_jsxs("div", { children: [_jsx("p", { className: "text-xs font-semibold text-gray-400 uppercase mb-3", children: "Per Order Economics" }), _jsx("div", { className: "grid grid-cols-4 gap-3", children: [
+                                            { label: 'AOV', value: fmt(ue?.AOV ?? 0) },
+                                            { label: 'Take Rate', value: `${ue?.takeRate ?? 0}%` },
+                                            { label: 'Revenue per Order', value: fmt(ue?.revenuePerOrder ?? 0) },
+                                            { label: 'Cost per Order', value: fmt(ue?.costPerOrder ?? 0) },
+                                        ].map(item => (_jsxs("div", { className: "bg-gray-50 rounded-lg p-3 text-center", children: [_jsx("p", { className: "text-xs text-gray-400 mb-1", children: item.label }), _jsx("p", { className: "text-base font-bold text-gray-800", children: item.value })] }, item.label))) })] }), _jsxs("div", { className: "flex gap-6 justify-center pt-2", children: [_jsx(RatioGauge, { ratio: ce?.ltvToCacShopper ?? 0 }), _jsx(RatioGauge, { ratio: ce?.ltvToCacTraveler ?? 0 })] })] }), _jsxs("div", { className: "space-y-4", children: [_jsx("p", { className: "text-xs font-semibold text-gray-400 uppercase mb-3", children: "Customer Economics" }), _jsx("div", { className: "space-y-1", children: [
                                     { label: 'CAC (Shopper)', value: fmt(ce?.CACShopper ?? 0) },
                                     { label: 'CAC (Traveler)', value: fmt(ce?.CACTraveler ?? 0) },
                                     { label: 'LTV (Shopper)', value: fmt(ce?.LTVShopper ?? 0) },
@@ -88,5 +88,5 @@ export default function UnitEconomics() {
                                             : 'N/A',
                                     },
                                     { label: 'Total Users', value: (ce?.totalUsers ?? 0).toLocaleString() },
-                                ].map(item => (_jsxs("div", { className: "flex items-center justify-between py-2.5 border-b border-gray-100", children: [_jsx("span", { className: "text-sm text-gray-500", children: item.label }), _jsx("span", { className: "text-sm font-semibold text-gray-800", children: item.value })] }, item.label))) }), _jsxs("div", { className: "flex gap-6 justify-center", children: [_jsx(RatioGauge, { ratio: ce?.ltvToCacShopper ?? 0 }), _jsx(RatioGauge, { ratio: ce?.ltvToCacTraveler ?? 0 })] })] })] }))] }));
+                                ].map(item => (_jsxs("div", { className: "flex items-center justify-between py-1.5 border-b border-gray-100", children: [_jsx("span", { className: "text-sm text-gray-500", children: item.label }), _jsx("span", { className: "text-sm font-semibold text-gray-800", children: item.value })] }, item.label))) })] })] }))] }));
 }

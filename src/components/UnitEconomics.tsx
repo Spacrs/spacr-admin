@@ -157,6 +157,12 @@ export default function UnitEconomics() {
               </div>
             </div>
 
+            {/* Gauges (moved here) */}
+            <div className="flex gap-6 justify-center pt-2">
+              <RatioGauge ratio={ce?.ltvToCacShopper ?? 0} />
+              <RatioGauge ratio={ce?.ltvToCacTraveler ?? 0} />
+            </div>
+
             {/* Waterfall Chart */}
             {/* <div>
               <p className="text-xs font-semibold text-gray-400 uppercase mb-3">Cost Breakdown</p>
@@ -197,7 +203,7 @@ export default function UnitEconomics() {
             <p className="text-xs font-semibold text-gray-400 uppercase mb-3">Customer Economics</p>
 
             {/* Metrics rows */}
-            <div className="space-y-3">
+            <div className="space-y-1">
               {[
                   { label: 'CAC (Shopper)', value: fmt(ce?.CACShopper ?? 0) },
                   { label: 'CAC (Traveler)', value: fmt(ce?.CACTraveler ?? 0) },
@@ -222,7 +228,7 @@ export default function UnitEconomics() {
                 ].map(item => (
                 <div
                   key={item.label}
-                  className="flex items-center justify-between py-2.5 border-b border-gray-100"
+                  className="flex items-center justify-between py-1.5 border-b border-gray-100"
                 >
                   <span className="text-sm text-gray-500">{item.label}</span>
                   <span className="text-sm font-semibold text-gray-800">{item.value}</span>
@@ -234,10 +240,10 @@ export default function UnitEconomics() {
             {/* <div className="flex justify-center pt-4">
               <RatioGauge ratio={ce?.ltvToCac ?? 0} />
             </div> */}
-            <div className="flex gap-6 justify-center">
+            {/* <div className="flex gap-6 justify-center">
               <RatioGauge ratio={ce?.ltvToCacShopper ?? 0} />
               <RatioGauge ratio={ce?.ltvToCacTraveler ?? 0} />
-            </div>
+            </div> */}
           </div>
 
         </div>
