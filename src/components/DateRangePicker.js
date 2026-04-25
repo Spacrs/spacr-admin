@@ -1,19 +1,86 @@
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
-import { useState, useRef, useEffect, useLayoutEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useLayoutEffect, useCallback, } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 const PRESETS = [
-    { label: "Today", getDates: () => { const t = new Date(); return { from: t, to: t }; } },
-    { label: "Last 7 days", getDates: () => { const to = new Date(); const from = new Date(); from.setDate(to.getDate() - 6); return { from, to }; } },
-    { label: "Last 4 weeks", getDates: () => { const to = new Date(); const from = new Date(); from.setDate(to.getDate() - 27); return { from, to }; } },
-    { label: "Last Month", getDates: () => { const now = new Date(); const from = new Date(now.getFullYear(), now.getMonth() - 1, 1); const to = new Date(now.getFullYear(), now.getMonth(), 0); return { from, to }; } },
-    { label: "Last 6 months", getDates: () => { const to = new Date(); const from = new Date(); from.setMonth(to.getMonth() - 6); return { from, to }; } },
-    { label: "Month to date", getDates: () => { const to = new Date(); const from = new Date(to.getFullYear(), to.getMonth(), 1); return { from, to }; } },
-    { label: "Quarter to date", getDates: () => { const to = new Date(); const q = Math.floor(to.getMonth() / 3); const from = new Date(to.getFullYear(), q * 3, 1); return { from, to }; } },
-    { label: "Year to date", getDates: () => { const to = new Date(); const from = new Date(to.getFullYear(), 0, 1); return { from, to }; } },
-    { label: "All time", getDates: () => ({ from: new Date(2025, 0, 1), to: new Date() }) },
+    {
+        label: "Today",
+        getDates: () => {
+            const t = new Date();
+            return { from: t, to: t };
+        },
+    },
+    {
+        label: "Last 7 days",
+        getDates: () => {
+            const to = new Date();
+            const from = new Date();
+            from.setDate(to.getDate() - 6);
+            return { from, to };
+        },
+    },
+    {
+        label: "Last 4 weeks",
+        getDates: () => {
+            const to = new Date();
+            const from = new Date();
+            from.setDate(to.getDate() - 27);
+            return { from, to };
+        },
+    },
+    {
+        label: "Last Month",
+        getDates: () => {
+            const now = new Date();
+            const from = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+            const to = new Date(now.getFullYear(), now.getMonth(), 0);
+            return { from, to };
+        },
+    },
+    // { label: "Last 6 months",   getDates: () => { const to = new Date(); const from = new Date(); from.setMonth(to.getMonth() - 6); return { from, to }; } },
+    {
+        label: "Last 6 months",
+        getDates: () => {
+            const now = new Date();
+            const to = new Date(now);
+            // 5 months back + start of that month
+            const from = new Date(now.getFullYear(), now.getMonth() - 5, 1);
+            return { from, to };
+        },
+    },
+    {
+        label: "Month to date",
+        getDates: () => {
+            const to = new Date();
+            const from = new Date(to.getFullYear(), to.getMonth(), 1);
+            return { from, to };
+        },
+    },
+    {
+        label: "Quarter to date",
+        getDates: () => {
+            const to = new Date();
+            const q = Math.floor(to.getMonth() / 3);
+            const from = new Date(to.getFullYear(), q * 3, 1);
+            return { from, to };
+        },
+    },
+    {
+        label: "Year to date",
+        getDates: () => {
+            const to = new Date();
+            const from = new Date(to.getFullYear(), 0, 1);
+            return { from, to };
+        },
+    },
+    {
+        label: "All time",
+        getDates: () => ({ from: new Date(2025, 0, 1), to: new Date() }),
+    },
 ];
-const toStr = (d) => d ? `${String(d.getDate()).padStart(2, "0")} / ${String(d.getMonth() + 1).padStart(2, "0")} / ${d.getFullYear()}` : "";
+const toStr = (d) => d
+    ? `${String(d.getDate()).padStart(2, "0")} / ${String(d.getMonth() + 1).padStart(2, "0")} / ${d.getFullYear()}`
+    : "";
 const parseInput = (s) => {
     const digits = s.replace(/\D/g, "");
     if (digits.length !== 8)
@@ -47,7 +114,11 @@ export default function DateRangePicker({ onChange }) {
     const [month, setMonth] = useState(new Date(today.getFullYear(), today.getMonth() - 1, 1));
     // ── position stored as CSS vars, not state, to avoid flicker ──
     const [popupStyle, setPopupStyle] = useState({
-        position: "fixed", visibility: "hidden", top: 0, left: 0, zIndex: 9999,
+        position: "fixed",
+        visibility: "hidden",
+        top: 0,
+        left: 0,
+        zIndex: 9999,
     });
     const triggerRef = useRef(null);
     const popupRef = useRef(null);
@@ -94,7 +165,7 @@ export default function DateRangePicker({ onChange }) {
         if (!open)
             return;
         // Hide first, then measure & position
-        setPopupStyle(s => ({ ...s, visibility: "hidden" }));
+        setPopupStyle((s) => ({ ...s, visibility: "hidden" }));
         // rAF ensures popup is mounted and has dimensions
         const raf = requestAnimationFrame(() => {
             calcPosition();
@@ -131,7 +202,7 @@ export default function DateRangePicker({ onChange }) {
         const d = parseInput(masked);
         setFromErr(!d && masked.replace(/\D/g, "").length === 8);
         if (d) {
-            setTempRange(p => ({ ...p, from: d }));
+            setTempRange((p) => ({ ...p, from: d }));
             setActivePreset("");
         }
     };
@@ -141,7 +212,7 @@ export default function DateRangePicker({ onChange }) {
         const d = parseInput(masked);
         setToErr(!d && masked.replace(/\D/g, "").length === 8);
         if (d) {
-            setTempRange(p => ({ ...p, to: d }));
+            setTempRange((p) => ({ ...p, to: d }));
             setActivePreset("");
         }
     };
@@ -171,7 +242,7 @@ export default function DateRangePicker({ onChange }) {
     //   setActivePreset("");
     // };
     const handleClear = () => {
-        const def = PRESETS.find(p => p.label === "Last 7 days");
+        const def = PRESETS.find((p) => p.label === "Last 7 days");
         const dates = def.getDates();
         setTempRange(dates);
         // setRange(dates); // optional: if you want applied immediately
@@ -183,11 +254,11 @@ export default function DateRangePicker({ onChange }) {
     };
     const handleOpen = () => {
         // Reset visibility so useLayoutEffect re-measures cleanly
-        setPopupStyle(s => ({ ...s, visibility: "hidden" }));
+        setPopupStyle((s) => ({ ...s, visibility: "hidden" }));
         setTempRange(range);
         setFromStr(toStr(range.from));
         setToStr_(toStr(range.to));
-        setOpen(v => !v);
+        setOpen((v) => !v);
     };
     const numMonths = isMobile ? 1 : 2;
     const defaultMonth = isMobile
@@ -296,5 +367,5 @@ export default function DateRangePicker({ onChange }) {
         .drp-btn-clear:hover { border-color:#5b4ed8; color:#5b4ed8; background:#f1f0fe; }
         .drp-btn-apply { background:#5b4ed8; border:1.5px solid #5b4ed8; color:#fff; }
         .drp-btn-apply:hover { background:#4a3ec0; border-color:#4a3ec0; box-shadow:0 4px 12px rgba(91,78,216,.3); }
-      ` }), _jsxs("div", { className: "drp", style: { display: "inline-block" }, children: [_jsxs("div", { className: "drp-trigger", onClick: handleOpen, ref: triggerRef, children: [_jsx("span", { className: "drp-lbl", children: "Start" }), _jsx("span", { className: `drp-val ${open ? "hi" : ""}`, children: toStr(range.from) || "Select" }), _jsx("span", { className: "drp-sep", children: "\u2013" }), _jsx("span", { className: "drp-lbl", children: "End" }), _jsx("span", { className: "drp-val", children: toStr(range.to) || "Select" })] }), open && (_jsxs("div", { className: "drp-popup", ref: popupRef, style: popupStyle, children: [_jsxs("div", { className: "drp-inputs", children: [_jsxs("div", { className: "drp-input-group", children: [_jsx("span", { className: "drp-input-label", children: "Start Date" }), _jsx("input", { className: `drp-input${fromErr ? " err" : ""}`, placeholder: "DD / MM / YYYY", value: fromStr, onChange: e => handleFromChange(e.target.value) })] }), _jsx("span", { className: "drp-input-sep", children: "\u2013" }), _jsxs("div", { className: "drp-input-group", children: [_jsx("span", { className: "drp-input-label", children: "End Date" }), _jsx("input", { className: `drp-input${toErr ? " err" : ""}`, placeholder: "DD / MM / YYYY", value: toStr_, onChange: e => handleToChange(e.target.value) })] })] }), _jsxs("div", { className: "drp-body", children: [_jsx("div", { className: "drp-presets", children: PRESETS.map(p => (_jsx("button", { className: `drp-pbtn${activePreset === p.label ? " active" : ""}`, onClick: () => handlePreset(p), children: p.label }, p.label))) }), _jsx("div", { className: "drp-cals", children: _jsx(DayPicker, { mode: "range", selected: tempRange, onSelect: handleSelect, numberOfMonths: numMonths, defaultMonth: defaultMonth, month: month, onMonthChange: setMonth, showOutsideDays: false }) })] }), _jsxs("div", { className: "drp-footer", children: [_jsx("button", { className: "drp-btn drp-btn-clear", onClick: handleClear, children: "Clear" }), _jsx("button", { className: "drp-btn drp-btn-apply", onClick: handleApply, children: "Apply" })] })] }))] })] }));
+      ` }), _jsxs("div", { className: "drp", style: { display: "inline-block" }, children: [_jsxs("div", { className: "drp-trigger", onClick: handleOpen, ref: triggerRef, children: [_jsx("span", { className: "drp-lbl", children: "Start" }), _jsx("span", { className: `drp-val ${open ? "hi" : ""}`, children: toStr(range.from) || "Select" }), _jsx("span", { className: "drp-sep", children: "\u2013" }), _jsx("span", { className: "drp-lbl", children: "End" }), _jsx("span", { className: "drp-val", children: toStr(range.to) || "Select" })] }), open && (_jsxs("div", { className: "drp-popup", ref: popupRef, style: popupStyle, children: [_jsxs("div", { className: "drp-inputs", children: [_jsxs("div", { className: "drp-input-group", children: [_jsx("span", { className: "drp-input-label", children: "Start Date" }), _jsx("input", { className: `drp-input${fromErr ? " err" : ""}`, placeholder: "DD / MM / YYYY", value: fromStr, onChange: (e) => handleFromChange(e.target.value) })] }), _jsx("span", { className: "drp-input-sep", children: "\u2013" }), _jsxs("div", { className: "drp-input-group", children: [_jsx("span", { className: "drp-input-label", children: "End Date" }), _jsx("input", { className: `drp-input${toErr ? " err" : ""}`, placeholder: "DD / MM / YYYY", value: toStr_, onChange: (e) => handleToChange(e.target.value) })] })] }), _jsxs("div", { className: "drp-body", children: [_jsx("div", { className: "drp-presets", children: PRESETS.map((p) => (_jsx("button", { className: `drp-pbtn${activePreset === p.label ? " active" : ""}`, onClick: () => handlePreset(p), children: p.label }, p.label))) }), _jsx("div", { className: "drp-cals", children: _jsx(DayPicker, { mode: "range", selected: tempRange, onSelect: handleSelect, numberOfMonths: numMonths, defaultMonth: defaultMonth, month: month, onMonthChange: setMonth, showOutsideDays: false }) })] }), _jsxs("div", { className: "drp-footer", children: [_jsx("button", { className: "drp-btn drp-btn-clear", onClick: handleClear, children: "Clear" }), _jsx("button", { className: "drp-btn drp-btn-apply", onClick: handleApply, children: "Apply" })] })] }))] })] }));
 }
