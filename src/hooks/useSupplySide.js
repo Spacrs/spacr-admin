@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import API from "../constants/apiEndpoints";
 export function useSupplySide(fromDate, toDate) {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -11,7 +10,9 @@ export function useSupplySide(fromDate, toDate) {
         setError(null);
         // `http://localhost:8000/api/v5/admin/dashboard/supply-metrics?fromDate=${fromDate}&toDate=${toDate}`
         // ${API.ADMIN.SUPPLY_METRICS}?fromDate=${fromDate}&toDate=${toDate}
-        fetch(`${API.ADMIN.SUPPLY_METRICS}?fromDate=${fromDate}&toDate=${toDate}`, {
+        fetch(`http://localhost:9000/api/v5/admin/dashboard/supply-metrics?fromDate=${fromDate}&toDate=${toDate}`, 
+        // `${API.ADMIN.SUPPLY_METRICS}?fromDate=${fromDate}&toDate=${toDate}`,
+        {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             },

@@ -1,28 +1,106 @@
-import { useState, useRef, useEffect, useLayoutEffect, useCallback } from "react";
+import {
+  useState,
+  useRef,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+} from "react";
 import { DayPicker, type DateRange } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 
-interface Preset { label: string; getDates: () => DateRange; }
+interface Preset {
+  label: string;
+  getDates: () => DateRange;
+}
 
 const PRESETS: Preset[] = [
-  { label: "Today",           getDates: () => { const t = new Date(); return { from: t, to: t }; } },
-  { label: "Last 7 days",     getDates: () => { const to = new Date(); const from = new Date(); from.setDate(to.getDate() - 6); return { from, to }; } },
-  { label: "Last 4 weeks",    getDates: () => { const to = new Date(); const from = new Date(); from.setDate(to.getDate() - 27); return { from, to }; } },
-  { label: "Last Month",      getDates: () => { const now = new Date(); const from = new Date(now.getFullYear(), now.getMonth() - 1, 1); const to = new Date(now.getFullYear(), now.getMonth(), 0); return { from, to }; } },
-  { label: "Last 6 months",   getDates: () => { const to = new Date(); const from = new Date(); from.setMonth(to.getMonth() - 6); return { from, to }; } },
-  { label: "Month to date",   getDates: () => { const to = new Date(); const from = new Date(to.getFullYear(), to.getMonth(), 1); return { from, to }; } },
-  { label: "Quarter to date", getDates: () => { const to = new Date(); const q = Math.floor(to.getMonth() / 3); const from = new Date(to.getFullYear(), q * 3, 1); return { from, to }; } },
-  { label: "Year to date",    getDates: () => { const to = new Date(); const from = new Date(to.getFullYear(), 0, 1); return { from, to }; } },
-  { label: "All time",        getDates: () => ({ from: new Date(2025, 0, 1), to: new Date() }) },
+  {
+    label: "Today",
+    getDates: () => {
+      const t = new Date();
+      return { from: t, to: t };
+    },
+  },
+  {
+    label: "Last 7 days",
+    getDates: () => {
+      const to = new Date();
+      const from = new Date();
+      from.setDate(to.getDate() - 6);
+      return { from, to };
+    },
+  },
+  {
+    label: "Last 4 weeks",
+    getDates: () => {
+      const to = new Date();
+      const from = new Date();
+      from.setDate(to.getDate() - 27);
+      return { from, to };
+    },
+  },
+  {
+    label: "Last Month",
+    getDates: () => {
+      const now = new Date();
+      const from = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const to = new Date(now.getFullYear(), now.getMonth(), 0);
+      return { from, to };
+    },
+  },
+  // { label: "Last 6 months",   getDates: () => { const to = new Date(); const from = new Date(); from.setMonth(to.getMonth() - 6); return { from, to }; } },
+  {
+    label: "Last 6 months",
+    getDates: () => {
+      const now = new Date();
+      const to = new Date(now);
+      // 5 months back + start of that month
+      const from = new Date(now.getFullYear(), now.getMonth() - 5, 1);
+      return { from, to };
+    },
+  },
+  {
+    label: "Month to date",
+    getDates: () => {
+      const to = new Date();
+      const from = new Date(to.getFullYear(), to.getMonth(), 1);
+      return { from, to };
+    },
+  },
+  {
+    label: "Quarter to date",
+    getDates: () => {
+      const to = new Date();
+      const q = Math.floor(to.getMonth() / 3);
+      const from = new Date(to.getFullYear(), q * 3, 1);
+      return { from, to };
+    },
+  },
+  {
+    label: "Year to date",
+    getDates: () => {
+      const to = new Date();
+      const from = new Date(to.getFullYear(), 0, 1);
+      return { from, to };
+    },
+  },
+  {
+    label: "All time",
+    getDates: () => ({ from: new Date(2025, 0, 1), to: new Date() }),
+  },
 ];
 
 const toStr = (d?: Date) =>
-  d ? `${String(d.getDate()).padStart(2,"0")} / ${String(d.getMonth()+1).padStart(2,"0")} / ${d.getFullYear()}` : "";
+  d
+    ? `${String(d.getDate()).padStart(2, "0")} / ${String(d.getMonth() + 1).padStart(2, "0")} / ${d.getFullYear()}`
+    : "";
 
 const parseInput = (s: string): Date | undefined => {
   const digits = s.replace(/\D/g, "");
   if (digits.length !== 8) return undefined;
-  const dd = +digits.slice(0,2), mm = +digits.slice(2,4), yyyy = +digits.slice(4);
+  const dd = +digits.slice(0, 2),
+    mm = +digits.slice(2, 4),
+    yyyy = +digits.slice(4);
   const d = new Date(yyyy, mm - 1, dd);
   return isNaN(d.getTime()) ? undefined : d;
 };
@@ -38,31 +116,35 @@ const maskDate = (raw: string): string => {
 };
 
 export default function DateRangePicker({ onChange }) {
-  const def   = PRESETS[1];
+  const def = PRESETS[1];
   const today = new Date();
 
-  const [range,        setRange]        = useState<DateRange>(def.getDates());
-  const [tempRange,    setTempRange]    = useState<DateRange>(def.getDates());
-  const [open,         setOpen]         = useState(false);
+  const [range, setRange] = useState<DateRange>(def.getDates());
+  const [tempRange, setTempRange] = useState<DateRange>(def.getDates());
+  const [open, setOpen] = useState(false);
   const [activePreset, setActivePreset] = useState("Last 7 days");
-  const [isMobile,     setIsMobile]     = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const [fromStr, setFromStr] = useState(toStr(def.getDates().from));
-  const [toStr_,  setToStr_]  = useState(toStr(def.getDates().to));
+  const [toStr_, setToStr_] = useState(toStr(def.getDates().to));
   const [fromErr, setFromErr] = useState(false);
-  const [toErr,   setToErr]   = useState(false);
+  const [toErr, setToErr] = useState(false);
 
   const [month, setMonth] = useState(
-    new Date(today.getFullYear(), today.getMonth() - 1, 1)
+    new Date(today.getFullYear(), today.getMonth() - 1, 1),
   );
 
   // ── position stored as CSS vars, not state, to avoid flicker ──
   const [popupStyle, setPopupStyle] = useState<React.CSSProperties>({
-    position: "fixed", visibility: "hidden", top: 0, left: 0, zIndex: 9999,
+    position: "fixed",
+    visibility: "hidden",
+    top: 0,
+    left: 0,
+    zIndex: 9999,
   });
 
   const triggerRef = useRef<HTMLDivElement>(null);
-  const popupRef   = useRef<HTMLDivElement>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 640);
@@ -76,12 +158,12 @@ export default function DateRangePicker({ onChange }) {
     if (!triggerRef.current || !popupRef.current) return;
 
     const tr = triggerRef.current.getBoundingClientRect();
-    const pr = popupRef.current.getBoundingClientRect();   // real popup width after render
+    const pr = popupRef.current.getBoundingClientRect(); // real popup width after render
     const GAP = 8;
-    const VW  = window.innerWidth;
-    const VH  = window.innerHeight;
+    const VW = window.innerWidth;
+    const VH = window.innerHeight;
 
-    const popupW = pr.width  || (isMobile ? 360 : 740);
+    const popupW = pr.width || (isMobile ? 360 : 740);
     const popupH = pr.height || 480;
 
     // Vertical: below trigger, flip above if not enough room
@@ -95,12 +177,12 @@ export default function DateRangePicker({ onChange }) {
     if (left < 8) left = 8;
 
     setPopupStyle({
-      position:   "fixed",
+      position: "fixed",
       top,
       left,
-      zIndex:     9999,
+      zIndex: 9999,
       visibility: "visible",
-      maxWidth:   `calc(100vw - 16px)`,
+      maxWidth: `calc(100vw - 16px)`,
     });
   }, [isMobile]);
 
@@ -109,7 +191,7 @@ export default function DateRangePicker({ onChange }) {
     if (!open) return;
 
     // Hide first, then measure & position
-    setPopupStyle(s => ({ ...s, visibility: "hidden" }));
+    setPopupStyle((s) => ({ ...s, visibility: "hidden" }));
 
     // rAF ensures popup is mounted and has dimensions
     const raf = requestAnimationFrame(() => {
@@ -123,11 +205,11 @@ export default function DateRangePicker({ onChange }) {
   useEffect(() => {
     if (!open) return;
     const handler = () => calcPosition();
-    window.addEventListener("resize",  handler);
-    window.addEventListener("scroll",  handler, true);
+    window.addEventListener("resize", handler);
+    window.addEventListener("scroll", handler, true);
     return () => {
-      window.removeEventListener("resize",  handler);
-      window.removeEventListener("scroll",  handler, true);
+      window.removeEventListener("resize", handler);
+      window.removeEventListener("scroll", handler, true);
     };
   }, [open, calcPosition]);
 
@@ -148,16 +230,22 @@ export default function DateRangePicker({ onChange }) {
     const masked = maskDate(val);
     setFromStr(masked);
     const d = parseInput(masked);
-    setFromErr(!d && masked.replace(/\D/g,"").length === 8);
-    if (d) { setTempRange(p => ({ ...p, from: d })); setActivePreset(""); }
+    setFromErr(!d && masked.replace(/\D/g, "").length === 8);
+    if (d) {
+      setTempRange((p) => ({ ...p, from: d }));
+      setActivePreset("");
+    }
   };
-  
+
   const handleToChange = (val: string) => {
     const masked = maskDate(val);
     setToStr_(masked);
     const d = parseInput(masked);
-    setToErr(!d && masked.replace(/\D/g,"").length === 8);
-    if (d) { setTempRange(p => ({ ...p, to: d })); setActivePreset(""); }
+    setToErr(!d && masked.replace(/\D/g, "").length === 8);
+    if (d) {
+      setTempRange((p) => ({ ...p, to: d }));
+      setActivePreset("");
+    }
   };
 
   const handleSelect = (r: DateRange | undefined) => {
@@ -176,7 +264,7 @@ export default function DateRangePicker({ onChange }) {
     setActivePreset(p.label);
   };
 
-//   const handleApply = () => { setRange(tempRange); setOpen(false); };
+  //   const handleApply = () => { setRange(tempRange); setOpen(false); };
   const handleApply = () => {
     setRange(tempRange);
     setOpen(false);
@@ -190,7 +278,7 @@ export default function DateRangePicker({ onChange }) {
   // };
 
   const handleClear = () => {
-    const def = PRESETS.find(p => p.label === "Last 7 days")!;
+    const def = PRESETS.find((p) => p.label === "Last 7 days")!;
     const dates = def.getDates();
 
     setTempRange(dates);
@@ -207,14 +295,14 @@ export default function DateRangePicker({ onChange }) {
 
   const handleOpen = () => {
     // Reset visibility so useLayoutEffect re-measures cleanly
-    setPopupStyle(s => ({ ...s, visibility: "hidden" }));
+    setPopupStyle((s) => ({ ...s, visibility: "hidden" }));
     setTempRange(range);
     setFromStr(toStr(range.from));
     setToStr_(toStr(range.to));
-    setOpen(v => !v);
+    setOpen((v) => !v);
   };
 
-  const numMonths    = isMobile ? 1 : 2;
+  const numMonths = isMobile ? 1 : 2;
   const defaultMonth = isMobile
     ? new Date(today.getFullYear(), today.getMonth(), 1)
     : new Date(today.getFullYear(), today.getMonth() - 1, 1);
@@ -327,11 +415,12 @@ export default function DateRangePicker({ onChange }) {
       `}</style>
 
       <div className="drp" style={{ display: "inline-block" }}>
-
         {/* Trigger */}
         <div className="drp-trigger" onClick={handleOpen} ref={triggerRef}>
           <span className="drp-lbl">Start</span>
-          <span className={`drp-val ${open ? "hi" : ""}`}>{toStr(range.from) || "Select"}</span>
+          <span className={`drp-val ${open ? "hi" : ""}`}>
+            {toStr(range.from) || "Select"}
+          </span>
           <span className="drp-sep">–</span>
           <span className="drp-lbl">End</span>
           <span className="drp-val">{toStr(range.to) || "Select"}</span>
@@ -340,7 +429,6 @@ export default function DateRangePicker({ onChange }) {
         {/* Popup — always mounted while open, positioned via useLayoutEffect */}
         {open && (
           <div className="drp-popup" ref={popupRef} style={popupStyle}>
-
             {/* Date inputs */}
             <div className="drp-inputs">
               <div className="drp-input-group">
@@ -349,7 +437,7 @@ export default function DateRangePicker({ onChange }) {
                   className={`drp-input${fromErr ? " err" : ""}`}
                   placeholder="DD / MM / YYYY"
                   value={fromStr}
-                  onChange={e => handleFromChange(e.target.value)}
+                  onChange={(e) => handleFromChange(e.target.value)}
                 />
               </div>
               <span className="drp-input-sep">–</span>
@@ -359,7 +447,7 @@ export default function DateRangePicker({ onChange }) {
                   className={`drp-input${toErr ? " err" : ""}`}
                   placeholder="DD / MM / YYYY"
                   value={toStr_}
-                  onChange={e => handleToChange(e.target.value)}
+                  onChange={(e) => handleToChange(e.target.value)}
                 />
               </div>
             </div>
@@ -367,7 +455,7 @@ export default function DateRangePicker({ onChange }) {
             <div className="drp-body">
               {/* Presets */}
               <div className="drp-presets">
-                {PRESETS.map(p => (
+                {PRESETS.map((p) => (
                   <button
                     key={p.label}
                     className={`drp-pbtn${activePreset === p.label ? " active" : ""}`}
@@ -395,8 +483,12 @@ export default function DateRangePicker({ onChange }) {
 
             {/* Footer */}
             <div className="drp-footer">
-              <button className="drp-btn drp-btn-clear" onClick={handleClear}>Clear</button>
-              <button className="drp-btn drp-btn-apply" onClick={handleApply}>Apply</button>
+              <button className="drp-btn drp-btn-clear" onClick={handleClear}>
+                Clear
+              </button>
+              <button className="drp-btn drp-btn-apply" onClick={handleApply}>
+                Apply
+              </button>
             </div>
           </div>
         )}
