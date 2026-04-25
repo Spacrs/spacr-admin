@@ -15,9 +15,23 @@ import DateRangePicker from "../DateRangePicker";
 //   return `₹ ${value}`;
 // }
 
+// function fmtCurrency(value: number): string {
+//   if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
+//   if (value >= 1_000)     return `$${(value / 1_000).toFixed(1)}K`;
+//   return `$${value}`;
+// }
+
 function fmtCurrency(value: number): string {
-  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
-  if (value >= 1_000)     return `$${(value / 1_000).toFixed(1)}K`;
+  if (value >= 1_000_000) {
+    const v = Math.floor((value / 1_000_000) * 100) / 100;
+    return `$${v}M`;
+  }
+
+  if (value >= 1_000) {
+    const v = Math.floor((value / 1_000) * 10) / 10;
+    return `$${v}K`;
+  }
+
   return `$${value}`;
 }
 
