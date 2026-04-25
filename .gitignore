@@ -29,3 +29,5 @@ dist
 
 # environment variables
 .env
+
+# tsconfig.tsbuildinfo
