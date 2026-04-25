@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import API from '../constants/apiEndpoints';
 export function useUnitEconomics(fromDate, toDate) {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -8,7 +9,8 @@ export function useUnitEconomics(fromDate, toDate) {
             return;
         setLoading(true);
         setError(null);
-        fetch(`http://localhost:9000/api/v5/admin/dashboard/unit-economics?fromDate=${fromDate}&toDate=${toDate}`, {
+        // `http://localhost:8000/api/v5/admin/dashboard/unit-economics?fromDate=${fromDate}&toDate=${toDate}`
+        fetch(`${API.ADMIN.UNIT_ECONOMIC}?fromDate=${fromDate}&toDate=${toDate}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             },

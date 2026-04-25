@@ -45,6 +45,10 @@ import WithdrawalList from "../pages/WithdrawalManagement/WithdrawalList";
 import WithdrawalDetails from "../pages/WithdrawalManagement/WithdrawalDetails";
 import ReportDetails from "../pages/Reports/ReportDetails";
 import Overview from "../pages/Dashboard/Overview";
+import CostList from "../pages/CostManagement/CostList";
+import AddMonthlyCost from "../pages/CostManagement/AddMonthlyCost";
+import CACList from "../pages/CustomerAcquisitionCostManagement/CACList";
+import AddCAC from "../pages/CustomerAcquisitionCostManagement/AddCAC";
 export const protectedRoutes = [
     // these routes are accessable with auth or layout for diffrent roles
     {
@@ -348,6 +352,38 @@ export const adminRoutes = [
         path: "reports",
         component: ReportDetails,
         breadcrumb: ["admin", "Reports"],
+        showBreadcrumb: true,
+    },
+    // added on 23-04-2026(RP)
+    {
+        path: "cost-list",
+        component: CostList,
+        breadcrumb: ["admin", "Cost List"],
+        showBreadcrumb: true,
+    },
+    {
+        path: "add-monthly-cost",
+        component: AddMonthlyCost,
+        breadcrumb: ["admin", "Add Monthly Cost"],
+        showBreadcrumb: true,
+    },
+    {
+        path: "edit-monthly-cost/:costId",
+        component: AddMonthlyCost,
+        breadcrumb: ["admin", "Edit Monthly Cost"],
+        showBreadcrumb: true,
+    },
+    // added on 24-04-2026(RP)
+    {
+        path: "ad-spent",
+        component: CACList, // main CAC page (handles shopper/traveller internally)
+        breadcrumb: ["admin", "Ad Spent List"],
+        showBreadcrumb: true,
+    },
+    {
+        path: "add-ad-spent",
+        component: AddCAC, // form to add CAC data
+        breadcrumb: ["admin", "Add Ad Spent"],
         showBreadcrumb: true,
     },
 ];

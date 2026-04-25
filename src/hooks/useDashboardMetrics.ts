@@ -32,7 +32,8 @@ export function useDashboardMetrics(fromDate: string, toDate: string) {
     setLoading(true);
     setError(null);
 
-    let url = `http://localhost:8000/api/v5/admin/dashboard/metrics`;
+    // let url = `http://localhost:8000/api/v5/admin/dashboard/metrics`;
+    let url = API.ADMIN.GET_DASHBOARD_METRICS;
 
     const params = new URLSearchParams();
 

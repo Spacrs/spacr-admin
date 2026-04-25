@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import API from '../constants/apiEndpoints';
 
 export interface GrowthTrendPoint {
   date: string;
@@ -37,9 +38,10 @@ export function useGrowthTrends(fromDate: string, toDate: string) {
       setLoading(true);
       setError(null);
 
+      // `http://localhost:8000/api/v5/admin/dashboard/growth-trends?fromDate=${fromDate}&toDate=${toDate}`
       try {
         const res = await fetch(
-          `http://localhost:9000/api/v5/admin/dashboard/growth-trends?fromDate=${fromDate}&toDate=${toDate}`,
+          `${API.ADMIN.GROWTH_TRENDS}?fromDate=${fromDate}&toDate=${toDate}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("access_token")}`,

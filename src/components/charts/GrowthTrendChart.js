@@ -1,15 +1,20 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState } from 'react';
 import { format, subDays } from 'date-fns';
-import { ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LabelList, } from 'recharts';
+import { ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, } from 'recharts';
 import { useGrowthTrends } from '../../hooks/useGrowthTrends';
 import DateRangePicker from "../DateRangePicker";
+// function fmtCurrency(value: number): string {
+//   if (value >= 1_00_00_000) return `₹ ${(value / 1_00_00_000).toFixed(2)} Cr`;
+//   if (value >= 1_00_000) return `₹ ${(value / 1_00_000).toFixed(1)} L`;
+//   return `₹ ${value}`;
+// }
 function fmtCurrency(value) {
-    if (value >= 1_00_00_000)
-        return `₹ ${(value / 1_00_00_000).toFixed(2)} Cr`;
-    if (value >= 1_00_000)
-        return `₹ ${(value / 1_00_000).toFixed(1)} L`;
-    return `₹ ${value}`;
+    if (value >= 1_000_000)
+        return `$${(value / 1_000_000).toFixed(2)}M`;
+    if (value >= 1_000)
+        return `$${(value / 1_000).toFixed(1)}K`;
+    return `$${value}`;
 }
 function fmtUsers(value) {
     if (value >= 1000)
@@ -31,5 +36,7 @@ export default function GrowthTrendChart() {
                                     return null;
                                 const d = payload[0].payload;
                                 return (_jsxs("div", { className: "bg-white border border-gray-200 rounded-lg shadow-md p-3 text-xs", children: [_jsxs("p", { className: "text-blue-600", children: ["GMV: ", fmtCurrency(d.GMV)] }), _jsxs("p", { className: "text-orange-500", children: ["Revenue: ", fmtCurrency(d.revenue)] }), _jsxs("p", { className: "text-green-600", children: ["Users: ", d.totalUsers] })] }));
-                            } }), _jsx(Legend, { verticalAlign: "bottom", height: 36, wrapperStyle: { fontSize: 12 } }), _jsx(Bar, { yAxisId: "left", dataKey: "GMV", fill: "#3b82f6", barSize: 40, radius: [6, 6, 0, 0], children: _jsx(LabelList, { dataKey: "GMV", position: "top", formatter: (v) => fmtCurrency(Number(v)), style: { fontSize: 12, fontWeight: 600 } }) }), _jsx(Line, { yAxisId: "left", type: "monotone", dataKey: "revenue", stroke: "#f97316", strokeWidth: 2, dot: { r: 4 } }), _jsx(Line, { yAxisId: "right", type: "monotone", dataKey: "totalUsers", stroke: "#16a34a", strokeWidth: 3, dot: { r: 5 }, children: _jsx(LabelList, { dataKey: "totalUsers", position: "top", formatter: (v) => fmtUsers(Number(v)), style: { fill: "#16a34a", fontSize: 12, fontWeight: 600 } }) })] }) }))] }));
+                            } }), _jsx(Legend, { verticalAlign: "bottom", height: 36, wrapperStyle: { fontSize: 12 }, formatter: (value) => _jsx("span", { className: "text-gray-700", children: value }) }), _jsx(Bar, { yAxisId: "left", dataKey: "GMV", name: "GMV", fill: "#3b82f6", barSize: 40, radius: [6, 6, 0, 0] }), _jsx(Line, { yAxisId: "left", type: "linear" // monotone
+                            , dataKey: "revenue", name: "Revenue", stroke: "#f97316", strokeWidth: 2, dot: { r: 4 } }), _jsx(Line, { yAxisId: "right", type: "linear" // monotone
+                            , dataKey: "totalUsers", name: "Total Users", stroke: "#16a34a", strokeWidth: 3 })] }) }))] }));
 }

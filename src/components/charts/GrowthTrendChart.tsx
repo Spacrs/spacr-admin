@@ -9,10 +9,16 @@ import {
 import { useGrowthTrends } from '../../hooks/useGrowthTrends';
 import DateRangePicker from "../DateRangePicker";
 
+// function fmtCurrency(value: number): string {
+//   if (value >= 1_00_00_000) return `₹ ${(value / 1_00_00_000).toFixed(2)} Cr`;
+//   if (value >= 1_00_000) return `₹ ${(value / 1_00_000).toFixed(1)} L`;
+//   return `₹ ${value}`;
+// }
+
 function fmtCurrency(value: number): string {
-  if (value >= 1_00_00_000) return `₹ ${(value / 1_00_00_000).toFixed(2)} Cr`;
-  if (value >= 1_00_000) return `₹ ${(value / 1_00_000).toFixed(1)} L`;
-  return `₹ ${value}`;
+  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
+  if (value >= 1_000)     return `$${(value / 1_000).toFixed(1)}K`;
+  return `$${value}`;
 }
 
 function fmtUsers(value: number): string {
@@ -102,29 +108,37 @@ export default function GrowthTrendChart() {
               }}
             />
 
-            <Legend verticalAlign="bottom" height={36} wrapperStyle={{ fontSize: 12 }} />
+            {/* <Legend verticalAlign="bottom" height={36} wrapperStyle={{ fontSize: 12 }} /> */}
+            <Legend
+                verticalAlign="bottom"
+                height={36}
+                wrapperStyle={{ fontSize: 12 }}
+                formatter={(value) => <span className="text-gray-700">{value}</span>}
+              />
 
             {/* GMV BAR */}
             <Bar
               yAxisId="left"
               dataKey="GMV"
+              name="GMV"
               fill="#3b82f6"
               barSize={40}
               radius={[6, 6, 0, 0]}
             >
-              <LabelList
+              {/* <LabelList
                 dataKey="GMV"
                 position="top"
                 formatter={(v: any) => fmtCurrency(Number(v))}
                 style={{ fontSize: 12, fontWeight: 600 }}
-              />
+              /> */}
             </Bar>
 
             {/* Revenue LINE */}
             <Line
               yAxisId="left"
-              type="monotone"
+              type="linear" // monotone
               dataKey="revenue"
+              name="Revenue"
               stroke="#f97316"
               strokeWidth={2}
               dot={{ r: 4 }}
@@ -133,18 +147,19 @@ export default function GrowthTrendChart() {
             {/* Users LINE */}
             <Line
               yAxisId="right"
-              type="monotone"
+              type="linear" // monotone
               dataKey="totalUsers"
+              name="Total Users"
               stroke="#16a34a"
               strokeWidth={3}
-              dot={{ r: 5 }}
+              // dot={{ r: 5 }}
             >
-              <LabelList
+              {/* <LabelList
                 dataKey="totalUsers"
                 position="top"
                 formatter={(v: any) => fmtUsers(Number(v))}
                 style={{ fill: "#16a34a", fontSize: 12, fontWeight: 600 }}
-              />
+              /> */}
             </Line>
 
           </ComposedChart>

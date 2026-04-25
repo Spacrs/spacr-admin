@@ -37,10 +37,10 @@ export function useTopCorridors(fromDate: string, toDate: string) {
 
     // ${API.ADMIN.TOP_CORRIDORS}?fromDate=${fromDate}&toDate=${toDate}
     
-    fetch(`http://localhost:8000/api/v5/admin/dashboard/top-corridors${params}`,{
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
+    fetch(`${API.ADMIN.TOP_CORRIDORS}${params}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
     })
       .then(res => {
         if (!res.ok) throw new Error('Failed to fetch corridors');

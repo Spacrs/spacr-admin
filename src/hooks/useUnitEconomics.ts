@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import API from '../constants/apiEndpoints';
 
 export interface UnitEconomic {
   AOV: number;
@@ -7,12 +8,18 @@ export interface UnitEconomic {
   costPerOrder: number;
 }
 
-export interface CustomerEconomic {
-  CAC: number;
-  LTV: number;
-  ltvToCac: number;
+type CustomerEconomic = {
+  CACShopper: number;
+  CACTraveler: number;
+
+  LTVShopper: number;
+  LTVTraveler: number;
+
+  ltvToCacShopper: number;
+  ltvToCacTraveler: number;
+
   totalUsers: number;
-}
+};
 
 interface ApiResponse {
   success: boolean;
@@ -32,7 +39,8 @@ export function useUnitEconomics(fromDate: string, toDate: string) {
     setLoading(true);
     setError(null);
 
-    fetch(`http://localhost:9000/api/v5/admin/dashboard/unit-economics?fromDate=${fromDate}&toDate=${toDate}`, {
+    // `http://localhost:8000/api/v5/admin/dashboard/unit-economics?fromDate=${fromDate}&toDate=${toDate}`
+    fetch(`${API.ADMIN.UNIT_ECONOMIC}?fromDate=${fromDate}&toDate=${toDate}`, {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },

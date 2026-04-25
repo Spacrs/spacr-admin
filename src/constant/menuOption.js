@@ -97,5 +97,15 @@ const menuItems = [
         path: "/admin/contact-support-list",
         icon: _jsx(MdContactSupport, { style: { fontSize: "20px", margin: "0 10px" } }),
     },
+    {
+        label: "Cost Management",
+        path: "/admin/cost-list",
+        icon: _jsx(GiTakeMyMoney, { style: { fontSize: "20px", margin: "0 10px" } }),
+    },
+    {
+        label: "Ad Spent Management",
+        path: "/admin/ad-spent",
+        icon: _jsx(GiTakeMyMoney, { style: { fontSize: "20px", margin: "0 10px" } }),
+    },
 ];
 export default menuItems;

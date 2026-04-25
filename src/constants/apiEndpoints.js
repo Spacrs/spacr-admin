@@ -37,7 +37,11 @@ const API = {
         GROWTH_TRENDS: `${BASE_URL}/api/v5/admin/dashboard/growth-trends`,
         SUPPLY_METRICS: `${BASE_URL}/api/v5/admin/dashboard/supply-metrics`,
         TOP_CORRIDORS: `${BASE_URL}/api/v5/admin/dashboard/top-corridors`,
-        UNIT_ECONOMIC: `${BASE_URL}/api/v5/admin/dashboard/unit-economics`
+        UNIT_ECONOMIC: `${BASE_URL}/api/v5/admin/dashboard/unit-economics`,
+        // Cost Management
+        MONTHLY_COST: `${BASE_URL}/api/v5/admin/costs/monthly-cost`,
+        // Ad Spend
+        Ad_SPEND: `${BASE_URL}/api/v5/admin/cac`
     },
     COUNTRY: {
         GET_COUNTRIES_FOR_BANNER: `${BASE_URL}/api/${VERSION}/country/get-countries-for-banner`,

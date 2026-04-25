@@ -77,7 +77,7 @@ export default function TopCorridors() {
           {/* Left — Horizontal Bar Chart (GMV by Corridor) */}
           <div>
             <p className="text-sm font-medium text-gray-600 mb-3">GMV by Corridor</p>
-            <ResponsiveContainer width="100%" height={320}>
+            {/* <ResponsiveContainer width="100%" height={320}>
               <BarChart
                 data={chartData}
                 layout="vertical"
@@ -106,6 +106,48 @@ export default function TopCorridors() {
                   }
                 />
                 <Bar dataKey="GMV" radius={[0, 6, 6, 0]}>
+                  {chartData.map((_, i) => (
+                    <Cell key={i} fill={BAR_COLORS[i % BAR_COLORS.length]} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer> */}
+            <ResponsiveContainer width="100%" height={320}>
+              <BarChart
+                data={chartData}
+                layout="vertical"
+                margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
+                barCategoryGap={12} // spacing between bars
+              >
+                <XAxis
+                  type="number"
+                  tickFormatter={fmt}
+                  tick={{ fontSize: 11, fill: '#9ca3af' }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+
+                <YAxis
+                  type="category"
+                  dataKey="fullName"
+                  tick={{ fontSize: 12, fill: '#374151' }}
+                  axisLine={false}
+                  tickLine={false}
+                  width={160}
+                />
+
+                <Tooltip
+                  formatter={(value, name) => [fmt(Number(value)), name]}
+                  labelFormatter={(label, payload) =>
+                    payload?.[0]?.payload?.fullName ?? label
+                  }
+                />
+
+                <Bar
+                  dataKey="GMV"
+                  barSize={20} // 🔥 thicker bars (increase from 14 → 20)
+                  radius={[0, 0, 0, 0]} // ❌ remove rounded corners
+                >
                   {chartData.map((_, i) => (
                     <Cell key={i} fill={BAR_COLORS[i % BAR_COLORS.length]} />
                   ))}

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import API from "../constants/apiEndpoints";
 export function useDashboardMetrics(fromDate, toDate) {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -6,7 +7,8 @@ export function useDashboardMetrics(fromDate, toDate) {
     useEffect(() => {
         setLoading(true);
         setError(null);
-        let url = `http://localhost:8000/api/v5/admin/dashboard/metrics`;
+        // let url = `http://localhost:8000/api/v5/admin/dashboard/metrics`;
+        let url = API.ADMIN.GET_DASHBOARD_METRICS;
         const params = new URLSearchParams();
         if (fromDate)
             params.append("fromDate", fromDate);

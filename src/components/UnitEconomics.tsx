@@ -158,7 +158,7 @@ export default function UnitEconomics() {
             </div>
 
             {/* Waterfall Chart */}
-            <div>
+            {/* <div>
               <p className="text-xs font-semibold text-gray-400 uppercase mb-3">Cost Breakdown</p>
               <ResponsiveContainer width="100%" height={200}>
                 <BarChart data={waterfallData} margin={{ top: 5, right: 10, left: 0, bottom: 20 }}>
@@ -181,9 +181,7 @@ export default function UnitEconomics() {
                       props.payload.name,
                     ]}
                   />
-                  {/* Invisible base bar */}
                   <Bar dataKey="base" stackId="a" fill="transparent" />
-                  {/* Visible value bar */}
                   <Bar dataKey="display" stackId="a" radius={[4, 4, 0, 0]}>
                     {waterfallData.map((entry, i) => (
                       <Cell key={i} fill={waterfallColors[entry.name] ?? '#3b82f6'} />
@@ -191,7 +189,7 @@ export default function UnitEconomics() {
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
-            </div>
+            </div> */}
           </div>
 
           {/* RIGHT — Customer Economics + Gauge */}
@@ -201,11 +199,27 @@ export default function UnitEconomics() {
             {/* Metrics rows */}
             <div className="space-y-3">
               {[
-                { label: 'CAC',            value: fmt(ce?.CAC ?? 0) },
-                { label: 'LTV',            value: fmt(ce?.LTV ?? 0) },
-                { label: 'LTV / CAC',      value: ce?.ltvToCac ? `${ce.ltvToCac.toFixed(1)}x` : 'N/A' },
-                { label: 'Total Users',    value: (ce?.totalUsers ?? 0).toLocaleString() },
-              ].map(item => (
+                  { label: 'CAC (Shopper)', value: fmt(ce?.CACShopper ?? 0) },
+                  { label: 'CAC (Traveler)', value: fmt(ce?.CACTraveler ?? 0) },
+
+                  { label: 'LTV (Shopper)', value: fmt(ce?.LTVShopper ?? 0) },
+                  { label: 'LTV (Traveler)', value: fmt(ce?.LTVTraveler ?? 0) },
+
+                  {
+                    label: 'LTV/CAC (Shopper)',
+                    value: ce?.ltvToCacShopper
+                      ? `${ce.ltvToCacShopper.toFixed(1)}x`
+                      : 'N/A',
+                  },
+                  {
+                    label: 'LTV/CAC (Traveler)',
+                    value: ce?.ltvToCacTraveler
+                      ? `${ce.ltvToCacTraveler.toFixed(1)}x`
+                      : 'N/A',
+                  },
+
+                  { label: 'Total Users', value: (ce?.totalUsers ?? 0).toLocaleString() },
+                ].map(item => (
                 <div
                   key={item.label}
                   className="flex items-center justify-between py-2.5 border-b border-gray-100"
@@ -217,8 +231,12 @@ export default function UnitEconomics() {
             </div>
 
             {/* LTV/CAC Gauge */}
-            <div className="flex justify-center pt-4">
+            {/* <div className="flex justify-center pt-4">
               <RatioGauge ratio={ce?.ltvToCac ?? 0} />
+            </div> */}
+            <div className="flex gap-6 justify-center">
+              <RatioGauge ratio={ce?.ltvToCacShopper ?? 0} />
+              <RatioGauge ratio={ce?.ltvToCacTraveler ?? 0} />
             </div>
           </div>
 
