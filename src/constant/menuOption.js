@@ -1,7 +1,13 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { icons } from "../Icons/constant";
-const { HiOutlineUsers, BsCreditCard2Front, TbTruckDelivery, GrSend, MdContactSupport, IoIosFlag, FaCity, CiSettings, MdProductionQuantityLimits, FaBarcode, FaPlane, GiKnightBanner, GiTakeMyMoney, AiOutlineTransaction, BsCurrencyExchange, TbReportSearch } = icons;
+const { HiOutlineUsers, BsCreditCard2Front, TbTruckDelivery, GrSend, MdContactSupport, IoIosFlag, FaCity, CiSettings, MdProductionQuantityLimits, FaBarcode, FaPlane, GiKnightBanner, GiTakeMyMoney, AiOutlineTransaction, BsCurrencyExchange, TbReportSearch, RxDashboard } = icons;
 const menuItems = [
+    // added on 14-04-2026(RP)
+    {
+        label: "Dashboard",
+        path: "/admin/dashboard-overview",
+        icon: _jsx(RxDashboard, { style: { fontSize: "20px", margin: "0 10px" } }),
+    },
     {
         label: "Users",
         path: "/admin/users",
@@ -90,6 +96,16 @@ const menuItems = [
         label: "Contact Support List",
         path: "/admin/contact-support-list",
         icon: _jsx(MdContactSupport, { style: { fontSize: "20px", margin: "0 10px" } }),
+    },
+    {
+        label: "Cost Management",
+        path: "/admin/cost-list",
+        icon: _jsx(GiTakeMyMoney, { style: { fontSize: "20px", margin: "0 10px" } }),
+    },
+    {
+        label: "Ad Spent Management",
+        path: "/admin/ad-spent",
+        icon: _jsx(GiTakeMyMoney, { style: { fontSize: "20px", margin: "0 10px" } }),
     },
 ];
 export default menuItems;

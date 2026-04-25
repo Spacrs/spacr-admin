@@ -405,6 +405,78 @@ const WithdrawalListColumn: IColumns[] = [
   },
 ];
 
+// added on 23-04-2026 (RP)
+const CostListColumn: IColumns[] = [
+  {
+    name: "Month",
+    Header: "Month",
+    colName: "Default",
+  },
+  {
+    name: "Cost",
+    Header: "Cost",
+    colName: "Default",
+  },
+  // {
+  //   name: "Notes",
+  //   Header: "Notes",
+  //   colName: "Default",
+  // },
+  {
+    name: "CreatedAt",
+    Header: "Created At",
+    colName: "DateAndTime",
+  },
+  {
+    name: "UpdatedAt",
+    Header: "Updated At",
+    colName: "DateAndTime",
+  },
+  // {
+  //   name: "action",
+  //   Header: "Actions",
+  //   colName: "Actions",
+  //   Actions: ["UPDATE"], // ya ["VIEW","UPDATE"] if needed
+  // },
+];
+
+// added on 24-04-2026 (RP)
+export const cacListColumn: IColumns[] = [
+  {
+    name: "Month",
+    Header: "Month",
+    colName: "Default",
+  },
+  {
+    name: "CACType",
+    Header: "CAC Type",
+    colName: "Default",
+  },
+  {
+    name: "AdSpent",
+    Header: "Ad Spent",
+    colName: "Default",
+  },
+  {
+    name: "CreatedAt",
+    Header: "Created At",
+    colName: "DateAndTime",
+  },
+  {
+    name: "UpdatedAt",
+    Header: "Updated At",
+    colName: "DateAndTime",
+  },
+  // {
+  //   name: "action",
+  //   Header: "Actions",
+  //   colName: "Actions",
+  //   Actions: ["UPDATE", "DELETE"], // added delete (optional)
+  // },
+];
+
+
+
 export const columns = {
   user: user,
   userDevices: userDevices,
@@ -420,5 +492,7 @@ export const columns = {
   bannerListColumn: bannerListColumn,
   systemFees: systemFeesColumn,
   transaction: TranssactionListColumn,
-  withdrawal: WithdrawalListColumn
+  withdrawal: WithdrawalListColumn,
+  costColumn: CostListColumn,
+  cacColumn: cacListColumn,
 };
