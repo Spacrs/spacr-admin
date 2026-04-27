@@ -9,9 +9,9 @@ import { useUnitEconomics } from '../hooks/useUnitEconomics';
 import DateRangePicker from "./DateRangePicker";
 
 function fmt(value: number): string {
-  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
-  if (value >= 1_000)     return `$${(value / 1_000).toFixed(1)}K`;
-  return `$${value.toFixed(2)}`;
+  if (value >= 1_000_000) return `AED ${(value / 1_000_000).toFixed(2)}M`;
+  if (value >= 1_000)     return `AED ${(value / 1_000).toFixed(1)}K`;
+  return `AED ${value.toFixed(2)}`;
 }
 
 // Build waterfall data from unit economics
