@@ -24,15 +24,15 @@ import DateRangePicker from "../DateRangePicker";
 function fmtCurrency(value: number): string {
   if (value >= 1_000_000) {
     const v = Math.floor((value / 1_000_000) * 100) / 100;
-    return `$${v}M`;
+    return `AED ${v}M`;
   }
 
   if (value >= 1_000) {
     const v = Math.floor((value / 1_000) * 10) / 10;
-    return `$${v}K`;
+    return `AED ${v}K`;
   }
 
-  return `$${value}`;
+  return `AED ${value}`;
 }
 
 function fmtUsers(value: number): string {
@@ -70,8 +70,8 @@ export default function GrowthTrendChart() {
 
       {/* Axis Titles */}
       <div className="flex justify-between text-xs font-semibold px-2">
-        <span className="text-blue-600">Currency (GMV & Revenue)</span>
-        <span className="text-green-600">Total Users (Count)</span>
+        <span className="text-green-600">Currency (GMV & Revenue)</span>
+        <span className="text-blue-600">Total Users (Count)</span>
       </div>
 
       {/* Loading */}
@@ -86,14 +86,15 @@ export default function GrowthTrendChart() {
             <XAxis
               dataKey="label"
               tick={{ fontSize: 12 }}
-              axisLine={{ stroke: "#94a3b8" }}
+              axisLine={{ stroke: "#22c55e" }}
               tickLine={false}
             />
 
             <YAxis
               yAxisId="left"
               tickFormatter={fmtCurrency}
-              axisLine={{ stroke: "#94a3b8" }}
+              width={80} 
+              axisLine={{ stroke: "#22c55e" }}
               tickLine={false}
             />
 
@@ -101,7 +102,7 @@ export default function GrowthTrendChart() {
               yAxisId="right"
               orientation="right"
               tickFormatter={fmtUsers}
-              axisLine={{ stroke: "#22c55e" }}
+              axisLine={{ stroke: "#94a3b8" }}
               tickLine={false}
             />
 
@@ -114,9 +115,9 @@ export default function GrowthTrendChart() {
 
                 return (
                   <div className="bg-white border border-gray-200 rounded-lg shadow-md p-3 text-xs">
-                    <p className="text-blue-600">GMV: {fmtCurrency(d.GMV)}</p>
+                    <p className="text-green-600">GMV: {fmtCurrency(d.GMV)}</p>
                     <p className="text-orange-500">Revenue: {fmtCurrency(d.revenue)}</p>
-                    <p className="text-green-600">Users: {d.totalUsers}</p>
+                    <p className="text-blue-600">Users: {d.totalUsers}</p>
                   </div>
                 );
               }}
@@ -131,21 +132,31 @@ export default function GrowthTrendChart() {
               />
 
             {/* GMV BAR */}
-            <Bar
+            {/* <Bar
               yAxisId="left"
               dataKey="GMV"
               name="GMV"
               fill="#3b82f6"
               barSize={40}
               radius={[6, 6, 0, 0]}
-            >
+            > */}
               {/* <LabelList
                 dataKey="GMV"
                 position="top"
                 formatter={(v: any) => fmtCurrency(Number(v))}
                 style={{ fontSize: 12, fontWeight: 600 }}
               /> */}
-            </Bar>
+            {/* </Bar> */}
+
+
+            <Bar
+              yAxisId="right" 
+              dataKey="totalUsers"
+              name="Total Users"
+              fill="#3b82f6"
+              barSize={40}
+              radius={[6, 6, 0, 0]}
+            />
 
             {/* Revenue LINE */}
             <Line
@@ -157,9 +168,19 @@ export default function GrowthTrendChart() {
               strokeWidth={2}
               dot={{ r: 4 }}
             />
+            
+
+            <Line
+              yAxisId="left"
+              type="linear"
+              dataKey="GMV"
+              name="GMV"
+              stroke="#16a34a"
+              strokeWidth={2}
+            />
 
             {/* Users LINE */}
-            <Line
+            {/* <Line
               yAxisId="right"
               type="linear" // monotone
               dataKey="totalUsers"
@@ -167,14 +188,14 @@ export default function GrowthTrendChart() {
               stroke="#16a34a"
               strokeWidth={3}
               // dot={{ r: 5 }}
-            >
+            > */}
               {/* <LabelList
                 dataKey="totalUsers"
                 position="top"
                 formatter={(v: any) => fmtUsers(Number(v))}
                 style={{ fill: "#16a34a", fontSize: 12, fontWeight: 600 }}
               /> */}
-            </Line>
+            {/* </Line> */}
 
           </ComposedChart>
         </ResponsiveContainer>
