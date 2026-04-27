@@ -1,6 +1,6 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState } from 'react';
-import { format, subDays } from 'date-fns';
+import { format } from 'date-fns';
 import { useUnitEconomics } from '../hooks/useUnitEconomics';
 import DateRangePicker from "./DateRangePicker";
 function fmt(value) {
@@ -41,11 +41,16 @@ function RatioGauge({ ratio }) {
     const pct = Math.min(ratio / maxRatio, 1);
     const dashOffset = circ * (1 - pct);
     const color = ratio >= 3 ? '#22c55e' : ratio >= 1 ? '#f59e0b' : '#ef4444';
-    return (_jsxs("div", { className: "flex flex-col items-center gap-1", children: [_jsxs("svg", { width: size, height: size, children: [_jsx("circle", { cx: size / 2, cy: size / 2, r: r, fill: "none", stroke: "#e5e7eb", strokeWidth: stroke }), _jsx("circle", { cx: size / 2, cy: size / 2, r: r, fill: "none", stroke: color, strokeWidth: stroke, strokeDasharray: circ, strokeDashoffset: dashOffset, strokeLinecap: "round", transform: `rotate(-90 ${size / 2} ${size / 2})`, style: { transition: 'stroke-dashoffset 0.6s ease' } }), _jsx("text", { x: size / 2, y: size / 2 + 6, textAnchor: "middle", fontSize: 18, fontWeight: "bold", fill: color, children: ratio > 0 ? `${ratio.toFixed(1)}x` : 'N/A' })] }), _jsx("p", { className: "text-xs text-gray-400", children: "LTV / CAC Ratio" })] }));
+    return (_jsxs("div", { className: "flex flex-col items-center gap-1", children: [_jsxs("svg", { width: size, height: size, children: [_jsx("circle", { cx: size / 2, cy: size / 2, r: r, fill: "none", stroke: "#e5e7eb", strokeWidth: stroke }), _jsx("circle", { cx: size / 2, cy: size / 2, r: r, fill: "none", stroke: color, strokeWidth: stroke, strokeDasharray: circ, strokeDashoffset: dashOffset, strokeLinecap: "round", transform: `rotate(-90 ${size / 2} ${size / 2})`, style: { transition: 'stroke-dashoffset 0.6s ease' } }), _jsx("text", { x: size / 2, y: size / 2 + 6, textAnchor: "middle", fontSize: 18, fontWeight: "bold", fill: color, children: ratio > 0 ? `${ratio.toFixed(2)}x` : '0.00x' })] }), _jsx("p", { className: "text-xs text-gray-400", children: "LTV / CAC Ratio" })] }));
 }
 export default function UnitEconomics() {
-    const [startDate, setStartDate] = useState(subDays(new Date(), 30));
-    const [endDate, setEndDate] = useState(new Date());
+    // const [startDate, setStartDate] = useState<Date | null>(subDays(new Date(), 30));
+    // const [endDate, setEndDate]     = useState<Date | null>(new Date());
+    const to = new Date();
+    const from = new Date();
+    from.setDate(to.getDate() - 6);
+    const [startDate, setStartDate] = useState(from);
+    const [endDate, setEndDate] = useState(to);
     const { data, loading, error } = useUnitEconomics(startDate ? format(startDate, 'yyyy-MM-dd') : '', endDate ? format(endDate, 'yyyy-MM-dd') : '');
     const ue = data?.unitEconomic;
     const ce = data?.customerEconomic;
@@ -78,14 +83,14 @@ export default function UnitEconomics() {
                                     {
                                         label: 'LTV/CAC (Shopper)',
                                         value: ce?.ltvToCacShopper
-                                            ? `${ce.ltvToCacShopper.toFixed(1)}x`
-                                            : 'N/A',
+                                            ? `${ce.ltvToCacShopper.toFixed(2)}x`
+                                            : '0.00x',
                                     },
                                     {
                                         label: 'LTV/CAC (Traveler)',
                                         value: ce?.ltvToCacTraveler
-                                            ? `${ce.ltvToCacTraveler.toFixed(1)}x`
-                                            : 'N/A',
+                                            ? `${ce.ltvToCacTraveler.toFixed(2)}x`
+                                            : '0.00x',
                                     },
                                     { label: 'Total Users', value: (ce?.totalUsers ?? 0).toLocaleString() },
                                 ].map(item => (_jsxs("div", { className: "flex items-center justify-between py-1.5 border-b border-gray-100", children: [_jsx("span", { className: "text-sm text-gray-500", children: item.label }), _jsx("span", { className: "text-sm font-semibold text-gray-800", children: item.value })] }, item.label))) })] })] }))] }));

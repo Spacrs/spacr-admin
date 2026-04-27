@@ -72,7 +72,7 @@ function RatioGauge({ ratio }: { ratio: number }) {
           textAnchor="middle" fontSize={18}
           fontWeight="bold" fill={color}
         >
-          {ratio > 0 ? `${ratio.toFixed(1)}x` : 'N/A'}
+          {ratio > 0 ? `${ratio.toFixed(2)}x` : '0.00x'}
         </text>
       </svg>
       <p className="text-xs text-gray-400">LTV / CAC Ratio</p>
@@ -81,8 +81,15 @@ function RatioGauge({ ratio }: { ratio: number }) {
 }
 
 export default function UnitEconomics() {
-  const [startDate, setStartDate] = useState<Date | null>(subDays(new Date(), 30));
-  const [endDate, setEndDate]     = useState<Date | null>(new Date());
+  // const [startDate, setStartDate] = useState<Date | null>(subDays(new Date(), 30));
+  // const [endDate, setEndDate]     = useState<Date | null>(new Date());
+
+  const to = new Date();
+  const from = new Date(); 
+  from.setDate(to.getDate() - 6);
+
+  const [startDate, setStartDate] = useState<Date | null>(from);
+  const [endDate, setEndDate] = useState<Date | null>(to);
 
   const { data, loading, error } = useUnitEconomics(
     startDate ? format(startDate, 'yyyy-MM-dd') : '',
@@ -214,14 +221,14 @@ export default function UnitEconomics() {
                   {
                     label: 'LTV/CAC (Shopper)',
                     value: ce?.ltvToCacShopper
-                      ? `${ce.ltvToCacShopper.toFixed(1)}x`
-                      : 'N/A',
+                      ? `${ce.ltvToCacShopper.toFixed(2)}x`
+                      : '0.00x',
                   },
                   {
                     label: 'LTV/CAC (Traveler)',
                     value: ce?.ltvToCacTraveler
-                      ? `${ce.ltvToCacTraveler.toFixed(1)}x`
-                      : 'N/A',
+                      ? `${ce.ltvToCacTraveler.toFixed(2)}x`
+                      : '0.00x',
                   },
 
                   { label: 'Total Users', value: (ce?.totalUsers ?? 0).toLocaleString() },
