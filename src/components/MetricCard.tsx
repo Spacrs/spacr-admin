@@ -4,6 +4,7 @@ interface MetricCardProps {
   change?: string;
   positive?: boolean;
   loading?: boolean;
+   isCurrency?: boolean;
 }
 
 export default function MetricCard({
@@ -12,6 +13,7 @@ export default function MetricCard({
   change,
   positive = true,
   loading = false,
+  isCurrency = false
 }: MetricCardProps) {
   if (loading) {
     return (
@@ -24,16 +26,25 @@ export default function MetricCard({
 
   return (
     <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 h-[100px] flex flex-col justify-between">
-      
-      {/* Label (fixed area) */}
-      <p className="text-sm text-gray-500 line-clamp-2 min-h-[40px]">
-        {label}
-      </p>
 
-      {/* Value (always bottom aligned) */}
-      <p className="text-2xl font-bold text-gray-900">
-        {value}
-      </p>
+      {/* Label (fixed area) */}
+      {/* Top Row */}
+      <div className="flex items-start justify-between gap-2">
+        <p className="text-sm text-gray-500 leading-tight line-clamp-2">
+          {label}
+        </p>
+
+        {isCurrency && (
+          <span className="text-[11px] font-medium text-blue-600 shrink-0">
+            AED
+          </span>
+        )}
+      </div>
+
+        {/* Value (always bottom aligned) */}
+      <p className="text-xl font-bold text-gray-900">
+          {value}
+        </p>
     </div>
   );
 }
@@ -71,3 +82,4 @@ export default function MetricCard({
 //     </div>
 //   );
 // }
+ 

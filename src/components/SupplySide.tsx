@@ -17,9 +17,9 @@ import {
 import DateRangePicker from "./DateRangePicker";
 
 function fmt(value: number): string {
-  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
-  if (value >= 1_000) return `$${(value / 1_000).toFixed(1)}K`;
-  return `$${value.toFixed(0)}`;
+  if (value >= 1_000_000) return `AED ${(value / 1_000_000).toFixed(2)}M`;
+  if (value >= 1_000) return `AED ${(value / 1_000).toFixed(1)}K`;
+  return `AED ${value.toFixed(0)}`;
 }
 
 export default function SupplySide() {

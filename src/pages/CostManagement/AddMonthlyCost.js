@@ -33,7 +33,7 @@ function AddMonthlyCost() {
     const handleChange = (e) => {
         const { name, value } = e.target;
         if (name === "cost") {
-            if (/^\d*$/.test(value)) {
+            if (/^\d*\.?\d*$/.test(value)) {
                 setPayload((p) => ({
                     ...p,
                     cost: value === "" ? "" : Number(value),

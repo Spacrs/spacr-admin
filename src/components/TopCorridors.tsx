@@ -8,9 +8,15 @@ import DateFilter from './DateFilter';
 import { useTopCorridors } from '../hooks/useTopCorridors';
 
 function fmt(value: number): string {
-  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
-  if (value >= 1_000)     return `$${(value / 1_000).toFixed(1)}K`;
-  return `$${value.toFixed(0)}`;
+  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(2)}M`;
+  if (value >= 1_000)     return `${(value / 1_000).toFixed(1)}K`;
+  return `${value.toFixed(0)}`;
+}
+
+function fmtWithCurrency(value: number): string {
+  if (value >= 1_000_000) return `AED ${(value / 1_000_000).toFixed(2)}M`;
+  if (value >= 1_000)     return `AED ${(value / 1_000).toFixed(1)}K`;
+  return `AED ${value.toFixed(0)}`;
 }
 
 // Shorten long corridor names for chart label
@@ -121,7 +127,7 @@ export default function TopCorridors() {
               >
                 <XAxis
                   type="number"
-                  tickFormatter={fmt}
+                  tickFormatter={fmtWithCurrency}
                   tick={{ fontSize: 11, fill: '#9ca3af' }}
                   axisLine={false}
                   tickLine={false}
@@ -137,7 +143,7 @@ export default function TopCorridors() {
                 />
 
                 <Tooltip
-                  formatter={(value, name) => [fmt(Number(value)), name]}
+                  formatter={(value, name) => [fmtWithCurrency(Number(value)), name]}
                   labelFormatter={(label, payload) =>
                     payload?.[0]?.payload?.fullName ?? label
                   }
@@ -164,10 +170,10 @@ export default function TopCorridors() {
                 <tr className="text-left text-xs text-gray-400 border-b border-gray-100">
                   <th className="pb-2 font-medium">Corridor</th>
                   <th className="pb-2 font-medium text-right">Orders</th>
-                  <th className="pb-2 font-medium text-right">GMV</th>
-                  <th className="pb-2 font-medium text-right">Revenue</th>
-                  <th className="pb-2 font-medium text-right">AOV</th>
-                  <th className="pb-2 font-medium text-right">Avg Earnings</th>
+                  <th className="pb-2 font-medium text-right">GMV (AED)</th>
+                  <th className="pb-2 font-medium text-right">Revenue (AED)</th>
+                  <th className="pb-2 font-medium text-right">AOV (AED)</th>
+                  <th className="pb-2 font-medium text-right">Avg Earnings (AED)</th>
                 </tr>
               </thead>
               <tbody>
