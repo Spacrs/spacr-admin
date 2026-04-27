@@ -16,11 +16,18 @@ const {
   GiTakeMyMoney,
   AiOutlineTransaction,
   BsCurrencyExchange,
-  TbReportSearch
+  TbReportSearch,
+  RxDashboard
 
 } = icons;
 
 const menuItems: MenuItemTypes[] = [
+  // added on 14-04-2026(RP)
+  {
+    label: "Dashboard",
+    path: "/admin/dashboard-overview",
+    icon: <RxDashboard style={{ fontSize: "20px", margin: "0 10px" }} />,
+  },
   {
     label: "Users",
     path: "/admin/users",
@@ -115,6 +122,16 @@ const menuItems: MenuItemTypes[] = [
     label: "Contact Support List",
     path: "/admin/contact-support-list",
     icon: <MdContactSupport style={{ fontSize: "20px", margin: "0 10px" }} />,
+  },
+  {
+    label: "Cost Management",
+    path: "/admin/cost-list",
+    icon: <GiTakeMyMoney style={{ fontSize: "20px", margin: "0 10px" }} />,
+  },
+  {
+    label: "Ad Spent Management",
+    path: "/admin/ad-spent",
+    icon: <GiTakeMyMoney style={{ fontSize: "20px", margin: "0 10px" }} />,
   },
   
 ];

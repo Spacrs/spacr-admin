@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content:  [
+  darkMode: ["class"], // REQUIRED for shadcn
+  content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
@@ -20,8 +21,21 @@ export default {
         fadeIn: 'fadeIn 0.5s ease-out',
         slideUp: 'slideUp 0.3s ease-out',
       },
+
+      // ADD THIS (shadcn system)
       colors: {
-        // primary: '#36468E',
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+
+        // YOUR CUSTOM COLORS (keep them)
         primary: '#131f5c',
         lightBlue:'#ECF0FF',
         secondary: '#2ecc71', // Green
