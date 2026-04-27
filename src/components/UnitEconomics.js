@@ -5,10 +5,10 @@ import { useUnitEconomics } from '../hooks/useUnitEconomics';
 import DateRangePicker from "./DateRangePicker";
 function fmt(value) {
     if (value >= 1_000_000)
-        return `$${(value / 1_000_000).toFixed(2)}M`;
+        return `AED ${(value / 1_000_000).toFixed(2)}M`;
     if (value >= 1_000)
-        return `$${(value / 1_000).toFixed(1)}K`;
-    return `$${value.toFixed(2)}`;
+        return `AED ${(value / 1_000).toFixed(1)}K`;
+    return `AED ${value.toFixed(2)}`;
 }
 // Build waterfall data from unit economics
 function buildWaterfall(revenue, costPerOrder) {
