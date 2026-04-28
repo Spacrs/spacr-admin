@@ -12,13 +12,13 @@ import DateRangePicker from "./DateRangePicker";
 function fmt(value) {
     if (value >= 1_000_000) {
         const v = Math.floor((value / 1_000_000) * 100) / 100;
-        return `$${v}M`;
+        return `${v}M`;
     }
     if (value >= 1_000) {
         const v = Math.floor((value / 1_000) * 10) / 10;
-        return `$${v}K`;
+        return `${v}K`;
     }
-    return `$${value}`;
+    return `${value}`;
 }
 export default function TopMetrics() {
     // const [startDate, setStartDate] = useState<Date>(subDays(new Date(), 30));
@@ -34,9 +34,9 @@ export default function TopMetrics() {
         to: new Date(2026, 3, 20),
     });
     const metrics = [
-        { label: "GMV", value: data ? fmt(data.GMV) : "—" },
-        { label: "Revenue", value: data ? fmt(data.revenue) : "—" },
-        { label: "Net Profit", value: data ? fmt(data.netProfit) : "—" },
+        { label: "GMV", value: data ? fmt(data.GMV) : "—", isCurrency: true },
+        { label: "Revenue", value: data ? fmt(data.revenue) : "—", isCurrency: true },
+        { label: "Net Profit", value: data ? fmt(data.netProfit) : "—", isCurrency: true },
         {
             label: "Active Orders",
             value: data ? data.totalActiveOrders.toLocaleString() : "—",
@@ -67,5 +67,5 @@ export default function TopMetrics() {
                                 setStartDate(range.from);
                                 setEndDate(range.to);
                             }
-                        } })] }), error && (_jsxs("div", { className: "bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3", children: ["Failed to load metrics: ", error] })), _jsx("div", { className: "grid grid-cols-3 md:grid-cols-5 xl:grid-cols-9 gap-3", children: metrics.map((m) => (_jsx(MetricCard, { label: m.label, value: m.value, positive: m.positive, loading: loading }, m.label))) })] }));
+                        } })] }), error && (_jsxs("div", { className: "bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3", children: ["Failed to load metrics: ", error] })), _jsx("div", { className: "grid grid-cols-3 md:grid-cols-5 xl:grid-cols-9 gap-3", children: metrics.map((m) => (_jsx(MetricCard, { label: m.label, value: m.value, positive: m.positive, loading: loading, isCurrency: m.isCurrency }, m.label))) })] }));
 }

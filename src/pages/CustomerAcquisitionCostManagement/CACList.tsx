@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { columns } from "../../constant/Columns";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { Search, ErrorMsg, Table, Button } from "../../components/Common";
 import API from "../../constants/apiEndpoints";
 
@@ -19,14 +19,14 @@ const CACList = () => {
   const itemsPerPage = 10;
   const navigate = useNavigate();
 
-  // ✅ Fetch CAC API
+  // Fetch CAC API
   const fetchCACList = async () => {
     try {
       setLoading(true);
       setIsError(false);
 
       // "http://localhost:8000/api/v5/admin/cac"
-      const res = await fetch(API.ADMIN.Ad_SPEND, {
+      const res = await fetch(`${API.ADMIN.Ad_SPEND}?page=${currentPage}&limit=${itemsPerPage}&search=${filter}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -83,12 +83,12 @@ const CACList = () => {
   };
 
   const handleUpdate = (data: any) => {
-    const cacId = data?.Id;
-    navigate(`/admin/edit-cac/${cacId}`);
+    const cacId = data?.CACID;
+    navigate(`/admin/edit-ad-spent/${cacId}`);
   };
 
   const handleDelete = (data: any) => {
-    setDeleteId(data?.Id);
+    setDeleteId(data?.CACID);
     setShowConfirm(true);
   };
 
@@ -98,14 +98,13 @@ const CACList = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:8000/api/v5/admin/cac/${deleteId}`,
+        // `http://localhost:8000/api/v5/admin/cac/${deleteId}`,
+        `${API.ADMIN.Ad_SPEND}/${deleteId}`,
         {
-          method: "PATCH",
+          method: "DELETE",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
-          body: JSON.stringify({ IsDeleted: true }),
         },
       );
 
@@ -115,7 +114,7 @@ const CACList = () => {
         throw new Error(result.message || "Failed to delete CAC");
       }
 
-      toast.success("CAC deleted successfully");
+      toast.success("Ad Spent deleted successfully");
       fetchCACList();
     } catch (err: any) {
       toast.error(err.message || "Error while deleting");
@@ -127,13 +126,15 @@ const CACList = () => {
 
   return (
     <div>
+        <ToastContainer />
+      
       {/* Header */}
       <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         <div className="flex flex-1 max-w-lg">
           <Search
             search={filter}
             onChange={onSearch}
-            placeholder="Search by month or type..."
+            placeholder="Search by month..."
             onReset={() => setFilter("")}
           />
         </div>
@@ -150,14 +151,14 @@ const CACList = () => {
       <div className="p-4 bg-gray-100 rounded-lg shadow-md">
         <Table
           data={cacData || []}
-          columns={columns.cacColumn} // ✅ make sure you define this
+          columns={columns.cacColumn}
           loading={loading}
           totalPages={totalPages}
           currentPage={currentPage}
           onPageChange={onPageChange}
           itemsPerPage={itemsPerPage}
-          //   handleUpdate={handleUpdate}
-          //   handleDelete={handleDelete}
+          handleUpdate={handleUpdate}
+          handleDelete={handleDelete}
         />
       </div>
 
@@ -166,7 +167,7 @@ const CACList = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-sm text-center">
             <p className="mb-4 font-semibold text-lg">
-              Are you sure you want to delete this CAC entry?
+              Are you sure you want to delete this Ad Spent entry?
             </p>
             <div className="flex justify-center gap-4">
               <Button

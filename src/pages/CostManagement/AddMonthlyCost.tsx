@@ -1,20 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../components/Common/Button";
 import InputComponent from "../../components/Common/Inputes";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import API from "../../constants/apiEndpoints";
-
+import { useParams } from "react-router-dom";
 
 type Payload = {
   month: string;
   cost: number | "";
-//   notes?: string;
+  //   notes?: string;
 };
 
 function AddMonthlyCost() {
   const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
+  const { costId } = useParams();
+  const isEdit = Boolean(costId);
 
   const yearOptions = Array.from({ length: 10 }, (_, i) => currentYear - i);
 
@@ -42,25 +44,41 @@ function AddMonthlyCost() {
     // notes: "",
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
+  useEffect(() => {
+    if (!costId) return;
 
-    if (name === "cost") {
-      if (/^\d*$/.test(value)) {
-        setPayload((p) => ({
-          ...p,
-          cost: value === "" ? "" : Number(value),
-        }));
+    const fetchCostById = async () => {
+      try {
+        const res = await fetch(`${API.ADMIN.MONTHLY_COST}/${costId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+          const data = result.data;
+
+          const [yearVal, monthVal] = data.Month.split("-");
+
+          setYear(yearVal);
+          setMonth(monthVal);
+
+          setPayload({
+            month: data.Month,
+            cost: data.Cost,
+          });
+        } else {
+          toast.error("Failed to load cost data");
+        }
+      } catch (err) {
+        toast.error("Error fetching cost data");
       }
-    } else {
-      setPayload((p) => ({
-        ...p,
-        [name]: value,
-      }));
-    }
-  };
+    };
+
+    fetchCostById();
+  }, [costId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,12 +95,15 @@ function AddMonthlyCost() {
       return;
     }
 
-    console.log('payload', payload)
-    console.log('finalMonth', finalMonth);
     try {
-      // `http://localhost:8000/api/v5/admin/costs/monthly-cost`
-      await fetch(`${API.ADMIN.MONTHLY_COST}`, {
-        method: "POST",
+      const url = isEdit
+        ? `${API.ADMIN.MONTHLY_COST}/${costId}`
+        : `${API.ADMIN.MONTHLY_COST}`;
+
+      const method = isEdit ? "PATCH" : "POST";
+
+      const res = await fetch(url, {
+        method,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           "Content-Type": "application/json",
@@ -93,13 +114,41 @@ function AddMonthlyCost() {
         }),
       });
 
-      toast.success("Cost saved successfully");
-      // redirect after short delay
+      const result = await res.json();
+
+      if (!res.ok || !result.success) {
+        throw new Error(result.message || "Something went wrong");
+      }
+
+      toast.success(
+        isEdit ? "Cost updated successfully" : "Cost saved successfully",
+      );
+
       setTimeout(() => {
         navigate("/admin/cost-list");
       }, 1000);
-    } catch (err) {
-      toast.error("Failed to save cost");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to save cost");
+    }
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+
+    if (name === "cost") {
+      if (/^\d*\.?\d*$/.test(value)) {
+        setPayload((p) => ({
+          ...p,
+          cost: value === "" ? "" : Number(value),
+        }));
+      }
+    } else {
+      setPayload((p) => ({
+        ...p,
+        [name]: value,
+      }));
     }
   };
 
@@ -112,7 +161,9 @@ function AddMonthlyCost() {
           onSubmit={handleSubmit}
           className="max-w-xl mx-auto bg-white p-6 shadow rounded-lg space-y-6"
         >
-          <h2 className="text-lg font-semibold">Cost Management</h2>
+          <h2 className="text-lg font-semibold">
+            {isEdit ? "Edit Cost" : "Cost Management"}
+          </h2>
 
           {/* Year + Month */}
           <div className="grid grid-cols-2 gap-4">
@@ -172,7 +223,11 @@ function AddMonthlyCost() {
 
           {/* Submit */}
           <div className="text-right">
-            <Button text="Save Cost" variant="primary" type="submit" />
+            <Button
+              text={isEdit ? "Update Cost" : "Save Cost"}
+              variant="primary"
+              type="submit"
+            />
           </div>
         </form>
       </div>

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { columns } from "../../constant/Columns";
 import { useNavigate } from "react-router-dom";
 import API from "../../constants/apiEndpoints";
+import { toast, ToastContainer } from "react-toastify";
 import { Search, ErrorMsg, Table, Button } from "../../components/Common";
 function CostList() {
     console.log("CostList component rendered");
@@ -16,10 +17,8 @@ function CostList() {
     const [isError, setIsError] = useState(false);
     const itemsPerPage = 10;
     const navigate = useNavigate();
-    // ✅ Fetch API
+    // Fetch API
     const fetchCostList = async () => {
-        console.log("API function called");
-        console.log("Fetching cost list with params:");
         try {
             setLoading(true);
             setIsError(false);
@@ -30,7 +29,6 @@ function CostList() {
                 },
             });
             const result = await res.json();
-            console.log("Cost API Response:", result);
             if (res.ok && result.success) {
                 const formattedData = (result.data || []).map((item) => {
                     if (!item.Month)
@@ -62,7 +60,6 @@ function CostList() {
         }
     };
     useEffect(() => {
-        console.log("useEffect triggered");
         fetchCostList();
     }, [currentPage, filter]);
     if (isError) {
@@ -76,47 +73,44 @@ function CostList() {
         setCurrentPage(1);
     };
     const handleUpdate = (data) => {
-        const costId = data?.Id;
-        navigate(`/admin/edit-monthly-cost/${costId}`);
+        navigate(`/admin/edit-monthly-cost/${data?.Id}`);
     };
     const handleDelete = (data) => {
         setDeleteId(data?.Id);
         setShowConfirm(true);
     };
-    // const handleConfirmDelete = async () => {
-    //   if (!deleteId) return;
-    //   try {
-    //     const access_token = localStorage.getItem("access_token");
-    //     const res = await fetch(
-    //       `http://localhost:8000/api/v5/admin/costs/monthly-cost/${deleteId}`,
-    //       {
-    //         method: "PATCH", // soft delete (recommended)
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //           Authorization: `Bearer ${access_token}`,
-    //         },
-    //         body: JSON.stringify({ IsDeleted: true }),
-    //       }
-    //     );
-    //     const result = await res.json();
-    //     if (!res.ok || !result.success) {
-    //       throw new Error(result.message || "Failed to delete cost");
-    //     }
-    //     // success toast
-    //     toast.success("Cost deleted successfully");
-    //     // refresh list
-    //     // await fetchCostList();
-    //   } catch (err: any) {
-    //     // error toast
-    //     toast.error(err.message || "Error while deleting");
-    //   } finally {
-    //     setShowConfirm(false);
-    //     setDeleteId(null);
-    //   }
-    // };
-    return (_jsxs("div", { children: [_jsxs("div", { className: "flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg", children: [_jsx("div", { className: "flex flex-1 max-w-lg", children: _jsx(Search, { search: filter, onChange: onSearch, placeholder: "Search by month...", onReset: () => setFilter("") }) }), _jsx("button", { className: "ml-4 bg-black text-white px-4 py-2 rounded", onClick: () => navigate("/admin/add-monthly-cost"), children: "Add Cost" })] }), _jsx("div", { className: "p-4 bg-gray-100 rounded-lg shadow-md", children: _jsx(Table, { data: costData || [], columns: columns.costColumn, loading: loading, totalPages: totalPages, currentPage: currentPage, onPageChange: onPageChange, itemsPerPage: itemsPerPage }) }), showConfirm && (_jsx("div", { className: "fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50", children: _jsxs("div", { className: "bg-white p-6 rounded-lg shadow-md w-full max-w-sm text-center", children: [_jsx("p", { className: "mb-4 font-semibold text-lg", children: "Are you sure you want to delete this marketplace?" }), _jsx("div", { className: "flex justify-center gap-4", children: _jsx(Button, { text: "Cancel", variant: "lightBlue", onClick: () => {
-                                    setShowConfirm(false);
-                                    setDeleteId(null);
-                                } }) })] }) }))] }));
+    const handleConfirmDelete = async () => {
+        if (!deleteId)
+            return;
+        try {
+            const access_token = localStorage.getItem("access_token");
+            const res = await fetch(`${API.ADMIN.MONTHLY_COST}/${deleteId}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            });
+            const result = await res.json();
+            if (!res.ok || !result.success) {
+                throw new Error(result.message || "Failed to delete cost");
+            }
+            toast.success("Cost deleted successfully");
+            // Option 1 (current - safe)
+            await fetchCostList();
+            // Option 2 (better UX - no API call)
+            // setCostData(prev => prev.filter(item => item.Id !== deleteId));
+        }
+        catch (err) {
+            toast.error(err.message || "Error while deleting");
+        }
+        finally {
+            setShowConfirm(false);
+            setDeleteId(null);
+        }
+    };
+    return (_jsxs("div", { children: [_jsx(ToastContainer, {}), _jsxs("div", { className: "flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg", children: [_jsx("div", { className: "flex flex-1 max-w-lg", children: _jsx(Search, { search: filter, onChange: onSearch, placeholder: "Search by month...", onReset: () => setFilter("") }) }), _jsx("button", { className: "ml-4 bg-black text-white px-4 py-2 rounded", onClick: () => navigate("/admin/add-monthly-cost"), children: "Add Cost" })] }), _jsx("div", { className: "p-4 bg-gray-100 rounded-lg shadow-md", children: _jsx(Table, { data: costData || [], columns: columns.costColumn, loading: loading, totalPages: totalPages, currentPage: currentPage, onPageChange: onPageChange, itemsPerPage: itemsPerPage, handleUpdate: handleUpdate, handleDelete: handleDelete }) }), showConfirm && (_jsx("div", { className: "fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50", children: _jsxs("div", { className: "bg-white p-6 rounded-lg shadow-md w-full max-w-sm text-center", children: [_jsx("p", { className: "mb-4 font-semibold text-lg", children: "Are you sure you want to delete this Cost entry?" }), _jsxs("div", { className: "flex justify-center gap-4", children: [_jsx(Button, { text: "Cancel", variant: "lightBlue", onClick: () => {
+                                        setShowConfirm(false);
+                                        setDeleteId(null);
+                                    } }), _jsx(Button, { text: "Yes, Delete", variant: "danger", onClick: handleConfirmDelete })] })] }) }))] }));
 }
 export default CostList;

@@ -26,7 +26,7 @@ export default function KpiCard({
         <span style={{ fontSize: 16 }}>{icon}</span>
         <span>{label}</span>
       </div>
-      <p className="text-2xl font-bold text-gray-900">{value}</p>
+      <p className="text-xl font-bold text-gray-900">{value}</p>
     </div>
   );
 }

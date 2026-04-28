@@ -20,11 +20,8 @@ function CostList() {
   const itemsPerPage = 10;
   const navigate = useNavigate();
 
-  // ✅ Fetch API
+  // Fetch API
   const fetchCostList = async () => {
-    console.log("API function called");
-
-    console.log("Fetching cost list with params:");
     try {
       setLoading(true);
       setIsError(false);
@@ -41,7 +38,6 @@ function CostList() {
       );
 
       const result = await res.json();
-      console.log("Cost API Response:", result);
 
       if (res.ok && result.success) {
         const formattedData = (result.data || []).map((item: any) => {
@@ -73,7 +69,6 @@ function CostList() {
   };
 
   useEffect(() => {
-    console.log("useEffect triggered");
     fetchCostList();
   }, [currentPage, filter]);
 
@@ -91,8 +86,7 @@ function CostList() {
   };
 
   const handleUpdate = (data: any) => {
-    const costId = data?.Id;
-    navigate(`/admin/edit-monthly-cost/${costId}`);
+    navigate(`/admin/edit-monthly-cost/${data?.Id}`);
   };
 
   const handleDelete = (data: any) => {
@@ -100,47 +94,48 @@ function CostList() {
     setShowConfirm(true);
   };
 
-  // const handleConfirmDelete = async () => {
-  //   if (!deleteId) return;
+  const handleConfirmDelete = async () => {
+    if (!deleteId) return;
 
-  //   try {
-  //     const access_token = localStorage.getItem("access_token");
+    try {
+      const access_token = localStorage.getItem("access_token");
 
-  //     const res = await fetch(
-  //       `http://localhost:8000/api/v5/admin/costs/monthly-cost/${deleteId}`,
-  //       {
-  //         method: "PATCH", // soft delete (recommended)
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${access_token}`,
-  //         },
-  //         body: JSON.stringify({ IsDeleted: true }),
-  //       }
-  //     );
+      const res = await fetch(
+        `${API.ADMIN.MONTHLY_COST}/${deleteId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
 
-  //     const result = await res.json();
+      const result = await res.json();
 
-  //     if (!res.ok || !result.success) {
-  //       throw new Error(result.message || "Failed to delete cost");
-  //     }
+      if (!res.ok || !result.success) {
+        throw new Error(result.message || "Failed to delete cost");
+      }
 
-  //     // success toast
-  //     toast.success("Cost deleted successfully");
+      toast.success("Cost deleted successfully");
 
-  //     // refresh list
-  //     // await fetchCostList();
+      // Option 1 (current - safe)
+      await fetchCostList();
 
-  //   } catch (err: any) {
-  //     // error toast
-  //     toast.error(err.message || "Error while deleting");
-  //   } finally {
-  //     setShowConfirm(false);
-  //     setDeleteId(null);
-  //   }
-  // };
+      // Option 2 (better UX - no API call)
+      // setCostData(prev => prev.filter(item => item.Id !== deleteId));
+
+    } catch (err: any) {
+      toast.error(err.message || "Error while deleting");
+    } finally {
+      setShowConfirm(false);
+      setDeleteId(null);
+    }
+  };
 
   return (
     <div>
+      <ToastContainer />
+
       {/* Header */}
       <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         {/* <ToastContainer /> */}
@@ -171,8 +166,8 @@ function CostList() {
           currentPage={currentPage}
           onPageChange={onPageChange}
           itemsPerPage={itemsPerPage}
-          // handleUpdate={handleUpdate}
-          // handleDelete={handleDelete}
+          handleUpdate={handleUpdate}
+          handleDelete={handleDelete}
         />
       </div>
 
@@ -180,7 +175,7 @@ function CostList() {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-sm text-center">
             <p className="mb-4 font-semibold text-lg">
-              Are you sure you want to delete this marketplace?
+              Are you sure you want to delete this Cost entry?
             </p>
             <div className="flex justify-center gap-4">
               <Button
@@ -191,11 +186,11 @@ function CostList() {
                   setDeleteId(null);
                 }}
               />
-              {/* <Button
+              <Button
                 text="Yes, Delete"
                 variant="danger"
                 onClick={handleConfirmDelete}
-              /> */}
+              />
             </div>
           </div>
         </div>
