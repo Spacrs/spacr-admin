@@ -26,7 +26,7 @@ const CACList = () => {
       setIsError(false);
 
       // "http://localhost:8000/api/v5/admin/cac"
-      const res = await fetch(API.ADMIN.Ad_SPEND, {
+      const res = await fetch(`${API.ADMIN.Ad_SPEND}?page=${currentPage}&limit=${itemsPerPage}&search=${filter}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -134,7 +134,7 @@ const CACList = () => {
           <Search
             search={filter}
             onChange={onSearch}
-            placeholder="Search by month or type..."
+            placeholder="Search by month..."
             onReset={() => setFilter("")}
           />
         </div>
