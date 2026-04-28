@@ -41,7 +41,7 @@ const API = {
         // Cost Management
         MONTHLY_COST: `${BASE_URL}/api/v5/admin/costs/monthly-cost`,
         // Ad Spend
-        Ad_SPEND: `${BASE_URL}/api/v5/admin/cac`
+        Ad_SPEND: `${BASE_URL}/api/v5/admin/ad-spent`,
     },
     COUNTRY: {
         GET_COUNTRIES_FOR_BANNER: `${BASE_URL}/api/${VERSION}/country/get-countries-for-banner`,

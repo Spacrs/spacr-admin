@@ -54,7 +54,7 @@ const API = {
     MONTHLY_COST : `${BASE_URL}/api/v5/admin/costs/monthly-cost`,
 
     // Ad Spend
-    Ad_SPEND : `${BASE_URL}/api/v5/admin/cac`
+    Ad_SPEND : `${BASE_URL}/api/v5/admin/ad-spent`,
 
   },
 
