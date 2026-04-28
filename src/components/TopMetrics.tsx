@@ -17,15 +17,15 @@ import DateRangePicker from "./DateRangePicker";
 function fmt(value: number): string {
   if (value >= 1_000_000) {
     const v = Math.floor((value / 1_000_000) * 100) / 100;
-    return `$${v}M`;
+    return `${v}M`;
   }
 
   if (value >= 1_000) {
     const v = Math.floor((value / 1_000) * 10) / 10;
-    return `$${v}K`;
+    return `${v}K`;
   }
 
-  return `$${value}`;
+  return `${value}`;
 }
 
 export default function TopMetrics() {
@@ -51,9 +51,9 @@ export default function TopMetrics() {
   })
 
   const metrics = [
-    { label: "GMV", value: data ? fmt(data.GMV) : "—" },
-    { label: "Revenue", value: data ? fmt(data.revenue) : "—" },
-    { label: "Net Profit", value: data ? fmt(data.netProfit) : "—" },
+    { label: "GMV", value: data ? fmt(data.GMV) : "—" , isCurrency: true},
+    { label: "Revenue", value: data ? fmt(data.revenue) : "—" , isCurrency: true},
+    { label: "Net Profit", value: data ? fmt(data.netProfit) : "—" , isCurrency: true},
     {
       label: "Active Orders",
       value: data ? data.totalActiveOrders.toLocaleString() : "—",
@@ -132,6 +132,7 @@ export default function TopMetrics() {
             value={m.value}
             positive={m.positive}
             loading={loading}
+            isCurrency={m.isCurrency}
           />
         ))}
       </div>

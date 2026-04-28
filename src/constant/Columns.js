@@ -411,12 +411,12 @@ const CostListColumn = [
         Header: "Updated At",
         colName: "DateAndTime",
     },
-    // {
-    //   name: "action",
-    //   Header: "Actions",
-    //   colName: "Actions",
-    //   Actions: ["UPDATE"], // ya ["VIEW","UPDATE"] if needed
-    // },
+    {
+        name: "action",
+        Header: "Actions",
+        colName: "Actions",
+        Actions: ["UPDATE", "DELETE"],
+    },
 ];
 // added on 24-04-2026 (RP)
 export const cacListColumn = [
@@ -445,12 +445,12 @@ export const cacListColumn = [
         Header: "Updated At",
         colName: "DateAndTime",
     },
-    // {
-    //   name: "action",
-    //   Header: "Actions",
-    //   colName: "Actions",
-    //   Actions: ["UPDATE", "DELETE"], // added delete (optional)
-    // },
+    {
+        name: "action",
+        Header: "Actions",
+        colName: "Actions",
+        Actions: ["UPDATE", "DELETE"],
+    },
 ];
 export const columns = {
     user: user,
