@@ -134,6 +134,8 @@ function CostList() {
 
   return (
     <div>
+      <ToastContainer />
+
       {/* Header */}
       <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         {/* <ToastContainer /> */}

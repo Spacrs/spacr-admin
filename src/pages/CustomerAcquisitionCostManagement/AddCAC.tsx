@@ -133,7 +133,7 @@ const isEdit = Boolean(cacId);
       const url = isEdit ? `${API.ADMIN.Ad_SPEND}/${cacId}` : API.ADMIN.Ad_SPEND;
       const method = isEdit ? "PATCH" : "POST";
 
-      await fetch(url, {
+      const res = await fetch(url, {
         method: method,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -145,6 +145,12 @@ const isEdit = Boolean(cacId);
         }),
       });
 
+      const result = await res.json();
+
+      if (!res.ok || !result.success) {
+        throw new Error(result.message || "Something went wrong");
+      }
+
       toast.success(isEdit ? "Ad Spent updated successfully" : "Ad Spent added successfully");
 
       // redirect after short delay
@@ -152,8 +158,8 @@ const isEdit = Boolean(cacId);
         navigate("/admin/ad-spent");
       }, 1000);
 
-    } catch (err) {
-      toast.error("Failed to save Ad Spent");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to save Ad Spent");
     }
   };
 
