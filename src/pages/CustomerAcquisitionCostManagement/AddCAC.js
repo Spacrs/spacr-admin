@@ -105,7 +105,7 @@ function AddCAC() {
         try {
             const url = isEdit ? `${API.ADMIN.Ad_SPEND}/${cacId}` : API.ADMIN.Ad_SPEND;
             const method = isEdit ? "PATCH" : "POST";
-            await fetch(url, {
+            const res = await fetch(url, {
                 method: method,
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -116,6 +116,10 @@ function AddCAC() {
                     month: finalMonth,
                 }),
             });
+            const result = await res.json();
+            if (!res.ok || !result.success) {
+                throw new Error(result.message || "Something went wrong");
+            }
             toast.success(isEdit ? "Ad Spent updated successfully" : "Ad Spent added successfully");
             // redirect after short delay
             setTimeout(() => {
@@ -123,7 +127,7 @@ function AddCAC() {
             }, 1000);
         }
         catch (err) {
-            toast.error("Failed to save Ad Spent");
+            toast.error(err.message || "Failed to save Ad Spent");
         }
     };
     return (_jsxs("div", { className: "min-h-screen", children: [_jsx(ToastContainer, {}), _jsx("div", { className: "p-8 bg-gray-50", children: _jsxs("form", { onSubmit: handleSubmit, className: "max-w-xl mx-auto bg-white p-6 shadow rounded-lg space-y-6", children: [_jsx("h2", { className: "text-lg font-semibold", children: isEdit ? "Edit Ad Spent" : "Add Ad Spent" }), _jsxs("div", { className: "grid grid-cols-2 gap-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block mb-1 font-medium", children: "Year" }), _jsxs("select", { value: year, onChange: (e) => setYear(e.target.value), className: "w-full border rounded px-3 py-2", children: [_jsx("option", { value: "", children: "Select Year" }), yearOptions.map((y) => (_jsx("option", { value: y, children: y }, y)))] })] }), _jsxs("div", { children: [_jsx("label", { className: "block mb-1 font-medium", children: "Month" }), _jsxs("select", { value: month, onChange: (e) => setMonth(e.target.value), className: "w-full border rounded px-3 py-2", children: [_jsx("option", { value: "", children: "Select Month" }), monthOptions.map((m) => (_jsx("option", { value: m.value, children: m.label }, m.value)))] })] })] }), _jsxs("div", { children: [_jsx("label", { className: "block mb-1 font-medium", children: "CAC Type" }), _jsxs("select", { name: "cacType", value: payload.cacType, onChange: handleChange, className: "w-full border rounded px-3 py-2", children: [_jsx("option", { value: "", children: "Select Type" }), cacTypeOptions.map((t) => (_jsx("option", { value: t.value, children: t.label }, t.value)))] })] }), _jsx(InputComponent, { label: "Ad Spent", name: "adSpent", type: "number", value: payload.adSpent, onChange: handleChange, required: true }), _jsx("div", { className: "text-right", children: _jsx(Button, { text: isEdit ? "Update" : "Save", variant: "primary", type: "submit" }) })] }) })] }));

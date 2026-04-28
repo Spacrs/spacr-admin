@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { columns } from "../../constant/Columns";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { Search, ErrorMsg, Table, Button } from "../../components/Common";
 import API from "../../constants/apiEndpoints";
 
@@ -126,6 +126,8 @@ const CACList = () => {
 
   return (
     <div>
+        <ToastContainer />
+      
       {/* Header */}
       <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         <div className="flex flex-1 max-w-lg">
