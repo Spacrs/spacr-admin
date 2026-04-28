@@ -395,6 +395,12 @@ export const adminRoutes = [
     breadcrumb: ["admin", "Add Ad Spent"],
     showBreadcrumb: true,
   },
+  {
+    path: "edit-ad-spent/:cacId",
+    component: AddCAC,
+    breadcrumb: ["admin", "Edit Ad Spent"],
+    showBreadcrumb: true,
+  }
   
   
 ];

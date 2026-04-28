@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../components/Common/Button";
 import InputComponent from "../../components/Common/Inputes";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import API from "../../constants/apiEndpoints";
+import { useParams } from "react-router-dom";
 
 type Payload = {
   month: string;
@@ -13,6 +14,9 @@ type Payload = {
 
 function AddCAC() {
   const navigate = useNavigate();
+const { cacId } = useParams();
+const isEdit = Boolean(cacId);
+  
 
   const currentYear = new Date().getFullYear();
   const yearOptions = Array.from({ length: 10 }, (_, i) => currentYear - i);
@@ -66,6 +70,43 @@ function AddCAC() {
     }
   };
 
+  useEffect(() => {
+    if (!cacId) return;
+
+    const fetchAdSpentById = async () => {
+      try {
+        const res = await fetch(`${API.ADMIN.Ad_SPEND}/${cacId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+          const data = result.data;
+
+          const [yearVal, monthVal] = data.Month.split("-");
+
+          setYear(yearVal);
+          setMonth(monthVal);
+
+          setPayload({
+            month: data.Month,
+            adSpent: data.AdSpent,
+            cacType: data.CACType,
+          });
+        } else {
+          toast.error("Failed to load ad spent data");
+        }
+      } catch (err) {
+        toast.error("Error fetching ad spent data");
+      }
+    };
+
+    fetchAdSpentById();
+  }, [cacId]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -88,8 +129,12 @@ function AddCAC() {
     
     // "http://localhost:8000/api/v5/admin/cac"
     try {
-      await fetch(API.ADMIN.Ad_SPEND, {
-        method: "POST",
+
+      const url = isEdit ? `${API.ADMIN.Ad_SPEND}/${cacId}` : API.ADMIN.Ad_SPEND;
+      const method = isEdit ? "PATCH" : "POST";
+
+      await fetch(url, {
+        method: method,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           "Content-Type": "application/json",
@@ -100,7 +145,7 @@ function AddCAC() {
         }),
       });
 
-      toast.success("Ad Spent saved successfully");
+      toast.success(isEdit ? "Ad Spent updated successfully" : "Ad Spent added successfully");
 
       // redirect after short delay
       setTimeout(() => {
@@ -121,7 +166,9 @@ function AddCAC() {
           onSubmit={handleSubmit}
           className="max-w-xl mx-auto bg-white p-6 shadow rounded-lg space-y-6"
         >
-          <h2 className="text-lg font-semibold">Ad Spent</h2>
+          <h2 className="text-lg font-semibold">
+            {isEdit ? "Edit Ad Spent" : "Add Ad Spent"}  
+          </h2>
 
           {/* Year + Month */}
           <div className="grid grid-cols-2 gap-4">
@@ -190,7 +237,7 @@ function AddCAC() {
 
           {/* Submit */}
           <div className="text-right">
-            <Button text="Save" variant="primary" type="submit" />
+            <Button text={isEdit ? "Update" : "Save"} variant="primary" type="submit" />
           </div>
         </form>
       </div>
