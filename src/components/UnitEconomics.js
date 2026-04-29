@@ -1,8 +1,9 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { useUnitEconomics } from '../hooks/useUnitEconomics';
 import DateRangePicker from "./DateRangePicker";
+import { useDateContext } from "../context/DateContext";
 function fmt(value) {
     if (value >= 1_000_000)
         return `AED ${(value / 1_000_000).toFixed(2)}M`;
@@ -49,9 +50,19 @@ export default function UnitEconomics() {
     const to = new Date();
     const from = new Date();
     from.setDate(to.getDate() - 6);
-    const [startDate, setStartDate] = useState(from);
-    const [endDate, setEndDate] = useState(to);
+    const { globalRange } = useDateContext();
+    const [localRange, setLocalRange] = useState(null);
+    const [isLocal, setIsLocal] = useState(false);
+    const startDate = isLocal ? localRange?.from : globalRange.from;
+    const endDate = isLocal ? localRange?.to : globalRange.to;
+    // const [startDate, setStartDate] = useState<Date | null>(from);
+    // const [endDate, setEndDate] = useState<Date | null>(to);
     const { data, loading, error } = useUnitEconomics(startDate ? format(startDate, 'yyyy-MM-dd') : '', endDate ? format(endDate, 'yyyy-MM-dd') : '');
+    // Whenever global range changes (e.g. from another component), reset local state
+    useEffect(() => {
+        setIsLocal(false);
+        setLocalRange(null);
+    }, [globalRange]);
     const ue = data?.unitEconomic;
     const ce = data?.customerEconomic;
     const waterfallData = ue
@@ -64,11 +75,13 @@ export default function UnitEconomics() {
         'Other Costs': '#ef4444',
         Contribution: '#22c55e',
     };
-    return (_jsxs("div", { className: "bg-white rounded-xl p-5 shadow-sm border border-gray-100 space-y-5", children: [_jsxs("div", { className: "flex items-center justify-between flex-wrap gap-3", children: [_jsx("h2", { className: "text-base font-semibold text-gray-800", children: "Unit Economics" }), _jsx(DateRangePicker, { onChange: (range) => {
+    return (_jsxs("div", { className: "bg-white rounded-xl p-5 shadow-sm border border-gray-100 space-y-5", children: [_jsxs("div", { className: "flex items-center justify-between flex-wrap gap-3", children: [_jsx("h2", { className: "text-base font-semibold text-gray-800", children: "Unit Economics" }), _jsx(DateRangePicker, { value: isLocal ? localRange : globalRange, onChange: (range) => {
                             console.log('range', range.from, range.to);
                             if (range.from && range.to) {
-                                setStartDate(range.from);
-                                setEndDate(range.to);
+                                // setStartDate(range.from);
+                                // setEndDate(range.to);
+                                setLocalRange(range);
+                                setIsLocal(true); // switch to local
                             }
                         } })] }), error && (_jsxs("div", { className: "bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3", children: ["Failed to load unit economics: ", error] })), loading ? (_jsx("div", { className: "h-64 bg-gray-100 rounded animate-pulse" })) : (_jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-6", children: [_jsxs("div", { className: "space-y-4", children: [_jsxs("div", { children: [_jsx("p", { className: "text-xs font-semibold text-gray-400 uppercase mb-3", children: "Per Order Economics" }), _jsx("div", { className: "grid grid-cols-4 gap-3", children: [
                                             { label: 'AOV', value: fmt(ue?.AOV ?? 0) },

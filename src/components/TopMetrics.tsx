@@ -7,6 +7,7 @@ import { useDashboardMetrics } from "../hooks/useDashboardMetrics";
 import { Button } from './ui/button'
 import { Calendar } from './ui/calendar'
 import DateRangePicker from "./DateRangePicker";
+import { useDateContext } from "../context/DateContext";
 
 // function fmt(value: number): string {
 //   if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
@@ -31,24 +32,24 @@ function fmt(value: number): string {
 export default function TopMetrics() {
   // const [startDate, setStartDate] = useState<Date>(subDays(new Date(), 30));
   // const [endDate, setEndDate] = useState<Date>(new Date());
+  const { globalRange, setGlobalRange } = useDateContext();
 
-  const to = new Date();
-  const from = new Date(); 
-  from.setDate(to.getDate() - 6);
+  const startDate = globalRange.from;
+  const endDate = globalRange.to;
 
-  const [startDate, setStartDate] = useState<Date | null>(from);
-  const [endDate, setEndDate] = useState<Date | null>(to);
+
+  // const to = new Date();
+  // const from = new Date(); 
+  // from.setDate(to.getDate() - 6);
+
+  // const [startDate, setStartDate] = useState<Date | null>(from);
+  // const [endDate, setEndDate] = useState<Date | null>(to);
 
 
   const { data, loading, error } = useDashboardMetrics(
     startDate ? format(startDate, "yyyy-MM-dd") : "",
     endDate ? format(endDate, "yyyy-MM-dd") : ""
   );
-
-  const [date, setDate] = useState<any>({
-    from: new Date(2026, 3, 14),
-    to: new Date(2026, 3, 20),
-  })
 
   const metrics = [
     { label: "GMV", value: data ? fmt(data.GMV) : "—" , isCurrency: true},
@@ -107,11 +108,14 @@ export default function TopMetrics() {
           showCompare={false}
         /> */}
 
-        <DateRangePicker onChange={(range) => {
+        <DateRangePicker 
+        value={globalRange}
+        onChange={(range) => {
           console.log('range', range.from, range.to)
           if (range.from && range.to) {
-            setStartDate(range.from);
-            setEndDate(range.to);
+            // setStartDate(range.from);
+            // setEndDate(range.to);
+            setGlobalRange(range);
           }
         }} /> 
       </div>

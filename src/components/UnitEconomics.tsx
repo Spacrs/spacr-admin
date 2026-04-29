@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { format, subDays } from 'date-fns';
 import {
   BarChart, Bar, XAxis, YAxis,
@@ -7,6 +7,8 @@ import {
 import DateFilter from './DateFilter';
 import { useUnitEconomics } from '../hooks/useUnitEconomics';
 import DateRangePicker from "./DateRangePicker";
+import { useDateContext } from "../context/DateContext";
+import type { DateRange } from "react-day-picker";
 
 function fmt(value: number): string {
   if (value >= 1_000_000) return `AED ${(value / 1_000_000).toFixed(2)}M`;
@@ -83,18 +85,31 @@ function RatioGauge({ ratio }: { ratio: number }) {
 export default function UnitEconomics() {
   // const [startDate, setStartDate] = useState<Date | null>(subDays(new Date(), 30));
   // const [endDate, setEndDate]     = useState<Date | null>(new Date());
-
   const to = new Date();
   const from = new Date(); 
   from.setDate(to.getDate() - 6);
 
-  const [startDate, setStartDate] = useState<Date | null>(from);
-  const [endDate, setEndDate] = useState<Date | null>(to);
+  const { globalRange } = useDateContext();
+
+  const [localRange, setLocalRange] = useState<DateRange | null>(null);
+  const [isLocal, setIsLocal] = useState(false);
+
+  const startDate = isLocal ? localRange?.from : globalRange.from;
+  const endDate = isLocal ? localRange?.to : globalRange.to;
+
+  // const [startDate, setStartDate] = useState<Date | null>(from);
+  // const [endDate, setEndDate] = useState<Date | null>(to);
 
   const { data, loading, error } = useUnitEconomics(
     startDate ? format(startDate, 'yyyy-MM-dd') : '',
     endDate ? format(endDate, 'yyyy-MM-dd') : ''
   );
+
+  // Whenever global range changes (e.g. from another component), reset local state
+  useEffect(() => {
+    setIsLocal(false);
+    setLocalRange(null);
+  }, [globalRange]);
 
   const ue = data?.unitEconomic;
   const ce = data?.customerEconomic;
@@ -123,11 +138,15 @@ export default function UnitEconomics() {
           onRangeChange={(s, e) => { setStartDate(s); setEndDate(e); }}
         /> */}
 
-        <DateRangePicker onChange={(range) => {
+        <DateRangePicker 
+        value={isLocal ? localRange : globalRange}
+        onChange={(range) => {
           console.log('range', range.from, range.to)
           if (range.from && range.to) {
-            setStartDate(range.from);
-            setEndDate(range.to);
+            // setStartDate(range.from);
+            // setEndDate(range.to);
+            setLocalRange(range);
+            setIsLocal(true); // switch to local
           }
         }} /> 
       </div>

@@ -1,9 +1,10 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useState } from 'react';
-import { format, subDays } from 'date-fns';
+import { useEffect, useState } from 'react';
+import { format } from 'date-fns';
 import { ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, } from 'recharts';
 import { useGrowthTrends } from '../../hooks/useGrowthTrends';
 import DateRangePicker from "../DateRangePicker";
+import { useDateContext } from "../../context/DateContext";
 // function fmtCurrency(value: number): string {
 //   if (value >= 1_00_00_000) return `₹ ${(value / 1_00_00_000).toFixed(2)} Cr`;
 //   if (value >= 1_00_000) return `₹ ${(value / 1_00_000).toFixed(1)} L`;
@@ -31,14 +32,24 @@ function fmtUsers(value) {
     return `${value}`;
 }
 export default function GrowthTrendChart() {
-    const [startDate, setStartDate] = useState(subDays(new Date(), 6));
-    const [endDate, setEndDate] = useState(new Date());
+    // const [startDate, setStartDate] = useState<Date | null>(subDays(new Date(), 6));
+    // const [endDate, setEndDate] = useState<Date | null>(new Date());
+    const { globalRange } = useDateContext();
+    const [localRange, setLocalRange] = useState(null);
+    const [isLocal, setIsLocal] = useState(false);
+    const startDate = isLocal ? localRange?.from : globalRange.from;
+    const endDate = isLocal ? localRange?.to : globalRange.to;
     const { data, loading } = useGrowthTrends(startDate ? format(startDate, 'yyyy-MM-dd') : '', endDate ? format(endDate, 'yyyy-MM-dd') : '');
+    // when global range changes (e.g. from another component), reset local state
+    useEffect(() => {
+        setIsLocal(false);
+        setLocalRange(null);
+    }, [globalRange]);
     const trends = data?.growthTrends || [];
-    return (_jsxs("div", { className: "bg-white rounded-xl p-5 shadow-sm border border-gray-100 space-y-4", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsx("h2", { className: "text-base font-semibold", children: "Growth Trends" }), _jsx(DateRangePicker, { onChange: (range) => {
+    return (_jsxs("div", { className: "bg-white rounded-xl p-5 shadow-sm border border-gray-100 space-y-4", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsx("h2", { className: "text-base font-semibold", children: "Growth Trends" }), _jsx(DateRangePicker, { value: isLocal ? localRange : globalRange, onChange: (range) => {
                             if (range.from && range.to) {
-                                setStartDate(range.from);
-                                setEndDate(range.to);
+                                setLocalRange(range);
+                                setIsLocal(true); // switch to local
                             }
                         } })] }), _jsxs("div", { className: "flex justify-between text-xs font-semibold px-2", children: [_jsx("span", { className: "text-green-600", children: "Currency (GMV & Revenue)" }), _jsx("span", { className: "text-blue-600", children: "Total Users (Count)" })] }), loading ? (_jsx("div", { className: "h-64 bg-gray-100 rounded animate-pulse" })) : (_jsx(ResponsiveContainer, { width: "100%", aspect: 2.2, children: _jsxs(ComposedChart, { data: trends, margin: { top: 20, right: 30, left: 10, bottom: 5 }, children: [_jsx(CartesianGrid, { stroke: "#e5e7eb", vertical: false }), _jsx(XAxis, { dataKey: "label", tick: { fontSize: 12 }, axisLine: { stroke: "#22c55e" }, tickLine: false }), _jsx(YAxis, { yAxisId: "left", tickFormatter: fmtCurrency, width: 80, axisLine: { stroke: "#22c55e" }, tickLine: false }), _jsx(YAxis, { yAxisId: "right", orientation: "right", tickFormatter: fmtUsers, axisLine: { stroke: "#94a3b8" }, tickLine: false }), _jsx(Tooltip, { content: ({ active, payload }) => {
                                 if (!active || !payload?.length)
