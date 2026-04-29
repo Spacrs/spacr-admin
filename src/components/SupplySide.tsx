@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { format, subDays } from "date-fns";
 import DateFilter from "./DateFilter";
 import KpiCard from "./KpiCard";
@@ -15,6 +15,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import DateRangePicker from "./DateRangePicker";
+import { useDateContext } from "../context/DateContext";
+import type { DateRange } from "react-day-picker";
 
 function fmt(value: number): string {
   if (value >= 1_000_000) return `AED ${(value / 1_000_000).toFixed(2)}M`;
@@ -26,15 +28,22 @@ export default function SupplySide() {
   const to = new Date();
   const from = new Date(); 
   from.setDate(to.getDate() - 6);
+
+  const { globalRange } = useDateContext();
+
+  const [localRange, setLocalRange] = useState<DateRange | null>(null);
+  const [isLocal, setIsLocal] = useState(false);
   
-  const [startDate, setStartDate] = useState<Date | null>(from); // subDays(new Date(), 30)
-  const [endDate, setEndDate] = useState<Date | null>(to);  // new Date()
+  // const [startDate, setStartDate] = useState<Date | null>(from  || globalRange.from); // subDays(new Date(), 30)
+  // const [endDate, setEndDate] = useState<Date | null>(to || globalRange.to);  // new Date()
+
+  const startDate = isLocal ? localRange?.from : globalRange.from;
+  const endDate = isLocal ? localRange?.to : globalRange.to;
 
   const { data, loading, error } = useSupplySide(
     startDate ? format(startDate, 'yyyy-MM-dd') : '',
     endDate ? format(endDate, 'yyyy-MM-dd') : ''
   );
-  console.log("data_____", data);
 
   const supplyGrowth = data?.charts?.supplyGrowth || [];
   const ordersTrend = data?.charts?.ordersTrend || [];
@@ -43,6 +52,12 @@ export default function SupplySide() {
     const [year, m] = month.split("-");
     return `${m}/${year}`; // or make it "Jan 2026" if needed
   };
+
+  // Whenever global range changes (e.g. from another component), reset local state
+  useEffect(() => {
+    setIsLocal(false);
+    setLocalRange(null);
+  }, [globalRange]);
 
   const kpis = [
     {
@@ -98,13 +113,24 @@ export default function SupplySide() {
           }}
         /> */}
 
-        <DateRangePicker onChange={(range) => {
-          console.log('range', range.from, range.to)
-          if (range.from && range.to) {
-            setStartDate(range.from);
-            setEndDate(range.to);
-          }
-        }} 
+        <DateRangePicker
+          // value={localRange || globalRange}
+          // onChange={(range) => {
+          //   console.log('range', range.from, range.to)
+          //   if (range.from && range.to) {
+          //     // setStartDate(range.from);
+          //     // setEndDate(range.to);
+          //     setLocalRange(range);
+          //   }
+          // }} 
+
+          value={isLocal ? localRange : globalRange}
+          onChange={(range) => {
+            if (range.from && range.to) {
+              setLocalRange(range);
+              setIsLocal(true);
+            }
+          }}
         /> 
       </div>
 

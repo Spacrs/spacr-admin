@@ -99,7 +99,22 @@ const maskDate = (raw) => {
     }
     return out;
 };
-export default function DateRangePicker({ onChange }) {
+const isSameDate = (d1, d2) => {
+    if (!d1 || !d2)
+        return false;
+    return d1.toDateString() === d2.toDateString();
+};
+const detectPreset = (range) => {
+    for (const p of PRESETS) {
+        const presetRange = p.getDates();
+        if (isSameDate(range.from, presetRange.from) &&
+            isSameDate(range.to, presetRange.to)) {
+            return p.label;
+        }
+    }
+    return ""; // custom range
+};
+export default function DateRangePicker({ onChange, value, }) {
     const def = PRESETS[1];
     const today = new Date();
     const [range, setRange] = useState(def.getDates());
@@ -122,6 +137,16 @@ export default function DateRangePicker({ onChange }) {
     });
     const triggerRef = useRef(null);
     const popupRef = useRef(null);
+    // Sync with external value changes (e.g. from parent or global context)
+    useEffect(() => {
+        if (value?.from && value?.to) {
+            setRange(value);
+            setTempRange(value);
+            setFromStr(toStr(value.from));
+            setToStr_(toStr(value.to));
+            setActivePreset(detectPreset(value)); // highlighted preset button
+        }
+    }, [value]);
     useEffect(() => {
         const check = () => setIsMobile(window.innerWidth < 640);
         check();
