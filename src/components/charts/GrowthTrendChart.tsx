@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { format, subDays } from 'date-fns';
 import {
   ComposedChart, Bar, Line,
@@ -8,6 +8,8 @@ import {
 } from 'recharts';
 import { useGrowthTrends } from '../../hooks/useGrowthTrends';
 import DateRangePicker from "../DateRangePicker";
+import { useDateContext } from "../../context/DateContext";
+import type { DateRange } from "react-day-picker";
 
 // function fmtCurrency(value: number): string {
 //   if (value >= 1_00_00_000) return `₹ ${(value / 1_00_00_000).toFixed(2)} Cr`;
@@ -41,13 +43,27 @@ function fmtUsers(value: number): string {
 }
 
 export default function GrowthTrendChart() {
-  const [startDate, setStartDate] = useState<Date | null>(subDays(new Date(), 6));
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
+  // const [startDate, setStartDate] = useState<Date | null>(subDays(new Date(), 6));
+  // const [endDate, setEndDate] = useState<Date | null>(new Date());
+
+  const { globalRange } = useDateContext();
+
+  const [localRange, setLocalRange] = useState<DateRange | null>(null);
+  const [isLocal, setIsLocal] = useState(false);
+
+  const startDate = isLocal ? localRange?.from : globalRange.from;
+  const endDate = isLocal ? localRange?.to : globalRange.to;
 
   const { data, loading } = useGrowthTrends(
     startDate ? format(startDate, 'yyyy-MM-dd') : '',
     endDate ? format(endDate, 'yyyy-MM-dd') : ''
   );
+
+  // when global range changes (e.g. from another component), reset local state
+  useEffect(() => {
+    setIsLocal(false);
+    setLocalRange(null);
+  }, [globalRange]);
 
   const trends = data?.growthTrends || [];
 
@@ -59,10 +75,11 @@ export default function GrowthTrendChart() {
         <h2 className="text-base font-semibold">Growth Trends</h2>
 
         <DateRangePicker
+          value={isLocal ? localRange : globalRange}
           onChange={(range) => {
             if (range.from && range.to) {
-              setStartDate(range.from);
-              setEndDate(range.to);
+              setLocalRange(range);
+              setIsLocal(true); // switch to local
             }
           }}
         />
