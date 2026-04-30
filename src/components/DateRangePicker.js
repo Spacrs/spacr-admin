@@ -125,6 +125,7 @@ export default function DateRangePicker({ onChange, value, }) {
     const [fromErr, setFromErr] = useState(false);
     const [toErr, setToErr] = useState(false);
     const [month, setMonth] = useState(new Date(today.getFullYear(), today.getMonth() - 1, 1));
+    // ── position stored as CSS vars, not state, to avoid flicker ──
     const [popupStyle, setPopupStyle] = useState({
         position: "fixed",
         visibility: "hidden",
@@ -134,6 +135,7 @@ export default function DateRangePicker({ onChange, value, }) {
     });
     const triggerRef = useRef(null);
     const popupRef = useRef(null);
+    // Sync with external value changes (e.g. from parent or global context)
     useEffect(() => {
         if (value?.from && value?.to) {
             setRange(value);
@@ -192,6 +194,7 @@ export default function DateRangePicker({ onChange, value, }) {
         const raf = requestAnimationFrame(() => { calcPosition(); });
         return () => cancelAnimationFrame(raf);
     }, [open, calcPosition]);
+    // ── Reposition on resize / scroll ──
     useEffect(() => {
         if (!open)
             return;
@@ -203,6 +206,7 @@ export default function DateRangePicker({ onChange, value, }) {
             window.removeEventListener("scroll", handler, true);
         };
     }, [open, calcPosition]);
+    // ── Close on outside click ──
     useEffect(() => {
         const handler = (e) => {
             const t = e.target;
@@ -213,6 +217,7 @@ export default function DateRangePicker({ onChange, value, }) {
         document.addEventListener("mousedown", handler);
         return () => document.removeEventListener("mousedown", handler);
     }, []);
+    // ── Input handlers ──
     const handleFromChange = (val) => {
         const masked = maskDate(val);
         setFromStr(masked);
