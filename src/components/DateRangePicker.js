@@ -321,21 +321,41 @@ export default function DateRangePicker({ onChange, value, }) {
         @keyframes drpIn { from{opacity:0;transform:translateY(-5px)} to{opacity:1;transform:translateY(0)} }
 
         .drp-inputs {
-          display: flex; align-items: center; gap: 10px;
-          padding: 14px 20px 0; flex-wrap: wrap;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          padding: 14px 20px 10px;
+          flex-wrap: wrap;
+          background: #fafbff;
         }
-        .drp-input-group { display: flex; flex-direction: column; gap: 4px; }
-        .drp-input-label { font-size: 11px; font-weight: 600; color: #94a3b8; letter-spacing: .5px; text-transform: uppercase; }
+        .drp-input-group {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .drp-input-label {
+          font-size: 12px;
+          font-weight: 600;
+          color: #64748b;
+          text-transform: none;
+        }
         .drp-input {
           font-size: 14px; font-weight: 600; font-family: 'DM Sans', sans-serif;
           color: #1e293b; background: #f8fafc;
           border: 1.5px solid #e2e8f0; border-radius: 8px;
-          padding: 7px 12px; width: 148px; outline: none;
+          padding: 4px 10px; width: 140px; outline: none;
           transition: border-color .2s, box-shadow .2s; letter-spacing: .3px;
         }
         .drp-input:focus { border-color: #7c6df0; box-shadow: 0 0 0 3px rgba(124,109,240,.12); background: #fff; }
         .drp-input.err   { border-color: #f87171; background: #fff5f5; }
-        .drp-input-sep   { color: #cbd5e1; font-size: 20px; margin-top: 18px; }
+        .drp-input-sep {
+          color: #cbd5e1;
+          font-size: 20px;
+          margin-top: 0;
+          display: flex;
+          align-items: center;
+        }
 
         .drp-body { display: flex; }
 
@@ -380,17 +400,21 @@ export default function DateRangePicker({ onChange, value, }) {
         .rdp-today:not(.rdp-selected) .rdp-day_button { font-weight: 700; color: #5b4ed8; }
 
         .drp-footer {
-          display: flex; justify-content: flex-end; align-items: center;
-          gap: 10px; padding: 12px 20px;
-          border-top: 1px solid #f1f5f9; background: #fafbff; flex-shrink: 0;
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          gap: 8px;               
+          padding: 8px 16px;  
+          border-top: 1px solid #f1f5f9;
+          background: #fafbff;
         }
         .drp-btn {
-          padding: 8px 22px; border-radius: 9px; font-size: 14px; font-weight: 600;
+          padding: 6px 14px; border-radius: 7px; font-size: 13px; font-weight: 600;
           cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .18s; outline: none; white-space: nowrap;
         }
         .drp-btn-clear { background:#fff; border:1.5px solid #e2e8f0; color:#475569; }
         .drp-btn-clear:hover { border-color:#5b4ed8; color:#5b4ed8; background:#f1f0fe; }
         .drp-btn-apply { background:#5b4ed8; border:1.5px solid #5b4ed8; color:#fff; }
         .drp-btn-apply:hover { background:#4a3ec0; border-color:#4a3ec0; box-shadow:0 4px 12px rgba(91,78,216,.3); }
-      ` }), _jsxs("div", { className: "drp", style: { display: "inline-block" }, children: [_jsxs("div", { className: "drp-trigger", onClick: handleOpen, ref: triggerRef, children: [_jsx("span", { className: "drp-lbl", children: "Start" }), _jsx("span", { className: `drp-val ${open ? "hi" : ""}`, children: toStr(range.from) || "Select" }), _jsx("span", { className: "drp-sep", children: "\u2013" }), _jsx("span", { className: "drp-lbl", children: "End" }), _jsx("span", { className: "drp-val", children: toStr(range.to) || "Select" })] }), open && (_jsxs("div", { className: "drp-popup", ref: popupRef, style: popupStyle, children: [_jsxs("div", { className: "drp-inputs", children: [_jsxs("div", { className: "drp-input-group", children: [_jsx("span", { className: "drp-input-label", children: "Start Date" }), _jsx("input", { className: `drp-input${fromErr ? " err" : ""}`, placeholder: "DD / MM / YYYY", value: fromStr, onChange: (e) => handleFromChange(e.target.value) })] }), _jsx("span", { className: "drp-input-sep", children: "\u2013" }), _jsxs("div", { className: "drp-input-group", children: [_jsx("span", { className: "drp-input-label", children: "End Date" }), _jsx("input", { className: `drp-input${toErr ? " err" : ""}`, placeholder: "DD / MM / YYYY", value: toStr_, onChange: (e) => handleToChange(e.target.value) })] })] }), _jsxs("div", { className: "drp-body", children: [_jsx("div", { className: "drp-presets", children: PRESETS.map((p) => (_jsx("button", { className: `drp-pbtn${activePreset === p.label ? " active" : ""}`, onClick: () => handlePreset(p), children: p.label }, p.label))) }), _jsx("div", { className: "drp-cals", children: _jsx(DayPicker, { mode: "range", selected: tempRange, onSelect: handleSelect, numberOfMonths: numMonths, defaultMonth: defaultMonth, month: month, onMonthChange: setMonth, showOutsideDays: false }) })] }), _jsxs("div", { className: "drp-footer", children: [_jsx("button", { className: "drp-btn drp-btn-clear", onClick: handleClear, children: "Clear" }), _jsx("button", { className: "drp-btn drp-btn-apply", onClick: handleApply, children: "Apply" })] })] }))] })] }));
+      ` }), _jsxs("div", { className: "drp", style: { display: "inline-block" }, children: [_jsxs("div", { className: "drp-trigger", onClick: handleOpen, ref: triggerRef, children: [_jsx("span", { className: "drp-lbl", children: "Start" }), _jsx("span", { className: `drp-val ${open ? "hi" : ""}`, children: toStr(range.from) || "Select" }), _jsx("span", { className: "drp-sep", children: "\u2013" }), _jsx("span", { className: "drp-lbl", children: "End" }), _jsx("span", { className: "drp-val", children: toStr(range.to) || "Select" })] }), open && (_jsxs("div", { className: "drp-popup", ref: popupRef, style: popupStyle, children: [_jsxs("div", { className: "drp-inputs", children: [_jsxs("div", { className: "drp-input-group", children: [_jsx("span", { className: "drp-input-label", children: "Start Date" }), _jsx("input", { className: `drp-input${fromErr ? " err" : ""}`, placeholder: "DD / MM / YYYY", value: fromStr, onChange: (e) => handleFromChange(e.target.value) })] }), _jsx("span", { className: "drp-input-sep", children: "\u2013" }), _jsxs("div", { className: "drp-input-group", children: [_jsx("span", { className: "drp-input-label", children: "End Date" }), _jsx("input", { className: `drp-input${toErr ? " err" : ""}`, placeholder: "DD / MM / YYYY", value: toStr_, onChange: (e) => handleToChange(e.target.value) })] })] }), _jsxs("div", { className: "drp-body", children: [_jsx("div", { className: "drp-presets", children: PRESETS.map((p) => (_jsx("button", { className: `drp-pbtn${activePreset === p.label ? " active" : ""}`, onClick: () => handlePreset(p), children: p.label }, p.label))) }), _jsx("div", { className: "drp-cals", children: _jsx(DayPicker, { mode: "range", selected: tempRange, onSelect: handleSelect, numberOfMonths: numMonths, defaultMonth: defaultMonth, month: month, onMonthChange: setMonth, showOutsideDays: false, navLayout: "around" }) })] }), _jsxs("div", { className: "drp-footer", children: [_jsx("button", { className: "drp-btn drp-btn-clear", onClick: handleClear, children: "Clear" }), _jsx("button", { className: "drp-btn drp-btn-apply", onClick: handleApply, children: "Apply" })] })] }))] })] }));
 }

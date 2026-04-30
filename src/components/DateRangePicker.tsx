@@ -274,16 +274,16 @@ export default function DateRangePicker({
     }
   };
 
-  const handleToChange = (val: string) => {
+const handleToChange = (val: string) => {
     const masked = maskDate(val);
     setToStr_(masked);
     const d = parseInput(masked);
     setToErr(!d && masked.replace(/\D/g, "").length === 8);
     if (d) {
-      setTempRange((p) => ({ ...p, to: d }));
-      setActivePreset("");
-    }
-  };
+    setTempRange((p) => ({ ...p, to: d }));
+    setActivePreset("");
+  }
+};
 
   const handleSelect = (r: DateRange | undefined) => {
     const next = r ?? { from: undefined, to: undefined };
@@ -378,21 +378,41 @@ export default function DateRangePicker({
         @keyframes drpIn { from{opacity:0;transform:translateY(-5px)} to{opacity:1;transform:translateY(0)} }
 
         .drp-inputs {
-          display: flex; align-items: center; gap: 10px;
-          padding: 14px 20px 0; flex-wrap: wrap;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          padding: 14px 20px 10px;
+          flex-wrap: wrap;
+          background: #fafbff;
         }
-        .drp-input-group { display: flex; flex-direction: column; gap: 4px; }
-        .drp-input-label { font-size: 11px; font-weight: 600; color: #94a3b8; letter-spacing: .5px; text-transform: uppercase; }
+        .drp-input-group {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .drp-input-label {
+          font-size: 12px;
+          font-weight: 600;
+          color: #64748b;
+          text-transform: none;
+        }
         .drp-input {
           font-size: 14px; font-weight: 600; font-family: 'DM Sans', sans-serif;
           color: #1e293b; background: #f8fafc;
           border: 1.5px solid #e2e8f0; border-radius: 8px;
-          padding: 7px 12px; width: 148px; outline: none;
+          padding: 4px 10px; width: 140px; outline: none;
           transition: border-color .2s, box-shadow .2s; letter-spacing: .3px;
         }
         .drp-input:focus { border-color: #7c6df0; box-shadow: 0 0 0 3px rgba(124,109,240,.12); background: #fff; }
         .drp-input.err   { border-color: #f87171; background: #fff5f5; }
-        .drp-input-sep   { color: #cbd5e1; font-size: 20px; margin-top: 18px; }
+        .drp-input-sep {
+          color: #cbd5e1;
+          font-size: 20px;
+          margin-top: 0;
+          display: flex;
+          align-items: center;
+        }
 
         .drp-body { display: flex; }
 
@@ -437,12 +457,16 @@ export default function DateRangePicker({
         .rdp-today:not(.rdp-selected) .rdp-day_button { font-weight: 700; color: #5b4ed8; }
 
         .drp-footer {
-          display: flex; justify-content: flex-end; align-items: center;
-          gap: 10px; padding: 12px 20px;
-          border-top: 1px solid #f1f5f9; background: #fafbff; flex-shrink: 0;
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          gap: 8px;               
+          padding: 8px 16px;  
+          border-top: 1px solid #f1f5f9;
+          background: #fafbff;
         }
         .drp-btn {
-          padding: 8px 22px; border-radius: 9px; font-size: 14px; font-weight: 600;
+          padding: 6px 14px; border-radius: 7px; font-size: 13px; font-weight: 600;
           cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .18s; outline: none; white-space: nowrap;
         }
         .drp-btn-clear { background:#fff; border:1.5px solid #e2e8f0; color:#475569; }
@@ -514,6 +538,7 @@ export default function DateRangePicker({
                   month={month}
                   onMonthChange={setMonth}
                   showOutsideDays={false}
+                  navLayout="around"
                 />
               </div>
             </div>
