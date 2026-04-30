@@ -21,9 +21,9 @@ export default function TransactionList() {
   });
 
   
-  useEffect(() => {
-    refetch();
-  }, []);
+  // useEffect(() => {
+  //   refetch();
+  // }, []);
 
   const handleView = (row: any) => {
     const transactionId = row.TransactionID;
@@ -53,8 +53,8 @@ export default function TransactionList() {
           columns={columns.transaction}
           loading={isLoading || isFetching}
           totalPages={data?.pagination?.totalPages || 1}
-          currentPage={currentPage}
-          onPageChange={setCurrentPage}
+          currentPage={page}
+          onPageChange={setPage}
           handleView={handleView}
           itemsPerPage={10}
         />
