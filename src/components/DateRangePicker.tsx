@@ -189,32 +189,26 @@ export default function DateRangePicker({
   // ── Smart positioning: right-aligns when near right edge, flips up near bottom ──
   const calcPosition = useCallback(() => {
     if (!triggerRef.current || !popupRef.current) return;
-
+ 
     const tr = triggerRef.current.getBoundingClientRect();
-    const pr = popupRef.current.getBoundingClientRect();
-    const GAP = 4; // 8
+    const wrapperRect = triggerRef.current.parentElement!.getBoundingClientRect();
+    const GAP = 4;
     const VW = window.innerWidth;
-    const VH = window.innerHeight;
-
+    const pr = popupRef.current.getBoundingClientRect();
     const popupW = pr.width || (isMobile ? VW - 16 : 780);
-    const popupH = pr.height || 460;
-
-    // Vertical: below trigger; flip above if not enough room
-    let top = tr.bottom + GAP;
-    if (top + popupH > VH - 8) top = tr.top - popupH - GAP;
-    if (top < 8) top = 8;
-
-    // Horizontal: start left-aligned to trigger
-    let left = tr.left;
-    // If overflows right edge → right-align to trigger's right edge
-    if (left + popupW > VW - 8) {
-      left = tr.right - popupW;
+ 
+    // Top: relative to wrapper
+    let top = tr.height + GAP;
+ 
+    // Left: relative to wrapper
+    let left = 0;
+    if (tr.left + popupW > VW - 8) {
+      left = tr.width - popupW;
     }
-    // Final clamp so it never goes off left edge
-    if (left < 8) left = 8;
-
+    if (tr.left + left < 8) left = 8 - tr.left;
+ 
     setPopupStyle({
-      position: "fixed",
+      position: "absolute", // fixed
       top,
       left,
       zIndex: 9999,
@@ -223,6 +217,44 @@ export default function DateRangePicker({
       maxWidth: `calc(100vw - 16px)`,
     });
   }, [isMobile]);
+
+  // old calcPosition for fixed positioning (flipping relative to viewport edges)
+  // const calcPosition = useCallback(() => {
+  //   if (!triggerRef.current || !popupRef.current) return;
+
+  //   const tr = triggerRef.current.getBoundingClientRect();
+  //   const pr = popupRef.current.getBoundingClientRect();
+  //   const GAP = 4; // 8
+  //   const VW = window.innerWidth;
+  //   const VH = window.innerHeight;
+
+  //   const popupW = pr.width || (isMobile ? VW - 16 : 780);
+  //   const popupH = pr.height || 460;
+
+  //   // Vertical: below trigger; flip above if not enough room
+  //   let top = tr.bottom + GAP;
+  //   if (top + popupH > VH - 8) top = tr.top - popupH - GAP;
+  //   if (top < 8) top = 8;
+
+  //   // Horizontal: start left-aligned to trigger
+  //   let left = tr.left;
+  //   // If overflows right edge → right-align to trigger's right edge
+  //   if (left + popupW > VW - 8) {
+  //     left = tr.right - popupW;
+  //   }
+  //   // Final clamp so it never goes off left edge
+  //   if (left < 8) left = 8;
+
+  //   setPopupStyle({
+  //     position: "fixed",
+  //     top,
+  //     left,
+  //     zIndex: 9999,
+  //     visibility: "visible",
+  //     width: isMobile ? `calc(100vw - 16px)` : undefined,
+  //     maxWidth: `calc(100vw - 16px)`,
+  //   });
+  // }, [isMobile]);
 
   useLayoutEffect(() => {
     if (!open) return;
@@ -356,7 +388,7 @@ export default function DateRangePicker({
         /* ── Header ── */
         .drp-inputs {
           display: flex; align-items: center; justify-content: center;
-          gap: 12px; padding: 12px 20px 10px; flex-wrap: wrap;
+          gap: 12px; padding: 6px 20px 6px; flex-wrap: wrap;
           background: #fafbff; border-bottom: 1px solid #f1f5f9;
         }
         .drp-input-group { display: flex; align-items: center; gap: 8px; }
@@ -377,7 +409,7 @@ export default function DateRangePicker({
 
         /* ── Presets ── */
         .drp-presets {
-          flex-shrink: 0; width: 148px; padding: 14px 10px;
+          flex-shrink: 0; width: 148px; padding: 6px 10px;
           border-right: 1px solid #f1f5f9;
           display: flex; flex-direction: column; gap: 2px;
           background: #fafbff;
@@ -393,7 +425,7 @@ export default function DateRangePicker({
 
         /* ── Calendar container: no extra height ── */
         .drp-cals {
-          padding: 16px 20px;
+          padding: 6px 16px;
           display: flex;
           align-items: flex-start;
         }
@@ -466,7 +498,7 @@ export default function DateRangePicker({
         /* ── Footer ── */
         .drp-footer {
           display: flex; justify-content: flex-end; align-items: center;
-          gap: 8px; padding: 10px 16px;
+          gap: 8px; padding: 6px 16px;
           border-top: 1px solid #f1f5f9; background: #fafbff;
         }
         .drp-btn {
@@ -488,7 +520,8 @@ export default function DateRangePicker({
         }
       `}</style>
 
-      <div className="drp" style={{ display: "inline-block" }}>
+      {/* <div className="drp" style={{ display: "inline-block"}}>   */}
+      <div className="drp" style={{ display: "inline-block", position: "relative" }}>
         {/* Trigger */}
         <div className="drp-trigger" onClick={handleOpen} ref={triggerRef}>
           <span className="drp-lbl">Start</span>
