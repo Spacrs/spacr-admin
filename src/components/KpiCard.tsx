@@ -21,12 +21,20 @@ export default function KpiCard({
   }
 
   return (
-    <div className="flex-shrink-0 min-w-[160px]">
-      <div className="flex items-center gap-2 text-gray-500 text-sm mb-1 whitespace-nowrap">
-        <span style={{ fontSize: 16 }}>{icon}</span>
-        <span>{label}</span>
+    <div className="flex-1 min-w-[140px] flex flex-col" style={{ minHeight: 64 }}>
+      
+      {/* Part 1 — Label (flex-1 se baaki jagah le lega) */}
+      <div className="flex items-start gap-2 text-gray-500 text-sm flex-1">
+        <span style={{ fontSize: 16, lineHeight: '20px', flexShrink: 0 }}>
+          {icon}
+        </span>
+        <span className="leading-tight">{label}</span>
       </div>
-      <p className="text-xl font-bold text-gray-900 whitespace-nowrap">{value}</p>
+
+      {/* Part 2 — Value (hamesha bottom pe, apni jagah lega) */}
+      <p className="text-xl font-bold text-gray-900 mt-1 break-words">
+        {value}
+      </p>
     </div>
   );
 }

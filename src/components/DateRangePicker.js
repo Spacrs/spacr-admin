@@ -156,29 +156,22 @@ export default function DateRangePicker({ onChange, value, }) {
         if (!triggerRef.current || !popupRef.current)
             return;
         const tr = triggerRef.current.getBoundingClientRect();
-        const pr = popupRef.current.getBoundingClientRect();
-        const GAP = 4; // 8
+        const wrapperRect = triggerRef.current.parentElement.getBoundingClientRect();
+        const GAP = 4;
         const VW = window.innerWidth;
-        const VH = window.innerHeight;
+        const pr = popupRef.current.getBoundingClientRect();
         const popupW = pr.width || (isMobile ? VW - 16 : 780);
-        const popupH = pr.height || 460;
-        // Vertical: below trigger; flip above if not enough room
-        let top = tr.bottom + GAP;
-        if (top + popupH > VH - 8)
-            top = tr.top - popupH - GAP;
-        if (top < 8)
-            top = 8;
-        // Horizontal: start left-aligned to trigger
-        let left = tr.left;
-        // If overflows right edge → right-align to trigger's right edge
-        if (left + popupW > VW - 8) {
-            left = tr.right - popupW;
+        // Top: relative to wrapper
+        let top = tr.height + GAP;
+        // Left: relative to wrapper
+        let left = 0;
+        if (tr.left + popupW > VW - 8) {
+            left = tr.width - popupW;
         }
-        // Final clamp so it never goes off left edge
-        if (left < 8)
-            left = 8;
+        if (tr.left + left < 8)
+            left = 8 - tr.left;
         setPopupStyle({
-            position: "fixed",
+            position: "absolute", // fixed
             top,
             left,
             zIndex: 9999,
@@ -187,6 +180,38 @@ export default function DateRangePicker({ onChange, value, }) {
             maxWidth: `calc(100vw - 16px)`,
         });
     }, [isMobile]);
+    // old calcPosition for fixed positioning (flipping relative to viewport edges)
+    // const calcPosition = useCallback(() => {
+    //   if (!triggerRef.current || !popupRef.current) return;
+    //   const tr = triggerRef.current.getBoundingClientRect();
+    //   const pr = popupRef.current.getBoundingClientRect();
+    //   const GAP = 4; // 8
+    //   const VW = window.innerWidth;
+    //   const VH = window.innerHeight;
+    //   const popupW = pr.width || (isMobile ? VW - 16 : 780);
+    //   const popupH = pr.height || 460;
+    //   // Vertical: below trigger; flip above if not enough room
+    //   let top = tr.bottom + GAP;
+    //   if (top + popupH > VH - 8) top = tr.top - popupH - GAP;
+    //   if (top < 8) top = 8;
+    //   // Horizontal: start left-aligned to trigger
+    //   let left = tr.left;
+    //   // If overflows right edge → right-align to trigger's right edge
+    //   if (left + popupW > VW - 8) {
+    //     left = tr.right - popupW;
+    //   }
+    //   // Final clamp so it never goes off left edge
+    //   if (left < 8) left = 8;
+    //   setPopupStyle({
+    //     position: "fixed",
+    //     top,
+    //     left,
+    //     zIndex: 9999,
+    //     visibility: "visible",
+    //     width: isMobile ? `calc(100vw - 16px)` : undefined,
+    //     maxWidth: `calc(100vw - 16px)`,
+    //   });
+    // }, [isMobile]);
     useLayoutEffect(() => {
         if (!open)
             return;
@@ -314,7 +339,7 @@ export default function DateRangePicker({ onChange, value, }) {
         /* ── Header ── */
         .drp-inputs {
           display: flex; align-items: center; justify-content: center;
-          gap: 12px; padding: 12px 20px 10px; flex-wrap: wrap;
+          gap: 12px; padding: 6px 20px 6px; flex-wrap: wrap;
           background: #fafbff; border-bottom: 1px solid #f1f5f9;
         }
         .drp-input-group { display: flex; align-items: center; gap: 8px; }
@@ -335,7 +360,7 @@ export default function DateRangePicker({ onChange, value, }) {
 
         /* ── Presets ── */
         .drp-presets {
-          flex-shrink: 0; width: 148px; padding: 14px 10px;
+          flex-shrink: 0; width: 148px; padding: 6px 10px;
           border-right: 1px solid #f1f5f9;
           display: flex; flex-direction: column; gap: 2px;
           background: #fafbff;
@@ -351,7 +376,7 @@ export default function DateRangePicker({ onChange, value, }) {
 
         /* ── Calendar container: no extra height ── */
         .drp-cals {
-          padding: 16px 20px;
+          padding: 6px 16px;
           display: flex;
           align-items: flex-start;
         }
@@ -424,7 +449,7 @@ export default function DateRangePicker({ onChange, value, }) {
         /* ── Footer ── */
         .drp-footer {
           display: flex; justify-content: flex-end; align-items: center;
-          gap: 8px; padding: 10px 16px;
+          gap: 8px; padding: 6px 16px;
           border-top: 1px solid #f1f5f9; background: #fafbff;
         }
         .drp-btn {
@@ -444,5 +469,5 @@ export default function DateRangePicker({ onChange, value, }) {
           .drp-cals { padding: 12px 10px; }
           .drp-input { width: 120px; font-size: 13px; }
         }
-      ` }), _jsxs("div", { className: "drp", style: { display: "inline-block" }, children: [_jsxs("div", { className: "drp-trigger", onClick: handleOpen, ref: triggerRef, children: [_jsx("span", { className: "drp-lbl", children: "Start" }), _jsx("span", { className: `drp-val ${open ? "hi" : ""}`, children: toStr(range.from) || "Select" }), _jsx("span", { className: "drp-sep", children: "\u2013" }), _jsx("span", { className: "drp-lbl", children: "End" }), _jsx("span", { className: "drp-val", children: toStr(range.to) || "Select" })] }), open && (_jsxs("div", { className: "drp-popup", ref: popupRef, style: popupStyle, children: [_jsxs("div", { className: "drp-inputs", children: [_jsxs("div", { className: "drp-input-group", children: [_jsx("span", { className: "drp-input-label", children: "Start Date" }), _jsx("input", { className: `drp-input${fromErr ? " err" : ""}`, placeholder: "DD / MM / YYYY", value: fromStr, onChange: (e) => handleFromChange(e.target.value) })] }), _jsx("span", { className: "drp-input-sep", children: "\u2013" }), _jsxs("div", { className: "drp-input-group", children: [_jsx("span", { className: "drp-input-label", children: "End Date" }), _jsx("input", { className: `drp-input${toErr ? " err" : ""}`, placeholder: "DD / MM / YYYY", value: toStr_, onChange: (e) => handleToChange(e.target.value) })] })] }), _jsxs("div", { className: "drp-body", children: [_jsx("div", { className: "drp-presets", children: PRESETS.map((p) => (_jsx("button", { className: `drp-pbtn${activePreset === p.label ? " active" : ""}`, onClick: () => handlePreset(p), children: p.label }, p.label))) }), _jsx("div", { className: "drp-cals", children: _jsx(DayPicker, { mode: "range", selected: tempRange, onSelect: handleSelect, numberOfMonths: numMonths, defaultMonth: defaultMonth, month: month, onMonthChange: setMonth, showOutsideDays: false, navLayout: "around" }) })] }), _jsxs("div", { className: "drp-footer", children: [_jsx("button", { className: "drp-btn drp-btn-clear", onClick: handleClear, children: "Clear" }), _jsx("button", { className: "drp-btn drp-btn-apply", onClick: handleApply, children: "Apply" })] })] }))] })] }));
+      ` }), _jsxs("div", { className: "drp", style: { display: "inline-block", position: "relative" }, children: [_jsxs("div", { className: "drp-trigger", onClick: handleOpen, ref: triggerRef, children: [_jsx("span", { className: "drp-lbl", children: "Start" }), _jsx("span", { className: `drp-val ${open ? "hi" : ""}`, children: toStr(range.from) || "Select" }), _jsx("span", { className: "drp-sep", children: "\u2013" }), _jsx("span", { className: "drp-lbl", children: "End" }), _jsx("span", { className: "drp-val", children: toStr(range.to) || "Select" })] }), open && (_jsxs("div", { className: "drp-popup", ref: popupRef, style: popupStyle, children: [_jsxs("div", { className: "drp-inputs", children: [_jsxs("div", { className: "drp-input-group", children: [_jsx("span", { className: "drp-input-label", children: "Start Date" }), _jsx("input", { className: `drp-input${fromErr ? " err" : ""}`, placeholder: "DD / MM / YYYY", value: fromStr, onChange: (e) => handleFromChange(e.target.value) })] }), _jsx("span", { className: "drp-input-sep", children: "\u2013" }), _jsxs("div", { className: "drp-input-group", children: [_jsx("span", { className: "drp-input-label", children: "End Date" }), _jsx("input", { className: `drp-input${toErr ? " err" : ""}`, placeholder: "DD / MM / YYYY", value: toStr_, onChange: (e) => handleToChange(e.target.value) })] })] }), _jsxs("div", { className: "drp-body", children: [_jsx("div", { className: "drp-presets", children: PRESETS.map((p) => (_jsx("button", { className: `drp-pbtn${activePreset === p.label ? " active" : ""}`, onClick: () => handlePreset(p), children: p.label }, p.label))) }), _jsx("div", { className: "drp-cals", children: _jsx(DayPicker, { mode: "range", selected: tempRange, onSelect: handleSelect, numberOfMonths: numMonths, defaultMonth: defaultMonth, month: month, onMonthChange: setMonth, showOutsideDays: false, navLayout: "around" }) })] }), _jsxs("div", { className: "drp-footer", children: [_jsx("button", { className: "drp-btn drp-btn-clear", onClick: handleClear, children: "Clear" }), _jsx("button", { className: "drp-btn drp-btn-apply", onClick: handleApply, children: "Apply" })] })] }))] })] }));
 }
