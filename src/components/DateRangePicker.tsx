@@ -48,13 +48,11 @@ const PRESETS: Preset[] = [
       return { from, to };
     },
   },
-  // { label: "Last 6 months",   getDates: () => { const to = new Date(); const from = new Date(); from.setMonth(to.getMonth() - 6); return { from, to }; } },
   {
     label: "Last 6 months",
     getDates: () => {
       const now = new Date();
       const to = new Date(now);
-      // 5 months back + start of that month
       const from = new Date(now.getFullYear(), now.getMonth() - 5, 1);
       return { from, to };
     },
@@ -123,7 +121,6 @@ const isSameDate = (d1?: Date, d2?: Date) => {
 const detectPreset = (range: DateRange): string => {
   for (const p of PRESETS) {
     const presetRange = p.getDates();
-
     if (
       isSameDate(range.from, presetRange.from) &&
       isSameDate(range.to, presetRange.to)
@@ -131,7 +128,7 @@ const detectPreset = (range: DateRange): string => {
       return p.label;
     }
   }
-  return ""; // custom range
+  return "";
 };
 
 export default function DateRangePicker({
@@ -139,7 +136,7 @@ export default function DateRangePicker({
   value,
 }: {
   onChange?: (range: DateRange) => void;
-  value?: DateRange; // optional
+  value?: DateRange;
 }) {
   const def = PRESETS[1];
   const today = new Date();
@@ -156,7 +153,7 @@ export default function DateRangePicker({
   const [toErr, setToErr] = useState(false);
 
   const [month, setMonth] = useState(
-    new Date(today.getFullYear(), today.getMonth() - 1, 1),
+    new Date(today.getFullYear(), today.getMonth() - 1, 1)
   );
 
   // ── position stored as CSS vars, not state, to avoid flicker ──
@@ -178,63 +175,91 @@ export default function DateRangePicker({
       setTempRange(value);
       setFromStr(toStr(value.from));
       setToStr_(toStr(value.to));
-
-      setActivePreset(detectPreset(value)); // highlighted preset button
+      setActivePreset(detectPreset(value));
     }
   }, [value]);
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 640);
+    const check = () => setIsMobile(window.innerWidth < 700);
     check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  // ── Core position calculator ──
+  // ── Smart positioning: right-aligns when near right edge, flips up near bottom ──
   const calcPosition = useCallback(() => {
     if (!triggerRef.current || !popupRef.current) return;
-
+ 
     const tr = triggerRef.current.getBoundingClientRect();
-    const pr = popupRef.current.getBoundingClientRect(); // real popup width after render
-    const GAP = 8;
+    const wrapperRect = triggerRef.current.parentElement!.getBoundingClientRect();
+    const GAP = 4;
     const VW = window.innerWidth;
-    const VH = window.innerHeight;
-
-    const popupW = pr.width || (isMobile ? 360 : 740);
-    const popupH = pr.height || 480;
-
-    // Vertical: below trigger, flip above if not enough room
-    let top = tr.bottom + GAP;
-    if (top + popupH > VH - 8) top = tr.top - popupH - GAP;
-    if (top < 8) top = 8;
-
-    // Horizontal: left-align to trigger, shift left if overflows
-    let left = tr.left;
-    if (left + popupW > VW - 8) left = VW - popupW - 8;
-    if (left < 8) left = 8;
-
+    const pr = popupRef.current.getBoundingClientRect();
+    const popupW = pr.width || (isMobile ? VW - 16 : 780);
+ 
+    // Top: relative to wrapper
+    let top = tr.height + GAP;
+ 
+    // Left: relative to wrapper
+    let left = 0;
+    if (tr.left + popupW > VW - 8) {
+      left = tr.width - popupW;
+    }
+    if (tr.left + left < 8) left = 8 - tr.left;
+ 
     setPopupStyle({
-      position: "fixed",
+      position: "absolute", // fixed
       top,
       left,
       zIndex: 9999,
       visibility: "visible",
+      width: isMobile ? `calc(100vw - 16px)` : undefined,
       maxWidth: `calc(100vw - 16px)`,
     });
   }, [isMobile]);
 
-  // ── useLayoutEffect: runs AFTER DOM paint → real popup dimensions available ──
+  // old calcPosition for fixed positioning (flipping relative to viewport edges)
+  // const calcPosition = useCallback(() => {
+  //   if (!triggerRef.current || !popupRef.current) return;
+
+  //   const tr = triggerRef.current.getBoundingClientRect();
+  //   const pr = popupRef.current.getBoundingClientRect();
+  //   const GAP = 4; // 8
+  //   const VW = window.innerWidth;
+  //   const VH = window.innerHeight;
+
+  //   const popupW = pr.width || (isMobile ? VW - 16 : 780);
+  //   const popupH = pr.height || 460;
+
+  //   // Vertical: below trigger; flip above if not enough room
+  //   let top = tr.bottom + GAP;
+  //   if (top + popupH > VH - 8) top = tr.top - popupH - GAP;
+  //   if (top < 8) top = 8;
+
+  //   // Horizontal: start left-aligned to trigger
+  //   let left = tr.left;
+  //   // If overflows right edge → right-align to trigger's right edge
+  //   if (left + popupW > VW - 8) {
+  //     left = tr.right - popupW;
+  //   }
+  //   // Final clamp so it never goes off left edge
+  //   if (left < 8) left = 8;
+
+  //   setPopupStyle({
+  //     position: "fixed",
+  //     top,
+  //     left,
+  //     zIndex: 9999,
+  //     visibility: "visible",
+  //     width: isMobile ? `calc(100vw - 16px)` : undefined,
+  //     maxWidth: `calc(100vw - 16px)`,
+  //   });
+  // }, [isMobile]);
+
   useLayoutEffect(() => {
     if (!open) return;
-
-    // Hide first, then measure & position
     setPopupStyle((s) => ({ ...s, visibility: "hidden" }));
-
-    // rAF ensures popup is mounted and has dimensions
-    const raf = requestAnimationFrame(() => {
-      calcPosition();
-    });
-
+    const raf = requestAnimationFrame(() => { calcPosition(); });
     return () => cancelAnimationFrame(raf);
   }, [open, calcPosition]);
 
@@ -268,10 +293,7 @@ export default function DateRangePicker({
     setFromStr(masked);
     const d = parseInput(masked);
     setFromErr(!d && masked.replace(/\D/g, "").length === 8);
-    if (d) {
-      setTempRange((p) => ({ ...p, from: d }));
-      setActivePreset("");
-    }
+    if (d) { setTempRange((p) => ({ ...p, from: d })); setActivePreset(""); }
   };
 
   const handleToChange = (val: string) => {
@@ -279,10 +301,7 @@ export default function DateRangePicker({
     setToStr_(masked);
     const d = parseInput(masked);
     setToErr(!d && masked.replace(/\D/g, "").length === 8);
-    if (d) {
-      setTempRange((p) => ({ ...p, to: d }));
-      setActivePreset("");
-    }
+    if (d) { setTempRange((p) => ({ ...p, to: d })); setActivePreset(""); }
   };
 
   const handleSelect = (r: DateRange | undefined) => {
@@ -301,37 +320,24 @@ export default function DateRangePicker({
     setActivePreset(p.label);
   };
 
-  //   const handleApply = () => { setRange(tempRange); setOpen(false); };
   const handleApply = () => {
     setRange(tempRange);
     setOpen(false);
-    onChange?.(tempRange); // ← parent ko bhejo
+    onChange?.(tempRange);
   };
-
-  // const handleClear = () => {
-  //   setTempRange({ from: undefined, to: undefined });
-  //   setFromStr(""); setToStr_(""); setFromErr(false); setToErr(false);
-  //   setActivePreset("");
-  // };
 
   const handleClear = () => {
     const def = PRESETS.find((p) => p.label === "Last 7 days")!;
     const dates = def.getDates();
-
     setTempRange(dates);
-    // setRange(dates); // optional: if you want applied immediately
-
     setFromStr(toStr(dates.from));
     setToStr_(toStr(dates.to));
-
     setFromErr(false);
     setToErr(false);
-
     setActivePreset("Last 7 days");
   };
 
   const handleOpen = () => {
-    // Reset visibility so useLayoutEffect re-measures cleanly
     setPopupStyle((s) => ({ ...s, visibility: "hidden" }));
     setTempRange(range);
     setFromStr(toStr(range.from));
@@ -350,10 +356,11 @@ export default function DateRangePicker({
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
         .drp * { box-sizing: border-box; font-family: 'DM Sans', sans-serif; }
 
+        /* ── Trigger ── */
         .drp-trigger {
           display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap;
           background: #fff; border: 1px solid #e2e8f0; border-radius: 10px;
-          padding: 8px 14px; cursor: pointer; user-select: none;
+          padding: 4px 10px; cursor: pointer; user-select: none;
           box-shadow: 0 1px 3px rgba(0,0,0,.07);
           transition: border-color .2s, box-shadow .2s;
         }
@@ -367,6 +374,7 @@ export default function DateRangePicker({
         .drp-val.hi { border-color: #7c6df0; background: #f0eeff; color: #5b4ed8; }
         .drp-sep { color: #cbd5e1; }
 
+        /* ── Popup ── */
         .drp-popup {
           background: #fff; border-radius: 16px;
           box-shadow: 0 20px 60px rgba(0,0,0,.16), 0 4px 16px rgba(0,0,0,.09);
@@ -377,81 +385,143 @@ export default function DateRangePicker({
         }
         @keyframes drpIn { from{opacity:0;transform:translateY(-5px)} to{opacity:1;transform:translateY(0)} }
 
+        /* ── Header ── */
         .drp-inputs {
-          display: flex; align-items: center; gap: 10px;
-          padding: 14px 20px 0; flex-wrap: wrap;
+          display: flex; align-items: center; justify-content: center;
+          gap: 12px; padding: 6px 20px 6px; flex-wrap: wrap;
+          background: #fafbff; border-bottom: 1px solid #f1f5f9;
         }
-        .drp-input-group { display: flex; flex-direction: column; gap: 4px; }
-        .drp-input-label { font-size: 11px; font-weight: 600; color: #94a3b8; letter-spacing: .5px; text-transform: uppercase; }
+        .drp-input-group { display: flex; align-items: center; gap: 8px; }
+        .drp-input-label { font-size: 12px; font-weight: 600; color: #64748b; }
         .drp-input {
           font-size: 14px; font-weight: 600; font-family: 'DM Sans', sans-serif;
           color: #1e293b; background: #f8fafc;
           border: 1.5px solid #e2e8f0; border-radius: 8px;
-          padding: 7px 12px; width: 148px; outline: none;
+          padding: 6px 12px; width: 148px; outline: none;
           transition: border-color .2s, box-shadow .2s; letter-spacing: .3px;
         }
         .drp-input:focus { border-color: #7c6df0; box-shadow: 0 0 0 3px rgba(124,109,240,.12); background: #fff; }
         .drp-input.err   { border-color: #f87171; background: #fff5f5; }
-        .drp-input-sep   { color: #cbd5e1; font-size: 20px; margin-top: 18px; }
+        .drp-input-sep { color: #cbd5e1; font-size: 20px; display: flex; align-items: center; }
 
+        /* ── Body ── */
         .drp-body { display: flex; }
 
+        /* ── Presets ── */
         .drp-presets {
-          flex-shrink: 0; width: 148px; padding: 16px 12px;
+          flex-shrink: 0; width: 148px; padding: 6px 10px;
           border-right: 1px solid #f1f5f9;
           display: flex; flex-direction: column; gap: 2px;
           background: #fafbff;
         }
         .drp-pbtn {
-          padding: 8px 10px; border-radius: 8px; font-size: 13px; font-weight: 500;
+          padding: 8px 12px; border-radius: 8px; font-size: 13px; font-weight: 500;
           color: #475569; background: transparent; border: none; cursor: pointer;
           text-align: left; transition: background .15s, color .15s; white-space: nowrap;
+          line-height: 1.4;
         }
         .drp-pbtn:hover  { background: #f1f0fe; color: #5b4ed8; }
         .drp-pbtn.active { background: #ede9ff; color: #5b4ed8; font-weight: 600; }
 
-        .drp-cals { flex-shrink: 0; padding: 16px 20px 12px; }
+        /* ── Calendar container: no extra height ── */
+        .drp-cals {
+          padding: 6px 16px;
+          display: flex;
+          align-items: flex-start;
+        }
 
+        /* ── react-day-picker: force uniform cells both months ── */
         .rdp-root {
           --rdp-accent-color: #5b4ed8;
           --rdp-accent-background-color: #ede9ff;
           --rdp-range_middle-background-color: #ede9ff;
           --rdp-range_middle-color: #5b4ed8;
-          --rdp-day-width: 36px; --rdp-day-height: 36px;
-          --rdp-weekday-padding: 0; margin: 0;
+          --rdp-day-width: 38px;
+          --rdp-day-height: 38px;
+          --rdp-weekday-padding: 0;
+          margin: 0;
         }
-        .rdp-months { gap: 20px; flex-wrap: nowrap; }
-        .rdp-month_caption { justify-content: center; margin-bottom: 8px; padding: 0; }
+
+        /* These !important rules ensure BOTH months get the same size */
+        .rdp-day_button {
+          width: 36px !important;
+          height: 36px !important;
+          min-width: 36px !important;
+          border-radius: 50% !important;
+          font-size: 13px !important;
+          font-weight: 500 !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          margin: 0 auto !important;
+        }
+        .rdp-weekday {
+          width: 36px !important;
+          min-width: 36px !important;
+          font-size: 11.5px !important;
+          color: #94a3b8 !important;
+          font-weight: 600 !important;
+          text-align: center !important;
+          padding: 0 2px !important;
+        }
+        .rdp-day {
+          padding: 2px 1px !important;
+          text-align: center !important;
+        }
+        /* Removes extra bottom whitespace inside rdp table */
+        .rdp-month { width: auto !important; }
+        .rdp-table { border-collapse: collapse !important; }
+
+        .rdp-months { gap: 24px !important; flex-wrap: nowrap; }
+        .rdp-month_caption { justify-content: center; margin-bottom: 10px; padding: 0; }
         .rdp-caption_label, .rdp-month_caption span {
           font-size: 14px; font-weight: 700; color: #1e293b; font-family: 'DM Sans', sans-serif;
         }
-        .rdp-button_previous, .rdp-button_next { color: #7c6df0 !important; border-radius: 8px !important; }
+        .rdp-button_previous, .rdp-button_next {
+          color: #7c6df0 !important; border-radius: 8px !important;
+        }
         .rdp-button_previous:hover, .rdp-button_next:hover { background: #ede9ff !important; }
-        .rdp-weekday { font-size: 11.5px; color: #94a3b8; font-weight: 600; }
-        .rdp-day_button { border-radius: 50%; font-size: 13px; font-weight: 500; }
+
         .rdp-selected .rdp-day_button,
         .rdp-range_start .rdp-day_button,
-        .rdp-range_end .rdp-day_button   { background:#5b4ed8!important; color:#fff!important; border-radius:50%!important; }
-        .rdp-range_middle .rdp-day_button { background:#ede9ff!important; color:#5b4ed8!important; border-radius:0!important; }
+        .rdp-range_end .rdp-day_button {
+          background: #5b4ed8 !important; color: #fff !important; border-radius: 50% !important;
+        }
+        .rdp-range_middle .rdp-day_button {
+          background: #ede9ff !important; color: #5b4ed8 !important; border-radius: 0 !important;
+        }
         .rdp-outside .rdp-day_button { color: #c8d2e0 !important; }
-        .rdp-today:not(.rdp-selected) .rdp-day_button { font-weight: 700; color: #5b4ed8; }
+        .rdp-today:not(.rdp-selected) .rdp-day_button {
+          font-weight: 700 !important; color: #5b4ed8 !important;
+        }
 
+        /* ── Footer ── */
         .drp-footer {
           display: flex; justify-content: flex-end; align-items: center;
-          gap: 10px; padding: 12px 20px;
-          border-top: 1px solid #f1f5f9; background: #fafbff; flex-shrink: 0;
+          gap: 8px; padding: 6px 16px;
+          border-top: 1px solid #f1f5f9; background: #fafbff;
         }
         .drp-btn {
-          padding: 8px 22px; border-radius: 9px; font-size: 14px; font-weight: 600;
-          cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .18s; outline: none; white-space: nowrap;
+          padding: 7px 18px; border-radius: 8px; font-size: 13px; font-weight: 600;
+          cursor: pointer; font-family: 'DM Sans', sans-serif;
+          transition: all .18s; outline: none; white-space: nowrap;
         }
         .drp-btn-clear { background:#fff; border:1.5px solid #e2e8f0; color:#475569; }
         .drp-btn-clear:hover { border-color:#5b4ed8; color:#5b4ed8; background:#f1f0fe; }
         .drp-btn-apply { background:#5b4ed8; border:1.5px solid #5b4ed8; color:#fff; }
         .drp-btn-apply:hover { background:#4a3ec0; border-color:#4a3ec0; box-shadow:0 4px 12px rgba(91,78,216,.3); }
+
+        /* ── Mobile ── */
+        @media (max-width: 699px) {
+          .drp-presets { width: 120px; padding: 10px 6px; }
+          .drp-pbtn { font-size: 12px; padding: 7px 8px; }
+          .drp-cals { padding: 12px 10px; }
+          .drp-input { width: 120px; font-size: 13px; }
+        }
       `}</style>
 
-      <div className="drp" style={{ display: "inline-block" }}>
+      {/* <div className="drp" style={{ display: "inline-block"}}>   */}
+      <div className="drp" style={{ display: "inline-block", position: "relative" }}>
         {/* Trigger */}
         <div className="drp-trigger" onClick={handleOpen} ref={triggerRef}>
           <span className="drp-lbl">Start</span>
@@ -463,10 +533,9 @@ export default function DateRangePicker({
           <span className="drp-val">{toStr(range.to) || "Select"}</span>
         </div>
 
-        {/* Popup — always mounted while open, positioned via useLayoutEffect */}
         {open && (
           <div className="drp-popup" ref={popupRef} style={popupStyle}>
-            {/* Date inputs */}
+            {/* Header */}
             <div className="drp-inputs">
               <div className="drp-input-group">
                 <span className="drp-input-label">Start Date</span>
@@ -489,6 +558,7 @@ export default function DateRangePicker({
               </div>
             </div>
 
+            {/* Body */}
             <div className="drp-body">
               {/* Presets */}
               <div className="drp-presets">
@@ -514,6 +584,7 @@ export default function DateRangePicker({
                   month={month}
                   onMonthChange={setMonth}
                   showOutsideDays={false}
+                  navLayout="around"
                 />
               </div>
             </div>

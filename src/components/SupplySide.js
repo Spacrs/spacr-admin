@@ -92,7 +92,7 @@ export default function SupplySide() {
                                 setLocalRange(range);
                                 setIsLocal(true);
                             }
-                        } })] }), error && (_jsxs("div", { className: "bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3", children: ["Failed to load supply metrics: ", error] })), _jsxs("div", { className: "border border-gray-100 rounded-lg p-4", children: [_jsx("span", { className: "text-xs font-semibold text-white bg-blue-500 rounded px-2 py-0.5 mb-4 inline-block", children: "KPI Row" }), _jsx("div", { className: "flex flex-wrap gap-6 mt-2", children: kpis.map((k) => (_jsx(KpiCard, { icon: k.icon, label: k.label, value: k.value, loading: loading }, k.label))) })] })] }));
+                        } })] }), error && (_jsxs("div", { className: "bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3", children: ["Failed to load supply metrics: ", error] })), _jsxs("div", { className: "border border-gray-100 rounded-lg p-4", children: [_jsx("span", { className: "text-xs font-semibold text-white bg-blue-500 rounded px-2 py-0.5 mb-4 inline-block", children: "KPI Row" }), _jsx("div", { className: "flex flex-wrap gap-6 mt-2 items-stretch", children: kpis.map((k) => (_jsx(KpiCard, { icon: k.icon, label: k.label, value: k.value, loading: loading }, k.label))) })] })] }));
 }
 // Replace placeholder with real chart
 {

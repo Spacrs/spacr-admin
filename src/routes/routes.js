@@ -74,7 +74,7 @@ export const adminRoutes = [
         path: "dashboard-overview",
         component: Overview,
         breadcrumb: ["admin", "dashboard"],
-        // showBreadcrumb: true,
+        showBreadcrumb: true,
     },
     {
         path: "dashboard",
