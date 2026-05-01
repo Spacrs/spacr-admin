@@ -21,12 +21,12 @@ export default function KpiCard({
   }
 
   return (
-    <div className="flex-1 min-w-[140px]">
-      <div className="flex items-center gap-2 text-gray-500 text-sm mb-1">
+    <div className="flex-shrink-0 min-w-[160px]">
+      <div className="flex items-center gap-2 text-gray-500 text-sm mb-1 whitespace-nowrap">
         <span style={{ fontSize: 16 }}>{icon}</span>
         <span>{label}</span>
       </div>
-      <p className="text-xl font-bold text-gray-900">{value}</p>
+      <p className="text-xl font-bold text-gray-900 whitespace-nowrap">{value}</p>
     </div>
   );
 }

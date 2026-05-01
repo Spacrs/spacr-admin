@@ -6,5 +6,5 @@ import TopCorridors from "../../components/TopCorridors";
 import UnitEconomics from "../../components/UnitEconomics";
 import { DateProvider } from "../../context/DateContext";
 export default function Overview() {
-    return (_jsx(DateProvider, { children: _jsx("div", { className: "", children: _jsxs("div", { className: "bg-gray-100 p-6 space-y-6", children: [_jsx(TopMetrics, {}), _jsx(SupplySide, {}), _jsx(GrowthTrendChart, {}), _jsx(TopCorridors, {}), _jsx(UnitEconomics, {})] }) }) }));
+    return (_jsx(DateProvider, { children: _jsxs("div", { className: "flex flex-col gap-6", children: [_jsx(TopMetrics, {}), _jsx(SupplySide, {}), _jsx(GrowthTrendChart, {}), _jsx(TopCorridors, {}), _jsx(UnitEconomics, {})] }) }));
 }

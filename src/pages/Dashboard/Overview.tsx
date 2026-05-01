@@ -8,14 +8,33 @@ import { DateProvider } from "../../context/DateContext";
 export default function Overview() {
   return (
     <DateProvider>
-      <div className="">
-        <div className="bg-gray-100 p-6 space-y-6">
+      <div className="flex flex-col gap-6">
+
+        {/* Top Metrics Card */}
+        {/* <div className="bg-gray-100 p-4 rounded-lg shadow-md"> */}
           <TopMetrics />
+        {/* </div> */}
+
+        {/* Supply Side Card */}
+        {/* <div className="bg-gray-100 p-4 rounded-lg shadow-md"> */}
           <SupplySide />
+        {/* </div> */}
+
+        {/* Growth Trend Chart Card */}
+        {/* <div className="bg-gray-100 p-4 rounded-lg shadow-md"> */}
           <GrowthTrendChart />
+        {/* </div> */}
+
+        {/* Top Corridors Card */}
+        {/* <div className="bg-gray-100 p-4 rounded-lg shadow-md"> */}
           <TopCorridors />
+        {/* </div> */}
+
+        {/* Unit Economics Card */}
+        {/* <div className="bg-gray-100 p-4 rounded-lg shadow-md"> */}
           <UnitEconomics />
-        </div>
+        {/* </div> */}
+
       </div>
     </DateProvider>
   );

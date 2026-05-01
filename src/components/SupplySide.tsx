@@ -146,7 +146,7 @@ export default function SupplySide() {
         <span className="text-xs font-semibold text-white bg-blue-500 rounded px-2 py-0.5 mb-4 inline-block">
           KPI Row
         </span>
-        <div className="flex flex-wrap gap-6 mt-2">
+        <div className="flex gap-6 mt-2 overflow-x-auto pb-1">
           {kpis.map((k) => (
             <KpiCard
               key={k.label}
