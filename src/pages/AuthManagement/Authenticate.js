@@ -23,7 +23,7 @@ const Authenticate = () => {
             console.log(response);
             if (response.success) {
                 localStorage.setItem("access_token", user.secret);
-                navigate(`/admin/users`);
+                navigate(`/admin/dashboard-overview`); // default landing page after login
                 toastHandler(response.message);
             }
         }
