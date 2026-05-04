@@ -17,6 +17,8 @@ import { bannersApi } from "./slices/bannerSlice/apiSlice";
 // import { feesApi } from "./slices/feesSlice/feesSlice";
 import { feesApi } from "./slices/feesSlice/apiSlice"; // correct path to feesApi
 import feesSlice from "./slices/feesSlice/feesSlice"; // slice default export
+import { costApi } from "./slices/costSlice/costApi";
+import { adSpentApi } from "./slices/adSpentSlice/adSpentApi";
 
 export const store: Store = configureStore({
   reducer: {
@@ -35,6 +37,8 @@ export const store: Store = configureStore({
     bannerSlice: bannerReducer,
     [bannersApi.reducerPath]: bannersApi.reducer,
     [feesApi.reducerPath]: feesApi.reducer,
+    [costApi.reducerPath]: costApi.reducer, // add on 04-05-2026(RP)
+    [adSpentApi.reducerPath]: adSpentApi.reducer, // add on 04-05-2026(RP)
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -44,8 +48,10 @@ export const store: Store = configureStore({
       .concat(ordersApi.middleware)
       .concat(countriesConfigApi.middleware)
       .concat(notificationApi.middleware)
-      .concat(bannersApi.middleware)
-      .concat(feesApi.middleware),
+      .concat(bannersApi.middleware)  
+      .concat(feesApi.middleware)
+      .concat(costApi.middleware)
+      .concat(adSpentApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
