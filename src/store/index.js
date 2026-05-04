@@ -15,6 +15,8 @@ import bannerReducer from "./slices/bannerSlice/bannerSlice";
 import { bannersApi } from "./slices/bannerSlice/apiSlice";
 // import { feesApi } from "./slices/feesSlice/feesSlice";
 import { feesApi } from "./slices/feesSlice/apiSlice"; // correct path to feesApi
+import { costApi } from "./slices/costSlice/costApi";
+import { adSpentApi } from "./slices/adSpentSlice/adSpentApi";
 export const store = configureStore({
     reducer: {
         [adminAuthApi.reducerPath]: adminAuthApi.reducer,
@@ -32,6 +34,8 @@ export const store = configureStore({
         bannerSlice: bannerReducer,
         [bannersApi.reducerPath]: bannersApi.reducer,
         [feesApi.reducerPath]: feesApi.reducer,
+        [costApi.reducerPath]: costApi.reducer, // add on 04-05-2026(RP)
+        [adSpentApi.reducerPath]: adSpentApi.reducer, // add on 04-05-2026(RP)
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware()
         .concat(adminAuthApi.middleware)
@@ -41,5 +45,7 @@ export const store = configureStore({
         .concat(countriesConfigApi.middleware)
         .concat(notificationApi.middleware)
         .concat(bannersApi.middleware)
-        .concat(feesApi.middleware),
+        .concat(feesApi.middleware)
+        .concat(costApi.middleware)
+        .concat(adSpentApi.middleware),
 });
