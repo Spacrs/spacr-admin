@@ -4,70 +4,81 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { Search, ErrorMsg, Table, Button } from "../../components/Common";
 import API from "../../constants/apiEndpoints";
+import {
+  useDeleteAdSpentMutation,
+  useGetAdSpentListQuery,
+} from "../../store/slices/adSpentSlice/adSpentApi";
 
 const CACList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState("");
-  const [cacData, setCacData] = useState<any[]>([]);
-  const [totalPages, setTotalPages] = useState(1);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
 
   const [loading, setLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [deleteCAC, { isLoading: isDeleting }] = useDeleteAdSpentMutation();
 
   const itemsPerPage = 10;
   const navigate = useNavigate();
 
   // Fetch CAC API
-  const fetchCACList = async () => {
-    try {
-      setLoading(true);
-      setIsError(false);
+  // const fetchCACList = async () => {
+  //   try {
+  //     setLoading(true);
+  //     setIsError(false);
 
-      // "http://localhost:8000/api/v5/admin/cac"
-      const res = await fetch(`${API.ADMIN.Ad_SPEND}?page=${currentPage}&limit=${itemsPerPage}&search=${filter}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      });
+  //     // "http://localhost:8000/api/v5/admin/cac"
+  //     const res = await fetch(`${API.ADMIN.Ad_SPEND}?page=${currentPage}&limit=${itemsPerPage}&search=${filter}`, {
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+  //       },
+  //     });
 
-      const result = await res.json();
-      console.log("CAC API Response:", result);
+  //     const result = await res.json();
+  //     console.log("CAC API Response:", result);
 
-      if (res.ok && result.success) {
-        const formattedData = (result.data || []).map((item: any) => {
-          if (!item.Month) return item;
+  //     if (res.ok && result.success) {
+  //       const formattedData = (result.data || []).map((item: any) => {
+  //         if (!item.Month) return item;
 
-          const [year, month] = item.Month.split("-");
-          const date = new Date(Number(year), Number(month) - 1);
+  //         const [year, month] = item.Month.split("-");
+  //         const date = new Date(Number(year), Number(month) - 1);
 
-          return {
-            ...item,
-            Month: date.toLocaleString("en-US", {
-              month: "long",
-              year: "numeric",
-            }), // March 2026
-          };
-        });
+  //         return {
+  //           ...item,
+  //           Month: date.toLocaleString("en-US", {
+  //             month: "long",
+  //             year: "numeric",
+  //           }), // March 2026
+  //         };
+  //       });
 
-        setCacData(formattedData);
-        setTotalPages(result.pagination?.totalPages || 1);
-      } else {
-        setIsError(true);
-        console.error(result.message || "Failed to fetch CAC data");
-      }
-    } catch (error: any) {
-      setIsError(true);
-      console.error(error.message || "Error fetching CAC data");
-    } finally {
-      setLoading(false);
-    }
-  };
+  //       setCacData(formattedData);
+  //       setTotalPages(result.pagination?.totalPages || 1);
+  //     } else {
+  //       setIsError(true);
+  //       console.error(result.message || "Failed to fetch CAC data");
+  //     }
+  //   } catch (error: any) {
+  //     setIsError(true);
+  //     console.error(error.message || "Error fetching CAC data");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchCACList();
-  }, [currentPage, filter]);
+  // useEffect(() => {
+  //   fetchCACList();
+  // }, [currentPage, filter]);
+
+  const { data, isLoading, isError } = useGetAdSpentListQuery({
+    page: currentPage,
+    limit: itemsPerPage,
+    search: filter,
+  });
+
+  const cacData = data?.data || [];
+  const totalPages = data?.pagination?.totalPages || 1;
 
   if (isError) {
     return <ErrorMsg errorMsg="Error loading CAC data" />;
@@ -97,27 +108,10 @@ const CACList = () => {
     if (!deleteId) return;
 
     try {
-      const res = await fetch(
-        // `http://localhost:8000/api/v5/admin/cac/${deleteId}`,
-        `${API.ADMIN.Ad_SPEND}/${deleteId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        },
-      );
-
-      const result = await res.json();
-
-      if (!res.ok || !result.success) {
-        throw new Error(result.message || "Failed to delete CAC");
-      }
-
+      await deleteCAC(deleteId).unwrap();
       toast.success("Ad Spent deleted successfully");
-      fetchCACList();
     } catch (err: any) {
-      toast.error(err.message || "Error while deleting");
+      toast.error(err?.data?.message || "Error while deleting");
     } finally {
       setShowConfirm(false);
       setDeleteId(null);
@@ -126,8 +120,8 @@ const CACList = () => {
 
   return (
     <div>
-        <ToastContainer />
-      
+      <ToastContainer />
+
       {/* Header */}
       <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 shadow-md rounded-lg">
         <div className="flex flex-1 max-w-lg">
@@ -150,9 +144,9 @@ const CACList = () => {
       {/* Table */}
       <div className="p-4 bg-gray-100 rounded-lg shadow-md">
         <Table
-          data={cacData || []}
+          data={cacData}
           columns={columns.cacColumn}
-          loading={loading}
+          loading={isLoading}
           totalPages={totalPages}
           currentPage={currentPage}
           onPageChange={onPageChange}
