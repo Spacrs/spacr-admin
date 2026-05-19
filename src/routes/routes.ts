@@ -53,6 +53,8 @@ import CostList from "../pages/CostManagement/CostList";
 import AddMonthlyCost from "../pages/CostManagement/AddMonthlyCost";
 import CACList from "../pages/CustomerAcquisitionCostManagement/CACList";
 import AddCAC from "../pages/CustomerAcquisitionCostManagement/AddCAC";
+import InvoiceList from "../pages/InvoiceVerificationRequest/InvoiceList";
+import InvoiceDetails from "../pages/InvoiceVerificationRequest/InvoiceDetails";
 export const protectedRoutes = [
   // these routes are accessable with auth or layout for diffrent roles
   {
@@ -400,7 +402,21 @@ export const adminRoutes = [
     component: AddCAC,
     breadcrumb: ["admin", "Edit Ad Spent"],
     showBreadcrumb: true,
-  }
+  },
+
+  // added on 18-05-2026(RP)
+  {
+    path: "invoice-verification-request",
+    component: InvoiceList,
+    breadcrumb: ["admin", "Invoice Verification Request"],
+    showBreadcrumb: true,
+  },
+  {
+    path: "invoice-details/:id",
+    component: InvoiceDetails,
+    breadcrumb: ["admin", "Invoice-Details"],
+    showBreadcrumb: true,
+  },
   
   
 ];

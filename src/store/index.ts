@@ -19,6 +19,7 @@ import { feesApi } from "./slices/feesSlice/apiSlice"; // correct path to feesAp
 import feesSlice from "./slices/feesSlice/feesSlice"; // slice default export
 import { costApi } from "./slices/costSlice/costApi";
 import { adSpentApi } from "./slices/adSpentSlice/adSpentApi";
+import { invoiceApi } from "./slices/invoiceVerificationSlice/invoiceSlice";
 
 export const store: Store = configureStore({
   reducer: {
@@ -39,6 +40,7 @@ export const store: Store = configureStore({
     [feesApi.reducerPath]: feesApi.reducer,
     [costApi.reducerPath]: costApi.reducer, // add on 04-05-2026(RP)
     [adSpentApi.reducerPath]: adSpentApi.reducer, // add on 04-05-2026(RP)
+    [invoiceApi.reducerPath]: invoiceApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -51,7 +53,8 @@ export const store: Store = configureStore({
       .concat(bannersApi.middleware)  
       .concat(feesApi.middleware)
       .concat(costApi.middleware)
-      .concat(adSpentApi.middleware),
+      .concat(adSpentApi.middleware)
+      .concat(invoiceApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
