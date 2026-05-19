@@ -58,4 +58,6 @@ export interface ProductData {
   OrderOffer: any[]; 
   medias: Media[];
   image?: string;
+  orderImages?: Media[];
+  receiptMedia?: Media[];
 }

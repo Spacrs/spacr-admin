@@ -17,7 +17,8 @@ const {
   AiOutlineTransaction,
   BsCurrencyExchange,
   TbReportSearch,
-  RxDashboard
+  RxDashboard,
+  FaFileInvoice
 
 } = icons;
 
@@ -37,6 +38,12 @@ const menuItems: MenuItemTypes[] = [
     label: "Order List",
     path: "/admin/order-list",
     icon: <TbTruckDelivery style={{ fontSize: "20px", margin: "0 10px" }} />,
+  },
+  // added on 18-05-2026(RP)
+  {
+    label: "Invoice Verification Request",
+    path: "/admin/invoice-verification-request",
+    icon: <FaFileInvoice style={{ fontSize: "20px", margin: "0 10px" }} />,
   },
   {
     label: "Suggested Product",
