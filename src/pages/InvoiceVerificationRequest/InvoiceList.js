@@ -74,10 +74,8 @@ function InvoiceList() {
         }
     };
     const handleView = (data) => {
-        console.log("data___", data);
         if (data) {
             try {
-                console.log(data.OrderId, "orderId selectedorder");
                 navigate(`/admin/invoice-details/${data.OrderID}`);
             }
             catch (error) {

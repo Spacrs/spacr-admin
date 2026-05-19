@@ -484,7 +484,7 @@ const invoiceListColumn: IColumns[] = [
     sortable: true,
   },
   { name: "Price", Header: "Price", colName: "Default", sortable: true },
-  { name: "Status", Header: "Status", colName: "Status" },
+  // { name: "Status", Header: "Status", colName: "Status" },
 
   // Change colName from "Image" to "InvoicePreview"
   // {

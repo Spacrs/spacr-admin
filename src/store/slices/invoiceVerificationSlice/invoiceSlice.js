@@ -20,6 +20,13 @@ export const invoiceApi = createApi({
                 method: "GET",
             }),
         }),
+        updateInvoiceVerificationStatus: builder.mutation({
+            query: (credentials) => ({
+                url: `${API.INVOICE_VERIFICATION.UPDATE_INVOICE_STATUS}/${credentials.orderId}`,
+                method: "PATCH",
+                body: credentials,
+            }),
+        }),
         // 🔹 GET by ID
         // getCostById: builder.query({
         //   query: (id) => `${API.ADMIN.MONTHLY_COST}/${id}`,
@@ -53,7 +60,7 @@ export const invoiceApi = createApi({
         // }),
     }),
 });
-export const { useGetInvoiceListQuery, useGetInvoiceDetailsQuery,
+export const { useGetInvoiceListQuery, useGetInvoiceDetailsQuery, useUpdateInvoiceVerificationStatusMutation,
 //   useAddCostMutation,
 //   useUpdateCostMutation,
 //   useDeleteCostMutation,
