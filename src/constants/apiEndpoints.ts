@@ -1,4 +1,5 @@
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// const BASE_URL = 'http://localhost:8000';
 const VERSION = "v2";
 
 
@@ -74,6 +75,11 @@ const API = {
   NOTIFICATION: {
     GET_NOTIFICATION: `${BASE_URL}/api/${VERSION}/notification/get-a-notification`, // + /{notificationId}
     UPDATE_SCHEDULED_NOTIFICATION: `${BASE_URL}/api/${VERSION}/notification/update-scheduled-notification`, // + /{notificationId}
+  },
+
+  INVOICE_VERIFICATION: {
+    INVOICE_LIST: `${BASE_URL}/api/v6/admin/invoice-list`,
+    INVOICE_DETAILS: `${BASE_URL}/api/v6/admin/invoice-details`,
   },
 };
 

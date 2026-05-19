@@ -1,6 +1,6 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { icons } from "../Icons/constant";
-const { HiOutlineUsers, BsCreditCard2Front, TbTruckDelivery, GrSend, MdContactSupport, IoIosFlag, FaCity, CiSettings, MdProductionQuantityLimits, FaBarcode, FaPlane, GiKnightBanner, GiTakeMyMoney, AiOutlineTransaction, BsCurrencyExchange, TbReportSearch, RxDashboard } = icons;
+const { HiOutlineUsers, BsCreditCard2Front, TbTruckDelivery, GrSend, MdContactSupport, IoIosFlag, FaCity, CiSettings, MdProductionQuantityLimits, FaBarcode, FaPlane, GiKnightBanner, GiTakeMyMoney, AiOutlineTransaction, BsCurrencyExchange, TbReportSearch, RxDashboard, FaFileInvoice } = icons;
 const menuItems = [
     // added on 14-04-2026(RP)
     {
@@ -17,6 +17,12 @@ const menuItems = [
         label: "Order List",
         path: "/admin/order-list",
         icon: _jsx(TbTruckDelivery, { style: { fontSize: "20px", margin: "0 10px" } }),
+    },
+    // added on 18-05-2026(RP)
+    {
+        label: "Invoice Verification Request",
+        path: "/admin/invoice-verification-request",
+        icon: _jsx(FaFileInvoice, { style: { fontSize: "20px", margin: "0 10px" } }),
     },
     {
         label: "Suggested Product",
