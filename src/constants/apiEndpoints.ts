@@ -80,6 +80,7 @@ const API = {
   INVOICE_VERIFICATION: {
     INVOICE_LIST: `${BASE_URL}/api/v6/admin/invoice-list`,
     INVOICE_DETAILS: `${BASE_URL}/api/v6/admin/invoice-details`,
+    UPDATE_INVOICE_STATUS: `${BASE_URL}/api/v6/admin/update-invoice-status`,
   },
 };
 

@@ -99,10 +99,8 @@ function InvoiceList() {
   };
 
   const handleView = (data: any) => {
-    console.log("data___", data);
     if (data) {
       try {
-        console.log(data.OrderId, "orderId selectedorder");
         navigate(`/admin/invoice-details/${data.OrderID}`);
       } catch (error) {
         console.log(error, "error in handleView");

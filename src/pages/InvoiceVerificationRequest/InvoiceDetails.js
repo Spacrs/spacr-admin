@@ -1,19 +1,19 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
-import { useUpdateUserVerificationMutation, useUpdateProfileVideoVerificationMutation, useUpdateUserDocumentVerificationMutation } from "../../store/slices/userSlice/apiSlice";
+import { useUpdateUserVerificationMutation, useUpdateProfileVideoVerificationMutation, useUpdateUserDocumentVerificationMutation, } from "../../store/slices/userSlice/apiSlice";
 import { useNavigate, useParams } from "react-router-dom";
+import { updateIsLoading, } from "../../store/slices/userSlice/userSlice";
 import { useDispatch } from "react-redux";
 import Loading from "../../components/Common/Loader";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { ConfirmationModal } from "../../components/Common";
-import { useGetInvoiceDetailsQuery } from "../../store/slices/invoiceVerificationSlice/invoiceSlice";
+import { useGetInvoiceDetailsQuery, useUpdateInvoiceVerificationStatusMutation } from "../../store/slices/invoiceVerificationSlice/invoiceSlice";
 const InvoiceDetails = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const params = useParams();
-    console.log("params______", params);
-    const { data: order, isLoading, isError } = useGetInvoiceDetailsQuery(params.id);
-    console.log('order', order);
+    const [updateInvoiceVerificationStatus] = useUpdateInvoiceVerificationStatusMutation();
+    const { data: order, isLoading, isError, } = useGetInvoiceDetailsQuery(params.id);
     const [status, setStatus] = useState("pending");
     const [verificationvideostatus, setProfileVideoVerificationStatus] = useState("pending");
     const [updateUserVerification] = useUpdateUserVerificationMutation(); // Mutation hook to update status
@@ -35,24 +35,27 @@ const InvoiceDetails = () => {
         return (_jsx("div", { className: "text-red-500 text-center mt-4", children: "Error loading user data" }));
     // Handle status change
     const handleOnChange = async (event) => {
-        //   const verificationStatus = event.target.value;
-        //   // setStatus(verificationStatus); // Update the local state
-        //   setStatus(data?.data.DocumentVerified); // ✅ correct field from API
-        //   // Trigger the API call to update user status
-        //   try {
-        //     dispatch(updateIsLoading(true));
-        //     const data = await updateUserDocumentVerification({
-        //       userId: user.UserID,
-        //       verified: verificationStatus,
-        //        }).unwrap();
-        //  dispatch(
-        //       updateUserInUserList({ ...data.data, DocumentsVerified: verificationStatus})
-        //     );
-        //      await refetch();
-        //     dispatch(updateIsLoading(false));
-        //   } catch (error) {
-        //     console.error("Error updating status:", error);
-        //   }
+        const verificationStatus = event.target.value;
+        if (!verificationStatus)
+            return;
+        try {
+            setStatus(verificationStatus);
+            dispatch(updateIsLoading(true));
+            const OrderOfferID = order?.data?.OrderOffer?.[0]?.OrderOfferID;
+            const response = await updateInvoiceVerificationStatus({
+                orderId: params.id,
+                status: verificationStatus,
+                OrderOfferID,
+            }).unwrap();
+            toast.success(`Invoice status updated to ${verificationStatus}`);
+        }
+        catch (error) {
+            console.error("Error updating invoice status:", error);
+            toast.error(error?.data?.message || "Failed to update status");
+        }
+        finally {
+            dispatch(updateIsLoading(false));
+        }
     };
     //Added on 13-06-2025
     const handleToggleStatus = () => {
@@ -76,7 +79,7 @@ const InvoiceDetails = () => {
         //   toast.success("Profile has been verified!");
         // } catch (error) {
         //   console.error("Error updating status:", error);
-        // } 
+        // }
         // setIsModalOpen(false);
     };
     //Added on 13-06-2025
@@ -124,26 +127,22 @@ const InvoiceDetails = () => {
     const goToOffers = () => {
         navigate("/admin/order-offers/" + params.id);
     };
+    const invoices = order?.data?.orderInvoice || [];
     // let isDropdownDisabled = user?.Verified === 'verified';
     // let ButtonText = user?.Verified === 'verified' ? 'Verified' : 'Verify';
     // const profileImage =
     // !imageError && user?.ProfilePictureURL
     //   ? user.ProfilePictureURL
-    //   : defaultProfile; 
-    return (_jsxs("div", { className: "", children: [_jsx(ToastContainer, {}), _jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-6", children: [_jsxs("div", { className: "flex flex-col bg-gray-50 p-6 rounded-lg shadow-md", children: [_jsx("h2", { className: "text-2xl font-semibold mb-2", children: order.data.ProductName }), _jsx("p", { className: "text-gray-500 text-sm mb-4", children: order.data.Descriptions }), _jsx("a", { href: order.data.ProductUrl, target: "_blank", rel: "noopener noreferrer", className: "text-indigo-600 hover:text-indigo-800 text-sm", children: "View Product" }), _jsxs("div", { className: "mt-6 w-full", children: [_jsxs("p", { children: [_jsx("strong", { children: "Created By:" }), "  ", order?.data?.User?.FullName || "Admin"] }), _jsxs("p", { children: [_jsx("strong", { children: "Phone:" }), "  ", order?.data?.User?.Phone || "N.A"] }), _jsxs("p", { children: [_jsx("strong", { children: "Price:" }), " AED ", order.data.Price] }), _jsxs("p", { children: [_jsx("strong", { children: "Quantity:" }), " ", order.data.Quantity] }), _jsxs("p", { children: [_jsx("strong", { children: "Delivery Reward:" }), " AED ", order.data.DeliveryReward] }), _jsxs("p", { children: [_jsx("strong", { children: "Is With Box:" }), " ", order.data.IsWithBox === 1 ? "Yes" : "No"] }), _jsxs("p", { children: [_jsx("strong", { children: "Pay Up Front:" }), " ", (() => {
-                                                const validStatuses = ["Accepted", "ReadyToDeliver", "Purchased", "ReceiptUpload", "InTransit", "Delivered"];
-                                                const offer = order.data.OrderOffer?.find((offer) => validStatuses.includes(offer.Status));
-                                                if (!offer || !("payUpFront" in offer)) {
-                                                    return "NA";
-                                                }
-                                                return offer.payUpFront ? "Yes" : "No";
-                                            })()] }), _jsxs("p", { children: [_jsx("strong", { children: "Wait time:" }), " ", order.data.WaitTime
-                                                ? `${getWaitDays(order.data.CreatedAt, order.data.WaitTime)} (${getRemainingDays(order.data.WaitTime)})`
-                                                : "N.A."] }), order.data.CreatedBy === "user" && (_jsx("p", { className: "text-green-500 text-2xl font-medium mt-6", children: _jsxs("strong", { onClick: goToOffers, className: "px-4 py-2 text-md font-medium bg-green-100 border border-green-600 shadow-lg hover:bg-transparent hover:shadow-xl transition duration-200 ease-in-out cursor-pointer rounded-lg", children: ["Offers:", " ", _jsx("span", { className: "text-black font-medium px-2", children: order.data.totalOfferCount })] }) }))] })] }), _jsxs("div", { className: "flex flex-col bg-gray-50 p-6 rounded-lg shadow-md", children: [_jsx("h3", { className: "text-xl font-semibold mb-3", children: "Shipping Details" }), _jsxs("p", { children: [_jsx("strong", { children: "From Address:" }), " ", order.data.From_address] }), _jsxs("p", { children: [_jsx("strong", { children: "To Address:" }), " ", order.data.To_address] }), _jsx("div", { className: "mt-6", children: _jsxs("p", { children: [_jsx("strong", { children: "Status:" }), _jsx("span", { className: `ml-2 px-3 py-1 rounded-full text-sm font-medium 
-                ${order.data?.Status === "Pending"
-                                                ? "bg-yellow-300 text-gray-800"
-                                                : order.data?.Status === "Shipped"
-                                                    ? "bg-blue-300 text-gray-800"
-                                                    : "bg-green-300 text-gray-800"}`, children: order.data?.Status })] }) })] })] }), _jsxs("div", { className: "mt-6 bg-white shadow-md rounded-lg p-6", children: [_jsx("h3", { className: "text-lg font-semibold mb-4", children: "Identification Documents" }), _jsxs("div", { className: "max-w-sm mb-4", children: [_jsx("label", { htmlFor: "status", className: "block text-sm font-medium text-gray-700", children: _jsx("strong", { children: "Change Document Verification Status" }) }), _jsxs("select", { id: "status", value: status, onChange: handleOnChange, className: "mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", children: [_jsx("option", { value: "pending", children: "Pending" }), _jsx("option", { value: "verified", children: "Verified" }), _jsx("option", { value: "rejected", children: "Rejected" })] })] }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-6", children: [_jsx("div", { className: "border p-4 rounded-lg text-center shadow-md hover:shadow-lg transition", children: _jsx("p", { className: "font-semibold mb-2", children: "Emirates ID (Front)" }) }), _jsx("div", { className: "border p-4 rounded-lg text-center shadow-md hover:shadow-lg transition", children: _jsx("p", { className: "font-semibold mb-2", children: "Emirates ID (Back)" }) }), _jsx("div", { className: "border p-4 rounded-lg text-center shadow-md hover:shadow-lg transition", children: _jsx("p", { className: "font-semibold mb-2", children: "Passport" }) })] })] }), modalOpen && selectedImage && (_jsx("div", { className: "fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50", onClick: () => setModalOpen(false), children: _jsx("img", { src: selectedImage, alt: "Enlarged document", className: "max-w-3xl max-h-[90vh] rounded shadow-lg", onClick: (e) => e.stopPropagation() }) })), _jsx(ConfirmationModal, { isOpen: isModalOpen, onClose: () => setIsModalOpen(false), onConfirm: handleConfirmToggleStatus, message: `Are you sure you want to verify this user?` })] }));
+    //   : defaultProfile;
+    return (_jsxs("div", { className: "", children: [_jsx(ToastContainer, {}), _jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-6", children: [_jsxs("div", { className: "flex flex-col bg-gray-50 p-6 rounded-lg shadow-md", children: [_jsx("h2", { className: "text-2xl font-semibold mb-2", children: order.data.ProductName }), _jsx("p", { className: "text-gray-500 text-sm mb-4", children: order.data.Descriptions }), _jsx("a", { href: order.data.ProductUrl, target: "_blank", rel: "noopener noreferrer", className: "text-indigo-600 hover:text-indigo-800 text-sm", children: "View Product" }), _jsxs("div", { className: "mt-6 w-full", children: [_jsxs("p", { children: [_jsx("strong", { children: "Created By:" }), " ", order?.data?.User?.FullName || "Admin"] }), _jsxs("p", { children: [_jsx("strong", { children: "Phone:" }), " ", order?.data?.User?.Phone || "N.A"] }), _jsxs("p", { children: [_jsx("strong", { children: "Price:" }), " AED ", order.data.Price] }), _jsxs("p", { children: [_jsx("strong", { children: "Quantity:" }), " ", order.data.Quantity] })] })] }), _jsxs("div", { className: "flex flex-col bg-gray-50 p-6 rounded-lg shadow-md", children: [_jsx("h3", { className: "text-xl font-semibold mb-3", children: "Shipping Details" }), _jsxs("p", { children: [_jsx("strong", { children: "From Address:" }), " ", order.data.From_address] }), _jsxs("p", { children: [_jsx("strong", { children: "To Address:" }), " ", order.data.To_address] })] })] }), _jsxs("div", { className: "mt-6 bg-white shadow-md rounded-lg p-6", children: [_jsx("h3", { className: "text-lg font-semibold mb-4", children: "Order Invoice Verification" }), _jsxs("div", { className: "max-w-sm mb-4", children: [_jsx("label", { htmlFor: "status", className: "block text-sm font-medium text-gray-700", children: _jsx("strong", { children: "Change Invoice Verification Status" }) }), _jsxs("select", { id: "status", value: status, onChange: handleOnChange, className: "mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm", children: [_jsx("option", { value: "", children: "Select" }), _jsx("option", { value: "approved", children: "Approved" }), _jsx("option", { value: "rejected", children: "Rejected" })] })] }), invoices?.length > 0 ? (_jsx("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-6", children: invoices.map((invoice, index) => {
+                            const fileUrl = invoice.url;
+                            const isPdf = fileUrl?.toLowerCase().endsWith(".pdf");
+                            return (_jsxs("div", { className: "border p-4 rounded-lg text-center shadow-md hover:shadow-lg transition", children: [_jsxs("p", { className: "font-semibold mb-3", children: ["Invoice ", index + 1] }), isPdf ? (_jsxs("div", { className: "flex flex-col items-center justify-center h-52 bg-gray-100 rounded-md", children: [_jsx("div", { className: "text-6xl mb-3", children: "\uD83D\uDCC4" }), _jsx("p", { className: "text-sm text-gray-600 mb-3", children: "PDF Document" }), _jsx("a", { href: fileUrl, target: "_blank", rel: "noopener noreferrer", className: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition", children: "View PDF" })] })) : (
+                                    /* IMAGE VIEW */
+                                    _jsx("img", { src: fileUrl, alt: `Invoice ${index + 1}`, className: "w-full h-52 object-cover rounded-md cursor-pointer", onClick: () => {
+                                            setSelectedImage(fileUrl);
+                                            setModalOpen(true);
+                                        } }))] }, invoice.Id));
+                        }) })) : (_jsx("div", { className: "w-full h-40 flex items-center justify-center bg-gray-100 text-gray-500 rounded-md", children: "No invoice uploaded" }))] }), modalOpen && selectedImage && (_jsxs("div", { className: "fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4", onClick: () => setModalOpen(false), children: [_jsx("button", { className: "absolute top-5 right-5 bg-white text-black rounded-full w-10 h-10 flex items-center justify-center text-2xl font-bold shadow-lg hover:bg-red-500 hover:text-white transition", onClick: () => setModalOpen(false), children: "\u00D7" }), _jsx("img", { src: selectedImage, alt: "Enlarged document", className: "w-[80vw] h-[80vh] object-contain rounded-xl shadow-2xl", onClick: (e) => e.stopPropagation() })] })), _jsx(ConfirmationModal, { isOpen: isModalOpen, onClose: () => setIsModalOpen(false), onConfirm: handleConfirmToggleStatus, message: `Are you sure you want to verify this user?` })] }));
 };
 export default InvoiceDetails;
