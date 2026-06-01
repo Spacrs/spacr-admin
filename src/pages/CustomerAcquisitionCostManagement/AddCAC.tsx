@@ -5,6 +5,11 @@ import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import API from "../../constants/apiEndpoints";
 import { useParams } from "react-router-dom";
+import {
+  useAddAdSpentMutation,
+  useGetAdSpentByIdQuery,
+  useUpdateAdSpentMutation,
+} from "../../store/slices/adSpentSlice/adSpentApi";
 
 type Payload = {
   month: string;
@@ -14,8 +19,8 @@ type Payload = {
 
 function AddCAC() {
   const navigate = useNavigate();
-const { cacId } = useParams();
-const isEdit = Boolean(cacId);
+  const { cacId } = useParams();
+  const isEdit = Boolean(cacId);
   
 
   const currentYear = new Date().getFullYear();
@@ -50,8 +55,15 @@ const isEdit = Boolean(cacId);
     adSpent: "",
   });
 
+  const { data } = useGetAdSpentByIdQuery(cacId, {
+    skip: !cacId,
+  });
+
+  const [addAdSpent] = useAddAdSpentMutation();
+  const [updateAdSpent] = useUpdateAdSpentMutation();
+
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
 
@@ -71,41 +83,20 @@ const isEdit = Boolean(cacId);
   };
 
   useEffect(() => {
-    if (!cacId) return;
+    if (data?.success) {
+      const d = data.data;
 
-    const fetchAdSpentById = async () => {
-      try {
-        const res = await fetch(`${API.ADMIN.Ad_SPEND}/${cacId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        });
+      const [yearVal, monthVal] = d.Month.split("-");
+      setYear(yearVal);
+      setMonth(monthVal);
 
-        const result = await res.json();
-
-        if (result.success) {
-          const data = result.data;
-
-          const [yearVal, monthVal] = data.Month.split("-");
-
-          setYear(yearVal);
-          setMonth(monthVal);
-
-          setPayload({
-            month: data.Month,
-            adSpent: data.AdSpent,
-            cacType: data.CACType,
-          });
-        } else {
-          toast.error("Failed to load ad spent data");
-        }
-      } catch (err) {
-        toast.error("Error fetching ad spent data");
-      }
-    };
-
-    fetchAdSpentById();
-  }, [cacId]);
+      setPayload({
+        month: d.Month,
+        adSpent: d.AdSpent,
+        cacType: d.CACType,
+      });
+    }
+  }, [data]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -126,40 +117,31 @@ const isEdit = Boolean(cacId);
       toast.error("Enter valid Ad Spent");
       return;
     }
-    
-    // "http://localhost:8000/api/v5/admin/cac"
+
     try {
-
-      const url = isEdit ? `${API.ADMIN.Ad_SPEND}/${cacId}` : API.ADMIN.Ad_SPEND;
-      const method = isEdit ? "PATCH" : "POST";
-
-      const res = await fetch(url, {
-        method: method,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      if (isEdit) {
+        await updateAdSpent({
+          id: cacId,
+          body: { ...payload, month: finalMonth },
+        }).unwrap();
+      } else {
+        await addAdSpent({
           ...payload,
           month: finalMonth,
-        }),
-      });
-
-      const result = await res.json();
-
-      if (!res.ok || !result.success) {
-        throw new Error(result.message || "Something went wrong");
+        }).unwrap();
       }
 
-      toast.success(isEdit ? "Ad Spent updated successfully" : "Ad Spent added successfully");
+      toast.success(
+        isEdit
+          ? "Ad Spent updated successfully"
+          : "Ad Spent added successfully",
+      );
 
-      // redirect after short delay
       setTimeout(() => {
         navigate("/admin/ad-spent");
       }, 1000);
-
     } catch (err: any) {
-      toast.error(err.message || "Failed to save Ad Spent");
+      toast.error(err?.data?.message || "Failed to save Ad Spent");
     }
   };
 
@@ -173,7 +155,7 @@ const isEdit = Boolean(cacId);
           className="max-w-xl mx-auto bg-white p-6 shadow rounded-lg space-y-6"
         >
           <h2 className="text-lg font-semibold">
-            {isEdit ? "Edit Ad Spent" : "Add Ad Spent"}  
+            {isEdit ? "Edit Ad Spent" : "Add Ad Spent"}
           </h2>
 
           {/* Year + Month */}
@@ -243,7 +225,11 @@ const isEdit = Boolean(cacId);
 
           {/* Submit */}
           <div className="text-right">
-            <Button text={isEdit ? "Update" : "Save"} variant="primary" type="submit" />
+            <Button
+              text={isEdit ? "Update" : "Save"}
+              variant="primary"
+              type="submit"
+            />
           </div>
         </form>
       </div>

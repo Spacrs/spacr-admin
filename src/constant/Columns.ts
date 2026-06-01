@@ -222,12 +222,12 @@ const referralCode: IColumns[] = [
 const referralCodeDetails: IColumns[] = [
   { name: "FullName", Header: "Full Name", colName: "Default" },
   { name: "Email", Header: "Email", colName: "Default",
-  //  sortable: true 
+    //  sortable: true
   },
   { name: "Phone", Header: "Phone", colName: "Default",
-  //  sortable: true 
+    //  sortable: true
   },
- {
+  {
     name: "RedeemedAt",
     Header: "Redeemed At",
     colName: "Date",
@@ -239,32 +239,32 @@ const referralCodeDetails: IColumns[] = [
 const travelListingColumn: IColumns[] = [
   { name: "FromCity", Header: "From City", colName: "Default" },
   { name: "ToCity", Header: "To City", colName: "Default",
-  //  sortable: true 
+    //  sortable: true
   },
   { name: "FromCountry", Header: "From Country", colName: "Default",
-  //  sortable: true 
+    //  sortable: true
   },
   { name: "ToCountry", Header: "To Country", colName: "Default",
-  //  sortable: true 
+    //  sortable: true
   },
   { name: "UserName", Header: "Created By", colName: "Default",
-  //  sortable: true 
+    //  sortable: true
   },
   { name: "AvailableOrderCount", Header: "Order Count", colName: "Number",
-  //  sortable: true 
+    //  sortable: true
   },
-  
+
   { name: "DateTimeOfTravel", Header: "Travel Date", colName: "DateNew",
-  //  sortable: true 
+    //  sortable: true
   },
   { name: "Status", Header: "Status", colName: "Default",
-  //  sortable: true 
+    //  sortable: true
   },
   { name: "IsCancelled", Header: "Cancelled?", colName: "Boolean",
-  //  sortable: true 
+    //  sortable: true
   },
   { name: "CreatedAt", Header: "Created Date", colName: "Date",
-  //  sortable: true 
+    //  sortable: true
   },
 ];
 
@@ -396,7 +396,7 @@ const WithdrawalListColumn: IColumns[] = [
     Header: "Created At",
     colName: "DateAndTime",
   },
-  
+
   {
     name: "action",
     Header: "Actions",
@@ -475,7 +475,43 @@ export const cacListColumn: IColumns[] = [
   },
 ];
 
+const invoiceListColumn: IColumns[] = [
+  { name: "image", Header: "Image", colName: "Image", icon: "order" },
+  {
+    name: "ProductName",
+    Header: "Product Name",
+    colName: "Default",
+    sortable: true,
+  },
+  { name: "Price", Header: "Price", colName: "Default", sortable: true },
+  // { name: "Status", Header: "Status", colName: "Status" },
 
+  // Change colName from "Image" to "InvoicePreview"
+  // {
+  //   name: "invoice",
+  //   Header: "Invoice",
+  //   colName: "InvoicePreview",
+  //   icon: "order",
+  // },
+  {
+    name: "CreatedAt",
+    Header: "Created At",
+    colName: "DateAndTime",
+    sortable: true,
+  },
+  {
+    name: "UpdatedAt",
+    Header: "Updated At",
+    colName: "DateAndTime",
+    sortable: true,
+  },
+  {
+    name: "action",
+    Header: "Actions",
+    colName: "Actions",
+    Actions: ["VIEW"],
+  }
+];
 
 export const columns = {
   user: user,
@@ -495,4 +531,5 @@ export const columns = {
   withdrawal: WithdrawalListColumn,
   costColumn: CostListColumn,
   cacColumn: cacListColumn,
+  invoiceListColumn: invoiceListColumn,
 };

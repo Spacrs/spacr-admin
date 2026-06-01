@@ -34,6 +34,7 @@ import { GiTakeMyMoney } from "react-icons/gi";
 import { AiOutlineTransaction } from "react-icons/ai";
 import { BsCurrencyExchange } from "react-icons/bs";
 import { TbReportSearch } from "react-icons/tb";
+import { FaFileInvoice } from "react-icons/fa";
 export const icons = {
     CiHome: CiHome,
     RxDashboard: RxDashboard,
@@ -125,5 +126,6 @@ export const icons = {
     GiTakeMyMoney,
     AiOutlineTransaction,
     BsCurrencyExchange,
-    TbReportSearch
+    TbReportSearch,
+    FaFileInvoice
 };

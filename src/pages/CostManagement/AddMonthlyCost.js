@@ -4,13 +4,15 @@ import Button from "../../components/Common/Button";
 import InputComponent from "../../components/Common/Inputes";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import API from "../../constants/apiEndpoints";
 import { useParams } from "react-router-dom";
+import { useAddCostMutation, useGetCostByIdQuery, useUpdateCostMutation } from "../../store/slices/costSlice/costApi";
 function AddMonthlyCost() {
     const navigate = useNavigate();
     const currentYear = new Date().getFullYear();
     const { costId } = useParams();
     const isEdit = Boolean(costId);
+    const [addCost] = useAddCostMutation();
+    const [updateCost] = useUpdateCostMutation();
     const yearOptions = Array.from({ length: 10 }, (_, i) => currentYear - i);
     const monthOptions = [
         { label: "Jan", value: "01" },
@@ -33,37 +35,90 @@ function AddMonthlyCost() {
         cost: "",
         // notes: "",
     });
+    // useEffect(() => {
+    //   if (!costId) return;
+    //   const fetchCostById = async () => {
+    //     try {
+    //       const res = await fetch(`${API.ADMIN.MONTHLY_COST}/${costId}`, {
+    //         headers: {
+    //           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    //         },
+    //       });
+    //       const result = await res.json();
+    //       if (result.success) {
+    //         const data = result.data;
+    //         const [yearVal, monthVal] = data.Month.split("-");
+    //         setYear(yearVal);
+    //         setMonth(monthVal);
+    //         setPayload({
+    //           month: data.Month,
+    //           cost: data.Cost,
+    //         });
+    //       } else {
+    //         toast.error("Failed to load cost data");
+    //       }
+    //     } catch (err) {
+    //       toast.error("Error fetching cost data");
+    //     }
+    //   };
+    //   fetchCostById();
+    // }, [costId]);
+    const { data, isLoading, error } = useGetCostByIdQuery(costId, {
+        skip: !costId,
+    });
     useEffect(() => {
-        if (!costId)
-            return;
-        const fetchCostById = async () => {
-            try {
-                const res = await fetch(`${API.ADMIN.MONTHLY_COST}/${costId}`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                    },
-                });
-                const result = await res.json();
-                if (result.success) {
-                    const data = result.data;
-                    const [yearVal, monthVal] = data.Month.split("-");
-                    setYear(yearVal);
-                    setMonth(monthVal);
-                    setPayload({
-                        month: data.Month,
-                        cost: data.Cost,
-                    });
-                }
-                else {
-                    toast.error("Failed to load cost data");
-                }
-            }
-            catch (err) {
-                toast.error("Error fetching cost data");
-            }
-        };
-        fetchCostById();
-    }, [costId]);
+        if (data?.success) {
+            const d = data.data;
+            const [yearVal, monthVal] = d.Month.split("-");
+            setYear(yearVal);
+            setMonth(monthVal);
+            setPayload({
+                month: d.Month,
+                cost: d.Cost,
+            });
+        }
+    }, [data]);
+    // const handleSubmit = async (e: React.FormEvent) => {
+    //   e.preventDefault();
+    //   const finalMonth = `${year}-${month}`;
+    //   if (!year || !month) {
+    //     toast.error("Please select month & year");
+    //     return;
+    //   }
+    //   if (!payload.cost || payload.cost <= 0) {
+    //     toast.error("Enter valid cost");
+    //     return;
+    //   }
+    //   try {
+    //     const url = isEdit
+    //       ? `${API.ADMIN.MONTHLY_COST}/${costId}`
+    //       : `${API.ADMIN.MONTHLY_COST}`;
+    //     const method = isEdit ? "PATCH" : "POST";
+    //     const res = await fetch(url, {
+    //       method,
+    //       headers: {
+    //         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify({
+    //         ...payload,
+    //         month: finalMonth,
+    //       }),
+    //     });
+    //     const result = await res.json();
+    //     if (!res.ok || !result.success) {
+    //       throw new Error(result.message || "Something went wrong");
+    //     }
+    //     toast.success(
+    //       isEdit ? "Cost updated successfully" : "Cost saved successfully",
+    //     );
+    //     setTimeout(() => {
+    //       navigate("/admin/cost-list");
+    //     }, 1000);
+    //   } catch (err: any) {
+    //     toast.error(err.message || "Failed to save cost");
+    //   }
+    // };
     const handleSubmit = async (e) => {
         e.preventDefault();
         const finalMonth = `${year}-${month}`;
@@ -76,24 +131,17 @@ function AddMonthlyCost() {
             return;
         }
         try {
-            const url = isEdit
-                ? `${API.ADMIN.MONTHLY_COST}/${costId}`
-                : `${API.ADMIN.MONTHLY_COST}`;
-            const method = isEdit ? "PATCH" : "POST";
-            const res = await fetch(url, {
-                method,
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
+            if (isEdit) {
+                await updateCost({
+                    id: costId,
+                    body: { ...payload, month: finalMonth },
+                }).unwrap();
+            }
+            else {
+                await addCost({
                     ...payload,
                     month: finalMonth,
-                }),
-            });
-            const result = await res.json();
-            if (!res.ok || !result.success) {
-                throw new Error(result.message || "Something went wrong");
+                }).unwrap();
             }
             toast.success(isEdit ? "Cost updated successfully" : "Cost saved successfully");
             setTimeout(() => {
@@ -101,7 +149,7 @@ function AddMonthlyCost() {
             }, 1000);
         }
         catch (err) {
-            toast.error(err.message || "Failed to save cost");
+            toast.error(err?.data?.message || "Failed to save cost");
         }
     };
     const handleChange = (e) => {

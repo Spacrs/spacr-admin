@@ -4,73 +4,93 @@ import { useNavigate } from "react-router-dom";
 import API from "../../constants/apiEndpoints";
 import { toast, ToastContainer } from "react-toastify";
 import { Search, ErrorMsg, Table, Button } from "../../components/Common";
+import { useDeleteCostMutation, useGetCostsListQuery } from "../../store/slices/costSlice/costApi";
 
 function CostList() {
   console.log("CostList component rendered");
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState("");
-  const [costData, setCostData] = useState<any[]>([]);
-  const [totalPages, setTotalPages] = useState(1);
+  // const [costData, setCostData] = useState<any[]>([]);
+  // const [totalPages, setTotalPages] = useState(1);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
 
   const [loading, setLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  // const [isError, setIsError] = useState(false);
 
   const itemsPerPage = 10;
   const navigate = useNavigate();
+  const [deleteCost, { isLoading: isDeleting }] = useDeleteCostMutation();
 
   // Fetch API
-  const fetchCostList = async () => {
-    try {
-      setLoading(true);
-      setIsError(false);
+  // const fetchCostList = async () => {
+  //   try {
+  //     setLoading(true);
+  //     setIsError(false);
 
 
-      // `http://localhost:8000/api/v5/admin/costs/monthly-cost?page=${currentPage}&limit=${itemsPerPage}&search=${filter}` 
-      const res = await fetch(
-        `${API.ADMIN.MONTHLY_COST}?page=${currentPage}&limit=${itemsPerPage}&search=${filter}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        },
-      );
+  //     // `http://localhost:8000/api/v5/admin/costs/monthly-cost?page=${currentPage}&limit=${itemsPerPage}&search=${filter}` 
+  //     const res = await fetch(
+  //       `${API.ADMIN.MONTHLY_COST}?page=${currentPage}&limit=${itemsPerPage}&search=${filter}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+  //         },
+  //       },
+  //     );
 
-      const result = await res.json();
+  //     const result = await res.json();
 
-      if (res.ok && result.success) {
-        const formattedData = (result.data || []).map((item: any) => {
-          if (!item.Month) return item;
+  //     if (res.ok && result.success) {
+  //       const formattedData = (result.data || []).map((item: any) => {
+  //         if (!item.Month) return item;
 
-          const [year, month] = item.Month.split("-");
-          const date = new Date(Number(year), Number(month) - 1);
+  //         const [year, month] = item.Month.split("-");
+  //         const date = new Date(Number(year), Number(month) - 1);
 
-          return {
-            ...item,
-            Month: date.toLocaleString("en-US", {
-              month: "long",
-              year: "numeric",
-            }), // March 2026
-          };
-        });
-        setCostData(formattedData);
-        setTotalPages(result.pagination?.totalPages || 1);
-      } else {
-        setIsError(true);
-        console.error(result.message || "Failed to fetch cost data");
-      }
-    } catch (error: any) {
-      setIsError(true);
-      console.error(error.message || "Error fetching cost data");
-    } finally {
-      setLoading(false);
-    }
-  };
+  //         return {
+  //           ...item,
+  //           Month: date.toLocaleString("en-US", {
+  //             month: "long",
+  //             year: "numeric",
+  //           }), // March 2026
+  //         };
+  //       });
+  //       setCostData(formattedData);
+  //       setTotalPages(result.pagination?.totalPages || 1);
+  //     } else {
+  //       setIsError(true);
+  //       console.error(result.message || "Failed to fetch cost data");
+  //     }
+  //   } catch (error: any) {
+  //     setIsError(true);
+  //     console.error(error.message || "Error fetching cost data");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchCostList();
-  }, [currentPage, filter]);
+
+  const {
+    data,
+    isLoading,
+    isError,
+  } = useGetCostsListQuery({
+    page: currentPage,
+    limit: itemsPerPage,
+    search: filter,
+  });
+
+  const costData = data?.data || [];
+  const totalPages = data?.pagination?.totalPages || 1;
+
+  // useEffect(() => {
+  //   fetchCostList();
+  // }, [currentPage, filter]);
+
+  // if (isError) {
+  //   return <ErrorMsg errorMsg="Error loading cost data" />;
+  // }
 
   if (isError) {
     return <ErrorMsg errorMsg="Error loading cost data" />;
@@ -94,38 +114,17 @@ function CostList() {
     setShowConfirm(true);
   };
 
+
   const handleConfirmDelete = async () => {
     if (!deleteId) return;
 
     try {
-      const access_token = localStorage.getItem("access_token");
-
-      const res = await fetch(
-        `${API.ADMIN.MONTHLY_COST}/${deleteId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        }
-      );
-
-      const result = await res.json();
-
-      if (!res.ok || !result.success) {
-        throw new Error(result.message || "Failed to delete cost");
-      }
+      await deleteCost(deleteId).unwrap();
 
       toast.success("Cost deleted successfully");
 
-      // Option 1 (current - safe)
-      await fetchCostList();
-
-      // Option 2 (better UX - no API call)
-      // setCostData(prev => prev.filter(item => item.Id !== deleteId));
-
     } catch (err: any) {
-      toast.error(err.message || "Error while deleting");
+      toast.error(err?.data?.message || "Error while deleting");
     } finally {
       setShowConfirm(false);
       setDeleteId(null);
@@ -159,9 +158,9 @@ function CostList() {
       {/* Table */}
       <div className="p-4 bg-gray-100 rounded-lg shadow-md">
         <Table
-          data={costData || []}
+          data={costData}
           columns={columns.costColumn}
-          loading={loading}
+          loading={isLoading}
           totalPages={totalPages}
           currentPage={currentPage}
           onPageChange={onPageChange}
